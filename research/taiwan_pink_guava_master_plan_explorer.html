@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taiwan Pink Guava Master Plan | Extended Agronomy & Market Analytics Explorer</title>
+    <!-- Chosen Palette: Warm Neutrals & Fresh Guava (Background: #FDFBF7, Primary: #1E3A2B, Secondary: #4A7C59, Accent: #E07A5F, Dark Neutral: #2B2D42) -->
+    <!-- Application Structure Plan: Designed as a 10-section commercial orchard command application centered on maximizing yield, fruit quality, and financial profitability. Includes: 1. Executive Dashboard (With financial metrics), 2. Market Dynamics & Financial Analytics (Mandi price bifurcation, seasonal price curve, buyer channels, grade value chain, and interactive ROI simulator), 3. Nutrient Master Deep-Dive (14 elements with visual diagnostics, fertigation, and soil chemistry), 4. Interactive 12-Month Calendar, 5. Precision Drip Water Calculator, 6. Stage-wise Fertigation Schedules & 3-Tank Rules, 7. Integrated Crop Health & IPM Searchable Guide, 8. Fruit Bagging & Soil/Water Diagnostic Matrix, 9. Scalable Whole-Farm Procurement Calculator, and 10. Critical Warnings & Risk Audit. Responsive design upgraded with 3-column and 4-column grid structures. -->
+    <!-- Visualization & Content Choices: 
+        1. Executive Overview -> Goal: Executive understanding -> Interactive KPI Cards, 4-Column Metric Grid & Phenology Stepper -> Pure HTML/Tailwind.
+        2. Market & Financial Analytics -> Goal: Market optimization & commercial viability -> Interactive ROI & Sensitivity Engine + 3 Chart.js charts (Seasonal Price Volatility Curve, 4-Year Cumulative Cashflow Trajectory, and Grade-Wise Revenue Distribution).
+        3. Nutrient Deep-Dive -> Goal: Comprehensive nutrient-by-nutrient diagnostic & application guide -> Category filter tabs, responsive 2/3 column layout, exact concentrations (g/plant, g/L, kg/2,100 trees), soil interaction notes.
+        4. 12-Month Operational Calendar -> Goal: Dynamic task tracking -> Interactive Month Selector with filterable detail card -> Vanilla JS state.
+        5. Irrigation Engine -> Goal: Drip scheduling -> Interactive inputs with real-time volume & runtime calculations + Chart.js dynamic curve -> Responsive canvas.
+        6. Fertigation Matrix -> Goal: Precision WSF delivery -> Interactive Stage 1 & Stage 2 weekly tables + 3-tank compatibility visualizer.
+        7. Crop Health & IPM -> Goal: Quick diagnostic lookup -> Interactive search & category filter cards -> Vanilla JS dynamic DOM manipulation.
+        8. Soil & Water Diagnostic Matrix -> Goal: Precision agronomic remediation -> Interactive parameter dropdown with instant target and remedial actions.
+        9. Procurement Calculator -> Goal: Inputs scaling -> Interactive slider (100 to 5,000 trees) dynamically updating inputs for 2,100 trees.
+        10. Critical Pitfalls -> Goal: Prevent fatal errors -> Color-coded alert grid.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            bg: '#FDFBF7',
+                            primary: '#1E3A2B',
+                            secondary: '#4A7C59',
+                            accent: '#E07A5F',
+                            dark: '#2B2D42',
+                            card: '#FFFFFF',
+                            light: '#F2EFEA',
+                            border: '#E2DCD5',
+                            pink: '#F4A261'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #FDFBF7;
+            color: #2B2D42;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            height: 320px;
+            max-height: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (max-width: 640px) {
+            .chart-container {
+                height: 260px;
+            }
+        }
+        .nav-btn.active {
+            background-color: #1E3A2B;
+            color: #FFFFFF;
+            border-bottom: 3px solid #E07A5F;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .nutrient-tab.active {
+            background-color: #1E3A2B;
+            color: #FFFFFF;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header Navigation -->
+    <header class="bg-brand-primary text-white sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-full bg-brand-accent flex items-center justify-center font-bold text-xl text-white shadow-md">
+                    <i class="fa-solid font-bold">G</i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-wide">Taiwan Pink Guava Master Plan</h1>
+                    <p class="text-xs text-green-200">Karoda, Badnawar, Dhar (MP) | 2,100 Trees | Vertisol Soil Precision Agronomy & Commercial Valuation</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2 text-xs bg-emerald-900/80 px-3 py-1.5 rounded-lg border border-emerald-700">
+                <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="font-semibold">Current Field Status: 8 Months Old (Vegetative Framework Phase)</span>
+            </div>
+        </div>
+        
+        <nav class="bg-emerald-950 border-t border-emerald-800/60 overflow-x-auto">
+            <div class="max-w-7xl mx-auto px-2 flex whitespace-nowrap text-xs font-medium">
+                <button onclick="switchTab('overview')" id="btn-overview" class="nav-btn active px-4 py-3 flex items-center space-x-2 hover:bg-emerald-900 transition">
+                    <i class="fa-solid fa-chart-pie"></i><span>Dashboard Overview</span>
+                </button>
+                <button onclick="switchTab('market')" id="btn-market" class="nav-btn px-4 py-3 flex items-center space-x-2 hover:bg-emerald-900 transition">
+                    <i class="fa-solid fa-chart-line"></i><span>Market & Financial Analytics</span>
+                </button>
+                <button onclick="switchTab('nutrients')" id="btn-nutrients" class="nav-btn px-4 py-3 flex items-center space-x-2 hover:bg-emerald-900 transition">
+                    <i class="fa-solid fa-vial-circle-check"></i><span>Nutrient Master Deep-Dive</span>
+                </button>
+                <button onclick="switchTab('calendar')" id="btn-calendar" class="nav-btn px-4 py-3 flex items-center space-x-2 hover:bg-emerald-900 transition">
+                    <i class="fa-solid fa-calendar-days"></i><span>12-Month Calendar</span>
+                </button>
+                <button onclick="switchTab('irrigation')" id="btn-irrigation" class="nav-btn px-4 py-3 flex items-center space-x-2 hover:bg-emerald-900 transition">
+                    <i class="fa-solid fa-droplet"></i><span>Drip Water Calculator</span>
+                </button>
+                <button onclick="switchTab('fertigation')" id="btn-fertigation" class="nav-btn px-4 py-3 flex items-center space-x-2 hover:bg-emerald-900 transition">
+                    <i class="fa-solid fa-flask"></i><span>Fertigation Schedules</span>
+                </button>
+                <button onclick="switchTab('health')" id="btn-health" class="nav-btn px-4 py-3 flex items-center space-x-2 hover:bg-emerald-900 transition">
+                    <i class="fa-solid fa-bug"></i><span>Crop Health & IPM</span>
+                </button>
+                <button onclick="switchTab('bagging')" id="btn-bagging" class="nav-btn px-4 py-3 flex items-center space-x-2 hover:bg-emerald-900 transition">
+                    <i class="fa-solid fa-shield-cat"></i><span>Bagging & Diagnostics</span>
+                </button>
+                <button onclick="switchTab('procurement')" id="btn-procurement" class="nav-btn px-4 py-3 flex items-center space-x-2 hover:bg-emerald-900 transition">
+                    <i class="fa-solid fa-calculator"></i><span>Procurement Calculator</span>
+                </button>
+                <button onclick="switchTab('pitfalls')" id="btn-pitfalls" class="nav-btn px-4 py-3 flex items-center space-x-2 hover:bg-emerald-900 transition">
+                    <i class="fa-solid fa-triangle-exclamation"></i><span>Critical Warnings</span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full space-y-6">
+
+        <!-- TAB 1: EXECUTIVE OVERVIEW -->
+        <section id="tab-overview" class="tab-content active space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-brand-border">
+                <h2 class="text-xl font-bold text-brand-primary mb-2">Executive Summary & Operational Baseline</h2>
+                <p class="text-sm text-gray-700 leading-relaxed mb-4">
+                    This precision agronomy and financial management system governs operations for a 2,100-tree commercial Taiwan Pink guava (<em>Psidium guajava</em> L.) orchard in Karoda, Badnawar Tehsil, Dhar District, MP (Coordinates: 23.125961, 75.293923; Elevation ~510m; Vertisol black clay soils, pH 7.8–8.2). The dual objective is building a high-capacity 3-tier branch architecture, managing heavy clay soil dynamics, and executing regulated <strong>Mrig Bahar</strong> cropping to yield premium winter fruit (350–500 g weight, TSS &gt; 11.5° Brix) with an orchard lifespan exceeding 20 years and peak steady-state annual net revenue exceeding ₹58 Lakhs.
+                </p>
+                
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 pt-2">
+                    <div class="bg-brand-light p-3 rounded-lg border border-brand-border">
+                        <span class="text-xs text-gray-500 block">Total Orchard Scale</span>
+                        <span class="text-lg font-bold text-brand-primary">2,100 Trees</span>
+                        <span class="text-xs text-brand-secondary block">3.0m x 2.0m (~3.1 Acres)</span>
+                    </div>
+                    <div class="bg-brand-light p-3 rounded-lg border border-brand-border">
+                        <span class="text-xs text-gray-500 block">Current Tree Age</span>
+                        <span class="text-lg font-bold text-brand-primary">8 Months</span>
+                        <span class="text-xs text-amber-700 block">Mandatory Deblossom</span>
+                    </div>
+                    <div class="bg-brand-light p-3 rounded-lg border border-brand-border">
+                        <span class="text-xs text-gray-500 block">Soil Type</span>
+                        <span class="text-lg font-bold text-brand-primary">Vertisol</span>
+                        <span class="text-xs text-brand-secondary block">Deep Black Clay (&gt;45%)</span>
+                    </div>
+                    <div class="bg-brand-light p-3 rounded-lg border border-brand-border">
+                        <span class="text-xs text-gray-500 block">Designated Bahar</span>
+                        <span class="text-lg font-bold text-brand-primary">Mrig Bahar</span>
+                        <span class="text-xs text-brand-secondary block">Monsoon Bloom / Winter Crop</span>
+                    </div>
+                    <div class="bg-brand-light p-3 rounded-lg border border-brand-border">
+                        <span class="text-xs text-gray-500 block">Target Realization</span>
+                        <span class="text-lg font-bold text-brand-primary">₹65 - ₹85 / kg</span>
+                        <span class="text-xs text-brand-secondary block">3-Layer Bagged Grade A+</span>
+                    </div>
+                    <div class="bg-brand-light p-3 rounded-lg border border-brand-border">
+                        <span class="text-xs text-gray-500 block">Mature Net Income</span>
+                        <span class="text-lg font-bold text-brand-primary">₹58.1 Lakhs/Yr</span>
+                        <span class="text-xs text-brand-secondary block">Year 4+ Peak Horizon</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Financial Metric Highlights Row -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-emerald-900 text-white p-4 rounded-xl border border-emerald-800 shadow-sm flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-lg bg-emerald-800 flex items-center justify-center text-emerald-300 text-xl font-bold">
+                        <i class="fa-solid fa-coins"></i>
+                    </div>
+                    <div>
+                        <span class="text-[11px] text-emerald-200 uppercase tracking-wider block">Est. Yr 2 First Revenue</span>
+                        <span class="text-xl font-bold">₹24.2 Lakhs</span>
+                        <span class="text-[10px] text-emerald-300 block">15-20 kg/tree @ ₹67.25 avg</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border border-brand-border shadow-sm flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-sack-dollar"></i>
+                    </div>
+                    <div>
+                        <span class="text-[11px] text-gray-500 uppercase tracking-wider block">Est. Yr 3 Gross Revenue</span>
+                        <span class="text-xl font-bold text-brand-primary">₹45.5 Lakhs</span>
+                        <span class="text-[10px] text-brand-secondary block">30-35 kg/tree yield target</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border border-brand-border shadow-sm flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-lg bg-blue-100 text-blue-800 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <span class="text-[11px] text-gray-500 uppercase tracking-wider block">Estimated Payback Period</span>
+                        <span class="text-xl font-bold text-brand-primary">22 Months</span>
+                        <span class="text-[10px] text-blue-700 block">Full Capex + Opex Recovery</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-xl border border-brand-border shadow-sm flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-lg bg-purple-100 text-purple-800 flex items-center justify-center text-xl font-bold">
+                        <i class="fa-solid fa-award"></i>
+                    </div>
+                    <div>
+                        <span class="text-[11px] text-gray-500 uppercase tracking-wider block">Bagging Price Premium</span>
+                        <span class="text-xl font-bold text-brand-accent">+180% to +250%</span>
+                        <span class="text-[10px] text-gray-600 block">vs Generic Unbagged Guava</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-amber-50/80 border-l-4 border-amber-500 p-5 rounded-r-xl shadow-sm">
+                    <div class="flex items-center space-x-2 mb-3">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-600 text-lg"></i>
+                        <h3 class="font-bold text-amber-900 text-base">Immediate Operational Directives (Month 8 Status)</h3>
+                    </div>
+                    <ul class="space-y-2 text-xs text-amber-950">
+                        <li class="flex items-start space-x-2">
+                            <span class="font-bold text-amber-700">•</span>
+                            <span><strong>100% Manual Deblossoming:</strong> Continuous removal of pea-sized flower buds every 10–14 days through Month 12. <em>Chemical deblossoming is strictly forbidden on juvenile trees.</em></span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="font-bold text-amber-700">•</span>
+                            <span><strong>3-Tier Canopy Training:</strong> Maintain single trunk clean up to 45–60 cm. Train 3–4 primary scaffolds at 45°–60° angles, pinching at 45 cm for secondaries.</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="font-bold text-amber-700">•</span>
+                            <span><strong>Surface Drainage Escape Furrows:</strong> Install 30 cm deep drainage furrows every 4 rows to prevent Vertisol waterlogging during heavy monsoon rains.</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="font-bold text-amber-700">•</span>
+                            <span><strong>Biological Rootzone Inoculation:</strong> Enrich FYM with <em>Trichoderma viride</em> and <em>Pseudomonas fluorescens</em> to buffer feeder roots against Vertisol wilt complexes.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-brand-border flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-bold text-brand-primary text-base mb-2">Orchard Transition & Phenological Milestones</h3>
+                        <p class="text-xs text-gray-600 mb-4">
+                            The orchard follows a strict progression from structural canopy development to high-yield commercial cropping.
+                        </p>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="flex items-center text-xs">
+                            <span class="w-24 font-bold text-amber-700">Months 08 – 12</span>
+                            <div class="flex-grow bg-gray-200 h-2.5 rounded-full overflow-hidden mx-2">
+                                <div class="bg-amber-500 h-full w-full"></div>
+                            </div>
+                            <span class="w-32 text-right font-medium">Framework & Deblossom</span>
+                        </div>
+                        <div class="flex items-center text-xs">
+                            <span class="w-24 font-bold text-emerald-800">Months 13 – 15</span>
+                            <div class="flex-grow bg-gray-200 h-2.5 rounded-full overflow-hidden mx-2">
+                                <div class="bg-emerald-600 h-full w-1/2"></div>
+                            </div>
+                            <span class="w-32 text-right font-medium">Ambe Removal & Pre-Stress</span>
+                        </div>
+                        <div class="flex items-center text-xs">
+                            <span class="w-24 font-bold text-blue-800">Months 16 – 17</span>
+                            <div class="flex-grow bg-gray-200 h-2.5 rounded-full overflow-hidden mx-2">
+                                <div class="bg-blue-500 h-full w-1/4"></div>
+                            </div>
+                            <span class="w-32 text-right font-medium">Bahar Stress & Pruning</span>
+                        </div>
+                        <div class="flex items-center text-xs">
+                            <span class="w-24 font-bold text-purple-800">Months 18 – 24</span>
+                            <div class="flex-grow bg-gray-200 h-2.5 rounded-full overflow-hidden mx-2">
+                                <div class="bg-purple-600 h-full w-1/12"></div>
+                            </div>
+                            <span class="w-32 text-right font-medium">First Commercial Harvest</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-brand-border">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-2">
+                    <div>
+                        <h3 class="font-bold text-brand-primary text-base">Annual Water & Nutrient Demand Overview</h3>
+                        <p class="text-xs text-gray-600">Comparison of water requirements (L/plant/day) and elemental fertigation across growth stages.</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    <div>
+                        <div class="chart-container">
+                            <canvas id="overviewWaterChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="chart-container">
+                            <canvas id="overviewNpkChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: MARKET & FINANCIAL ANALYTICS -->
+        <section id="tab-market" class="tab-content space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-brand-border space-y-6">
+                <div>
+                    <h2 class="text-xl font-bold text-brand-primary">Commercial Valuation, Mandi Dynamics & Financial Analytics</h2>
+                    <p class="text-xs text-gray-600 mt-1 leading-relaxed">
+                        Data-driven financial feasibility model and terminal market price analysis for Taiwan Pink Guava production. This module details wholesale price bifurcation, harvest timing arbitrage, buyer channel dynamics, grade-wise valuation, and interactive 4-year ROI simulation.
+                    </p>
+                </div>
+
+                <!-- Strategic Finding Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-brand-light p-4 rounded-xl border border-brand-border space-y-2">
+                        <div class="flex items-center space-x-2 text-brand-primary font-bold text-sm">
+                            <i class="fa-solid fa-scale-unbalanced-flip text-brand-accent"></i>
+                            <span>Price Bifurcation & Bagging</span>
+                        </div>
+                        <p class="text-xs text-gray-700 leading-relaxed">
+                            Generic unbagged cultivars (Sardar/L-49, Allahabad Safeda) crash to ₹10–₹18/kg during December gluts. Individual 3-layer bagged Taiwan Pink guava (EPE foam + LDPE + UV Kraft paper) commands <strong>₹70–₹120/kg wholesale</strong> (+180% to +250% premium) by completely eliminating fruit fly damage, skin friction, and sun scald.
+                        </p>
+                    </div>
+
+                    <div class="bg-brand-light p-4 rounded-xl border border-brand-border space-y-2">
+                        <div class="flex items-center space-x-2 text-brand-primary font-bold text-sm">
+                            <i class="fa-solid fa-calendar-check text-emerald-700"></i>
+                            <span>Mrig Bahar Harvest Arbitrage</span>
+                        </div>
+                        <p class="text-xs text-gray-700 leading-relaxed">
+                            Bahar regulation is the single highest leverage financial decision. Suppressing Ambe Bahar (monsoon fruit, high pest pressure, realization ₹20–₹35/kg) and driving <strong>Mrig Bahar (winter harvest: Nov–Feb)</strong> achieves peak TSS (&gt;11.5° Brix), crisp texture, and maximum prices in metro APMC mandis (Vashi Mumbai, Azadpur Delhi).
+                        </p>
+                    </div>
+
+                    <div class="bg-brand-light p-4 rounded-xl border border-brand-border space-y-2">
+                        <div class="flex items-center space-x-2 text-brand-primary font-bold text-sm">
+                            <i class="fa-solid fa-handshake text-blue-800"></i>
+                            <span>Buyer Channel Diversification</span>
+                        </div>
+                        <p class="text-xs text-gray-700 leading-relaxed">
+                            A 2,100-tree orchard produces ~98 Tons at maturity. Relying solely on local mandis leads to 6–8% commission losses and price suppression. Direct off-take contracts with Modern Trade & Quick-Commerce (Blinkit, Zepto, Reliance Fresh) secure locked floor prices of <strong>₹85–₹130/kg</strong> for Grade A+ fruit.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Financial Model Charts Row -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-4 rounded-xl border border-brand-border flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-bold text-brand-primary text-sm mb-1">Seasonal Price Trend (₹/kg)</h3>
+                            <p class="text-[11px] text-gray-500 mb-3">Comparison of wholesale prices across Bahar harvest windows.</p>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="marketPriceChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-xl border border-brand-border flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-bold text-brand-primary text-sm mb-1">4-Year Financial Trajectory (₹ Lakhs)</h3>
+                            <p class="text-[11px] text-gray-500 mb-3">Capex, Opex, Revenue & Cumulative Cashflow.</p>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="marketCashflowChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-xl border border-brand-border flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-bold text-brand-primary text-sm mb-1">Grade-Wise Revenue Share</h3>
+                            <p class="text-[11px] text-gray-500 mb-3">Valuation split based on 2-stage bagging yield quality.</p>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="marketGradeChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive ROI & Financial Feasibility Simulator -->
+                <div class="bg-brand-light p-6 rounded-xl border border-brand-border space-y-4">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-2 border-b border-brand-border pb-3">
+                        <div>
+                            <h3 class="font-bold text-brand-primary text-base">Interactive Financial Feasibility & Sensitivity Engine</h3>
+                            <p class="text-xs text-gray-600">Simulate yield and market price variables to project financial returns for 2,100 trees.</p>
+                        </div>
+                        <span class="bg-brand-primary text-white text-xs font-bold px-3 py-1 rounded-lg">Dynamic Financial Model</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs">
+                        <div>
+                            <label class="block font-semibold text-gray-700 mb-1">Avg Price Realization (₹/kg)</label>
+                            <input type="range" id="sim-price" min="35" max="120" step="2.5" value="67.5" oninput="runFinancialSim()" class="w-full">
+                            <div class="flex justify-between font-bold text-brand-primary mt-1">
+                                <span>₹35/kg</span>
+                                <span id="val-sim-price" class="text-brand-accent">₹67.50 / kg</span>
+                                <span>₹120/kg</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold text-gray-700 mb-1">Year 2 Yield (kg / tree)</label>
+                            <input type="range" id="sim-yield2" min="10" max="30" step="1" value="18" oninput="runFinancialSim()" class="w-full">
+                            <div class="flex justify-between font-bold text-brand-primary mt-1">
+                                <span>10 kg</span>
+                                <span id="val-sim-yield2" class="text-brand-secondary">18 kg / tree</span>
+                                <span>30 kg</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold text-gray-700 mb-1">Mature Yield (Year 4+ kg / tree)</label>
+                            <input type="range" id="sim-yield4" min="25" max="65" step="2.5" value="48" oninput="runFinancialSim()" class="w-full">
+                            <div class="flex justify-between font-bold text-brand-primary mt-1">
+                                <span>25 kg</span>
+                                <span id="val-sim-yield4" class="text-brand-secondary">48 kg / tree</span>
+                                <span>65 kg</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold text-gray-700 mb-1">Bagging & Packing Cost (₹/fruit)</label>
+                            <input type="range" id="sim-bagcost" min="1.5" max="5.0" step="0.25" value="2.75" oninput="runFinancialSim()" class="w-full">
+                            <div class="flex justify-between font-bold text-brand-primary mt-1">
+                                <span>₹1.50</span>
+                                <span id="val-sim-bagcost" class="text-amber-800">₹2.75 / fruit</span>
+                                <span>₹5.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Output Results Table -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs pt-2">
+                        <div class="bg-white p-3 rounded-lg border border-brand-border">
+                            <span class="text-gray-500 block">Year 2 Gross Revenue</span>
+                            <span id="out-sim-rev2" class="text-base font-bold text-brand-primary">₹25,51,500</span>
+                            <span id="out-sim-vol2" class="text-[10px] text-gray-500 block">37.8 Tons</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-brand-border">
+                            <span class="text-gray-500 block">Year 2 Net Profit</span>
+                            <span id="out-sim-net2" class="text-base font-bold text-emerald-800">₹21,31,500</span>
+                            <span class="text-[10px] text-emerald-700 block">83.5% Net Margin</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-brand-border">
+                            <span class="text-gray-500 block">Mature Gross Revenue (Yr 4+)</span>
+                            <span id="out-sim-rev4" class="text-base font-bold text-brand-primary">₹68,04,000</span>
+                            <span id="out-sim-vol4" class="text-[10px] text-gray-500 block">100.8 Tons</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-lg border border-brand-border">
+                            <span class="text-gray-500 block">Mature Net Annual Income</span>
+                            <span id="out-sim-net4" class="text-base font-bold text-brand-accent">₹60,54,000</span>
+                            <span class="text-[10px] text-brand-accent block">89.0% Net Margin</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Buyer Channel Strategy Table -->
+                <div class="bg-white p-5 rounded-xl border border-brand-border space-y-3">
+                    <h3 class="font-bold text-brand-primary text-base">Buyer Channel Economics & Marketing Matrix</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs text-left border-collapse">
+                            <thead>
+                                <tr class="bg-brand-primary text-white">
+                                    <th class="p-2.5">Marketing Channel</th>
+                                    <th class="p-2.5">Target Fruit Grade</th>
+                                    <th class="p-2.5">Price Range (₹/kg)</th>
+                                    <th class="p-2.5">Payment Terms</th>
+                                    <th class="p-2.5">Commission & Deductions</th>
+                                    <th class="p-2.5">Strategic Recommendation</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 text-gray-800">
+                                <tr class="hover:bg-gray-50">
+                                    <td class="p-2.5 font-bold text-brand-primary">Local APMC Mandi (Indore / Ujjain)</td>
+                                    <td class="p-2.5">Grade B & C (180–250g)</td>
+                                    <td class="p-2.5 font-semibold text-amber-800">₹25 – ₹40</td>
+                                    <td class="p-2.5">Same day cash</td>
+                                    <td class="p-2.5">6.0% commission + weighment</td>
+                                    <td class="p-2.5">Use only for secondary/small fruit disposal to maintain liquid cash.</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="p-2.5 font-bold text-brand-primary">Metro Mandis (Vashi Mumbai / Azadpur)</td>
+                                    <td class="p-2.5">Grade A & A+ (300–500g)</td>
+                                    <td class="p-2.5 font-semibold text-emerald-800">₹65 – ₹95</td>
+                                    <td class="p-2.5">3–7 days bank transfer</td>
+                                    <td class="p-2.5">Freight (~₹4/kg) + 5% comm.</td>
+                                    <td class="p-2.5">Primary channel for 50% volume. High volume absorption capacity during Mrig Bahar.</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="p-2.5 font-bold text-brand-primary">Modern Retail & Q-Commerce (Blinkit/Zepto)</td>
+                                    <td class="p-2.5">Grade A+ (3-Layer Bagged)</td>
+                                    <td class="p-2.5 font-semibold text-brand-accent">₹90 – ₹130</td>
+                                    <td class="p-2.5">14-day weekly cycle</td>
+                                    <td class="p-2.5">Strict grading rejection (5–8%)</td>
+                                    <td class="p-2.5">Contract 30% orchard production. High stability and premium price locking.</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="p-2.5 font-bold text-brand-primary">Direct Export (Middle East / Maldives)</td>
+                                    <td class="p-2.5">Grade A+ (>400g, Zero Residue)</td>
+                                    <td class="p-2.5 font-semibold text-purple-900">₹140 – ₹220</td>
+                                    <td class="p-2.5">LC / 50% advance</td>
+                                    <td class="p-2.5">Cold chain + APEDA compliance</td>
+                                    <td class="p-2.5">Long-term target (Year 3+). Requires global GAP certification & hot water treatment.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 3: EXTENDED NUTRIENT MASTER DEEP-DIVE -->
+        <section id="tab-nutrients" class="tab-content space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-brand-border space-y-4">
+                <div class="border-b border-brand-border pb-4">
+                    <h2 class="text-xl font-bold text-brand-primary">Nutrient Master Deep-Dive Module</h2>
+                    <p class="text-xs text-gray-600 mt-1 leading-relaxed">
+                        Exhaustive agronomic breakdown for primary, secondary, micronutrient, and organic biostimulant management in Taiwan Pink Guava. Every element is detailed with physiological mechanisms, real-world visual field diagnostics, exact dosages (per tree, foliar ppm, and total for 2,100 trees), application methods, timing, Vertisol soil behavior, and cross-nutrient antagonisms.
+                    </p>
+                </div>
+
+                <!-- Nutrient Category Selector -->
+                <div class="flex flex-wrap gap-2 text-xs font-semibold" id="nutrient-category-btns">
+                    <button onclick="filterNutrients('all')" class="nutrient-tab active px-3 py-2 rounded-lg border border-brand-border transition">All Nutrients & Biostimulants</button>
+                    <button onclick="filterNutrients('macro')" class="nutrient-tab px-3 py-2 rounded-lg border border-brand-border bg-white text-gray-700 transition hover:bg-brand-light">Primary (N, P, K)</button>
+                    <button onclick="filterNutrients('secondary')" class="nutrient-tab px-3 py-2 rounded-lg border border-brand-border bg-white text-gray-700 transition hover:bg-brand-light">Secondary (Ca, Mg, S)</button>
+                    <button onclick="filterNutrients('micro')" class="nutrient-tab px-3 py-2 rounded-lg border border-brand-border bg-white text-gray-700 transition hover:bg-brand-light">Micronutrients (Zn, B, Fe, Mn, Cu, Mo)</button>
+                    <button onclick="filterNutrients('bio')" class="nutrient-tab px-3 py-2 rounded-lg border border-brand-border bg-white text-gray-700 transition hover:bg-brand-light">Biostimulants & Soil Conditioners</button>
+                </div>
+
+                <!-- Nutrient Cards Container -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2" id="nutrient-cards-grid">
+                    <!-- Dynamic rendering handled by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 4: 12-MONTH CALENDAR -->
+        <section id="tab-calendar" class="tab-content space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-brand-border">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-brand-primary">12-Month Operational Farm Calendar</h2>
+                        <p class="text-xs text-gray-600">Select an operational month (Months 8 to 20 post-planting) to view specific field tasks, phenology, and fertigation targets.</p>
+                    </div>
+                </div>
+
+                <div class="flex overflow-x-auto space-x-2 pb-3 mb-4 text-xs font-semibold" id="month-buttons">
+                </div>
+
+                <div id="calendar-detail-card" class="bg-brand-light p-5 rounded-xl border border-brand-border space-y-4">
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 5: DRIP WATER CALCULATOR -->
+        <section id="tab-irrigation" class="tab-content space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-brand-border">
+                <h2 class="text-xl font-bold text-brand-primary mb-2">Precision Drip Irrigation Engine</h2>
+                <p class="text-xs text-gray-600 mb-6">
+                    Calculate daily water requirement ($V$, in L/plant/day) based on local Penman-Monteith reference evapotranspiration ($\text{ET}_0$), crop coefficients ($K_c$), and canopy ground cover fraction ($K_r$).
+                </p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="bg-brand-light p-5 rounded-xl border border-brand-border space-y-4">
+                        <h3 class="font-bold text-brand-primary text-sm border-b border-brand-border pb-2">ETc Calculation Parameters</h3>
+                        
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Growth Stage & Season</label>
+                            <select id="calc-stage" onchange="runIrrigationCalc()" class="w-full text-xs p-2 rounded border border-gray-300 bg-white">
+                                <option value="8-10">8-10 Months (Post-Monsoon) - ET0: 4.2, Kc: 0.45</option>
+                                <option value="10-12">10-12 Months (Winter) - ET0: 3.2, Kc: 0.45</option>
+                                <option value="12-14">12-14 Months (Spring Flush) - ET0: 5.5, Kc: 0.65</option>
+                                <option value="14-15">14-15 Months (Summer Stress) - ET0: 8.0, Kc: 0.15</option>
+                                <option value="15-17">15-17 Months (Bahar Bloom) - ET0: 6.0, Kc: 0.75</option>
+                                <option value="17-20">17-20 Months (Fruit Growth) - ET0: 4.5, Kc: 0.85</option>
+                                <option value="20-22">20-22 Months (Fruit Sizing) - ET0: 3.5, Kc: 0.80</option>
+                                <option value="22-24">22-24 Months (Harvest) - ET0: 3.8, Kc: 0.60</option>
+                                <option value="mature-summer">Mature Year 4+ (Peak Summer) - ET0: 8.2, Kc: 0.85</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Drip Hardware Config</label>
+                            <select id="calc-drippers" onchange="runIrrigationCalc()" class="w-full text-xs p-2 rounded border border-gray-300 bg-white">
+                                <option value="2x4">2 Drippers x 4.0 L/h (8.0 L/h Total)</option>
+                                <option value="4x4">4 Drippers x 4.0 L/h (16.0 L/h Total - Mature)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Drip System Efficiency ($\eta$)</label>
+                            <input type="number" id="calc-eff" value="0.90" step="0.05" min="0.70" max="0.98" onchange="runIrrigationCalc()" class="w-full text-xs p-2 rounded border border-gray-300 bg-white">
+                        </div>
+
+                        <div class="bg-white p-4 rounded-lg border border-brand-border space-y-2">
+                            <div class="flex justify-between text-xs">
+                                <span class="text-gray-600">Daily Volume / Plant:</span>
+                                <span id="out-vol-plant" class="font-bold text-brand-primary">3.3 L/day</span>
+                            </div>
+                            <div class="flex justify-between text-xs">
+                                <span class="text-gray-600">System Run Time:</span>
+                                <span id="out-runtime" class="font-bold text-brand-accent">0 hr 25 min</span>
+                            </div>
+                            <div class="flex justify-between text-xs border-t border-gray-100 pt-2">
+                                <span class="text-gray-600">Orchard Total (2,100 Trees):</span>
+                                <span id="out-vol-orchard" class="font-bold text-emerald-800">6,930 Liters</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-2 space-y-4">
+                        <div class="bg-white p-4 rounded-xl border border-brand-border">
+                            <h3 class="font-bold text-brand-primary text-sm mb-2">Stage-Wise Water Volume Curve (2,100 Trees)</h3>
+                            <div class="chart-container">
+                                <canvas id="irrigationCurveChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200">
+                            <h4 class="font-bold text-emerald-900 text-xs mb-2"><i class="fa-solid fa-wrench mr-1"></i> Vertisol Drip Maintenance Protocol</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs text-emerald-950">
+                                <div class="bg-white p-2.5 rounded border border-emerald-100">
+                                    <strong class="block text-emerald-800">Bi-Weekly Line Flush:</strong>
+                                    Flush lateral ends at operational pressure to remove fine Vertisol clay sediment.
+                                </div>
+                                <div class="bg-white p-2.5 rounded border border-emerald-100">
+                                    <strong class="block text-emerald-800">Monthly Acid Wash:</strong>
+                                    Inject HCl (33%) or Phosphoric Acid to reduce pH to 4.0 for 30 min to clear carbonates.
+                                </div>
+                                <div class="bg-white p-2.5 rounded border border-emerald-100">
+                                    <strong class="block text-emerald-800">Biofilm Chlorination:</strong>
+                                    Inject NaOCl (10–12%) at 5–10 ppm continuous or 50 ppm shock dose every two months.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 6: FERTIGATION & NUTRITION SCHEDULES -->
+        <section id="tab-fertigation" class="tab-content space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-brand-border">
+                <h2 class="text-xl font-bold text-brand-primary mb-2">Fertigation & Precision Nutrition Schedules</h2>
+                <p class="text-xs text-gray-600 mb-6">
+                    Delivering 75% of Recommended Dose of Fertilizer (RDF) via soluble drip fertigation synchronizes N-P-K delivery with phenological demand while preventing Vertisol salinity spikes.
+                </p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <div class="bg-brand-light p-4 rounded-xl border border-brand-border">
+                        <h3 class="font-bold text-brand-primary text-sm mb-2">Annual RDF Targets (Per Tree)</h3>
+                        <ul class="space-y-2 text-xs text-gray-700">
+                            <li class="flex justify-between border-b pb-1">
+                                <span>Year 1 (0–12 Months):</span>
+                                <span class="font-bold">100g N - 50g P₂O₅ - 50g K₂O</span>
+                            </li>
+                            <li class="flex justify-between border-b pb-1">
+                                <span>Year 2 (13–24 Months - 1st Crop):</span>
+                                <span class="font-bold text-emerald-800">200g N - 100g P₂O₅ - 200g K₂O</span>
+                            </li>
+                            <li class="flex justify-between border-b pb-1">
+                                <span>Year 3 (25–36 Months):</span>
+                                <span class="font-bold">350g N - 175g P₂O₅ - 350g K₂O</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span>Mature (Year 4+ Onward):</span>
+                                <span class="font-bold text-brand-accent">500g N - 250g P₂O₅ - 500g K₂O</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-brand-light p-4 rounded-xl border border-brand-border">
+                        <h3 class="font-bold text-brand-primary text-sm mb-2">3-Tank Injection System Protocol</h3>
+                        <div class="space-y-1.5 text-xs text-gray-700">
+                            <p><strong>Tank A:</strong> Soluble Nitrates & Sulfates (Urea, SOP, MgSO4).</p>
+                            <p><strong>Tank B:</strong> Calcium Nitrate & Iron EDDHA (Inject independently!).</p>
+                            <p><strong>Tank C:</strong> Phosphates (MAP 12-61-0, 19-19-19, Acidifiers).</p>
+                        </div>
+                        <p class="text-[11px] text-amber-800 mt-2 font-semibold">Rule: Never mix Tank B (Calcium) directly with Tank C (Phosphates/Sulfates) to prevent gypsum/calcium phosphate clogging precipitation!</p>
+                    </div>
+
+                    <div class="bg-brand-light p-4 rounded-xl border border-brand-border">
+                        <h3 class="font-bold text-brand-primary text-sm mb-2">Standard vs High-Intensity</h3>
+                        <p class="text-xs text-gray-700 mb-2">
+                            <strong>Standard:</strong> 75% RDF via Urea, 19-19-19, SOP. Protects clay soil structure and ensures 20-year longevity.
+                        </p>
+                        <p class="text-xs text-gray-700">
+                            <strong>High-Intensity:</strong> +25% K/P during sizing using MKP (0-52-34) & Multi-K. Yields up to 550g fruit but requires tensiometers & soil EC monitoring.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-brand-border mb-6">
+                    <h3 class="font-bold text-brand-primary text-sm mb-4">Stage 1 WSF Schedule: Months 8 to 12 (Framework Consolidation)</h3>
+                    <p class="text-xs text-gray-600 mb-3">16-Week target delivery for 2,100 trees: 40g N, 20g P₂O₅, 25g K₂O per tree.</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs text-left border-collapse">
+                            <thead>
+                                <tr class="bg-brand-primary text-white">
+                                    <th class="p-2.5">Fertilizer Grade</th>
+                                    <th class="p-2.5">Nutrient Content</th>
+                                    <th class="p-2.5">Per Plant / Wk</th>
+                                    <th class="p-2.5">Per 100 Trees / Wk</th>
+                                    <th class="p-2.5">Entire Orchard (2,100) / Wk</th>
+                                    <th class="p-2.5">Total 16-Wk Requirement</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200 text-gray-800">
+                                <tr class="hover:bg-gray-50">
+                                    <td class="p-2 font-semibold">Urea (46% N)</td>
+                                    <td class="p-2">Nitrogen</td>
+                                    <td class="p-2">4.50 g</td>
+                                    <td class="p-2">0.45 kg</td>
+                                    <td class="p-2 font-bold text-brand-primary">9.45 kg</td>
+                                    <td class="p-2 font-bold">151.2 kg</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="p-2 font-semibold">12-61-0 (MAP)</td>
+                                    <td class="p-2">N, P₂O₅</td>
+                                    <td class="p-2">2.05 g</td>
+                                    <td class="p-2">0.205 kg</td>
+                                    <td class="p-2 font-bold text-brand-primary">4.31 kg</td>
+                                    <td class="p-2 font-bold">68.96 kg</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="p-2 font-semibold">0-0-50 (SOP)</td>
+                                    <td class="p-2">K₂O, Sulfur</td>
+                                    <td class="p-2">3.12 g</td>
+                                    <td class="p-2">0.312 kg</td>
+                                    <td class="p-2 font-bold text-brand-primary">6.55 kg</td>
+                                    <td class="p-2 font-bold">104.8 kg</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="p-2 font-semibold">Magnesium Sulfate</td>
+                                    <td class="p-2">Mg, S</td>
+                                    <td class="p-2">1.50 g</td>
+                                    <td class="p-2">0.15 kg</td>
+                                    <td class="p-2 font-bold text-brand-primary">3.15 kg</td>
+                                    <td class="p-2 font-bold">50.4 kg</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="p-2 font-semibold">Calcium Nitrate</td>
+                                    <td class="p-2">N, Calcium</td>
+                                    <td class="p-2">2.00 g</td>
+                                    <td class="p-2">0.20 kg</td>
+                                    <td class="p-2 font-bold text-brand-primary">4.20 kg</td>
+                                    <td class="p-2 font-bold">67.2 kg</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 7: CROP HEALTH & IPM -->
+        <section id="tab-health" class="tab-content space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-brand-border">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-brand-primary">Crop Health, IPM & Disease Protection</h2>
+                        <p class="text-xs text-gray-600">Search and filter CIBRC-aligned management protocols for major guava pests and pathogens.</p>
+                    </div>
+                    <div class="flex space-x-2 w-full md:w-auto">
+                        <input type="text" id="health-search" onkeyup="filterHealthCards()" placeholder="Search pest/disease..." class="text-xs p-2 rounded border border-gray-300 w-full md:w-48">
+                        <select id="health-cat" onchange="filterHealthCards()" class="text-xs p-2 rounded border border-gray-300 bg-white">
+                            <option value="all">All Categories</option>
+                            <option value="insect">Insect Pests</option>
+                            <option value="disease">Diseases</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="health-cards-container">
+                </div>
+
+                <div class="bg-brand-light p-5 rounded-xl border border-brand-border mt-6">
+                    <h3 class="font-bold text-brand-primary text-sm mb-3">FRAC / IRAC Resistance Rotation Strategy & WALES Rule</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs mb-4">
+                        <div class="bg-white p-3 rounded border border-brand-border">
+                            <span class="font-bold text-brand-accent block">Window 1 (June)</span>
+                            <span>FRAC M01 Copper Oxychloride + IRAC 1B Organophosphates</span>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-brand-border">
+                            <span class="font-bold text-brand-accent block">Window 2 (August)</span>
+                            <span>FRAC 11 Azoxystrobin + IRAC 16 Buprofezin</span>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-brand-border">
+                            <span class="font-bold text-brand-accent block">Window 3 (October)</span>
+                            <span>FRAC 3 Difenoconazole + IRAC 28 Chlorantraniliprole</span>
+                        </div>
+                        <div class="bg-white p-3 rounded border border-brand-border">
+                            <span class="font-bold text-brand-accent block">Window 4 (November)</span>
+                            <span>FRAC M03 Mancozeb + IRAC 5 Spinosad</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-3.5 rounded border border-brand-border text-xs">
+                        <strong class="text-brand-primary block mb-1">WALES Tank-Mixing Protocol:</strong>
+                        <ol class="list-decimal list-inside space-y-0.5 text-gray-700">
+                            <li><strong>W:</strong> Fill tank 50% with water, start agitation. Add Water-Soluble Bags / Wettable Powders (WP/WG).</li>
+                            <li><strong>A:</strong> Agitate continuously until fully suspended.</li>
+                            <li><strong>L:</strong> Add Liquid flowables / Suspensions (SC, SE, OD).</li>
+                            <li><strong>E:</strong> Add Emulsifiable Concentrates (EC).</li>
+                            <li><strong>S:</strong> Add Surfactants, Soluble Concentrates (SL), and Foliar Micronutrients.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 8: FRUIT BAGGING & DIAGNOSTICS -->
+        <section id="tab-bagging" class="tab-content space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-brand-border">
+                <h2 class="text-xl font-bold text-brand-primary mb-2">Fruit Bagging & Soil Diagnostic Matrix</h2>
+                <p class="text-xs text-gray-600 mb-6">Explore the two-stage composite fruit bagging system and dynamic soil/water diagnostic thresholds.</p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white p-5 rounded-xl border border-brand-border space-y-3">
+                        <h3 class="font-bold text-brand-primary text-sm flex items-center">
+                            <i class="fa-solid fa-layer-group text-brand-accent mr-2"></i> Two-Stage Composite Bagging System
+                        </h3>
+                        <p class="text-xs text-gray-600">
+                            Bag fruitlets at 20–30 mm diameter (40–50 days post-set). Provides 100% protection against fruit fly, reduces anthracnose, and creates radiant pink peel color.
+                        </p>
+
+                        <div class="space-y-2 text-xs">
+                            <div class="p-2.5 bg-brand-light rounded border border-brand-border">
+                                <strong class="text-brand-primary block">Layer 1 (Innermost):</strong>
+                                Expanded Polyethylene (EPE) Foam Mesh Net. Protects tender fruit skin from rubbing and mechanical friction.
+                            </div>
+                            <div class="p-2.5 bg-brand-light rounded border border-brand-border">
+                                <strong class="text-brand-primary block">Layer 2 (Middle):</strong>
+                                Perforated Low-Density Polyethylene (LDPE) sheath (6–8 base pinholes). Buffers humidity and drains free condensation.
+                            </div>
+                            <div class="p-2.5 bg-brand-light rounded border border-brand-border">
+                                <strong class="text-brand-primary block">Layer 3 (Outermost):</strong>
+                                UV-reflective composite white craft paper or newsprint cover. Reflects excessive solar radiation to prevent scalding.
+                            </div>
+                        </div>
+
+                        <div class="p-3 bg-amber-50 rounded border border-amber-200 text-xs text-amber-900">
+                            <strong>Pre-Bagging Spray Directive:</strong> 24 hours prior to bagging, spray canopy with Azoxystrobin 23% SC (1.0 ml/L) + Neem Oil 10,000 ppm (1.5 ml/L). Ensure fruits are 100% dry before applying bags.
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-brand-border space-y-3">
+                        <h3 class="font-bold text-brand-primary text-sm flex items-center">
+                            <i class="fa-solid fa-flask-vial text-emerald-700 mr-2"></i> Interactive Soil & Water Diagnostic Lookup
+                        </h3>
+                        <p class="text-xs text-gray-600">Select a diagnostic soil or irrigation water parameter to view target agronomic ranges and remedial actions.</p>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-700 mb-1">Select Diagnostic Parameter</label>
+                            <select id="diag-param" onchange="runDiagnosticLookup()" class="w-full text-xs p-2.5 rounded border border-gray-300 bg-white">
+                                <option value="ph">Soil pH (Target: 6.5 – 7.5)</option>
+                                <option value="ec">Soil ECe (Target: < 1.5 dS/m)</option>
+                                <option value="oc">Organic Carbon (Target: 0.50% – 0.85%)</option>
+                                <option value="p">Available Phosphorus (Target: 15 – 25 kg/ha)</option>
+                                <option value="caco3">Free Calcium Carbonate CaCO3 (Target: < 5.0%)</option>
+                                <option value="w-rsc">Water RSC (Safe: < 1.25 meq/L)</option>
+                                <option value="w-sar">Water SAR (Safe: < 3.0)</option>
+                            </select>
+                        </div>
+
+                        <div id="diag-output" class="p-4 bg-brand-light rounded-lg border border-brand-border text-xs space-y-2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 9: WHOLE-FARM PROCUREMENT CALCULATOR -->
+        <section id="tab-procurement" class="tab-content space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-brand-border">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-brand-primary">Whole-Farm Input & Procurement Calculator</h2>
+                        <p class="text-xs text-gray-600">Adjust the tree count slider to scale required fertilizers, bio-agents, and hardware for your orchard layout.</p>
+                    </div>
+                    <div class="flex items-center space-x-3 bg-brand-light p-3 rounded-lg border border-brand-border">
+                        <label class="text-xs font-bold text-brand-primary">Orchard Scale:</label>
+                        <input type="range" id="proc-slider" min="100" max="5000" step="100" value="2100" oninput="updateProcurement()" class="w-32">
+                        <span id="proc-tree-count" class="text-sm font-bold text-brand-accent">2,100 Trees</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-4 rounded-xl border border-brand-border space-y-3">
+                        <h3 class="font-bold text-brand-primary text-sm border-b pb-2">Fertilizers & WSF (12-Mo Requirements)</h3>
+                        <ul class="space-y-2 text-xs" id="proc-list-fert">
+                        </ul>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-xl border border-brand-border space-y-3">
+                        <h3 class="font-bold text-brand-primary text-sm border-b pb-2">Micronutrients & Bio-Agents</h3>
+                        <ul class="space-y-2 text-xs" id="proc-list-bio">
+                        </ul>
+                    </div>
+
+                    <div class="bg-white p-4 rounded-xl border border-brand-border space-y-3">
+                        <h3 class="font-bold text-brand-primary text-sm border-b pb-2">Hardware & Bagging Supplies</h3>
+                        <ul class="space-y-2 text-xs" id="proc-list-hard">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 10: CRITICAL WARNINGS & AUDIT -->
+        <section id="tab-pitfalls" class="tab-content space-y-6">
+            <div class="bg-white p-6 rounded-xl shadow-sm border border-brand-border">
+                <h2 class="text-xl font-bold text-brand-primary mb-2">Agronomic Hazards & "Things NOT To Do"</h2>
+                <p class="text-xs text-gray-600 mb-6">Critical warnings to prevent irreversible framework stunting, Vertisol root hypoxia, and crop failure.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="bg-red-50 border border-red-200 p-4 rounded-xl space-y-2">
+                        <div class="flex items-center space-x-2 text-red-800 font-bold text-sm">
+                            <i class="fa-solid fa-ban"></i>
+                            <span>Premature Cropping (&lt;12 Months)</span>
+                        </div>
+                        <p class="text-xs text-red-950">
+                            Allowing fruit set at 8–12 months causes severe physiological exhaustion, permanently stunting scaffolds and shortening orchard lifespan from 20 years to 5 years.
+                        </p>
+                    </div>
+
+                    <div class="bg-red-50 border border-red-200 p-4 rounded-xl space-y-2">
+                        <div class="flex items-center space-x-2 text-red-800 font-bold text-sm">
+                            <i class="fa-solid fa-ban"></i>
+                            <span>Vertisol Root Collar Waterlogging</span>
+                        </div>
+                        <p class="text-xs text-red-950">
+                            Water pooling around trunks in heavy black clay creates anoxic conditions within 24 hours, suffocating feeder roots and triggering vascular <em>Fusarium</em> wilt collapse.
+                        </p>
+                    </div>
+
+                    <div class="bg-red-50 border border-red-200 p-4 rounded-xl space-y-2">
+                        <div class="flex items-center space-x-2 text-red-800 font-bold text-sm">
+                            <i class="fa-solid fa-ban"></i>
+                            <span>Tractor Rotovation Near Base</span>
+                        </div>
+                        <p class="text-xs text-red-950">
+                            Deep tillage within 1.2 meters of the trunk shears superficial feeder roots in the top 20 cm, opening infection courts for soil-borne fungal complexes.
+                        </p>
+                    </div>
+
+                    <div class="bg-red-50 border border-red-200 p-4 rounded-xl space-y-2">
+                        <div class="flex items-center space-x-2 text-red-800 font-bold text-sm">
+                            <i class="fa-solid fa-ban"></i>
+                            <span>Glyphosate Herbicide Drift</span>
+                        </div>
+                        <p class="text-xs text-red-950">
+                            Spraying non-selective systemic glyphosate near trees under 2 years causes rapid green bark absorption, leading to terminal chlorosis and vine-like growth distortion.
+                        </p>
+                    </div>
+
+                    <div class="bg-red-50 border border-red-200 p-4 rounded-xl space-y-2">
+                        <div class="flex items-center space-x-2 text-red-800 font-bold text-sm">
+                            <i class="fa-solid fa-ban"></i>
+                            <span>Calcium & Phosphate Mixing</span>
+                        </div>
+                        <p class="text-xs text-red-950">
+                            Combining Calcium Nitrate with MAP (12-61-0) or Sulfate fertilizers in the same tank causes immediate chemical precipitation of insoluble calcium phosphate, clogging drip lines.
+                        </p>
+                    </div>
+
+                    <div class="bg-red-50 border border-red-200 p-4 rounded-xl space-y-2">
+                        <div class="flex items-center space-x-2 text-red-800 font-bold text-sm">
+                            <i class="fa-solid fa-ban"></i>
+                            <span>Unperforated Plastic Bagging</span>
+                        </div>
+                        <p class="text-xs text-red-950">
+                            Bagging fruit in solid clear plastic under October sun elevates internal temperatures above 48°C, cooking fruit tissue and inducing total fruit rot.
+                        </p>
+                    </div>
+
+                    <div class="bg-red-50 border border-red-200 p-4 rounded-xl space-y-2">
+                        <div class="flex items-center space-x-2 text-red-800 font-bold text-sm">
+                            <i class="fa-solid fa-ban"></i>
+                            <span>Bloom Chemical Insecticides</span>
+                        </div>
+                        <p class="text-xs text-red-950">
+                            Spraying broad-spectrum insecticides (Imidacloprid, Dimethoate) during open bloom destroys honeybee pollinators, resulting in flower drop and misshapen fruit.
+                        </p>
+                    </div>
+
+                    <div class="bg-red-50 border border-red-200 p-4 rounded-xl space-y-2">
+                        <div class="flex items-center space-x-2 text-red-800 font-bold text-sm">
+                            <i class="fa-solid fa-ban"></i>
+                            <span>Caustic Chemical Deblossom</span>
+                        </div>
+                        <p class="text-xs text-red-950">
+                            Spraying 10% Urea or 600 ppm NAA on 8–12 month young trees causes severe foliar scorch and leaf drop. Deblossoming must be executed manually.
+                        </p>
+                    </div>
+
+                    <div class="bg-red-50 border border-red-200 p-4 rounded-xl space-y-2">
+                        <div class="flex items-center space-x-2 text-red-800 font-bold text-sm">
+                            <i class="fa-solid fa-ban"></i>
+                            <span>Unbuffered Water Stress</span>
+                        </div>
+                        <p class="text-xs text-red-950">
+                            Re-initiating full heavy irrigation abruptly after 30 days of drought stress causes water shock and root bark splitting. Always ramp up water (50% Day 1, 100% Day 3).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-brand-dark text-gray-300 text-xs py-6 border-t border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+            <div>
+                <p class="font-bold text-white mb-1">Taiwan Pink Guava Master Plan Explorer</p>
+                <p class="text-gray-400">Karoda Village, Badnawar Tehsil, Dhar District, Madhya Pradesh (23.125961, 75.293923)</p>
+            </div>
+            <div class="text-gray-400">
+                <p>Data source: ICAR-CISH, RVSKVV Gwalior, JNKVV Jabalpur, NHB & APMC Terminal Market Records</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Extended Nutrient Deep-Dive Master Data
+        const nutrientsData = [
+            {
+                id: "n",
+                symbol: "N",
+                name: "Nitrogen",
+                category: "macro",
+                role: "Chlorophyll synthesis, structural amino acids, vegetative flush elongation, cellular division.",
+                impact: "Drives structural canopy expansion. High initial N builds scaffolds. Over-application causes excessive vegetative growth, watery pulp, low Brix, and increased pest/fruit fly vulnerability.",
+                result: "Lush dark-green vegetative growth. Targeted delivery yields 350-500g fruits with optimum sugar/acid balance.",
+                img: "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?auto=format&fit=crop&w=600&q=80",
+                deficiency: "Older bottom leaves turn pale green to light yellow first. Overall tree stunting and thin twigs.",
+                excess: "Dark blue-green leaves, soft succulent wood, flower drop, delayed fruit maturity, low TSS (<10° Brix).",
+                timing: "Active vegetative flushes (Months 8-12; Month 17 post-pruning bloom). STOPS during Bahar stress (Month 16) & late sizing (Month 23).",
+                doseDrip: "Month 8-12: Urea @ 4.5g/tree/wk (9.45 kg/wk for 2,100 trees). Year 2 Target: 200g N/tree/year.",
+                doseFoliar: "1.0% Urea (10 g/L) during vegetative flush recovery.",
+                doseSoil: "100g N/tree/year (Year 1) -> 200g N/tree/year (Year 2).",
+                vertisol: "High leaching loss under flooding; volatility in high pH (>7.8). Fertigate in 3-phase split via drip.",
+                antagonism: "Excess Nitrogen suppresses Potassium, Calcium, and Boron uptake, leading to fruit cracking."
+            },
+            {
+                id: "p",
+                symbol: "P",
+                name: "Phosphorus (P₂O₅)",
+                category: "macro",
+                role: "ATP energy transport, nucleic acid synthesis, feeder root elongation, floral primordia formation.",
+                impact: "Essential for rapid feeder root establishment in dense Vertisols and synchronized bloom onset during Mrig Bahar.",
+                result: "Dense root architecture, abundant flower bud initiation, uniform fruit set.",
+                img: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=600&q=80",
+                deficiency: "Purplish-red or bronze tint on older leaves, weak thin roots, delayed flower bud differentiation.",
+                excess: "Binds and induces severe Zinc (Zn) and Iron (Fe) deficiencies in alkaline Vertisols.",
+                timing: "Monsoon onset, post-pruning root activation (Month 17), early floral development (Month 18).",
+                doseDrip: "MAP (12-61-0) @ 2.05g/tree/wk (4.31 kg/wk for 2,100 trees). Year 2 Target: 100g P₂O₅/tree/year.",
+                doseFoliar: "0.5% MAP (12-61-0) @ 5.0 g/L pre-bloom spray.",
+                doseSoil: "50g P₂O₅/tree/year (Year 1) -> 100g P₂O₅/tree/year (Year 2).",
+                vertisol: "High fixation in alkaline clay (pH >7.8) with free CaCO3. Drip fertigation with acidic MAP prevents fixation.",
+                antagonism: "Excess soil Phosphorus directly inhibits Zinc and Iron absorption."
+            },
+            {
+                id: "k",
+                symbol: "K",
+                name: "Potassium (K₂O)",
+                category: "macro",
+                role: "Stomatal opening/closing, osmoregulation, sugar & starch translocation, fruit cell expansion.",
+                impact: "Primary driver of fruit sizing (350-500g), crisp pink flesh firmness, sugar accumulation (>11.5° Brix), and drought/stress tolerance.",
+                result: "Heavy, dense, sweet, crack-resistant fruits with extended post-harvest shelf life.",
+                img: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=600&q=80",
+                deficiency: "Marginal leaf scorch (yellowing then necrosis on leaf edges), small sour fruits, weak stems.",
+                excess: "Competes with Magnesium (Mg) and Calcium (Ca) uptake, causing leaf chlorosis or soft fruit rind.",
+                timing: "Fruit development and sizing phase (Months 20-23). Continuous baseline during framework.",
+                doseDrip: "SOP (0-0-50) @ 3.12g/tree/wk (6.55 kg/wk for 2,100 trees). Sizing: Multi-K (13-0-45) @ 10g/tree/wk.",
+                doseFoliar: "1.0% SOP (10 g/L) or 1.0% KNO3 (10 g/L) during fruit expansion.",
+                doseSoil: "50g K₂O/tree/year (Year 1) -> 200g K₂O/tree/year (Year 2).",
+                vertisol: "Vertisol clay traps K in lattice. Use Sulfate of Potash (SOP) via drip to maintain solution concentration.",
+                antagonism: "High Potassium inhibits Magnesium and Calcium absorption."
+            },
+            {
+                id: "ca",
+                symbol: "Ca",
+                name: "Calcium",
+                category: "secondary",
+                role: "Calcium pectate middle lamella cell wall binder, membrane structural integrity, pollen tube growth.",
+                impact: "Crucial for firm rind skin, preventing stylar end rot, internal fruit breakdown, and decay under fruit bags.",
+                result: "Firm fruit rind, long storage capability, 100% bagged fruit survival without internal decay.",
+                img: "https://images.unsplash.com/photo-1528825871115-3581a5387919?auto=format&fit=crop&w=600&q=80",
+                deficiency: "Hook-shaped young leaf tips, stylar end rot in green fruits, soft fruit collapse under paper bags.",
+                excess: "High soil Ca increases pH and restricts Iron, Zinc, and Boron availability.",
+                timing: "Flowering, fruit set, and early fruit cell division (Months 18-21).",
+                doseDrip: "Calcium Nitrate @ 2.0g/tree/wk (4.2 kg/wk for 2,100 trees). Inject in Tank B independently!",
+                doseFoliar: "0.2% Calcium Chloride (2.0 g/L) or Calcium Nitrate @ 3.0 g/L during fruit set.",
+                doseSoil: "200-300g gypsum/tree in high-sodium Vertisol soils.",
+                vertisol: "High native CaCO3 is often insoluble. Soluble Calcium Nitrate fertigation is mandatory.",
+                antagonism: "Incompatible in tank mix with Phosphates (MAP) or Sulfates (SOP/MgSO4) - forms insoluble precipitate!"
+            },
+            {
+                id: "mg",
+                symbol: "Mg",
+                name: "Magnesium",
+                category: "secondary",
+                role: "Central atom of chlorophyll molecule, activator of sugar transport enzymes.",
+                impact: "Prevents winter foliar bronzing/drop, maintains high photosynthetic capacity during heavy fruit load.",
+                result: "Vibrant dark green canopy, sustained carbohydrates for fruit growth.",
+                img: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=600&q=80",
+                deficiency: "Interveinal chlorosis on older leaves (inverted green 'V' pattern at leaf base).",
+                excess: "Imbalances Potassium and Calcium uptake.",
+                timing: "Post-monsoon and winter fruit growth months (Months 9-12 & 20-22).",
+                doseDrip: "Magnesium Sulfate @ 1.5g/tree/wk (3.15 kg/wk for 2,100 trees).",
+                doseFoliar: "0.5% Magnesium Sulfate (5.0 g/L) foliar spray.",
+                doseSoil: "25-50g MgSO4/tree in basal application.",
+                vertisol: "High soil K:Mg ratio in black clay restricts Mg. Regular drip fertigation required.",
+                antagonism: "Excess K or NH4-N suppresses Mg uptake."
+            },
+            {
+                id: "s",
+                symbol: "S",
+                name: "Sulfur",
+                category: "secondary",
+                role: "Synthesis of essential amino acids (methionine, cysteine), aromatic protein synthesis, soil pH buffering.",
+                impact: "Enhances pink guava's distinct aroma and flavor profile while micro-acidifying Vertisol root zone.",
+                result: "Aromatic fruit flesh, superior nitrogen use efficiency.",
+                img: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=600&q=80",
+                deficiency: "Uniform pale yellowing on youngest upper leaves first (unlike Nitrogen).",
+                excess: "May lower soil pH excessively if applied in elemental form in large amounts.",
+                timing: "Delivered continuously via SOP (18% S) and MgSO4 (12% S) fertigation.",
+                doseDrip: "Provided automatically via SOP and MgSO4 weekly fertigation.",
+                doseFoliar: "Elemental Sulfur 80% WDG @ 2.0 g/L (acts as fungicide & nutrient).",
+                doseSoil: "50-100g Elemental Sulfur/tree for soil acidification if pH > 8.2.",
+                vertisol: "Sulfate anion (SO4²⁻) is mobile. Continuous small doses prevent leaching loss.",
+                antagonism: "High Molybdenum can interfere with Sulfur metabolism."
+            },
+            {
+                id: "zn",
+                symbol: "Zn",
+                name: "Zinc",
+                category: "micro",
+                role: "Precursor for indole-3-acetic acid (IAA auxin) synthesis, leaf expansion, internode elongation.",
+                impact: "Prevents 'little leaf' stunting and resetting of branch tips, driving canopy spread.",
+                result: "Broad leaf blades, strong internode extension, vigor.",
+                img: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=600&q=80",
+                deficiency: "'Little leaf' syndrome, small clustered leaves, leaf bronzing, short internodes, interveinal chlorosis.",
+                excess: "Phytotoxic at high concentrations; causes leaf-drop and iron chlorosis.",
+                timing: "At new flush emergence (Months 8, 14, 18 post-pruning).",
+                doseDrip: "Zn-EDTA (12% Zn) @ 1.0g/tree/month.",
+                doseFoliar: "Zn-EDTA (12%) @ 1.5 g/L or Zinc Sulfate (21%) @ 2.5 g/L + Lime.",
+                doseSoil: "Zinc Sulfate Heptahydrate @ 15-20g/tree basal.",
+                vertisol: "Fixed rapidly in Vertisols with pH > 7.5. Foliar Zn-EDTA or drip chelate is mandatory.",
+                antagonism: "High soil P directly blocks Zn uptake."
+            },
+            {
+                id: "b",
+                symbol: "B",
+                name: "Boron",
+                category: "micro",
+                role: "Cell wall cross-linking, pollen grain germination, pollen tube elongation, sugar transport.",
+                impact: "CRITICAL FOR FLOWER RETENTION, eliminating fruit cracking, and preventing internal brown corky tissue.",
+                result: "100% fruit set, zero stylar end cracking, smooth pink pulp.",
+                img: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?auto=format&fit=crop&w=600&q=80",
+                deficiency: "Flower drop, stylar end fruit cracking, hollow/corky core, bumpy malformed fruit.",
+                excess: "Narrow safety margin! Leaf tip burn, marginal necrosis, leaf drop.",
+                timing: "Pre-bloom flush (Month 18) and 50% petal fall (Month 19).",
+                doseDrip: "Solubor @ 0.5g/tree/month.",
+                doseFoliar: "Solubor (20% B) @ 1.0 - 1.25 g/L (Do not exceed 1.5 g/L!).",
+                doseSoil: "Borax (10% B) @ 5-10g/tree annually.",
+                vertisol: "Leaches in sandy soils, but binds to Vertisol clays. Foliar spray at bloom is most effective.",
+                antagonism: "High Calcium reduces Boron mobility in plant tissues."
+            },
+            {
+                id: "fe",
+                symbol: "Fe",
+                name: "Iron",
+                category: "micro",
+                role: "Chlorophyll synthesis electron carrier, catalase/peroxidase enzyme activator.",
+                impact: "Prevents iron chlorosis in high-pH calcareous Vertisol soils.",
+                result: "Dark green leaves with maximum photosynthetic productivity.",
+                img: "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=600&q=80",
+                deficiency: "Interveinal chlorosis on youngest top leaves (veins remain green, leaf turns ivory white in severe cases).",
+                excess: "Rare in alkaline Vertisols.",
+                timing: "Rainy season and post-monsoon flush (Months 8-11).",
+                doseDrip: "Fe-EDDHA (6% ortho-ortho) @ 10-15g/tree root drench (Stable up to pH 9.0!).",
+                doseFoliar: "Fe-EDTA (12%) @ 1.5 g/L.",
+                doseSoil: "Ferrous Sulfate is ineffective in high pH soil. Must use Fe-EDDHA chelate.",
+                vertisol: "Insoluble in calcareous soils (pH >7.8). Fe-EDDHA soil drench is the only reliable ground cure.",
+                antagonism: "Excess P, Zn, or Manganese induces Iron deficiency."
+            },
+            {
+                id: "mn",
+                symbol: "Mn",
+                name: "Manganese",
+                category: "micro",
+                role: "Water splitting in Photosystem II photosynthesis, nitrogen assimilation.",
+                impact: "Supports chloroplast integrity and photosynthesis.",
+                result: "Uniform green leaf blade development.",
+                img: "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?auto=format&fit=crop&w=600&q=80",
+                deficiency: "Checkered interveinal chlorosis on young leaves, dark green band along main veins.",
+                excess: "Crinkle leaf, brown spot necrosis in acidic soils (rare in Vertisols).",
+                timing: "Combine with zinc foliar sprays during vegetative expansion.",
+                doseDrip: "Mn-EDTA @ 0.5g/tree/month.",
+                doseFoliar: "Mn-EDTA (12%) @ 1.0 g/L or Manganese Sulfate @ 2.0 g/L.",
+                doseSoil: "Manganese Sulfate @ 10g/tree.",
+                vertisol: "Low availability in alkaline, organic-poor Vertisols.",
+                antagonism: "High Fe or Zn competes with Mn uptake."
+            },
+            {
+                id: "cu",
+                symbol: "Cu",
+                name: "Copper",
+                category: "micro",
+                role: "Lignin cell wall synthesis, plastocyanin electron transport, fungal pathogen suppression.",
+                impact: "Ensures stem rigidity and reduces dieback; doubles as preventive bactericide/fungicide.",
+                result: "Stiff stout shoots capable of supporting 500g fruits.",
+                img: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=600&q=80",
+                deficiency: "S-shaped twig bending, terminal shoot dieback, bark exuding gum.",
+                excess: "Phytotoxic; root damage and iron chlorosis.",
+                timing: "Post-pruning sanitation (Month 17) and pre-monsoon.",
+                doseDrip: "Cu-EDTA @ 0.5g/tree/month.",
+                doseFoliar: "Copper Oxychloride 50% WP @ 2.5-3.0 g/L or Cu-EDTA @ 1.0 g/L.",
+                doseSoil: "Copper Sulfate @ 5-10g/tree.",
+                vertisol: "Binds tightly to organic matter and clay particles.",
+                antagonism: "Excess Zinc or Nitrogen reduces Copper uptake."
+            },
+            {
+                id: "mo",
+                symbol: "Mo",
+                name: "Molybdenum",
+                category: "micro",
+                role: "Nitrate reductase enzyme component - converts absorbed nitrate into amino acids.",
+                impact: "Prevents nitrate accumulation in leaves, ensuring efficient protein synthesis.",
+                result: "High nitrogen conversion efficiency.",
+                img: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=600&q=80",
+                deficiency: "Interveinal chlorosis resembling N deficiency, whipped-leaf distortion.",
+                excess: "Toxic to livestock grazing on forage (less concern in guava).",
+                timing: "Annual maintenance foliar spray.",
+                doseDrip: "Sodium Molybdate @ 0.1g/tree.",
+                doseFoliar: "Ammonium Molybdate @ 0.5 g/L.",
+                doseSoil: "Sodium Molybdate @ 1-2g/tree.",
+                vertisol: "More available in high pH soils (unlike other micronutrients).",
+                antagonism: "Sulfate inhibits Molybdenum absorption."
+            },
+            {
+                id: "humic",
+                symbol: "HA/FA",
+                name: "Humic & Fulvic Acid",
+                category: "bio",
+                role: "Soil carbon aggregation, CEC enhancement, micro-chelation of fixed nutrients, root stimulation.",
+                impact: "Opens tight Vertisol clay, binds free salts, stimulates root branching and beneficial microbes.",
+                result: "Soft friable root zone, enhanced fertilizer efficiency (+20-30%).",
+                img: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=600&q=80",
+                deficiency: "Compacted clay, slow feeder root expansion, salt accumulation crusts.",
+                excess: "None at recommended dosages.",
+                timing: "Every 45 days via drip irrigation.",
+                doseDrip: "Potassium Humate (80%) @ 2.5 kg/ha (3.1 kg for 2,100 trees) every 45 days.",
+                doseFoliar: "Fulvic Acid @ 1.0 g/L as nutrient carrier.",
+                doseSoil: "Humic granules @ 25g/tree in basin.",
+                vertisol: "Essential for buffering high pH and salt build-up in Vertisols.",
+                antagonism: "None. Compatible with most soluble WSF."
+            },
+            {
+                id: "biofert",
+                symbol: "BIO",
+                name: "Biofertilizers & Biocontrol",
+                category: "bio",
+                role: "Biological N fixation (Azotobacter), P-solubilization (PSB), K-mobilization (KMB), biocontrol (Trichoderma).",
+                impact: "Protects rootzone from Fusarium wilt while converting native fixed soil phosphorus and potassium.",
+                result: "Disease-resistant root zone, long 20-year orchard lifespan.",
+                img: "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?auto=format&fit=crop&w=600&q=80",
+                deficiency: "High vulnerability to soil-borne wilt pathogens and root rot.",
+                excess: "None. Completely eco-safe.",
+                timing: "Monsoon onset (June) and post-monsoon (October) in FYM.",
+                doseDrip: "Trichoderma viride @ 2.5 kg/ha; Pseudomonas fluorescens @ 2.5 kg/ha drench.",
+                doseFoliar: "Beauveria bassiana @ 5.0 g/L for bio-insecticide.",
+                doseSoil: "Inoculate 1 kg Trichoderma per 100 kg moist FYM; apply 10 kg enriched FYM/tree.",
+                vertisol: "Requires moist soil and organic matter (FYM) to establish colonies in clay.",
+                antagonism: "Do NOT apply chemical fungicides (Carbendazim, Copper) within 10 days of bio-fungicide drenching!"
+            }
+        ];
+
+        const calendarData = [
+            { month: 8, title: "Month 08 (August) - Framework Building", pheno: "Active vegetative growth, pea-size flower bud emergence", water: "3.3 L/plant/day (25 min runtime)", fert: "Urea 4.5g, MAP 2.0g, SOP 3.1g, MgSO4 1.5g /wk", foliar: "IIHR Guava Special @ 5g/L + Sticker", pruning: "Pinch primary scaffolds at 45cm; continuous deblossom", ipm: "Scout for thrips/aphids. Inoculate basin with Trichoderma in FYM" },
+            { month: 9, title: "Month 09 (September) - Secondary Induction", pheno: "Secondary lateral sprouting along primary limbs", water: "3.3 L/plant/day (25 min runtime)", fert: "Urea 4.5g, MAP 2.0g, SOP 3.1g, CalNitrate 2.0g /wk", foliar: "Chelated Zn-EDTA (1.5g/L) + Solubor (1.0g/L)", pruning: "Soft-pinch emerging secondary branches at 30cm length", ipm: "Clear inter-row weeds; slash sunn hemp cover crop for basin mulch" },
+            { month: 10, title: "Month 10 (October) - Tertiary Flushing", pheno: "Tertiary twig development; framework hardening", water: "3.5 L/plant/day (26 min runtime)", fert: "Urea 4.5g, SOP 3.5g, MgSO4 1.5g /wk", foliar: "1% Potassium Nitrate (KNO3) to harden shoots", pruning: "Clean trunk up to 30cm. Install mealybug crawl barriers", ipm: "Install yellow sticky traps. Monitor mealybugs in leaf axils" },
+            { month: 11, title: "Month 11 (November) - Tissue Hardening", pheno: "Lignification of tertiary twigs; winter slowdown", water: "2.8 L/plant/day (20 min runtime)", fert: "Urea 3.0g, SOP 4.0g, CalNitrate 2.0g /wk", foliar: "MgSO4 @ 5.0 g/L to prevent late bronzing", pruning: "Allow tertiary wood to mature; do not head back this month", ipm: "Check trunk forks for bark-eating caterpillar frass ribbons" },
+            { month: 12, title: "Month 12 (December) - Canopy Rest", pheno: "Framework consolidation complete (3-4 scaffolds)", water: "2.5 L/plant/day (18 min runtime)", fert: "SOP 4.0g, Urea 2.0g /wk. Acid wash drip lines", foliar: "Nil (Dormancy rest)", pruning: "Sanitation: cut crossing inner twigs. Top up mulch to 8cm", ipm: "Inspect Vertisol surface micro-cracks; top up organic mulch" },
+            { month: 13, title: "Month 13 (January) - Slow Vegetative", pheno: "Winter canopy rest; early flower bud differentiation", water: "2.7 L/plant/day (20 min runtime)", fert: "Urea 3.0g, MAP 1.5g, SOP 3.0g /wk", foliar: "Nil", pruning: "Confirm 3-4 primary scaffolds with balanced tertiary canopy", ipm: "Clean dripper nozzles; check line pressure" },
+            { month: 14, title: "Month 14 (February) - Pre-Stress Preparation", pheno: "Late winter vegetative flush; Ambe bud emergence", water: "5.5 L/plant/day (45 min runtime)", fert: "Urea 6.0g, 19-19-19 6.0g, SOP 4.0g /wk", foliar: "Urea (1%) + Zinc Sulfate (0.5%) foliar", pruning: "Remove inner vertical water shoots. Deblossom Ambe buds", ipm: "Spray Copper Oxychloride (3 g/L) to suppress latent anthracnose" },
+            { month: 15, title: "Month 15 (March) - Ambe Removal & Growth", pheno: "Active spring flushing; temperature rise", water: "8.0 L/plant/day (60 min runtime)", fert: "19-19-19 @ 10g, SOP @ 5g /wk", foliar: "Nil", pruning: "Strip all Ambe Bahar flowers manually. Do not set fruit", ipm: "Spray Buprofezin 25% SC @ 1.25 ml/L if mealybugs reappear" },
+            { month: 16, title: "Month 16 (April) - Mrig Bahar Drought Stress", pheno: "Terminal shoot stoppage; foliage yellowing", water: "SHUT OFF DRIP COMPLETELY by April 20 (0 L/day)", fert: "Cease all fertigation during stress", foliar: "Nil", pruning: "Target 20-25% defoliation under controlled soil drought", ipm: "Clean tree basins; remove all weeds to ensure uniform stress" },
+            { month: 17, title: "Month 17 (May) - Stress Execution & Pruning", pheno: "25-35 days stress completion; floral bud swell", water: "Re-start drip late May: 50% Day 1, 100% Day 3", fert: "Apply basal FYM 15kg + Neem cake 500g + Trichoderma", foliar: "Nil", pruning: "Head back shoots 20-25cm; shoot bending (60-90 deg). Paint COC", ipm: "Apply copper paste to pruning cuts > 1cm" },
+            { month: 18, title: "Month 18 (June) - Sprouting & Floral Flush", pheno: "Massive synchronized flowering shoot emergence", water: "13.5 L/plant/day (Rain-adjusted)", fert: "MAP (12-61-0) @ 10g, Urea @ 8g /wk", foliar: "Solubor @ 1.25g/L + NAA @ 20 ppm at bud swell", pruning: "Verify tied shoot bends. Clear rootstock suckers", ipm: "Monitor thrips on buds; spray Neem 10,000 ppm @ 2 ml/L" },
+            { month: 19, title: "Month 19 (July) - Full Bloom & Set", pheno: "Open anthesis and 1st wave fruitlet setting", water: "Rain-adjusted (Ensure surface furrow drainage)", fert: "19-19-19 @ 12g, CalNitrate @ 4g /wk", foliar: "Solubor (1g/L) at 50% petal fall", pruning: "Cease insecticide spraying during open bloom for bees", ipm: "Ensure escape furrows are clear of waterlogging" },
+            { month: 20, title: "Month 20 (August) - Marble Stage & Bagging", pheno: "Fruitlets 20-30mm diameter; rapid expansion", water: "12.8 L/plant/day (Rain-adjusted)", fert: "MAP @ 8g, 13-0-45 @ 10g, CalNitrate @ 4g /wk", foliar: "Azoxystrobin 23% SC + Spinosad pre-bagging spray", pruning: "Thin to 1 fruit/cluster (40-50 fruits/tree). Apply 2-stage bags", ipm: "Hang methyl eugenol pheromone traps (20 traps/orchard)" }
+        ];
+
+        const healthData = [
+            { id: "fruitfly", cat: "insect", name: "Oriental Fruit Fly (Bactrocera dorsalis)", etl: "5 flies / trap / week", bio: "Methyl eugenol pheromone traps @ 20/ha; sanitation", chem: "Spot bait spray: 100g jaggery + 10ml Malathion 50% EC in 10L water. Direct: Spinosad 45% SC @ 0.35 ml/L (PHI: 3d)", desc: "Maggots feed inside pulp causing internal liquefaction. Primary pest of Ambe Bahar; managed via Mrig Bahar timing." },
+            { id: "mealybug", cat: "insect", name: "Guava Mealybug (Ferrisia virgata)", etl: "> 5% shoot tips infested", bio: "Release Cryptolaemus montrouzieri beetles @ 10/tree or Beauveria bassiana @ 5g/L", chem: "Buprofezin 25% SC @ 1.25 ml/L (PHI: 15d) or Dimethoate 30% EC @ 1.5 ml/L + silicone adjuvant", desc: "Waxy white colonies suck sap and excrete honeydew fostering black sooty mold." },
+            { id: "borer", cat: "insect", name: "Shoot & Fruit Borer (Conogethes punctiferalis)", etl: "2% shoot or fruit damage", bio: "Bacillus thuringiensis (Btk) @ 1.5 g/L at early larval stage", chem: "Chlorantraniliprole 18.5% SC @ 0.3 ml/L (PHI: 5d)", desc: "Larvae bore into tender growing tips causing dieback and bore into fruits leaving dark frass." },
+            { id: "caterpillar", cat: "insect", name: "Bark-Eating Caterpillar (Indarbela tetraonis)", etl: "Presence of frass ribbons on trunk", bio: "Manual web clearing with stiff wire brush", chem: "Inject 3-5ml Neem oil (5%) or Dichlorvos (0.1%) into bore hole and seal with wet mud", desc: "Larvae chew cambium bark under ribbons of silk and wood chips, disrupting translocation." },
+            { id: "wilt", cat: "disease", name: "Guava Wilt Complex (Fusarium oxysporum)", etl: "Immediate intervention at partial wilt", bio: "Basal bio-inoculation with Trichoderma viride in FYM + Neem cake twice yearly", chem: "Drench basin with Carbendazim 50% WP @ 2.0 g/L (5-8L/tree), follow 15 days later with Trichoderma", desc: "Yellowing and collapse of single scaffold progressing to total death. Dark brown xylem vascular discoloration." },
+            { id: "anthracnose", cat: "disease", name: "Anthracnose & Dieback (Colletotrichum gloeosporioides)", etl: "Early leaf spot appearance", bio: "Canopy aeration via vase pruning; removal of mummies", chem: "Post-pruning: Copper Oxychloride 50% WP @ 3.0 g/L. Fruitlet: Azoxystrobin 23% SC @ 1.0 ml/L or Difenoconazole @ 0.5 ml/L", desc: "Sunken dark lesions on fruits with pinkish spore rings; terminal twig dieback." },
+            { id: "canker", cat: "disease", name: "Fruit Canker (Pestalotiopsis psidii)", etl: "Pustule detection on green fruit", bio: "Sanitation pruning of dead twigs", chem: "Copper Hydroxide 53.8% DF @ 2.0 g/L or Carbendazim + Mancozeb @ 2.0 g/L", desc: "Elevated, corky, crater-like cankers with reddish halos on green fruit rinds." },
+            { id: "stylar", cat: "disease", name: "Stylar End Rot (Phomopsis psidii)", etl: "Petal fall stage under high humidity", bio: "Optimize drip calcium nutrition", chem: "Copper Oxychloride @ 2.5 g/L + Calcium Chloride @ 2.0 g/L at 75% petal fall", desc: "Water-soaked rot advancing from calyx end; linked to calcium deficiency in rind cells." }
+        ];
+
+        // Functions
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById('tab-' + tabId).classList.add('active');
+            document.getElementById('btn-' + tabId).classList.add('active');
+
+            if (tabId === 'overview') renderOverviewCharts();
+            if (tabId === 'market') renderMarketCharts();
+            if (tabId === 'irrigation') renderIrrigationChart();
+            if (tabId === 'nutrients') renderNutrientCards('all');
+        }
+
+        function filterNutrients(category) {
+            document.querySelectorAll('.nutrient-tab').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('bg-white', 'text-gray-700');
+            });
+            event.target.classList.add('active');
+            event.target.classList.remove('bg-white', 'text-gray-700');
+            renderNutrientCards(category);
+        }
+
+        function renderNutrientCards(category) {
+            const container = document.getElementById('nutrient-cards-grid');
+            container.innerHTML = '';
+
+            const filtered = nutrientsData.filter(item => category === 'all' || item.category === category);
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-xl border border-brand-border overflow-hidden shadow-sm flex flex-col justify-between";
+                
+                let catBadgeClass = "bg-emerald-100 text-emerald-800";
+                if (item.category === 'macro') catBadgeClass = "bg-green-100 text-green-900";
+                if (item.category === 'secondary') catBadgeClass = "bg-amber-100 text-amber-900";
+                if (item.category === 'micro') catBadgeClass = "bg-blue-100 text-blue-900";
+                if (item.category === 'bio') catBadgeClass = "bg-purple-100 text-purple-900";
+
+                card.innerHTML = `
+                    <div>
+                        <div class="relative h-40 bg-gray-200">
+                            <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover">
+                            <div class="absolute top-2 right-2 ${catBadgeClass} px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow">
+                                ${item.category} Nutrient
+                            </div>
+                            <div class="absolute bottom-2 left-2 bg-brand-primary/90 text-white px-3 py-1 rounded-lg text-sm font-bold flex items-center space-x-2">
+                                <span class="text-brand-pink text-base font-extrabold">[${item.symbol}]</span>
+                                <span>${item.name}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-4 space-y-3 text-xs">
+                            <div>
+                                <strong class="text-brand-primary block text-xs font-bold mb-0.5">Physiological Role & Mechanism:</strong>
+                                <p class="text-gray-700">${item.role}</p>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2 bg-brand-light p-2.5 rounded-lg border border-brand-border">
+                                <div>
+                                    <strong class="text-emerald-800 block font-bold text-[11px]">Yield & Quality Impact:</strong>
+                                    <span class="text-gray-700">${item.impact}</span>
+                                </div>
+                                <div>
+                                    <strong class="text-brand-primary block font-bold text-[11px]">Visual Result:</strong>
+                                    <span class="text-gray-700">${item.result}</span>
+                                </div>
+                            </div>
+
+                            <div class="space-y-1.5">
+                                <div class="p-2 bg-red-50 rounded border border-red-100">
+                                    <strong class="text-red-900 block font-bold">Visual Deficiency Symptoms:</strong>
+                                    <span class="text-red-950">${item.deficiency}</span>
+                                </div>
+                                <div class="p-2 bg-amber-50 rounded border border-amber-100">
+                                    <strong class="text-amber-900 block font-bold">Toxicity / Excess Risk:</strong>
+                                    <span class="text-amber-950">${item.excess}</span>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-brand-border pt-2 space-y-1">
+                                <strong class="text-brand-primary block font-bold">Exact Application Protocols & Dosages:</strong>
+                                <div class="flex justify-between py-0.5 border-b border-gray-100">
+                                    <span class="text-gray-500">Phenological Window:</span>
+                                    <span class="font-semibold text-gray-800">${item.timing}</span>
+                                </div>
+                                <div class="flex justify-between py-0.5 border-b border-gray-100">
+                                    <span class="text-gray-500">Drip Fertigation:</span>
+                                    <span class="font-bold text-brand-primary">${item.doseDrip}</span>
+                                </div>
+                                <div class="flex justify-between py-0.5 border-b border-gray-100">
+                                    <span class="text-gray-500">Foliar Spray:</span>
+                                    <span class="font-bold text-brand-accent">${item.doseFoliar}</span>
+                                </div>
+                                <div class="flex justify-between py-0.5">
+                                    <span class="text-gray-500">Basal / Soil Target:</span>
+                                    <span class="font-semibold text-gray-800">${item.doseSoil}</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50 p-2.5 rounded border border-gray-200 space-y-1 text-[11px]">
+                                <div><strong class="text-gray-700">Vertisol Soil Dynamics:</strong> ${item.vertisol}</div>
+                                <div><strong class="text-red-800">Antagonism & Tank Mix:</strong> ${item.antagonism}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderCalendarButtons() {
+            const container = document.getElementById('month-buttons');
+            container.innerHTML = '';
+            calendarData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.className = `px-3 py-2 rounded-lg border transition text-center min-w-[100px] ${index === 0 ? 'bg-brand-primary text-white border-brand-primary' : 'bg-white text-gray-700 border-brand-border hover:bg-brand-light'}`;
+                btn.innerHTML = `<span class="block text-[10px] opacity-80">Month</span><span class="text-sm font-bold">${item.month}</span>`;
+                btn.onclick = () => selectCalendarMonth(index, btn);
+                container.appendChild(btn);
+            });
+            selectCalendarMonth(0, container.children[0]);
+        }
+
+        function selectCalendarMonth(index, btnEl) {
+            const container = document.getElementById('month-buttons');
+            Array.from(container.children).forEach(b => {
+                b.className = 'px-3 py-2 rounded-lg border transition text-center min-w-[100px] bg-white text-gray-700 border-brand-border hover:bg-brand-light';
+            });
+            if (btnEl) btnEl.className = 'px-3 py-2 rounded-lg border transition text-center min-w-[100px] bg-brand-primary text-white border-brand-primary';
+
+            const item = calendarData[index];
+            const detailCard = document.getElementById('calendar-detail-card');
+            detailCard.innerHTML = `
+                <div class="flex justify-between items-center border-b border-brand-border pb-2">
+                    <h3 class="font-bold text-brand-primary text-base">${item.title}</h3>
+                    <span class="bg-brand-accent text-white px-2.5 py-1 rounded text-xs font-bold">Field Tasks</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+                    <div class="bg-white p-3 rounded border border-brand-border">
+                        <strong class="text-brand-primary block mb-1"><i class="fa-solid fa-seedling text-emerald-600 mr-1"></i> Phenology & Focus:</strong>
+                        <span>${item.pheno}</span>
+                    </div>
+                    <div class="bg-white p-3 rounded border border-brand-border">
+                        <strong class="text-brand-primary block mb-1"><i class="fa-solid fa-droplet text-blue-500 mr-1"></i> Water Target:</strong>
+                        <span>${item.water}</span>
+                    </div>
+                    <div class="bg-white p-3 rounded border border-brand-border">
+                        <strong class="text-brand-primary block mb-1"><i class="fa-solid fa-flask text-purple-600 mr-1"></i> Weekly Fertigation:</strong>
+                        <span>${item.fert}</span>
+                    </div>
+                    <div class="bg-white p-3 rounded border border-brand-border">
+                        <strong class="text-brand-primary block mb-1"><i class="fa-solid fa-spray-can text-amber-600 mr-1"></i> Foliar Spray:</strong>
+                        <span>${item.foliar}</span>
+                    </div>
+                    <div class="bg-white p-3 rounded border border-brand-border">
+                        <strong class="text-brand-primary block mb-1"><i class="fa-solid fa-scissors text-red-500 mr-1"></i> Canopy & Pruning:</strong>
+                        <span>${item.pruning}</span>
+                    </div>
+                    <div class="bg-white p-3 rounded border border-brand-border">
+                        <strong class="text-brand-primary block mb-1"><i class="fa-solid fa-bug text-emerald-800 mr-1"></i> Scouting & IPM:</strong>
+                        <span>${item.ipm}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function runIrrigationCalc() {
+            const stage = document.getElementById('calc-stage').value;
+            const dripperConf = document.getElementById('calc-drippers').value;
+            const eff = parseFloat(document.getElementById('calc-eff').value) || 0.90;
+
+            let et0 = 4.2, kc = 0.45, kr = 0.26;
+
+            if (stage === '8-10') { et0 = 4.2; kc = 0.45; kr = 0.26; }
+            else if (stage === '10-12') { et0 = 3.2; kc = 0.45; kr = 0.28; }
+            else if (stage === '12-14') { et0 = 5.5; kc = 0.65; kr = 0.35; }
+            else if (stage === '14-15') { et0 = 8.0; kc = 0.15; kr = 0.40; }
+            else if (stage === '15-17') { et0 = 6.0; kc = 0.75; kr = 0.45; }
+            else if (stage === '17-20') { et0 = 4.5; kc = 0.85; kr = 0.50; }
+            else if (stage === '20-22') { et0 = 3.5; kc = 0.80; kr = 0.55; }
+            else if (stage === '22-24') { et0 = 3.8; kc = 0.60; kr = 0.55; }
+            else if (stage === 'mature-summer') { et0 = 8.2; kc = 0.85; kr = 0.80; }
+
+            let etc = et0 * kc * kr;
+            let volPlant = etc * 6.0 * (1 / eff);
+            let totalVolOrchard = volPlant * 2100;
+
+            let dischargeRate = 8.0;
+            if (dripperConf === '4x4') dischargeRate = 16.0;
+
+            let runHoursFloat = volPlant / dischargeRate;
+            let hrs = Math.floor(runHoursFloat);
+            let mins = Math.round((runHoursFloat - hrs) * 60);
+
+            document.getElementById('out-vol-plant').innerText = `${volPlant.toFixed(1)} L/day`;
+            document.getElementById('out-runtime').innerText = `${hrs} hr ${mins < 10 ? '0' : ''}${mins} min`;
+            document.getElementById('out-vol-orchard').innerText = `${Math.round(totalVolOrchard).toLocaleString()} Liters`;
+        }
+
+        function runFinancialSim() {
+            const price = parseFloat(document.getElementById('sim-price').value);
+            const yield2 = parseFloat(document.getElementById('sim-yield2').value);
+            const yield4 = parseFloat(document.getElementById('sim-yield4').value);
+            const bagCost = parseFloat(document.getElementById('sim-bagcost').value);
+
+            document.getElementById('val-sim-price').innerText = `₹${price.toFixed(2)} / kg`;
+            document.getElementById('val-sim-yield2').innerText = `${yield2} kg / tree`;
+            document.getElementById('val-sim-yield4').innerText = `${yield4} kg / tree`;
+            document.getElementById('val-sim-bagcost').innerText = `₹${bagCost.toFixed(2)} / fruit`;
+
+            const trees = 2100;
+            const avgFruitWeightKg = 0.400; // 400g average fruit weight
+
+            // Year 2 Calculations
+            const vol2Tons = (trees * yield2) / 1000;
+            const rev2 = vol2Tons * 1000 * price;
+            const fruits2 = (trees * yield2) / avgFruitWeightKg;
+            const opex2 = 420000 + (fruits2 * bagCost);
+            const net2 = rev2 - opex2;
+
+            // Year 4+ Calculations
+            const vol4Tons = (trees * yield4) / 1000;
+            const rev4 = vol4Tons * 1000 * price;
+            const fruits4 = (trees * yield4) / avgFruitWeightKg;
+            const opex4 = 750000 + (fruits4 * bagCost);
+            const net4 = rev4 - opex4;
+
+            document.getElementById('out-sim-rev2').innerText = `₹${Math.round(rev2).toLocaleString('en-IN')}`;
+            document.getElementById('out-sim-vol2').innerText = `${vol2Tons.toFixed(1)} Tons Total Yield`;
+            document.getElementById('out-sim-net2').innerText = `₹${Math.round(net2).toLocaleString('en-IN')}`;
+
+            document.getElementById('out-sim-rev4').innerText = `₹${Math.round(rev4).toLocaleString('en-IN')}`;
+            document.getElementById('out-sim-vol4').innerText = `${vol4Tons.toFixed(1)} Tons Total Yield`;
+            document.getElementById('out-sim-net4').innerText = `₹${Math.round(net4).toLocaleString('en-IN')}`;
+        }
+
+        function filterHealthCards() {
+            const query = document.getElementById('health-search').value.toLowerCase();
+            const cat = document.getElementById('health-cat').value;
+            const container = document.getElementById('health-cards-container');
+            container.innerHTML = '';
+
+            const filtered = healthData.filter(item => {
+                const matchesCat = (cat === 'all' || item.cat === cat);
+                const matchesSearch = item.name.toLowerCase().includes(query) || item.desc.toLowerCase().includes(query) || item.chem.toLowerCase().includes(query);
+                return matchesCat && matchesSearch;
+            });
+
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-4 rounded-xl border border-brand-border space-y-2 shadow-sm";
+                card.innerHTML = `
+                    <div class="flex justify-between items-start border-b border-brand-border pb-1.5">
+                        <h4 class="font-bold text-brand-primary text-sm">${item.name}</h4>
+                        <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded ${item.cat === 'insect' ? 'bg-amber-100 text-amber-800' : 'bg-red-100 text-red-800'}">${item.cat}</span>
+                    </div>
+                    <p class="text-xs text-gray-600">${item.desc}</p>
+                    <div class="space-y-1 text-xs pt-1">
+                        <div><strong class="text-amber-800">ETL Threshold:</strong> ${item.etl}</div>
+                        <div><strong class="text-emerald-800">Biocontrol / Physical:</strong> ${item.bio}</div>
+                        <div><strong class="text-brand-accent">Chemical Intervention:</strong> ${item.chem}</div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function runDiagnosticLookup() {
+            const param = document.getElementById('diag-param').value;
+            const output = document.getElementById('diag-output');
+
+            let content = "";
+            if (param === 'ph') {
+                content = `<strong>Target Range:</strong> 6.5 – 7.5 (Potentiometric pH meter)<br>
+                <strong>Remedial Protocol if &gt; 7.8:</strong> Inject elemental sulfur or shift N source fully to ammonium sulfate/urea. Avoid nitrate-N. High pH precipitates P, Fe, and Zn into insoluble forms.`;
+            } else if (param === 'ec') {
+                content = `<strong>Target Range:</strong> &lt; 1.5 dS/m<br>
+                <strong>Remedial Protocol if &gt; 2.0 dS/m:</strong> Execute heavy leaching irrigations. Replace Muriate of Potash (MOP) completely with Sulfate of Potash (SOP) to reduce chloride salt stress.`;
+            } else if (param === 'oc') {
+                content = `<strong>Target Range:</strong> 0.50% – 0.85% (Walkley-Black)<br>
+                <strong>Remedial Protocol if &lt; 0.50%:</strong> Apply 15–20 kg well-rotted FYM/tree plus vermicompost annually. Drill leguminous green manure (sunn hemp) in alleys.`;
+            } else if (param === 'p') {
+                content = `<strong>Target Range:</strong> 15 – 25 kg/ha (Olsen P)<br>
+                <strong>Remedial Protocol if &lt; 12 kg/ha:</strong> Apply Monoammonium Phosphate (MAP 12-61-0) via drip. Avoid broadcast DAP in alkaline Vertisols as calcium precipitates it into insoluble tricalcium phosphate.`;
+            } else if (param === 'caco3') {
+                content = `<strong>Safe Threshold:</strong> &lt; 5.0% Free CaCO3<br>
+                <strong>Remedial Protocol if &gt; 8.0%:</strong> P, Fe, and Zn availability are critically compromised. Rely strictly on foliar EDTA chelates and acidic drip line flushes.`;
+            } else if (param === 'w-rsc') {
+                content = `<strong>Safe Threshold:</strong> &lt; 1.25 meq/L<br>
+                <strong>Remedial Protocol if &gt; 2.50 meq/L (Severe Hazard):</strong> Neutralize bicarbonates by injecting concentrated sulfuric or phosphoric acid into drip manifold until operational water pH drops to 6.0–6.5.`;
+            } else if (param === 'w-sar') {
+                content = `<strong>Safe Threshold:</strong> &lt; 3.0 SAR<br>
+                <strong>Remedial Protocol if &gt; 6.0 (Severe Hazard):</strong> Apply soluble agricultural gypsum (CaSO4) to drip lines and maintain high organic matter to prevent clay deflocculation and soil crusting.`;
+            }
+
+            output.innerHTML = content;
+        }
+
+        function updateProcurement() {
+            const trees = parseInt(document.getElementById('proc-slider').value);
+            document.getElementById('proc-tree-count').innerText = `${trees.toLocaleString()} Trees`;
+
+            const scale = trees / 2100;
+
+            const urea = Math.round(650 * scale);
+            const npk19 = Math.round(350 * scale);
+            const map = Math.round(250 * scale);
+            const kno3 = Math.round(400 * scale);
+            const sop = Math.round(400 * scale);
+            const calnit = Math.round(225 * scale);
+            const mgso4 = Math.round(175 * scale);
+
+            document.getElementById('proc-list-fert').innerHTML = `
+                <li class="flex justify-between border-b pb-1"><span>Technical Urea (46% N):</span><span class="font-bold">${urea} kg (${Math.ceil(urea/45)} bags)</span></li>
+                <li class="flex justify-between border-b pb-1"><span>19-19-19 Soluble WSF:</span><span class="font-bold">${npk19} kg (${Math.ceil(npk19/25)} bags)</span></li>
+                <li class="flex justify-between border-b pb-1"><span>12-61-0 (MAP) WSF:</span><span class="font-bold">${map} kg (${Math.ceil(map/25)} bags)</span></li>
+                <li class="flex justify-between border-b pb-1"><span>13-0-45 (Multi-K):</span><span class="font-bold">${kno3} kg (${Math.ceil(kno3/25)} bags)</span></li>
+                <li class="flex justify-between border-b pb-1"><span>0-0-50 (SOP) WSF:</span><span class="font-bold">${sop} kg (${Math.ceil(sop/25)} bags)</span></li>
+                <li class="flex justify-between border-b pb-1"><span>Calcium Nitrate WSF:</span><span class="font-bold">${calnit} kg (${Math.ceil(calnit/25)} bags)</span></li>
+                <li class="flex justify-between"><span>Magnesium Sulfate:</span><span class="font-bold">${mgso4} kg (${Math.ceil(mgso4/25)} bags)</span></li>
+            `;
+
+            const iihr = (25 * scale).toFixed(1);
+            const zn = (10 * scale).toFixed(1);
+            const boron = (10 * scale).toFixed(1);
+            const fe = (25 * scale).toFixed(1);
+            const trich = Math.round(50 * scale);
+
+            document.getElementById('proc-list-bio').innerHTML = `
+                <li class="flex justify-between border-b pb-1"><span>ICAR-IIHR Guava Special:</span><span class="font-bold">${iihr} kg</span></li>
+                <li class="flex justify-between border-b pb-1"><span>Chelated Zinc (Zn-EDTA 12%):</span><span class="font-bold">${zn} kg</span></li>
+                <li class="flex justify-between border-b pb-1"><span>Solubor (Boron 20%):</span><span class="font-bold">${boron} kg</span></li>
+                <li class="flex justify-between border-b pb-1"><span>Iron Chelate (Fe-EDDHA 6%):</span><span class="font-bold">${fe} kg</span></li>
+                <li class="flex justify-between"><span>Trichoderma viride WP:</span><span class="font-bold">${trich} kg</span></li>
+            `;
+
+            const bags = Math.round(105000 * scale);
+            const traps = Math.round(25 * scale);
+            const bandFilm = Math.round(1500 * scale);
+
+            document.getElementById('proc-list-hard').innerHTML = `
+                <li class="flex justify-between border-b pb-1"><span>Two-Stage Guava Bags:</span><span class="font-bold">${bags.toLocaleString()} units</span></li>
+                <li class="flex justify-between border-b pb-1"><span>Methyl Eugenol Fly Traps:</span><span class="font-bold">${traps} traps</span></li>
+                <li class="flex justify-between border-b pb-1"><span>Yellow & Blue Sticky Traps:</span><span class="font-bold">${Math.round(100 * scale)} sheets</span></li>
+                <li class="flex justify-between"><span>HDPE Stem Barrier Film:</span><span class="font-bold">${bandFilm} meters</span></li>
+            `;
+        }
+
+        let chartOverviewWater = null;
+        let chartOverviewNpk = null;
+        let chartIrrigationCurve = null;
+        let chartMarketPrice = null;
+        let chartMarketCashflow = null;
+        let chartMarketGrade = null;
+
+        function renderOverviewCharts() {
+            if (chartOverviewWater) return;
+
+            const ctx1 = document.getElementById('overviewWaterChart').getContext('2d');
+            chartOverviewWater = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['8-10M', '10-12M', '12-14M', '14-15M', '15-17M', '17-20M', '20-22M', 'Mature Summer'],
+                    datasets: [{
+                        label: 'Water Volume (Liters / Plant / Day)',
+                        data: [3.3, 2.7, 8.3, 0.0, 13.5, 12.8, 10.1, 37.1],
+                        backgroundColor: '#4A7C59'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { title: { display: true, text: 'L/plant/day' } }
+                    }
+                }
+            });
+
+            const ctx2 = document.getElementById('overviewNpkChart').getContext('2d');
+            chartOverviewNpk = new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Nitrogen (N)', 'Phosphorus (P2O5)', 'Potassium (K2O)'],
+                    datasets: [{
+                        data: [200, 100, 200],
+                        backgroundColor: ['#1E3A2B', '#E07A5F', '#4A7C59']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: { display: true, text: 'Year 2 Target N-P-K Ratio (200-100-200 g/tree)' }
+                    }
+                }
+            });
+        }
+
+        function renderMarketCharts() {
+            if (chartMarketPrice) return;
+
+            // Chart 1: Seasonal Price Trend
+            const ctx1 = document.getElementById('marketPriceChart').getContext('2d');
+            chartMarketPrice = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: ['Jul (Ambe)', 'Aug', 'Sep', 'Oct (Hasth)', 'Nov (Mrig)', 'Dec', 'Jan', 'Feb', 'Mar'],
+                    datasets: [
+                        {
+                            label: 'Generic Unbagged (Sardar)',
+                            data: [22, 18, 15, 28, 25, 14, 12, 18, 24],
+                            borderColor: '#94A3B8',
+                            borderDash: [5, 5],
+                            fill: false
+                        },
+                        {
+                            label: 'Taiwan Pink (3-Layer Bagged)',
+                            data: [45, 40, 50, 65, 85, 95, 110, 105, 80],
+                            borderColor: '#E07A5F',
+                            backgroundColor: 'rgba(224, 122, 95, 0.1)',
+                            fill: true,
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { title: { display: true, text: 'Wholesale Price (₹/kg)' } } }
+                }
+            });
+
+            // Chart 2: 4-Year Cashflow Trajectory
+            const ctx2 = document.getElementById('marketCashflowChart').getContext('2d');
+            chartMarketCashflow = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: ['Year 1', 'Year 2 (1st Harvest)', 'Year 3', 'Year 4+ (Mature)'],
+                    datasets: [
+                        {
+                            type: 'bar',
+                            label: 'Opex & Inputs (₹ Lakhs)',
+                            data: [6.5, 4.2, 5.8, 7.5],
+                            backgroundColor: '#2B2D42'
+                        },
+                        {
+                            type: 'bar',
+                            label: 'Gross Revenue (₹ Lakhs)',
+                            data: [0.0, 24.2, 45.5, 65.6],
+                            backgroundColor: '#4A7C59'
+                        },
+                        {
+                            type: 'line',
+                            label: 'Net Cumulative Cashflow (₹ Lakhs)',
+                            data: [-6.5, 13.5, 53.2, 111.3],
+                            borderColor: '#E07A5F',
+                            borderWidth: 3,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { title: { display: true, text: 'Amount in ₹ Lakhs' } } }
+                }
+            });
+
+            // Chart 3: Grade-Wise Revenue Distribution
+            const ctx3 = document.getElementById('marketGradeChart').getContext('2d');
+            chartMarketGrade = new Chart(ctx3, {
+                type: 'pie',
+                data: {
+                    labels: ['Grade A+ 3-Layer Bagged (60%)', 'Grade A Standard (25%)', 'Grade B Local/Processing (15%)'],
+                    datasets: [{
+                        data: [76.0, 18.5, 5.5],
+                        backgroundColor: ['#1E3A2B', '#4A7C59', '#F4A261']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) { return context.label + ': ' + context.raw + '% Total Revenue'; }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderIrrigationChart() {
+            if (chartIrrigationCurve) return;
+
+            const ctx = document.getElementById('irrigationCurveChart').getContext('2d');
+            chartIrrigationCurve = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Oct-Nov', 'Dec-Jan', 'Feb-Mar', 'Apr-May (Stress)', 'Jun-Jul (Bloom)', 'Aug-Oct (Growth)', 'Nov-Dec (Sizing)', 'Jan-Feb (Harvest)'],
+                    datasets: [{
+                        label: 'Total Orchard Daily Water (Liters / Day for 2,100 Trees)',
+                        data: [6930, 5670, 17430, 0, 28350, 26880, 21210, 17220],
+                        borderColor: '#E07A5F',
+                        backgroundColor: 'rgba(224, 122, 95, 0.15)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { title: { display: true, text: 'Orchard Liters/Day' } }
+                    }
+                }
+            });
+        }
+
+        window.onload = function() {
+            renderNutrientCards('all');
+            renderCalendarButtons();
+            renderOverviewCharts();
+            filterHealthCards();
+            runDiagnosticLookup();
+            updateProcurement();
+            runIrrigationCalc();
+            runFinancialSim();
+        };
+    </script>
+</body>
+</html>

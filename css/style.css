@@ -1,0 +1,71 @@
+/* ============================================================
+   Guava Dashboard – custom stylesheet
+   Tasks 3.1 – 3.8
+   ============================================================ */
+
+/* 3.8 – Body */
+body {
+  background-color: #FDFBF7;
+  font-family: system-ui, sans-serif;
+}
+
+/* 3.1 – Active language button */
+.lang-active {
+  background-color: #4A7C59;
+  color: #fff;
+  border: 2px solid #6ee7b7;
+  border-radius: 20px;
+}
+
+/* 3.2 – Hidden tab panels */
+.tab-panel[hidden] {
+  display: none;
+}
+
+/* 3.3 – Chart container */
+.chart-container {
+  position: relative;
+  width: 100%;
+  max-width: 650px;
+  height: 320px;
+  margin: auto;
+}
+@media (max-width: 640px) {
+  .chart-container { height: 260px; }
+}
+
+/* 3.4 – Active nav button */
+.nav-btn.active {
+  background-color: #1E3A2B;
+  color: #fff;
+  border-bottom: 3px solid #E07A5F;
+}
+
+/* 3.5 – Nutrient & IPM cards */
+.nutrient-card,
+.ipm-card {
+  background: #ffffff;
+  border: 1px solid #E2DCD5;
+  border-radius: 12px;
+  padding: 1.25rem;
+  transition: box-shadow 0.15s ease;
+}
+.nutrient-card:hover,
+.ipm-card:hover {
+  box-shadow: 0 4px 16px rgba(30, 58, 43, 0.12);
+}
+
+/* 3.6 – Evidence badges */
+.badge-A { background-color: #d1fae5; color: #065f46; padding: 2px 8px; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+.badge-B { background-color: #dbeafe; color: #1e40af; padding: 2px 8px; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+.badge-C { background-color: #fef9c3; color: #854d0e; padding: 2px 8px; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+.badge-E { background-color: #fee2e2; color: #991b1b; padding: 2px 8px; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+
+/* 3.7 – Responsive grid overrides */
+@media (max-width: 639px) {
+  .kpi-grid   { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .card-grid  { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  .card-grid  { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

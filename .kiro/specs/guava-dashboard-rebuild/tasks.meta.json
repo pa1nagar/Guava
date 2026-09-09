@@ -1,0 +1,3045 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1.2 Create folder `js/` under the workspace root": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889146354
+      },
+      {
+        "executionId": "95c6cdab-b984-4186-96f0-f997b227d34d",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889291656
+      },
+      {
+        "executionId": "95c6cdab-b984-4186-96f0-f997b227d34d",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889318326
+      }
+    ],
+    "1.3 Create empty placeholder files: `css/style.css`, `js/data.js`, `js/translator.js`, `js/charts.js`, `js/app.js`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889147047
+      },
+      {
+        "executionId": "95c6cdab-b984-4186-96f0-f997b227d34d",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889330352
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892194402
+      }
+    ],
+    "1.4 Confirm all 5 files exist on disk before proceeding": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889147167
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892201376
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892234139
+      }
+    ],
+    "2.1 Add `<!DOCTYPE html>` head with charset, viewport, title (\"Taiwan Pink Guava Master Plan\")": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889147273
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892254926
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892373305
+      }
+    ],
+    "2.2 Add CDN `<link>` and `<script>` tags: Tailwind CSS v3 CDN, Chart.js CDN, Font Awesome 6 CDN": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889147390
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892381170
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892388010
+      }
+    ],
+    "2.3 Add inline Tailwind config `<script>` block extending colours: bg `#FDFBF7`, primary `#1E3A2B`, secondary `#4A7C59`, accent `#E07A5F`, dark `#2B2D42`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889147496
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892395495
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892402558
+      }
+    ],
+    "2.4 Add language toggle bar div (fixed, `z-index:99999`) with `id=\"lang-en\"` and `id=\"lang-hi\"` buttons — NO Google Translate script, NO external translation calls": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889147571
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892409248
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892416244
+      }
+    ],
+    "2.5 Add sticky header with orchard title, status badge, and `<nav>` containing exactly 10 `<button>` elements with `id=\"btn-{slug}\"`, `data-tab=\"{slug}\"`, `onclick=\"switchTab('{slug}')\"` — each `<span>` child has `data-i18n=\"nav.tab{N}\"` — tab slugs: overview, market, nutrients, calendar, irrigation, fertigation, health, bagging, procurement, warnings": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889147664
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892423589
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892430971
+      }
+    ],
+    "2.6 Add `<main>` containing 10 `<section>` elements with `id=\"panel-{slug}\"` class `\"tab-panel\"` — all panels except `panel-overview` have `hidden` attribute": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889147788
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892437773
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892444676
+      }
+    ],
+    "2.7 Add `<script type=\"module\" src=\"js/app.js\"></script>` before closing `</body>`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889147916
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892452111
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892458772
+      }
+    ],
+    "3.1 Add `.lang-active` rule: `background-color: #4A7C59; color: #fff; border: 2px solid #6ee7b7; border-radius: 20px;`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889148000
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892472551
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892829566
+      }
+    ],
+    "3.2 Add `.tab-panel[hidden] { display: none; }` rule": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889148087
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892836975
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892844098
+      }
+    ],
+    "3.3 Add `.chart-container` rule: `position: relative; width: 100%; max-width: 650px; height: 320px; margin: auto;` plus `@media (max-width: 640px) { height: 260px; }`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889148173
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892851343
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892858322
+      }
+    ],
+    "3.4 Add `.nav-btn.active` rule: `background-color: #1E3A2B; color: #fff; border-bottom: 3px solid #E07A5F;`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889148251
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892865627
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892872582
+      }
+    ],
+    "3.5 Add `.nutrient-card`, `.ipm-card` card rules with white background, border `#E2DCD5`, border-radius 12px, hover box-shadow": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889148323
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892879711
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892886934
+      }
+    ],
+    "3.6 Add evidence badge rules: `.badge-A` (green-tinted), `.badge-B` (blue-tinted), `.badge-C` (amber-tinted), `.badge-E` (red-tinted)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889148404
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892894417
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892901907
+      }
+    ],
+    "3.7 Add responsive grid overrides: `.kpi-grid` 2-col mobile, `.card-grid` 1-col mobile / 3-col desktop (`≥1024px`)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889148481
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892909362
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892916316
+      }
+    ],
+    "3.8 Add `body { background-color: #FDFBF7; font-family: system-ui, sans-serif; }`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889148553
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892923240
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892930371
+      }
+    ],
+    "4.1 Add `<link rel=\"stylesheet\" href=\"css/style.css\">` in the `<head>` of `index.html`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889148630
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892945075
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892979943
+      }
+    ],
+    "4.2 Confirm the `<div style=\"height:44px;\"></div>` spacer follows the language toggle bar so content is not hidden behind the fixed bar": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889148701
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892986778
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788892993270
+      }
+    ],
+    "4.3 Verify the language toggle bar buttons have correct `onclick=\"setLang('en')\"` / `onclick=\"setLang('hi')\"` attributes (these will call into `app.js` which exposes them on window)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889148784
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788893000281
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788893007792
+      }
+    ],
+    "5.1 Open `index.html` as `file://` in Chrome (or run a local check via Node's fs module) — no console errors expected at this stage": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889148867
+      },
+      {
+        "executionId": "dfe727b2-cbd4-4e21-9ef3-7d20a90f8eff",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788893021903
+      },
+      {
+        "executionId": "c6041de9-b127-4175-a044-6ddeead5a5de",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788926453992
+      }
+    ],
+    "5.2 Verify the fixed language bar is visible at top, navigation bar is visible, and Tab 1 panel is visible while others are hidden": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889148939
+      },
+      {
+        "executionId": "c6041de9-b127-4175-a044-6ddeead5a5de",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788926470438
+      },
+      {
+        "executionId": "c6041de9-b127-4175-a044-6ddeead5a5de",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788926477699
+      }
+    ],
+    "5.3 Confirm CDN resources load (Tailwind styles applied, Font Awesome icons visible in nav buttons)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889149014
+      },
+      {
+        "executionId": "c6041de9-b127-4175-a044-6ddeead5a5de",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788926484177
+      },
+      {
+        "executionId": "c6041de9-b127-4175-a044-6ddeead5a5de",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788926490653
+      }
+    ],
+    "5.4 Note any layout issues for correction in later tasks": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889149088
+      },
+      {
+        "executionId": "c6041de9-b127-4175-a044-6ddeead5a5de",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788926497132
+      },
+      {
+        "executionId": "c6041de9-b127-4175-a044-6ddeead5a5de",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788926503509
+      }
+    ],
+    "6.1 Export `ORCHARD` object: `{ trees: 2100, avgFruitWeightKg: 0.400, spacingM2: 6.0 }`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889149171
+      },
+      {
+        "executionId": "c6041de9-b127-4175-a044-6ddeead5a5de",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788926511153
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788927624552
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930266061
+      }
+    ],
+    "6.2 Export `OPEX_BASE` object: `{ yr2: 420000, yr4: 750000 }`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889149254
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930272979
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930279978
+      }
+    ],
+    "6.3 Export `SCENARIO_YIELDS` array: `[20, 25, 30, 35, 40, 48]` (kg/tree — matches 6 scenario table rows)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889149333
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930286706
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930294187
+      }
+    ],
+    "6.4 Export `SCENARIO_PRICES` array: `[40, 50, 60, 70, 85]` (₹/kg — matches 5 scenario table columns)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889149413
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930303417
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930310472
+      }
+    ],
+    "6.5 Export `IRRIGATION_STAGES` array with 9 stage objects each having: `id`, `label`, `et0`, `kc`, `kr` — values must satisfy the ET₀×Kc×Kr×6÷η formula used in Requirements §8": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889149488
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930317278
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930323918
+      }
+    ],
+    "7.1 Add all 14 NutrientEntry objects in order: N, P, K, Ca, Mg, S, Zn, B, Fe, Mn, Cu, Mo, Humic/Fulvic Acid, Biofertilizers": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889149567
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930332193
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930343637
+      }
+    ],
+    "7.2 Each entry must include fields: `id`, `symbol`, `name`, `category` (`'macro'|'secondary'|'micro'|'bio'`), `role`, `impact`, `deficiency`, `excess`, `doseDrip`, `doseFoliar`, `doseSoil`, `vertisol`, `antagonism`, `evidenceGrade`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889149646
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930351075
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930358122
+      }
+    ],
+    "7.3 Every dosage string must include the evidence grade suffix (e.g. `\"2.5 g/L 🟡C\"`) — no absolute claims (\"100% protection\", \"guaranteed\")": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889149732
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930365312
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930372324
+      }
+    ],
+    "7.4 Entries for nutrients without cultivar-specific Vertisol validation must use `evidenceGrade: 'C'` and include a calibration note": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889149814
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930379172
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930386273
+      }
+    ],
+    "7.5 Add `imageLabel: '🔴 Illustrative only — not a deficiency photograph.'` to every entry": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889149948
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930397410
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930404381
+      }
+    ],
+    "8.1 Add 13 CalendarEntry objects for months 8 through 20": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889150046
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930410824
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930417222
+      }
+    ],
+    "8.2 Each entry must include: `month`, `title`, `pheno`, `waterLpd` (numeric, computed from `ET₀×Kc×Kr×6÷0.90`), `waterFormula` (human-readable formula string with actual values), `fert`, `foliar`, `pruning`, `ipm`, `droughtStop`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889150132
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930424392
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930431511
+      }
+    ],
+    "8.3 Set `droughtStop: true` only for Month 16 — water target text must include \"SHUT OFF DRIP COMPLETELY\"": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889150202
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930438773
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930445903
+      }
+    ],
+    "8.4 Verify all `waterLpd` values are consistent with the stage ET₀/Kc/Kr values in `IRRIGATION_STAGES`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889150288
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930454146
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930767010
+      }
+    ],
+    "8.5 Month 8 entry must reference the 4 operational directives (deblossoming, canopy training, drainage furrows, biological inoculation)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889150367
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930773774
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930780725
+      }
+    ],
+    "9.1 Add at minimum 8 IPMEntry objects: Oriental Fruit Fly, Guava Mealybug, Shoot & Fruit Borer, Bark-Eating Caterpillar, Guava Wilt Complex, Anthracnose & Dieback, Fruit Canker, Stylar End Rot": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889150455
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930787455
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930794417
+      }
+    ],
+    "9.2 Each entry must include: `id`, `category` (`'insect'|'disease'`), `name`, `etl`, `bio`, `chem` (with PHI where applicable), `desc`, `fallbackSymptoms` (array of symptom strings)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889150538
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930801508
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930809758
+      }
+    ],
+    "9.3 Chemical recommendations must NOT include absolute efficacy claims; each `chem` field must note \"verify CIB&RC registration before application\"": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889150625
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930820254
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930829804
+      }
+    ],
+    "9.4 Add `FRAC_IRAC_ROTATION` array with 4 spray windows listing alternating mode-of-action groups for resistance management": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889150703
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930839019
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930848459
+      }
+    ],
+    "10.1 Export `MONTHLY_PRICE_DATA` — 12 objects (Jan–Dec) each with `month`, `modal`, `min`, `max`, `arrivals`, `score` — use exact Azadpur Mandi values from the Market Strategy research: Jan modal ₹20, Feb ₹32, Mar ₹48, Apr ₹58, May ₹52, Jun ₹50, Jul ₹30, Aug ₹45, Sep ₹55, Oct ₹42, Nov ₹28, Dec ₹18": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889150788
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930858740
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930868975
+      }
+    ],
+    "10.2 Export `GRADE_ECONOMICS` — 4 objects (A+/A/B/C) each with `grade`, `label`, `weightG`, `pack`, `priceMin`, `priceMax`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889150866
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930886776
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930903962
+      }
+    ],
+    "10.3 Export `BAHAR_COMPARISON` — 3 objects (Mrig/Ambe/Hasta) each with `name`, `flowering`, `harvest`, `priceRange`, `modal`, `verdict`, `score`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889150946
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930915307
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930930466
+      }
+    ],
+    "10.4 Export `NET_REALIZATION_MODEL` — 2 objects (CFB carton vs plastic crate) with `protocol`, `grossMandi`, `totalDeductions`, `netFarmGate` — use research values: Grade A net ₹41.42/kg, Grade B net ₹23.69/kg": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889151018
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930947117
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930956566
+      }
+    ],
+    "10.5 Export `PROCUREMENT_BASE` object with three sub-objects (`fertilizers`, `bio`, `hardware`), each containing named items with `name`, `unit`, `qty2100` (base quantity for 2100 trees), `packSize`, `packUnit`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889151105
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930969859
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930981678
+      }
+    ],
+    "10.6 Export `DIAGNOSTIC_PARAMS` object keyed by parameter slug (`ph`, `ece`, `oc`, `avp`, `caco3`, `rsc`, `sar`) each with `label`, `targetRange`, `protocol`, and for RSC/SAR a `caveat` noting dose must be calculated from actual water chemistry": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889151220
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788930993634
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788931006513
+      }
+    ],
+    "11.1 Start `TRANSLATIONS` export with `en` object containing all keys for nav tab labels (`nav.tab1` through `nav.tab10`)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889151299
+      },
+      {
+        "executionId": "978413b7-7f48-4d53-a24c-8fc18ffd8880",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788931019139
+      },
+      {
+        "executionId": "8665ea5c-a164-4e90-aa7a-334387464968",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788931839708
+      }
+    ],
+    "11.2 Add English keys for Executive tab: `exec.kpi.*` (6 KPI labels), `exec.financial.*` (4 financial highlight labels), `exec.phase.*` (4 phase labels), `exec.directive.*` (4 directive headings)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889151403
+      },
+      {
+        "executionId": "8665ea5c-a164-4e90-aa7a-334387464968",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788931847256
+      },
+      {
+        "executionId": "8665ea5c-a164-4e90-aa7a-334387464968",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788932631500
+      }
+    ],
+    "11.3 Add English keys for Market tab: `market.heading`, `market.chart.seasonal`, `market.chart.cashflow`, `market.chart.grade`, `market.chart.score`, `market.table.*` (column headers for scenario table and grade table), `market.bahar.*`, `market.net.*`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889151489
+      },
+      {
+        "executionId": "8665ea5c-a164-4e90-aa7a-334387464968",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788932639286
+      },
+      {
+        "executionId": "8665ea5c-a164-4e90-aa7a-334387464968",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788932646878
+      }
+    ],
+    "11.4 Add English keys for `simulator.*` (all 4 slider labels, 4 output labels, disclaimer), `nutrient.*` (all card field labels + filter button labels + legend), `calendar.*` (month labels, detail card field labels)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889151565
+      },
+      {
+        "executionId": "8665ea5c-a164-4e90-aa7a-334387464968",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788932654668
+      },
+      {
+        "executionId": "8665ea5c-a164-4e90-aa7a-334387464968",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788932662539
+      }
+    ],
+    "11.5 Add English keys for remaining tabs: `drip.*`, `fert.*`, `ipm.*` (search placeholder, category filter labels, regulatory disclaimer, card field labels), `bagging.*`, `procurement.*`, `warnings.*`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889151649
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933068171
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933077614
+      }
+    ],
+    "11.6 Add `common.*` keys: `common.scenario`, `common.source`, `common.evidenceLegend.*` (4 grade descriptions), `common.disclaimer.financial`, `common.disclaimer.pesticide`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889151735
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933085232
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933144134
+      }
+    ],
+    "12.1 Add `hi` object to `TRANSLATIONS` — provide Hindi equivalents for all keys defined in Task 11": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889151823
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933172299
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933202053
+      }
+    ],
+    "12.2 Translate all 10 nav labels to Hindi (e.g. `'nav.tab1': 'डैशबोर्ड अवलोकन'`)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889151924
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933226892
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933239340
+      }
+    ],
+    "12.3 Translate Executive tab KPI labels, financial highlights, phase labels, and directive headings": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889152002
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933254281
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933263941
+      }
+    ],
+    "12.4 Translate Market tab headings, chart titles, table headers, simulator labels, bahar comparison labels": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889152168
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933271948
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933281564
+      }
+    ],
+    "12.5 Translate Nutrient Master filter labels and all card field labels (role, deficiency, excess, timing, etc.)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889152246
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933302798
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933323972
+      }
+    ],
+    "12.6 Translate remaining tabs: Calendar, Drip, Fertigation, IPM, Bagging, Procurement, Warnings, and all `common.*` keys — verify key count in `hi` matches key count in `en` (they must be equal)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889152329
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933334905
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933348042
+      }
+    ],
+    "13.1 Import `TRANSLATIONS` from `./data.js`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889152416
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933368081
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933413588
+      }
+    ],
+    "13.2 Implement `setLanguage(lang)` function: `querySelectorAll('[data-i18n]')`, for each element read `data-i18n` key, look up `TRANSLATIONS[lang][key]`, set `el.textContent = text` if found, else `console.warn` with key and lang": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889152501
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933423286
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933434086
+      }
+    ],
+    "13.3 Implement `getCurrentLang()` returning the module-level `currentLang` variable": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889152605
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933445960
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933457789
+      }
+    ],
+    "13.4 Implement `init()` that calls `setLanguage('en')` once on first call (seeds initial English text)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889152686
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933468303
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933477212
+      }
+    ],
+    "13.5 Update button active states in `setLanguage()`: toggle `.lang-active` class on `#lang-en` and `#lang-hi` based on active lang": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889152789
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933486782
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933507181
+      }
+    ],
+    "13.6 Export `setLanguage`, `getCurrentLang`, `init`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889152868
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933845638
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933857336
+      }
+    ],
+    "14.1 Import `setLanguage`, `init` from `./translator.js`; import chart init functions from `./charts.js` (stub imports if charts.js is empty at this stage)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889152949
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788933868141
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934067359
+      }
+    ],
+    "14.2 Implement `switchTab(tabId)`: hide all `.tab-panel` elements (set `hidden`), remove `.active` from all `.nav-btn`, show `#panel-{tabId}` (remove `hidden`), add `.active` to `#btn-{tabId}`, call `_lazyInitCharts(tabId)`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889153034
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934075661
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934084665
+      }
+    ],
+    "14.3 Implement `_lazyInitCharts(tabId)` with a `chartsInitialized` object — only call the appropriate chart init function on first activation of each tab": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889153106
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934091773
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934100526
+      }
+    ],
+    "14.4 Implement `window.switchTab` and `window.setLang` global wrappers so inline `onclick` attributes in HTML can call these functions from module scope": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889153189
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934109054
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934117530
+      }
+    ],
+    "14.5 Add `window.addEventListener('DOMContentLoaded', () => { init(); switchTab('overview'); })` bootstrapper": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889153279
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934434955
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934445033
+      }
+    ],
+    "15.1 Import `NUTRIENTS_DATA`, `CALENDAR_DATA` from `./data.js`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889153364
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934462193
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934473477
+      }
+    ],
+    "15.2 Implement `renderNutrientCards(category)`: filter `NUTRIENTS_DATA` by `category` (or show all if `'all'`), build HTML for each nutrient card with all required fields and evidence badge, inject into `#nutrient-card-grid`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889153448
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934492749
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934501544
+      }
+    ],
+    "15.3 Implement `filterNutrients(cat)`: called by filter button clicks; calls `renderNutrientCards(cat)` and manages active state on filter buttons": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889153533
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934510953
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934520382
+      }
+    ],
+    "15.4 Implement `renderCalendarButtons()`: build 13 month buttons (`Month 8` through `Month 20`) injecting into `#calendar-month-buttons`; bind click to `selectCalendarMonth(idx)`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889153622
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934531001
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934539887
+      }
+    ],
+    "15.5 Implement `selectCalendarMonth(idx)`: look up `CALENDAR_DATA[idx]`, render detail card HTML (pheno, waterLpd with formula, fert, foliar, pruning, ipm) into `#calendar-detail`; if `droughtStop === true`, render water target in red with \"SHUT OFF DRIP COMPLETELY\" text": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889153702
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934548715
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934557033
+      }
+    ],
+    "16.1 Import `ORCHARD`, `OPEX_BASE`, `IRRIGATION_STAGES`, `PROCUREMENT_BASE`, `DIAGNOSTIC_PARAMS` from `./data.js`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889153819
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934568531
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934581017
+      }
+    ],
+    "16.2 Implement `runFinancialSim()`: read values from `#sim-price`, `#sim-yield2`, `#sim-yield4`, `#sim-bagcost` sliders; compute gross/net using formula from Design §4; update `#out-gross2`, `#out-net2`, `#out-gross4`, `#out-net4`; negative net income renders red with \"−₹\" prefix; attach `data-raw` attribute to each output element for test access": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889153903
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934592459
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934602228
+      }
+    ],
+    "16.3 Implement `runIrrigationCalc()`: read `#irr-stage`, `#irr-hardware`, `#irr-efficiency`; compute `volPerPlant = et0 × kc × kr × 6.0 / η`; compute run time from hardware dripper flow; display in `#irr-vol`, `#irr-runtime`, `#irr-orchard-total`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889153985
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934626070
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934637719
+      }
+    ],
+    "16.4 Implement `updateProcurement()`: read `#proc-trees` slider value; for each item in `PROCUREMENT_BASE`, compute `Math.ceil(qty2100 × treeCount / 2100)` scaled quantity; render into `#proc-fertilizers`, `#proc-bio`, `#proc-hardware` panels showing both weight/count and commercial pack count": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889154055
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934649182
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934983589
+      }
+    ],
+    "16.5 Implement `runDiagnosticLookup()`: read selected value from `#diag-param` dropdown; look up in `DIAGNOSTIC_PARAMS`; render `targetRange` and `protocol` (and `caveat` for RSC/SAR) into `#diag-output`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889154207
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788934996207
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788935016045
+      }
+    ],
+    "17.1 Import `IPM_DATA` from `./data.js`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889154313
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788935033002
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788935043397
+      }
+    ],
+    "17.2 Implement `renderHealthCards(filteredData)`: build HTML for each IPM card (name, ETL, bio, chem, description, fallback symptom list) and inject into `#ipm-card-grid`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889154386
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788935053060
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788935064536
+      }
+    ],
+    "17.3 Implement `filterHealthCards()`: read `#ipm-search` text value and `#ipm-category` selected value; filter `IPM_DATA` by text (case-insensitive substring match on name + desc + chem) and by category; call `renderHealthCards()` with filtered result": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889154472
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788935074951
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788935086582
+      }
+    ],
+    "17.4 Wire all interactive elements on tab activation: when each tab first activates, call the relevant render/init function (nutrient cards for nutrients tab, calendar buttons for calendar tab, etc.)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889154580
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788935102972
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788935119056
+      }
+    ],
+    "17.5 Add `oninput` event binding for `#ipm-search` and `onchange` for `#ipm-category` to call `filterHealthCards()` — and add `oninput` bindings for all 4 simulator sliders to call `runFinancialSim()`, for irrigation inputs to call `runIrrigationCalc()`, for procurement slider to call `updateProcurement()`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889154771
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788935127334
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788935143201
+      }
+    ],
+    "18.1 Import `IRRIGATION_STAGES` from `./data.js`; set up module-level `_instances` Map for storing chart instances": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889154856
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788935152670
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788935281786
+      }
+    ],
+    "18.2 Implement `_getOrCreate(canvasId, config)` helper: return existing instance if present in `_instances`; otherwise create new `Chart`, store in map, and return it; return `null` with `console.warn` if canvas not found": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889154969
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788935290323
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788935299256
+      }
+    ],
+    "18.3 Implement `initOverviewCharts()`: create `chart-water` bar chart (X: stage labels, Y: L/plant/day computed as `et0 × kc × kr × 6.0 / 0.90`) using primary/secondary palette colours": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889155082
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788935307717
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788935622549
+      }
+    ],
+    "18.4 Implement doughnut chart `chart-npk`: 3 segments for Year-2 N:P:K ratio 200:100:200; labels \"N (200g)\", \"P (100g)\", \"K (200g)\"; colours green/blue/orange": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889155168
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788935655543
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788935663630
+      }
+    ],
+    "18.5 Export `initOverviewCharts`; ensure both charts are responsive and titled with evidence grade suffix `🟡C`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889155244
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788935749832
+      }
+    ],
+    "19.1 Import `MONTHLY_PRICE_DATA` from `./data.js`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889155332
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937318946
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937326434
+      }
+    ],
+    "19.2 Implement `initSeasonalChart()`: create `chart-seasonal` line chart with 3 datasets — modal price (solid green `#4A7C59`), min price (dashed amber), max price (dashed red); X-axis: 12 month labels; tooltip shows all three values plus arrivals pressure": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889155415
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937334543
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937343091
+      }
+    ],
+    "19.3 Implement `initScoreChart()`: create `chart-score` bar chart from `MONTHLY_PRICE_DATA[n].score`; bars coloured by score: `score ≤ 3` red, `4–6` amber, `≥ 7` green; Y-axis 0–10; label \"Market Attractiveness Score (1–10)\"": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889155496
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937351358
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937359275
+      }
+    ],
+    "19.4 Export both functions; include data source note \"Source: Azadpur Mandi, Agmarknet — verified Sep 2026\" as chart subtitle via Chart.js `plugins.subtitle`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889155591
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937367100
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937374570
+      }
+    ],
+    "20.1 Import `ORCHARD`, `OPEX_BASE`, `SCENARIO_PRICES` from `./data.js`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889155683
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937382329
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937390447
+      }
+    ],
+    "20.2 Implement `initCashflowChart()`: create `chart-cashflow` combo bar+line chart showing 4-year cumulative cashflow using base case (yield2=18, yield4=30, price=SCENARIO_PRICES[2]=₹60); bar chart for annual net income, line for cumulative total; label all bars with \"🔴 Scenario\"": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889155771
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937725745
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937757339
+      }
+    ],
+    "20.3 Implement `initGradeChart()`: create `chart-grade` pie chart from `GRADE_ECONOMICS` representing illustrative revenue share (A+: 15%, A: 50%, B: 25%, C: 10%); label each slice with grade and price range; include disclaimer \"🔴 Illustrative grade distribution\"": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889155854
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937800662
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937858134
+      }
+    ],
+    "20.4 Add `initMarketCharts()` function that calls all four market chart inits in sequence: `initSeasonalChart()`, `initScoreChart()`, `initCashflowChart()`, `initGradeChart()`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889155938
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937868129
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937878101
+      }
+    ],
+    "20.5 Export `initMarketCharts`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889156017
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937886542
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937907074
+      }
+    ],
+    "21.1 Import `IRRIGATION_STAGES`, `ORCHARD` from `./data.js`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889156096
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937916074
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937924259
+      }
+    ],
+    "21.2 Implement `initIrrigationChart()`: create `chart-irrigation` line chart showing daily water volume (L/plant/day) across all 9 growth stages at default η=0.90; X-axis: stage labels; Y-axis: litres/plant/day; single dataset in `#4A7C59`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889156172
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937932078
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937943359
+      }
+    ],
+    "21.3 Add a second dataset for orchard total daily volume (L/day for 2100 trees) on a secondary Y-axis (right side)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889156324
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937953245
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937962751
+      }
+    ],
+    "21.4 Include formula display `V = ET₀ × Kc × Kr × S ÷ η` as chart title or subtitle": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889156406
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937971421
+      },
+      {
+        "executionId": "52d12e82-2e79-48d5-a101-1f0aa5779de9",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788937981040
+      }
+    ],
+    "21.5 Export `initIrrigationChart`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889156482
+      },
+      {
+        "executionId": "21a7d35d-ddef-46a7-8fce-3f627affcf45",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788938094863
+      },
+      {
+        "executionId": "21a7d35d-ddef-46a7-8fce-3f627affcf45",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788938105779
+      }
+    ],
+    "22.1 Import `initOverviewCharts`, `initMarketCharts`, `initIrrigationChart` from `./charts.js`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889156562
+      },
+      {
+        "executionId": "21a7d35d-ddef-46a7-8fce-3f627affcf45",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788938119266
+      },
+      {
+        "executionId": "21a7d35d-ddef-46a7-8fce-3f627affcf45",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788938129676
+      }
+    ],
+    "22.2 Update `_lazyInitCharts(tabId)` switch statement to call the correct function for `'overview'`, `'market'`, `'irrigation'`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889156649
+      },
+      {
+        "executionId": "21a7d35d-ddef-46a7-8fce-3f627affcf45",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788938139579
+      },
+      {
+        "executionId": "21a7d35d-ddef-46a7-8fce-3f627affcf45",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788938148991
+      }
+    ],
+    "22.3 Verify `chartsInitialized` guard prevents double-initialisation: switch away from overview, switch back, confirm no second Chart instance is created": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889156824
+      },
+      {
+        "executionId": "21a7d35d-ddef-46a7-8fce-3f627affcf45",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788938158995
+      },
+      {
+        "executionId": "21a7d35d-ddef-46a7-8fce-3f627affcf45",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788938170363
+      }
+    ],
+    "22.4 Confirm that tabs without charts (nutrients, calendar, fertigation, bagging, procurement, warnings) do not throw errors in `_lazyInitCharts`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889156929
+      },
+      {
+        "executionId": "21a7d35d-ddef-46a7-8fce-3f627affcf45",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788938180066
+      },
+      {
+        "executionId": "21a7d35d-ddef-46a7-8fce-3f627affcf45",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788938189030
+      }
+    ],
+    "23.1 Inside `#panel-overview`: add heading and intro paragraph with `data-i18n` attributes on all translatable text": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889157013
+      },
+      {
+        "executionId": "21a7d35d-ddef-46a7-8fce-3f627affcf45",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788938205174
+      },
+      {
+        "executionId": "21a7d35d-ddef-46a7-8fce-3f627affcf45",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788938783416
+      }
+    ],
+    "23.2 Add 6-cell KPI grid (`#exec-kpi-grid`) with fixed values: 2,100 trees, 8 months, Vertisol, Mrig Bahar, ₹60–₹85/kg 🔴, ~₹30 Lakhs/Yr 🔴 — all label `<span>` elements carry `data-i18n=\"exec.kpi.*\"` keys": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889157087
+      },
+      {
+        "executionId": "21a7d35d-ddef-46a7-8fce-3f627affcf45",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788938794183
+      },
+      {
+        "executionId": "21a7d35d-ddef-46a7-8fce-3f627affcf45",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788938805790
+      },
+      {
+        "executionId": "35f5b7cc-3b07-46d0-a54e-74620d9d2fb3",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788939280437
+      }
+    ],
+    "23.3 Add 4 financial highlight cards: Year-2 first revenue, mature gross revenue, payback period, bagging premium — all with 🔴 scenario labels": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889157163
+      },
+      {
+        "executionId": "35f5b7cc-3b07-46d0-a54e-74620d9d2fb3",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788939242847
+      },
+      {
+        "executionId": "35f5b7cc-3b07-46d0-a54e-74620d9d2fb3",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788939254150
+      }
+    ],
+    "23.4 Add phenological progress bar section with 4 phase rows (Months 8–12, 13–15, 16–17, 18–24) — phase labels carry `data-i18n=\"exec.phase.*\"`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889157240
+      },
+      {
+        "executionId": "35f5b7cc-3b07-46d0-a54e-74620d9d2fb3",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788939293186
+      }
+    ],
+    "23.5 Add immediate directives panel (amber-bordered box) listing 4 Month-8 actions — each heading carries `data-i18n=\"exec.directive.*\"`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889157336
+      },
+      {
+        "executionId": "35f5b7cc-3b07-46d0-a54e-74620d9d2fb3",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788939305548
+      }
+    ],
+    "23.6 Add chart section with two `.chart-container` divs containing `<canvas id=\"chart-water\">` and `<canvas id=\"chart-npk\">`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889157432
+      },
+      {
+        "executionId": "35f5b7cc-3b07-46d0-a54e-74620d9d2fb3",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788939321248
+      }
+    ],
+    "24.1 Inside `#panel-market`: add 4 interactive sliders with `id` attributes (`sim-price`, `sim-yield2`, `sim-yield4`, `sim-bagcost`), labels with `data-i18n=\"simulator.*\"`, and `oninput=\"runFinancialSim()\"` handlers": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889157535
+      },
+      {
+        "executionId": "35f5b7cc-3b07-46d0-a54e-74620d9d2fb3",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788939344709
+      }
+    ],
+    "24.2 Add simulator output section with 4 output divs (`out-gross2`, `out-net2`, `out-gross4`, `out-net4`) and \"🔴 Scenario only\" disclaimer": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889157631
+      },
+      {
+        "executionId": "35f5b7cc-3b07-46d0-a54e-74620d9d2fb3",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788939355897
+      }
+    ],
+    "24.3 Add static 6×5 scenario range table (6 yield rows × 5 price columns) showing gross revenue only; column headers and row labels carry `data-i18n=\"market.table.*\"` — add footnote distinguishing gross from net": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889157727
+      },
+      {
+        "executionId": "35f5b7cc-3b07-46d0-a54e-74620d9d2fb3",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788939368337
+      }
+    ],
+    "24.4 Add Bahar Comparison panel (3-column grid) showing Mrig/Ambe/Hasta with pricing, verdict, and score — all headings translated": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889157814
+      },
+      {
+        "executionId": "35f5b7cc-3b07-46d0-a54e-74620d9d2fb3",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788939379522
+      }
+    ],
+    "24.5 Add Net Realization Model table comparing Grade A CFB carton (gross ₹65 → net ₹41.42/kg) vs Grade B plastic crate (gross ₹38 → net ₹23.69/kg) with all deduction line items": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889157911
+      },
+      {
+        "executionId": "35f5b7cc-3b07-46d0-a54e-74620d9d2fb3",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788939392149
+      }
+    ],
+    "24.6 Add Grade Economics table (A+/A/B/C rows with weight, pack type, price range) sourced from `GRADE_ECONOMICS`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889157998
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788940029443
+      }
+    ],
+    "24.7 Add 4 chart canvases in `.chart-container` wrappers: `chart-seasonal`, `chart-score`, `chart-cashflow`, `chart-grade`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889158089
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788940042721
+      }
+    ],
+    "25.1 Inside `#panel-nutrients`: add heading and evidence grade legend panel (4 rows: 🟢A, 🔵B, 🟡C, 🔴E with descriptions) — legend labels carry `data-i18n=\"common.evidenceLegend.*\"`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889158182
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788940984981
+      }
+    ],
+    "25.2 Add 5 filter buttons: All, Primary (N/P/K), Secondary (Ca/Mg/S), Micronutrients, Biostimulants — button labels carry `data-i18n=\"nutrient.filter.*\"` — each has `onclick=\"filterNutrients('{cat}')\"` where cat matches `category` values in `NUTRIENTS_DATA`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889158363
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788940994580
+      }
+    ],
+    "25.3 Add empty `<div id=\"nutrient-card-grid\" class=\"card-grid\">` container where JS will inject cards": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889158454
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941004269
+      }
+    ],
+    "25.4 Add disclaimer line: \"🔴 All images are illustrative only — not deficiency photographs. Verify all dosages via soil and leaf tissue analysis.\"": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889158544
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941013771
+      }
+    ],
+    "25.5 Confirm JS `renderNutrientCards('all')` will be called on tab first activation (hook in Task 17)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889158630
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941023048
+      }
+    ],
+    "26.1 Inside `#panel-calendar`: add heading and instructions paragraph — heading carries `data-i18n=\"calendar.heading\"`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889158717
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941033425
+      }
+    ],
+    "26.2 Add `<div id=\"calendar-month-buttons\" class=\"flex flex-wrap gap-2\">` container where JS will inject 13 month buttons": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889158855
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941043731
+      }
+    ],
+    "26.3 Add `<div id=\"calendar-detail\">` container where JS will inject the selected month's detail card": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889158951
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941053399
+      }
+    ],
+    "26.4 Add a note explaining the water formula: \"Water target computed from ET₀ × Kc × Kr × 6m² ÷ η (system efficiency)\"": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889159038
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941063575
+      }
+    ],
+    "26.5 Confirm JS `renderCalendarButtons()` and `selectCalendarMonth(0)` (Month 8 default) will be called on tab first activation": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889159130
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941381300
+      }
+    ],
+    "27.1 Inside `#panel-irrigation`: add stage dropdown `<select id=\"irr-stage\">` (9 options populated inline matching `IRRIGATION_STAGES` labels), hardware dropdown `<select id=\"irr-hardware\">` (2 dripper × 4 L/h or 4 dripper × 4 L/h), efficiency input `<input type=\"number\" id=\"irr-efficiency\" min=\"0.70\" max=\"1.00\" step=\"0.01\" value=\"0.90\">`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889159216
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941395839
+      }
+    ],
+    "27.2 Add formula display section: static text \"V = ET₀ × Kc × Kr × S ÷ η (S = 6.0 m²)\" and output area with `#irr-vol`, `#irr-runtime`, `#irr-orchard-total` divs; all input labels carry `data-i18n=\"drip.*\"`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889159311
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941408839
+      }
+    ],
+    "27.3 Add calculate button (or wire `oninput`/`onchange` events calling `runIrrigationCalc()`)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889159404
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941428012
+      }
+    ],
+    "27.4 Add `.chart-container` with `<canvas id=\"chart-irrigation\">`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889159497
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941441249
+      }
+    ],
+    "27.5 Add Vertisol Drip Maintenance Protocol panel with 3 items: bi-weekly line flush, acid wash (with caveat that frequency depends on water test results), biofilm chlorination": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889159573
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941452925
+      }
+    ],
+    "28.1 Inside `#panel-fertigation`: add Annual RDF Targets panel (4 rows: Year 1, Year 2, Year 3, Mature Year 4+) showing N-P₂O₅-K₂O per tree with evidence grade badges — include ICAR-IIHR reference (340:70:260 g N:P₂O₅:K₂O) and note to calibrate after soil/leaf analysis": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889159662
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941464488
+      }
+    ],
+    "28.2 Add 3-Tank Compatibility Protocol panel — clearly state Tank A contents (Calcium Nitrate + micronutrients), Tank B contents (mono/di ammonium phosphate + potassium nitrate), Tank C contents (WSF with sulfates if needed), and the prohibition on mixing Calcium Nitrate with Phosphates or Sulfates": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889159757
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941476756
+      }
+    ],
+    "28.3 Add Stage 1 WSF Schedule table (Months 8–12, 16-week programme) with columns: Grade, Per plant/week (g), Per 100 trees/week (g), Orchard 2100 trees/week (kg), 16-week total (kg) — note that values are sourced from `data.js` constants, not hardcoded": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889159836
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941492932
+      }
+    ],
+    "28.4 Add disclaimer: \"🟡C — Mature NPK targets must be calibrated with soil test and leaf tissue analysis after Year 2\"": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889159918
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941503449
+      }
+    ],
+    "28.5 Ensure all column headers and panel headings carry `data-i18n=\"fert.*\"` attributes": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889160007
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941514329
+      }
+    ],
+    "29.1 Inside `#panel-health`: add regulatory disclaimer BEFORE any IPM card content: \"⚠ All chemical recommendations must be verified against current CIB&RC registration before application.\" — disclaimer text carries `data-i18n=\"ipm.disclaimer\"`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889160100
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941556055
+      }
+    ],
+    "29.2 Add search input `<input id=\"ipm-search\" type=\"text\" placeholder=\"...\" oninput=\"filterHealthCards()\">` and category filter `<select id=\"ipm-category\" onchange=\"filterHealthCards()\">` with options All/Insect Pests/Diseases — placeholder and option labels carry `data-i18n=\"ipm.*\"` keys": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889160274
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941933623
+      }
+    ],
+    "29.3 Add empty `<div id=\"ipm-card-grid\" class=\"card-grid\">` for JS-rendered IPM cards": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889160361
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941946253
+      }
+    ],
+    "29.4 Add Visual Disease Identification Gallery section with 8 identification cards — each card has either a `<img>` element (with `onerror` fallback hiding img and showing `.img-fallback` div) or a text-based symptom diagram; note \"🔴 Image labels: illustrative only, not diagnostic photographs\"": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889160450
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941956025
+      }
+    ],
+    "29.5 Add FRAC/IRAC Resistance Rotation panel showing 4 spray windows with alternating mode-of-action groups for fungicide and insecticide rotation": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889160540
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941965283
+      }
+    ],
+    "30.1 Inside `#panel-bagging`: add 3-layer bagging system description — Layer 1: EPE foam mesh inner, Layer 2: perforated LDPE middle, Layer 3: UV-reflective paper outer — with `🟡C` evidence badge and caveat \"local validation required\"": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889160620
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941975856
+      }
+    ],
+    "30.2 Add pre-bagging spray directive: Azoxystrobin + Neem Oil, 24 hours before bagging, fruits must be dry — note chemical recommendations require CIB&RC verification": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889160711
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788941992102
+      }
+    ],
+    "30.3 Add diagnostic lookup section: `<select id=\"diag-param\">` with at least 7 options (Soil pH, Soil ECe, Organic Carbon, Available Phosphorus, Free CaCO₃, Irrigation Water RSC, Irrigation Water SAR) plus a blank default option, with `onchange=\"runDiagnosticLookup()\"`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889160788
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788942007157
+      }
+    ],
+    "30.4 Add `<div id=\"diag-output\">` where JS renders the target range and remediation protocol": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889160877
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788942017837
+      }
+    ],
+    "30.5 Add caveat panel: \"RSC and SAR remediation doses must be calculated from actual water chemistry analysis — do not apply at a fixed rate\"": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889160962
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788942027747
+      }
+    ],
+    "31.1 Inside `#panel-procurement`: add tree count slider `<input type=\"range\" id=\"proc-trees\" min=\"100\" max=\"5000\" step=\"100\" value=\"2100\" oninput=\"updateProcurement()\">` with live value display showing current tree count": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889161055
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788942041054
+      }
+    ],
+    "31.2 Add 3 output panels: `#proc-fertilizers` (Fertilizers & WSF), `#proc-bio` (Micronutrients & Bio-Agents), `#proc-hardware` (Hardware & Bagging Supplies) — panel headings carry `data-i18n=\"procurement.*\"`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889161147
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788942054851
+      }
+    ],
+    "31.3 Add note: \"Base quantities keyed to 2,100 trees. Scaling formula: actual trees ÷ 2,100 × base quantity, rounded up to nearest whole commercial unit.\"": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889161233
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788942068406
+      }
+    ],
+    "31.4 Add note: \"🔴 Prices and availability must be verified with local suppliers at time of purchase.\"": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889161346
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788942078145
+      }
+    ],
+    "31.5 Confirm `updateProcurement()` will be called on tab first activation to show default 2,100-tree quantities": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889161438
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788942088343
+      }
+    ],
+    "32.1 Inside `#panel-warnings`: add section heading and introductory note carrying `data-i18n=\"warnings.heading\"` and `data-i18n=\"warnings.intro\"`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889161521
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788942100629
+      }
+    ],
+    "32.2 Add 9 warning cards (red/amber background), one each for: premature cropping, Vertisol root-collar waterlogging, tractor rotovation near trunk, glyphosate drift, calcium–phosphate tank mixing, unperforated plastic bagging, bloom-period insecticide spray, caustic chemical deblossoming, unbuffered water stress re-irrigation": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889161606
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788942111283
+      }
+    ],
+    "32.3 The chemical deblossoming warning card MUST clarify: spraying Urea or NAA on trees under 12 months is the prohibited action, and manual deblossoming is the recommended alternative": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889161704
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788942430005
+      }
+    ],
+    "32.4 Each warning card title and body carries `data-i18n=\"warnings.card{N}.*\"` attributes for both title and body": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889161786
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788942440316
+      }
+    ],
+    "32.5 Use red background (`bg-red-50`, `border-red-500`) for severe warnings (premature cropping, waterlogging, caustic deblossoming) and amber (`bg-amber-50`, `border-amber-500`) for caution-level warnings": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889161879
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788942452702
+      }
+    ],
+    "33.1 Audit `#panel-overview` — confirm every translatable static text span/heading/label carries a `data-i18n` key matching the `en` object in `TRANSLATIONS`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889162032
+      },
+      {
+        "executionId": "cddb75ef-3600-461b-bcb3-38946edd4fc6",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788942465164
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788944371697
+      }
+    ],
+    "33.2 Audit `#panel-market` and `#panel-nutrients` — same check; pay particular attention to table column headers (every `<th>`) and button labels": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889162116
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788944391304
+      }
+    ],
+    "33.3 Audit `#panel-calendar`, `#panel-irrigation`, `#panel-fertigation` — check all field labels and unit labels": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889162198
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788944409501
+      }
+    ],
+    "33.4 Audit `#panel-health`, `#panel-bagging`, `#panel-procurement`, `#panel-warnings` — check all labels": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889162279
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788944429424
+      }
+    ],
+    "33.5 Cross-check: count keys in `TRANSLATIONS.en` vs number of `data-i18n` attributes in HTML — these should match (every key used at least once, no orphaned keys)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889162380
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788944466636
+      }
+    ],
+    "34.1 Open `index.html` as `file://` in Chrome; click \"🇮🇳 हिन्दी\" button — verify all `data-i18n` elements update to Hindi text": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889162468
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788944495985
+      }
+    ],
+    "34.2 Move a simulator slider while in Hindi mode — verify output values update correctly and remain numbers (not translated)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889162549
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788944524715
+      }
+    ],
+    "34.3 Click \"🇬🇧 English\" button — verify all elements restore to English text": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889162635
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788944549355
+      }
+    ],
+    "34.4 Check browser console — verify zero errors, and that any `console.warn` messages are only for genuinely missing keys (fix any found missing keys in `data.js`)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889162721
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788944573557
+      }
+    ],
+    "34.5 Verify `#lang-hi` has `.lang-active` class when Hindi is active, and `#lang-en` has it when English is active": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889162812
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788944593412
+      }
+    ],
+    "35.1 Click each of the 10 tab buttons in sequence — verify content section shows for each and all others are hidden": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889162908
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788944605704
+      }
+    ],
+    "35.2 Activate Market tab — verify all 4 charts render without blank canvases": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889163001
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788944615188
+      }
+    ],
+    "35.3 Switch away from Market tab and back — verify charts do NOT re-initialise (no duplicate chart error in console)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889163089
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788944933498
+      }
+    ],
+    "35.4 Activate Irrigation tab — verify `chart-irrigation` renders; activate Overview tab — verify `chart-water` and `chart-npk` render": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889163188
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788944942878
+      }
+    ],
+    "35.5 Check console for any `\"Canvas not found\"` warnings and fix by ensuring all chart canvas IDs in `charts.js` match those in `index.html`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889163283
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788944953563
+      }
+    ],
+    "36.1 Set simulator sliders to: price=60, yield2=18, yield4=30, bagCost=2.75 — verify Year-2 gross = ₹2,268,000 (= 2100 × 18 × 60), Year-2 net = gross − (420000 + (2100×18/0.4 × 2.75))": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889163370
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788944963874
+      }
+    ],
+    "36.2 Set bagCost slider to maximum, reduce price slider to minimum — verify net income turns negative and renders in red with \"−₹\" prefix": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889163467
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788944973116
+      }
+    ],
+    "36.3 Test irrigation calculator: select Month 8-10 stage, η=0.90, 2 drippers × 4 L/h — verify volPerPlant output matches `ET₀ × Kc × Kr × 6.0 / 0.90` for that stage": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889163563
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788944982425
+      }
+    ],
+    "36.4 Verify procurement calculator at tree count 4200 shows exactly 2× the base quantities for each item (linear scaling test)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889163694
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788944991830
+      }
+    ],
+    "36.5 Verify all simulator and calculator outputs carry \"🔴 Scenario only\" or equivalent disclaimer labels": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889163813
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788945001897
+      }
+    ],
+    "37.1 Run `node --check js/app.js js/data.js js/translator.js js/charts.js` to verify no syntax errors in any JS file": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889163911
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788945012201
+      }
+    ],
+    "37.2 Open `index.html` as `file://` in Chrome with DevTools open — verify zero console errors on initial page load": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889164026
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788945021866
+      }
+    ],
+    "37.3 Open `index.html` as `file://` in Firefox — verify same: no errors, all 10 tabs accessible": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889164132
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788945031658
+      }
+    ],
+    "37.4 Open in Edge — verify language toggle and simulator both function": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889164232
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788945042414
+      }
+    ],
+    "37.5 Fix any identified syntax errors or module import path issues (ensure all imports use relative `./` paths)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889164329
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788945052292
+      }
+    ],
+    "38.1 Add sticky footer or bottom-of-page panel with financial disclaimer text: \"All financial projections are planning scenarios only (🔴 Scenario). Verify all prices with buyers before harvest. NHB/ICAR agronomic references used where stated.\"": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889164412
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788945061492
+      }
+    ],
+    "38.2 Add market data attribution in Market tab: \"Price data: Azadpur Mandi, Agmarknet (verified Sep 2026). Production data: NHB Horticulture Statistics.\"": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889164521
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788945072092
+      }
+    ],
+    "38.3 Verify the evidence grade legend in the Nutrient Master tab covers all 4 grades with full descriptions": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889164636
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788945081568
+      }
+    ],
+    "38.4 Add CIB&RC disclaimer to IPM tab footer (visible even when cards are filtered out)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889164721
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788945090807
+      }
+    ],
+    "38.5 Add ICAR-IIHR NPK reference in Fertigation tab: \"Reference: ICAR-IIHR high-density guava research recommends 340:70:260 g N:P₂O₅:K₂O as an alternative calibration point\"": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889164829
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788945408673
+      }
+    ],
+    "39.1 Test at 375px viewport width (Chrome DevTools mobile emulation) — verify navigation bar scrolls horizontally without wrapping to a second line": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889164929
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788945418643
+      }
+    ],
+    "39.2 Verify KPI grid in Tab 1 renders as 2-column on 375px (not 6-column)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889165018
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788945429000
+      }
+    ],
+    "39.3 Verify nutrient card grid in Tab 3 renders as 1-column on mobile and 3-column on desktop ≥1024px": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889165113
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788945438697
+      }
+    ],
+    "39.4 Verify chart containers do not overflow their parent at 375px — confirm `height: 260px` on mobile is applied": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889165217
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788945451338
+      }
+    ],
+    "39.5 Verify scenario table in Tab 2 has horizontal scroll wrapper so it doesn't overflow on mobile: wrap in `<div class=\"overflow-x-auto\">`": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889165347
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788945461539
+      }
+    ],
+    "40.1 Search entire `index.html` and `js/data.js` for prohibited absolute claims: \"100% protection\", \"zero cracking\", \"guaranteed\", \"always\" — remove or qualify any found": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889165504
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788945470699
+      }
+    ],
+    "40.2 Verify no location data more specific than \"Badnawar Tehsil, Dhar District, Madhya Pradesh\" appears in any user-visible text": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889165615
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788945480448
+      }
+    ],
+    "40.3 Verify all ₹ symbols display correctly across all tabs (UTF-8 encoding set in `<meta charset=\"UTF-8\">`)": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889165730
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788945489744
+      }
+    ],
+    "40.4 Verify every financial projection in the simulator, scenario table, and financial highlight cards carries a \"🔴 Scenario only\" label": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889165823
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788945805404
+      }
+    ],
+    "40.5 Do a final cross-browser open in Chrome, Firefox, and Edge — confirm no regressions from Tasks 38–39": [
+      {
+        "executionId": "fbfd2aac-89a8-4da4-9a59-b13b8ccfc303",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788889165911
+      },
+      {
+        "executionId": "e059b35d-a719-45c6-a248-6a264b1d981e",
+        "chatSessionId": "sess_792977c2-d6c3-45c1-909e-93487741f5e9",
+        "timestamp": 1788945814619
+      }
+    ],
+    "1.1 Create folder `css/` under the workspace root": [
+      {
+        "executionId": "4415257c-857d-4f91-bcc9-b9527baec8d7",
+        "chatSessionId": "sess_53ddc1ed-1e1f-4c9d-8354-aed709a233f7",
+        "timestamp": 1788889236515
+      },
+      {
+        "executionId": "4415257c-857d-4f91-bcc9-b9527baec8d7",
+        "chatSessionId": "sess_53ddc1ed-1e1f-4c9d-8354-aed709a233f7",
+        "timestamp": 1788889261279
+      }
+    ]
+  }
+}
