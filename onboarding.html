@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guava Care — Tell us about your farm</title>
+
+  <!-- Tailwind CSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              bg:        '#FDFBF7',
+              primary:   '#1E3A2B',
+              secondary: '#4A7C59',
+              accent:    '#E07A5F',
+              dark:      '#2B2D42'
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-screen bg-brand-bg">
+
+  <!-- Header bar -->
+  <header class="bg-brand-primary px-4 py-3">
+    <p class="text-white text-sm font-semibold">🌿 Tell us about your farm</p>
+  </header>
+
+  <!-- Form — fits 360×640 without scrolling:
+       header ~44px + form padding 16px + 5×(label 18px + field 44px + gap 12px) + button 48px + errors ≈ 540px -->
+  <main class="px-4 pt-4 pb-4">
+    <form id="onboarding-form" autocomplete="off" novalidate class="flex flex-col gap-3">
+
+      <!-- Crop -->
+      <div class="flex flex-col gap-1">
+        <label for="crop" class="text-sm font-medium text-gray-700">Crop</label>
+        <select
+          id="crop"
+          name="crop"
+          class="h-11 rounded-lg border border-gray-300 bg-white px-3 text-sm focus:outline-none focus:border-brand-secondary"
+        >
+          <option value="guava">Guava</option>
+        </select>
+      </div>
+
+      <!-- Number of plants -->
+      <div class="flex flex-col gap-1">
+        <label for="plant-count" class="text-sm font-medium text-gray-700">Number of plants</label>
+        <input
+          type="number"
+          id="plant-count"
+          name="plant_count"
+          min="1"
+          placeholder="e.g. 500"
+          class="h-11 rounded-lg border border-gray-300 bg-white px-3 text-sm focus:outline-none focus:border-brand-secondary"
+        >
+        <span id="plant-count-error" class="hidden text-red-600 text-xs" role="alert"></span>
+      </div>
+
+      <!-- State -->
+      <div class="flex flex-col gap-1">
+        <label for="state-select" class="text-sm font-medium text-gray-700">State</label>
+        <select
+          id="state-select"
+          name="state"
+          class="h-11 rounded-lg border border-gray-300 bg-white px-3 text-sm focus:outline-none focus:border-brand-secondary"
+        >
+          <option value="">Select state</option>
+        </select>
+      </div>
+
+      <!-- District -->
+      <div class="flex flex-col gap-1">
+        <label for="district-select" class="text-sm font-medium text-gray-700">District</label>
+        <select
+          id="district-select"
+          name="district"
+          disabled
+          class="h-11 rounded-lg border border-gray-300 bg-white px-3 text-sm
+                 disabled:bg-gray-100 disabled:text-gray-400 focus:outline-none focus:border-brand-secondary"
+        >
+          <option value="">Select district</option>
+        </select>
+      </div>
+
+      <!-- Date planted -->
+      <div class="flex flex-col gap-1">
+        <label for="sowing-date" class="text-sm font-medium text-gray-700">When did you plant the trees?</label>
+        <input
+          type="date"
+          id="sowing-date"
+          name="sowing_date"
+          class="h-11 rounded-lg border border-gray-300 bg-white px-3 text-sm focus:outline-none focus:border-brand-secondary"
+        >
+        <span id="sowing-date-error" class="hidden text-red-600 text-xs" role="alert"></span>
+      </div>
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        id="btn-submit"
+        class="w-full min-h-[48px] bg-brand-primary text-white text-base font-semibold
+               rounded-lg hover:bg-brand-secondary active:scale-[0.98] transition mt-1"
+      >
+        Get my plan
+      </button>
+
+      <!-- API / network error -->
+      <div id="form-error" class="hidden text-red-600 text-sm text-center" role="alert"></div>
+
+      <!-- Loading state -->
+      <div id="form-loading" class="hidden text-gray-500 text-sm text-center">
+        Getting your plan…
+      </div>
+
+    </form>
+  </main>
+
+  <script type="module" src="js/onboarding.js"></script>
+
+</body>
+</html>

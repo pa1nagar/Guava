@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guava Care — Login</title>
+
+  <!-- Tailwind CSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Brand colour config (matches index.html) -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              bg:        '#FDFBF7',
+              primary:   '#1E3A2B',
+              secondary: '#4A7C59',
+              accent:    '#E07A5F',
+              dark:      '#2B2D42'
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-screen bg-brand-bg flex items-center justify-center px-4">
+
+  <div class="w-full max-w-sm flex flex-col items-center gap-3 text-center">
+
+    <!-- Brand mark -->
+    <div class="text-5xl">🌿</div>
+    <h1 class="text-2xl font-bold text-brand-primary">Guava Care</h1>
+    <p class="text-sm text-gray-500">Your personal guava crop plan</p>
+
+    <div class="mt-6 w-full flex flex-col gap-3">
+
+      <!-- Sign-in button -->
+      <button
+        id="btn-google-signin"
+        class="w-full min-h-[48px] bg-brand-primary text-white text-base font-semibold
+               rounded-lg flex items-center justify-center gap-2
+               hover:bg-brand-secondary active:scale-[0.98] transition"
+      >
+        <!-- Simple "G" mark -->
+        <span class="text-lg font-bold">G</span>
+        Sign in with Google
+      </button>
+
+      <p class="text-xs text-gray-400">Free · No password needed</p>
+
+      <!-- Error display (hidden until needed) -->
+      <span
+        id="auth-error"
+        class="hidden text-red-600 text-sm mt-1"
+        role="alert"
+      ></span>
+
+    </div>
+  </div>
+
+  <script type="module">
+    import { routeGuard, signInWithGoogle } from "./js/auth.js";
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      await routeGuard("login");
+    });
+
+    document.getElementById("btn-google-signin").addEventListener("click", async () => {
+      const errEl = document.getElementById("auth-error");
+      errEl.classList.add("hidden");
+      errEl.textContent = "";
+      try {
+        await signInWithGoogle();
+      } catch (err) {
+        errEl.textContent = "Sign-in failed. Please try again.";
+        errEl.classList.remove("hidden");
+      }
+    });
+  </script>
+
+</body>
+</html>

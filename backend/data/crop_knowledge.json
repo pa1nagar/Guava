@@ -1,0 +1,106 @@
+{
+  "_comment": "Do not add prose advice here — all text is passed verbatim to Gemini as reference data.",
+  "guava": {
+    "stages": [
+      {
+        "stage_id": "establishment",
+        "label": "Establishment",
+        "month_start": 0,
+        "month_end": 2,
+        "description": "Your trees have just been planted and are settling into the soil. Roots are growing and the tree is finding its footing.",
+        "irrigation": "Water every day. Give 3 litres per plant each day.",
+        "fertigation": "Give 5 grams of 19-19-19 water-soluble fertiliser per plant each week through the drip system.",
+        "pest_checks": "Check the base of each stem for white sticky insects or cottony patches.",
+        "reference_plant_count": 1
+      },
+      {
+        "stage_id": "vegetative_growth",
+        "label": "Vegetative Growth",
+        "month_start": 3,
+        "month_end": 7,
+        "description": "Your trees are putting on branches and leaves. This is the main growing phase where the tree builds its shape.",
+        "irrigation": "Water every day. Give 4 litres per plant each day.",
+        "fertigation": "Give 7 grams of 19-19-19 water-soluble fertiliser per plant each week through the drip system.",
+        "pest_checks": "Look for shoot tips that are wilted or dead — this means a borer insect is inside the stem.",
+        "reference_plant_count": 1
+      },
+      {
+        "stage_id": "post_monsoon",
+        "label": "Post-Monsoon Establishment",
+        "month_start": 8,
+        "month_end": 10,
+        "description": "The monsoon is ending and your trees are continuing to grow strongly. Canopy training and drainage are the main focus now.",
+        "irrigation": "Water every day. Give 3 litres per plant each day.",
+        "fertigation": "Give 8 grams of 12-6-20 water-soluble fertiliser per plant each week. Add 1 gram of iron chelate per plant each week.",
+        "pest_checks": "Check stems for bark damage from caterpillars. Clear weeds from around the base of each tree.",
+        "reference_plant_count": 1
+      },
+      {
+        "stage_id": "pre_bloom",
+        "label": "Pre-Bloom Hardening",
+        "month_start": 11,
+        "month_end": 12,
+        "description": "Growth is slowing down and flower buds are beginning to form. The tree is preparing to flower.",
+        "irrigation": "Water every day. Give 4 litres per plant each day.",
+        "fertigation": "Give 8 grams of 8-8-32 water-soluble fertiliser per plant each week. Add 3 grams of calcium nitrate per plant each week.",
+        "pest_checks": "Check leaf tips for dark spots or blotches that may be early fungal disease.",
+        "reference_plant_count": 1
+      },
+      {
+        "stage_id": "bloom_fruit_set",
+        "label": "Bloom and Fruit Set",
+        "month_start": 13,
+        "month_end": 14,
+        "description": "Your trees are flowering and small fruits are forming. This is the most important time for water and nutrition.",
+        "irrigation": "Water every day. Give 10 litres per plant each day.",
+        "fertigation": "Give 5 grams of MKP fertiliser per plant each week in Tank B. Add 5 grams of calcium nitrate per plant each week in Tank A.",
+        "pest_checks": "Do not spray any insecticides this week — it will harm the bees needed for pollination. Check fruit fly traps daily.",
+        "reference_plant_count": 1
+      },
+      {
+        "stage_id": "fruit_development",
+        "label": "Fruit Development",
+        "month_start": 15,
+        "month_end": 15,
+        "description": "Fruits are sizing up rapidly. Keeping them well-fed and protected from insects is the priority.",
+        "irrigation": "Water every day. Give 14 litres per plant each day.",
+        "fertigation": "Give 10 grams of SOP fertiliser per plant each week. Add 3 grams of calcium nitrate per plant each week.",
+        "pest_checks": "Bag any fruits that are not already covered. Check bags for holes or insect entry.",
+        "reference_plant_count": 1
+      },
+      {
+        "stage_id": "drought_stress",
+        "label": "Drought Stress",
+        "month_start": 16,
+        "month_end": 16,
+        "description": "This is the deliberate dry period. Stopping water now causes all fruits to ripen together at the same time.",
+        "irrigation": "Stop all irrigation completely this week. Do not water at all — this is intentional and important.",
+        "fertigation": "No fertiliser this week. The stress period must not be interrupted.",
+        "pest_checks": "Check that all fruit bags are intact. Look for any fruit that has fallen early.",
+        "reference_plant_count": 1
+      },
+      {
+        "stage_id": "harvest",
+        "label": "Harvest",
+        "month_start": 17,
+        "month_end": 17,
+        "description": "Your fruits are ready to pick. Harvest firm-mature fruits carefully for best market quality.",
+        "irrigation": "Restart watering. Give 14 litres per plant each day.",
+        "fertigation": "Give 5 grams of SOP fertiliser per plant each week for 2 weeks after harvest.",
+        "pest_checks": "Remove all fallen fruit from the ground immediately. Burn any diseased fruit — do not compost it.",
+        "reference_plant_count": 1
+      },
+      {
+        "stage_id": "post_harvest_mature",
+        "label": "Post-Harvest and Recovery",
+        "month_start": 18,
+        "month_end": 9999,
+        "description": "Harvest is done and your trees are resting and rebuilding. New shoots are emerging from the pruned branches.",
+        "irrigation": "Water every day. Give 11 litres per plant each day.",
+        "fertigation": "Give 10 grams of 19-19-19 water-soluble fertiliser per plant each week. Add 2 grams of humic acid per plant each week.",
+        "pest_checks": "Watch new shoots carefully for borer insects. Check the root area for any signs of wilting or rotting.",
+        "reference_plant_count": 1
+      }
+    ]
+  }
+}

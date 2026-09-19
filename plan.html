@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guava Care — Your Plan</title>
+
+  <!-- Tailwind CSS v3 CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              bg:        '#FDFBF7',
+              primary:   '#1E3A2B',
+              secondary: '#4A7C59',
+              accent:    '#E07A5F',
+              dark:      '#2B2D42'
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-screen bg-brand-bg">
+
+  <!-- Header bar -->
+  <header class="bg-brand-primary px-4 py-3">
+    <p class="text-white text-sm font-semibold">🌿 Your Crop Plan</p>
+  </header>
+
+  <!-- Farmer context bar (populated by JS) -->
+  <div id="farmer-context" class="text-sm text-gray-500 px-4 py-2 border-b border-gray-200"></div>
+
+  <!-- Main content -->
+  <main class="px-4 py-4 max-w-lg mx-auto">
+
+    <!-- Loading indicator -->
+    <div id="plan-loading" class="hidden flex flex-col items-center gap-3 py-10 text-gray-500">
+      <!-- Simple CSS spinner -->
+      <div class="w-8 h-8 border-4 border-brand-secondary border-t-transparent rounded-full animate-spin"></div>
+      <p class="text-sm">Getting your plan…</p>
+    </div>
+
+    <!-- Plan content (hidden until loaded) -->
+    <div id="plan-content" class="hidden flex flex-col gap-4">
+
+      <!-- Growth stage badge -->
+      <div
+        id="stage-badge"
+        class="inline-flex items-center gap-2 bg-brand-secondary/10 border border-brand-secondary
+               rounded-lg px-4 py-3 text-brand-secondary font-semibold text-sm"
+      ></div>
+
+      <!-- Plan text (paragraphs injected by JS) -->
+      <div id="plan-text" class="text-gray-800 text-sm leading-relaxed flex flex-col gap-3"></div>
+
+      <hr class="border-gray-200 my-1">
+
+      <a
+        href="onboarding.html"
+        class="text-sm text-brand-secondary underline underline-offset-2"
+      >
+        Update my details
+      </a>
+
+    </div>
+
+    <!-- Error state -->
+    <div
+      id="plan-error"
+      class="hidden bg-red-50 border border-red-200 rounded-lg px-4 py-3
+             text-red-700 text-sm"
+      role="alert"
+    ></div>
+
+  </main>
+
+  <script type="module" src="js/plan.js"></script>
+
+</body>
+</html>
