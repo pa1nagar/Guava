@@ -1041,3 +1041,249 @@ async function loadInsights() {
     console.error("Insights load failed:", err);
   }
 }
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Advanced insights rendering — GDD, climate, compliance, fertilizer budget
+// ─────────────────────────────────────────────────────────────────────────────
+
+function renderGDDAndClimate(climate, currentStageId) {
+  const el = document.getElementById("gdd-section");
+  if (!el) return;
+
+  if (!climate?.fetched) {
+    el.innerHTML = `<p class="text-sm text-gray-400">NASA POWER climate data unavailable. ${climate?.error || ""}</p>`;
+    return;
+  }
+
+  const gdd = climate.gdd_cumulative || 0;
+  const thresholds = climate.gdd_thresholds || {};
+  const STAGE_LABELS = {
+    establishment:"Establishment", vegetative_growth:"Vegetative Growth",
+    post_monsoon:"Post-Monsoon", pre_bloom:"Pre-Bloom",
+    bloom_fruit_set:"Bloom & Fruit Set", fruit_development:"Fruit Development",
+    drought_stress:"Drought Stress", harvest:"Harvest", post_harvest_mature:"Post-Harvest",
+  };
+
+  // Next stage threshold
+  const stageOrder = Object.keys(thresholds);
+  const curIdx = stageOrder.indexOf(currentStageId);
+  const nextStageId = stageOrder[curIdx + 1];
+  const nextThreshold = nextStageId ? thresholds[nextStageId] : null;
+  const currentThreshold = thresholds[currentStageId] || 0;
+  const progressPct = nextThreshold
+    ? Math.min(((gdd - currentThreshold) / (nextThreshold - currentThreshold)) * 100, 100)
+    : 100;
+
+  // GDD vs calendar comparison
+  const gddVsCal = climate.gdd_vs_calendar || "on_track";
+  const gddColour = gddVsCal === "ahead" ? "text-green-600" : gddVsCal === "behind" ? "text-amber-600" : "text-gray-600";
+  const gddIcon   = gddVsCal === "ahead" ? "🚀" : gddVsCal === "behind" ? "🐢" : "✅";
+
+  el.innerHTML = `
+    <!-- GDD gauge -->
+    <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+      <div class="flex items-start justify-between mb-3">
+        <div>
+          <p class="text-xs text-gray-400 font-semibold uppercase tracking-wider">Growing Degree Days accumulated</p>
+          <p class="text-3xl font-extrabold text-brand-dark mt-0.5">${gdd.toLocaleString("en-IN")} GDD</p>
+          <p class="text-sm text-gray-500 mt-1">Base temperature 10°C · since planting</p>
+        </div>
+        <span class="text-3xl">${gddIcon}</span>
+      </div>
+      ${nextStageId ? `
+        <div class="mb-1 flex justify-between text-xs text-gray-500">
+          <span>Current: ${STAGE_LABELS[currentStageId] || currentStageId}</span>
+          <span>Next: ${STAGE_LABELS[nextStageId] || nextStageId} at ${nextThreshold} GDD</span>
+        </div>
+        <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
+          <div class="h-3 bg-brand-secondary rounded-full transition-all"
+               style="width:${progressPct.toFixed(1)}%"></div>
+        </div>
+        <p class="text-xs text-gray-400 mt-1">${progressPct.toFixed(0)}% of the way to next stage</p>
+      ` : `<p class="text-sm text-gray-500">Final stage reached.</p>`}
+      <p class="text-sm mt-3 font-medium ${gddColour}">${climate.gdd_note || ""}</p>
+    </div>
+
+    <!-- Climate anomaly -->
+    <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+      <p class="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-2">This Month vs 30-Year Normal (NASA POWER)</p>
+      <div class="grid grid-cols-2 gap-3 mb-3">
+        <div class="bg-gray-50 rounded-xl p-3 text-center">
+          <p class="text-xs text-gray-400 mb-1">Temperature anomaly</p>
+          ${climate.anomaly_temperature != null ? `
+            <p class="text-xl font-extrabold ${Math.abs(climate.anomaly_temperature) > 1.5 ? "text-red-600" : "text-gray-700"}">
+              ${climate.anomaly_temperature > 0 ? "+" : ""}${climate.anomaly_temperature}°C
+            </p>
+          ` : `<p class="text-sm text-gray-400">Insufficient data</p>`}
+        </div>
+        <div class="bg-gray-50 rounded-xl p-3 text-center">
+          <p class="text-xs text-gray-400 mb-1">Rainfall anomaly</p>
+          ${climate.anomaly_rainfall_mm != null ? `
+            <p class="text-xl font-extrabold ${Math.abs(climate.anomaly_rainfall_mm) > 20 ? "text-blue-600" : "text-gray-700"}">
+              ${climate.anomaly_rainfall_mm > 0 ? "+" : ""}${climate.anomaly_rainfall_mm}mm
+            </p>
+          ` : `<p class="text-sm text-gray-400">Insufficient data</p>`}
+        </div>
+      </div>
+      <p class="text-sm text-gray-700 leading-relaxed">${climate.anomaly_summary || ""}</p>
+    </div>
+  `;
+}
+
+function renderMonsoonRisk(climate) {
+  const el = document.getElementById("monsoon-card");
+  if (!el || !climate?.fetched) return;
+
+  const risk = climate.waterlogging_risk || "low";
+  const colours = {
+    high:     "bg-red-50 border-red-300",
+    moderate: "bg-amber-50 border-amber-300",
+    drought:  "bg-orange-50 border-orange-300",
+    low:      "bg-green-50 border-green-200",
+  };
+  const icons = { high: "🌊", moderate: "⚠️", drought: "🌵", low: "✅" };
+
+  el.className = `rounded-2xl border px-5 py-4 ${colours[risk] || colours.low}`;
+  el.innerHTML = `
+    <div class="flex items-start gap-3 mb-3">
+      <span class="text-3xl">${icons[risk] || "✅"}</span>
+      <div>
+        <p class="text-sm font-bold text-gray-800 capitalize">${risk === "drought" ? "Drought Risk" : risk + " waterlogging risk"}</p>
+        <p class="text-sm text-gray-700 mt-1 leading-relaxed">${climate.waterlogging_message || ""}</p>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-3 text-center mt-2">
+      <div class="bg-white/60 rounded-xl p-2">
+        <p class="text-xs text-gray-500">Monsoon rainfall so far</p>
+        <p class="text-lg font-extrabold text-brand-dark">${(climate.monsoon_cumulative_mm || 0).toLocaleString("en-IN")} mm</p>
+      </div>
+      <div class="bg-white/60 rounded-xl p-2">
+        <p class="text-xs text-gray-500">vs 30-yr normal</p>
+        <p class="text-lg font-extrabold ${(climate.monsoon_deficit_pct || 0) > 0 ? "text-blue-700" : "text-red-600"}">
+          ${(climate.monsoon_deficit_pct || 0) > 0 ? "+" : ""}${(climate.monsoon_deficit_pct || 0).toFixed(0)}%
+        </p>
+      </div>
+    </div>
+  `;
+}
+
+function renderCompliance(compliance) {
+  const el = document.getElementById("compliance-card");
+  if (!el || !compliance) return;
+
+  const score = compliance.score || 0;
+  const colour = score >= 85 ? "#4A7C59" : score >= 60 ? "#F59E0B" : "#EF4444";
+  const bgColour = score >= 85 ? "bg-green-50" : score >= 60 ? "bg-amber-50" : "bg-red-50";
+
+  // Simple circular score display using CSS
+  el.innerHTML = `
+    <div class="flex items-center gap-5 mb-4">
+      <div class="relative w-20 h-20 flex-shrink-0">
+        <svg viewBox="0 0 36 36" class="w-20 h-20 -rotate-90">
+          <circle cx="18" cy="18" r="15.9" fill="none" stroke="#E5E7EB" stroke-width="3"/>
+          <circle cx="18" cy="18" r="15.9" fill="none" stroke="${colour}" stroke-width="3"
+            stroke-dasharray="${score} ${100 - score}" stroke-dashoffset="0"
+            stroke-linecap="round"/>
+        </svg>
+        <span class="absolute inset-0 flex items-center justify-center text-lg font-extrabold text-brand-dark">
+          ${score.toFixed(0)}
+        </span>
+      </div>
+      <div>
+        <p class="text-xs text-gray-400 font-semibold uppercase tracking-wider">Input Compliance Score</p>
+        <p class="text-base font-bold ${score >= 85 ? "text-green-700" : score >= 60 ? "text-amber-700" : "text-red-700"} mt-0.5">
+          ${score >= 85 ? "Good" : score >= 60 ? "Moderate" : "Needs attention"}
+        </p>
+      </div>
+    </div>
+    <p class="text-sm text-gray-700 leading-relaxed mb-3">${compliance.interpretation || ""}</p>
+    <div class="grid grid-cols-2 gap-3">
+      <div class="${bgColour} rounded-xl p-3 text-center">
+        <p class="text-xs text-gray-500">Logged fertilizer</p>
+        <p class="text-lg font-bold text-brand-dark">${(compliance.logged_fert_kg || 0).toLocaleString("en-IN")} kg</p>
+      </div>
+      <div class="bg-gray-50 rounded-xl p-3 text-center">
+        <p class="text-xs text-gray-500">Expected so far</p>
+        <p class="text-lg font-bold text-brand-dark">${(compliance.expected_fert_kg || 0).toLocaleString("en-IN")} kg</p>
+      </div>
+    </div>
+  `;
+}
+
+function renderFertForecast(items) {
+  const el = document.getElementById("fert-forecast");
+  if (!el) return;
+
+  if (!items || items.length === 0) {
+    el.innerHTML = `<p class="text-sm text-gray-400">No upcoming fertilizer stages.</p>`;
+    return;
+  }
+
+  let totalCost = 0;
+  el.innerHTML = "";
+
+  for (const item of items) {
+    totalCost += item.cost_estimate || 0;
+    const card = document.createElement("div");
+    card.className = "bg-white border border-gray-200 rounded-2xl p-4 shadow-sm";
+    card.innerHTML = `
+      <div class="flex items-start justify-between gap-3">
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-bold text-brand-dark">${item.stage_label}</p>
+          <p class="text-xs text-gray-500 mt-0.5">${item.fertilizer}</p>
+          <p class="text-xs text-gray-400 mt-1">${item.total_kg} kg · ₹${item.rate_per_kg}/kg · ${item.months} month${item.months > 1 ? "s" : ""}</p>
+        </div>
+        <div class="text-right flex-shrink-0">
+          <p class="text-xs text-gray-400">Estimated cost</p>
+          <p class="text-lg font-extrabold text-brand-dark">₹${(item.cost_estimate || 0).toLocaleString("en-IN")}</p>
+        </div>
+      </div>
+    `;
+    el.appendChild(card);
+  }
+
+  // Total row
+  const total = document.createElement("div");
+  total.className = "bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex justify-between items-center";
+  total.innerHTML = `
+    <p class="text-sm font-bold text-emerald-900">Total fertilizer cost (remaining stages)</p>
+    <p class="text-xl font-extrabold text-emerald-900">₹${totalCost.toLocaleString("en-IN")}</p>
+  `;
+  el.appendChild(total);
+}
+
+// Override loadInsights to use new data
+async function loadInsights() {
+  const loadingEl = document.getElementById("insights-loading");
+  const contentEl = document.getElementById("insights-content");
+  if (!loadingEl || !contentEl) return;
+
+  try {
+    const res = await apiFetch("/api/farmers/me/insights");
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    const locStr = `${data.location?.district}, ${data.location?.state}`;
+    const stageId = data.current_stage?.stage_id || "";
+
+    renderWeather(data.weather || {}, locStr);
+    renderDiseaseRisks(data.weather?.disease_risks || []);
+    renderMarket(data.market || {});
+    renderFutureStages(data.future_stages || []);
+    renderGDDAndClimate(data.climate || {}, stageId);
+    renderMonsoonRisk(data.climate || {});
+    renderCompliance(data.compliance || null);
+    renderFertForecast(data.fertilizer_forecast || []);
+
+    loadingEl.classList.add("hidden");
+    contentEl.classList.remove("hidden");
+
+  } catch (err) {
+    loadingEl.innerHTML = `
+      <p class="text-sm text-red-600">
+        Could not load insights. Please check your connection and try again.
+      </p>`;
+    console.error("Insights load failed:", err);
+  }
+}
