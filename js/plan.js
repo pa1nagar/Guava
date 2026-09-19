@@ -713,13 +713,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch { /* non-critical */ }
 
   try {
-    const [planRes, profileRes, spendRes, gapsRes, typesRes, fsRes] = await Promise.all([
+    // ── Step 1: Load critical data first (plan + profile) ──────────────────
+    // Show the page as soon as these two respond — don't wait for spending/gaps
+    const loadingMsg = document.querySelector("#page-loading p.text-sm");
+
+    if (loadingMsg) loadingMsg.textContent = "Connecting to server…";
+
+    const [planRes, profileRes] = await Promise.all([
       apiFetch("/api/plan"),
       apiFetch("/api/farmers/me"),
-      apiFetch("/api/farmers/me/spending"),
-      apiFetch("/api/farmers/me/gaps"),
-      apiFetch("/api/constants/activity-types"),
-      apiFetch("/api/farmers/me/financial-summary"),
     ]);
 
     if (planRes.status === 404 || profileRes.status === 404) {
@@ -729,25 +731,49 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     _plan    = await planRes.json();
     _profile = await profileRes.json();
-    _spend   = spendRes.ok  ? await spendRes.json()  : { total_cost:0, by_type:{} };
-    _fs      = fsRes.ok     ? await fsRes.json()      : null;
 
-    // Build activity type pills
-    let actTypes = ["Fertilizer","Irrigation","Pesticide","Labour","Other"];
-    if (typesRes.ok) { const d = await typesRes.json(); actTypes = d.activity_types || actTypes; }
-    buildTypePills(actTypes);
+    if (loadingMsg) loadingMsg.textContent = "Building your dashboard…";
 
-    // Render everything
+    // Build activity type pills (use fallback — don't wait for API)
+    buildTypePills(["Fertilizer","Irrigation","Pesticide","Labour","Other"]);
+    preFillFromPlan(_plan);
+
+    // Render core dashboard immediately
     renderHeader(_profile, _plan, displayName);
-    renderKPIs(_profile, _plan, _spend, _fs);
+    renderKPIs(_profile, _plan, { total_cost: 0, by_type: {} }, null);
     renderSummary(_plan);
     renderTasks(_plan);
     renderRoadmap(_plan);
+
+    // Show the page now — farmer sees their dashboard
+    clearTimeout(coldStartTimer);
+    pageLoading.classList.add("hidden");
+    pageContent.classList.remove("hidden");
+
+    // ── Step 2: Load secondary data in background (no spinner) ─────────────
+    // These fire after the page is visible — failures are silent
+    const [spendRes, gapsRes, fsRes, typesRes] = await Promise.all([
+      apiFetch("/api/farmers/me/spending"),
+      apiFetch("/api/farmers/me/gaps"),
+      apiFetch("/api/farmers/me/financial-summary"),
+      apiFetch("/api/constants/activity-types"),
+    ]);
+
+    _spend = spendRes.ok ? await spendRes.json() : { total_cost: 0, by_type: {} };
+    _fs    = fsRes.ok    ? await fsRes.json()    : null;
+
+    // Update KPIs and spending now that we have real data
+    renderKPIs(_profile, _plan, _spend, _fs);
     renderSpending(_spend);
-    preFillFromPlan(_plan);
     if (fsRes.ok) renderFinancialSummary(_fs);
 
-    // Simulator setup
+    // Update activity type pills with server values
+    if (typesRes.ok) {
+      const td = await typesRes.json();
+      buildTypePills(td.activity_types || ["Fertilizer","Irrigation","Pesticide","Labour","Other"]);
+      preFillFromPlan(_plan);
+    }
+
     simPlantCount.textContent = Number(_profile.plant_count).toLocaleString("en-IN");
     updateSimulator();
 
@@ -766,12 +792,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadRecentActivities();
     await refreshVendors();
 
-    clearTimeout(coldStartTimer);
-    pageLoading.classList.add("hidden");
-    pageContent.classList.remove("hidden");
-
   } catch (err) {
     clearTimeout(coldStartTimer);
+    // Only show error if page hasn't loaded yet
+    if (!pageContent.classList.contains("hidden")) return; // already showing — silent fail
     pageLoading.classList.add("hidden");
     const isTimeout = err.name === "AbortError";
     pageErrorMsg.textContent = isTimeout
