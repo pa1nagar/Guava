@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Guava Care — Your Plan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>My Farm — Guavaa</title>
 
-  <!-- Tailwind CSS v3 CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -17,7 +16,8 @@
               primary:   '#1E3A2B',
               secondary: '#4A7C59',
               accent:    '#E07A5F',
-              dark:      '#2B2D42'
+              dark:      '#2B2D42',
+              muted:     '#6B7280'
             }
           }
         }
@@ -25,206 +25,499 @@
     }
   </script>
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+
   <style>
-    /* Toast notification */
-    #toast {
-      transition: opacity 0.3s ease;
-    }
+    body { background: #FDFBF7; font-family: system-ui, sans-serif; }
+
     /* Spinner */
-    .spin {
-      animation: spin 0.9s linear infinite;
+    .spin { animation: _spin 0.85s linear infinite; }
+    @keyframes _spin { to { transform: rotate(360deg); } }
+
+    /* Toast */
+    #toast { transition: opacity 0.25s ease; }
+
+    /* Nav */
+    .farm-nav-btn {
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.6);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    /* Category colour dots */
-    .dot-fertilizer { background: #4A7C59; }
-    .dot-irrigation  { background: #3B82F6; }
-    .dot-ipm         { background: #F59E0B; }
-    .dot-activity    { background: #8B5CF6; }
+    .farm-nav-btn:hover { color: #fff; }
+    .farm-nav-btn.active { color: #fff; border-bottom-color: #E07A5F; background: rgba(0,0,0,0.15); }
+
+    /* Panels */
+    .farm-panel { display: none; }
+    .farm-panel.active { display: block; }
+
+    /* Stage progress dots */
+    .stage-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #D1FAE5;
+      flex-shrink: 0;
+      transition: background 0.3s;
+    }
+    .stage-dot.done   { background: #4A7C59; }
+    .stage-dot.active { background: #E07A5F; box-shadow: 0 0 0 3px rgba(224,122,95,0.3); }
+
+    /* Task cards */
+    .task-card-fertilizer { border-left: 4px solid #4A7C59; }
+    .task-card-irrigation  { border-left: 4px solid #3B82F6; }
+    .task-card-ipm         { border-left: 4px solid #F59E0B; }
+    .task-card-activity    { border-left: 4px solid #8B5CF6; }
+
+    /* Type pill buttons */
+    .type-pill {
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 2px solid #E5E7EB;
+      background: #fff;
+      color: #4B5563;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .type-pill.selected {
+      background: #1E3A2B;
+      color: #fff;
+      border-color: #1E3A2B;
+    }
+
+    /* Spend bar */
+    .spend-seg { height: 8px; border-radius: 99px; transition: width 0.4s; }
+
+    /* Scrollable nav */
+    .nav-scroll { overflow-x: auto; white-space: nowrap; }
+    .nav-scroll::-webkit-scrollbar { display: none; }
   </style>
 </head>
-<body class="min-h-screen bg-brand-bg">
+<body>
 
-  <!-- ── Header ────────────────────────────────────────────────────────────── -->
-  <header class="bg-brand-primary px-4 py-3 flex items-center justify-between">
-    <p class="text-white text-sm font-semibold">🌿 Your Crop Plan</p>
-    <button id="btn-signout"
-      class="text-white/70 text-xs underline underline-offset-2 hover:text-white">
-      Sign out
-    </button>
-  </header>
+<!-- ════════════════════ LOADING ════════════════════ -->
+<div id="page-loading"
+  class="min-h-screen flex flex-col items-center justify-center gap-4 text-brand-muted">
+  <div class="w-10 h-10 border-4 border-brand-secondary border-t-transparent rounded-full spin"></div>
+  <p class="text-sm font-medium">Loading your farm…</p>
+</div>
 
-  <!-- ── Loading ───────────────────────────────────────────────────────────── -->
-  <div id="plan-loading" class="flex flex-col items-center gap-3 py-16 text-gray-500">
-    <div class="w-8 h-8 border-4 border-brand-secondary border-t-transparent rounded-full spin"></div>
-    <p class="text-sm">Getting your plan…</p>
-  </div>
+<!-- ════════════════════ ERROR ════════════════════ -->
+<div id="page-error" class="hidden min-h-screen flex flex-col items-center justify-center gap-4 px-6">
+  <p class="text-5xl">🌱</p>
+  <p id="page-error-msg" class="text-sm text-gray-600 text-center max-w-xs"></p>
+  <button onclick="location.reload()"
+    class="px-6 py-2.5 bg-brand-primary text-white text-sm font-semibold rounded-xl">
+    Try again
+  </button>
+</div>
 
-  <!-- ── Main content (hidden until loaded) ────────────────────────────────── -->
-  <main id="plan-content" class="hidden px-4 py-4 max-w-lg mx-auto flex flex-col gap-5 pb-20">
+<!-- ════════════════════ DASHBOARD ════════════════════ -->
+<div id="page-content" class="hidden">
 
-    <!-- 1. Crop stage badge -->
-    <div class="flex items-start justify-between gap-3 flex-wrap">
+  <!-- ── Sticky header ──────────────────────────────────────────────────── -->
+  <header class="bg-brand-primary text-white sticky top-0 z-50 shadow-lg">
+
+    <!-- Top row: farm name + sign out -->
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-start justify-between gap-3">
       <div>
-        <div id="stage-badge"
-          class="inline-flex items-center gap-2 bg-brand-secondary/10 border border-brand-secondary
-                 rounded-lg px-3 py-2 text-brand-secondary font-semibold text-sm">
+        <p class="text-green-200 text-xs font-semibold uppercase tracking-wider">My Farm</p>
+        <h1 id="hdr-farm-name" class="text-base font-bold leading-tight mt-0.5">—</h1>
+        <div class="flex items-center gap-2 mt-1 flex-wrap">
+          <span id="hdr-crop-pill"
+            class="text-xs font-semibold bg-brand-secondary/40 text-green-100
+                   px-2.5 py-0.5 rounded-full border border-brand-secondary/50">
+            🌿 Guava
+          </span>
+          <span id="hdr-location" class="text-green-300/80 text-xs"></span>
+          <span id="hdr-active-badge"
+            class="hidden text-xs bg-emerald-900/80 border border-emerald-700
+                   px-2.5 py-0.5 rounded-lg font-semibold flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse"></span>
+            <span id="hdr-stage-text"></span>
+          </span>
         </div>
-        <p id="days-since" class="text-xs text-gray-400 mt-1 pl-1"></p>
       </div>
-      <a href="onboarding.html"
-        class="text-xs text-brand-secondary underline underline-offset-2 whitespace-nowrap">
-        Update farm details
-      </a>
+      <button id="btn-signout"
+        class="text-green-300/70 text-xs font-medium hover:text-white transition mt-1 flex-shrink-0">
+        Sign out
+      </button>
     </div>
 
-    <!-- 2. Summary sentence -->
-    <p id="plan-summary" class="text-gray-700 text-sm leading-relaxed"></p>
-
-    <!-- 3. Behind-schedule alerts (populated from /gaps) -->
-    <div id="gap-alerts" class="hidden flex flex-col gap-2"></div>
-
-    <!-- 4. Tasks -->
-    <section>
-      <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">What to do now</h2>
-      <div id="task-list" class="flex flex-col gap-3"></div>
-    </section>
-
-    <!-- 5. Spent so far -->
-    <section class="bg-white rounded-xl border border-gray-200 px-4 py-3 flex items-center justify-between">
-      <div>
-        <p class="text-xs text-gray-400 uppercase tracking-wide">Spent so far</p>
-        <p id="spent-amount" class="text-2xl font-bold text-brand-dark">—</p>
+    <!-- Stage progress bar -->
+    <div class="max-w-7xl mx-auto px-4 pb-2">
+      <div class="flex items-center gap-1.5" id="stage-dots"></div>
+      <div class="flex justify-between mt-1">
+        <span class="text-green-300/60 text-xs" id="hdr-sowing-label"></span>
+        <span class="text-green-300/60 text-xs" id="hdr-days-label"></span>
       </div>
-      <a href="report.html"
-        class="text-xs text-brand-secondary underline underline-offset-2">
-        Full report →
-      </a>
+    </div>
+
+    <!-- Tab navigation -->
+    <nav class="nav-scroll bg-emerald-950 border-t border-emerald-800/60">
+      <div class="inline-flex px-2">
+        <button class="farm-nav-btn active" data-panel="panel-overview" onclick="switchPanel('panel-overview')">
+          <i class="fa-solid fa-chart-pie"></i> Overview
+        </button>
+        <button class="farm-nav-btn" data-panel="panel-tasks" onclick="switchPanel('panel-tasks')">
+          <i class="fa-solid fa-list-check"></i> This Week
+        </button>
+        <button class="farm-nav-btn" data-panel="panel-log" onclick="switchPanel('panel-log')">
+          <i class="fa-solid fa-plus-circle"></i> Log Input
+        </button>
+        <button class="farm-nav-btn" data-panel="panel-financial" onclick="switchPanel('panel-financial')">
+          <i class="fa-solid fa-indian-rupee-sign"></i> Financials
+        </button>
+        <button id="nav-harvest-btn" class="farm-nav-btn hidden" data-panel="panel-harvest" onclick="switchPanel('panel-harvest')">
+          <i class="fa-solid fa-basket-shopping"></i> Harvest
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ── Main panels ─────────────────────────────────────────────────────── -->
+  <main class="max-w-7xl mx-auto px-4 py-6 pb-10">
+
+    <!-- ══ PANEL 1: OVERVIEW ══════════════════════════════════════════════ -->
+    <section id="panel-overview" class="farm-panel active">
+
+      <!-- KPI strip -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
+        <div class="bg-white rounded-xl border border-gray-200 p-3 text-center shadow-sm">
+          <div id="kpi-plants" class="text-2xl font-bold text-emerald-800">—</div>
+          <div class="text-xs text-gray-500 mt-1">Total Trees</div>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 p-3 text-center shadow-sm">
+          <div id="kpi-months" class="text-2xl font-bold text-emerald-800">—</div>
+          <div class="text-xs text-gray-500 mt-1">Months Growing</div>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 p-3 text-center shadow-sm">
+          <div id="kpi-stage" class="text-xl font-bold text-brand-accent">—</div>
+          <div class="text-xs text-gray-500 mt-1">Current Stage</div>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 p-3 text-center shadow-sm">
+          <div id="kpi-spent" class="text-2xl font-bold text-brand-dark">—</div>
+          <div class="text-xs text-gray-500 mt-1">Total Spent</div>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 p-3 text-center shadow-sm">
+          <div id="kpi-bep" class="text-2xl font-bold text-emerald-800">—</div>
+          <div class="text-xs text-gray-500 mt-1">Break-even /kg</div>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 p-3 text-center shadow-sm">
+          <div id="kpi-district" class="text-xl font-bold text-emerald-800">—</div>
+          <div class="text-xs text-gray-500 mt-1">District</div>
+        </div>
+      </div>
+
+      <!-- Gap alerts (amber) -->
+      <div id="gap-alerts" class="hidden mb-6 flex flex-col gap-3"></div>
+
+      <!-- Summary -->
+      <div class="bg-amber-50 border-2 border-amber-300 rounded-xl p-4 mb-6">
+        <h3 class="font-bold text-amber-900 mb-2">
+          <i class="fa-solid fa-bolt text-amber-500 mr-1"></i>
+          <span id="summary-stage-heading">Current Stage</span>
+        </h3>
+        <p id="overview-summary" class="text-sm text-gray-700 leading-relaxed"></p>
+      </div>
+
+      <!-- Spending breakdown card -->
+      <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6 shadow-sm">
+        <div class="flex items-start justify-between mb-4">
+          <div>
+            <h3 class="font-bold text-emerald-900 mb-0.5">
+              <i class="fa-solid fa-receipt text-emerald-600 mr-1"></i> Spending so far
+            </h3>
+            <p class="text-3xl font-extrabold text-brand-dark" id="spend-big">—</p>
+          </div>
+          <a href="report.html"
+            class="text-xs font-semibold text-brand-secondary bg-brand-secondary/10
+                   px-3 py-2 rounded-lg hover:bg-brand-secondary/20 transition">
+            Full report →
+          </a>
+        </div>
+        <!-- Bar -->
+        <div id="spend-bar" class="flex gap-1 mb-3 h-2 rounded-full overflow-hidden bg-gray-100"></div>
+        <!-- Legend -->
+        <div id="spend-legend" class="flex flex-wrap gap-x-5 gap-y-1.5"></div>
+      </div>
+
+      <!-- Stage roadmap -->
+      <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+        <h3 class="font-bold text-emerald-900 mb-4">
+          <i class="fa-solid fa-seedling text-emerald-600 mr-1"></i> Crop Cycle Roadmap
+        </h3>
+        <div id="stage-roadmap" class="space-y-2"></div>
+      </div>
+
     </section>
 
-    <!-- 6. Log an input -->
-    <section>
-      <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Log an input</h2>
+    <!-- ══ PANEL 2: THIS WEEK'S TASKS ═════════════════════════════════════ -->
+    <section id="panel-tasks" class="farm-panel">
 
-      <form id="log-form" class="bg-white rounded-xl border border-gray-200 px-4 py-4 flex flex-col gap-3">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-xl font-bold text-emerald-900">
+          <i class="fa-solid fa-list-check text-emerald-600 mr-1"></i> What to do this week
+        </h2>
+        <span id="tasks-stage-badge"
+          class="text-xs font-semibold bg-brand-secondary/10 border border-brand-secondary
+                 text-brand-secondary px-3 py-1.5 rounded-lg">
+        </span>
+      </div>
 
-        <!-- Activity type -->
-        <div class="flex flex-col gap-1">
-          <label for="act-type" class="text-sm font-medium text-gray-700">Type</label>
-          <select id="act-type"
-            class="h-11 rounded-lg border border-gray-300 bg-white px-3 text-sm
-                   focus:outline-none focus:border-brand-secondary">
-            <!-- Options populated by JS from /constants/activity-types -->
-          </select>
+      <div id="task-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6"></div>
+
+      <!-- Notes from AI -->
+      <div id="task-notes" class="flex flex-col gap-1"></div>
+
+    </section>
+
+    <!-- ══ PANEL 3: LOG INPUT ═════════════════════════════════════════════ -->
+    <section id="panel-log" class="farm-panel">
+
+      <h2 class="text-xl font-bold text-emerald-900 mb-4">
+        <i class="fa-solid fa-plus-circle text-emerald-600 mr-1"></i> Log an input
+      </h2>
+
+      <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm max-w-lg">
+
+        <!-- Type pills -->
+        <div class="mb-4">
+          <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Activity type</p>
+          <div id="type-pills" class="flex flex-wrap gap-2"></div>
+          <input type="hidden" id="act-type" value="Fertilizer">
         </div>
 
-        <!-- Quantity -->
-        <div class="flex flex-col gap-1">
-          <label for="act-qty" class="text-sm font-medium text-gray-700">
-            Quantity
-            <span id="qty-hint" class="text-gray-400 font-normal text-xs ml-1"></span>
-          </label>
-          <div class="flex gap-2">
+        <!-- Quantity + unit -->
+        <div class="grid grid-cols-2 gap-3 mb-3">
+          <div>
+            <label for="act-qty" class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">
+              Quantity
+              <span id="qty-hint" class="normal-case font-normal text-gray-400 ml-1 text-xs"></span>
+            </label>
             <input type="number" id="act-qty" min="0" step="any" placeholder="0"
-              class="h-11 flex-1 rounded-lg border border-gray-300 bg-white px-3 text-sm
-                     focus:outline-none focus:border-brand-secondary">
+              inputmode="decimal"
+              class="w-full h-11 rounded-xl border border-gray-300 bg-white px-3 text-sm
+                     font-semibold focus:outline-none focus:border-brand-secondary">
+          </div>
+          <div>
+            <label for="act-unit" class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Unit</label>
             <select id="act-unit"
-              class="h-11 rounded-lg border border-gray-300 bg-white px-3 text-sm
+              class="w-full h-11 rounded-xl border border-gray-300 bg-white px-3 text-sm
                      focus:outline-none focus:border-brand-secondary">
               <option value="kg">kg</option>
               <option value="litres">litres</option>
               <option value="bags">bags</option>
-              <option value="units">units</option>
               <option value="hours">hours</option>
+              <option value="units">units</option>
             </select>
           </div>
         </div>
 
-        <!-- Cost -->
-        <div class="flex flex-col gap-1">
-          <label for="act-cost" class="text-sm font-medium text-gray-700">Cost (₹)</label>
+        <!-- Cost (hidden for irrigation) -->
+        <div id="cost-row" class="mb-4">
+          <label for="act-cost" class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">
+            Cost (₹)
+          </label>
           <input type="number" id="act-cost" min="0" step="any" placeholder="0"
-            class="h-11 rounded-lg border border-gray-300 bg-white px-3 text-sm
-                   focus:outline-none focus:border-brand-secondary">
+            inputmode="decimal"
+            class="w-full h-11 rounded-xl border border-gray-300 bg-white px-3 text-sm
+                   font-semibold focus:outline-none focus:border-brand-secondary">
         </div>
 
-        <span id="log-error" class="hidden text-red-600 text-xs" role="alert"></span>
+        <p id="log-error" class="hidden text-red-600 text-sm mb-2" role="alert"></p>
 
-        <button type="submit" id="btn-log"
-          class="w-full min-h-[48px] bg-brand-primary text-white text-base font-semibold
-                 rounded-lg hover:bg-brand-secondary active:scale-[0.98] transition">
-          Save
+        <button type="button" id="btn-log"
+          class="w-full h-12 bg-brand-primary text-white font-bold text-base
+                 rounded-xl hover:bg-brand-secondary active:scale-[0.98] transition
+                 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-floppy-disk"></i> Save entry
         </button>
-      </form>
+
+      </div>
+
+      <!-- Recent entries -->
+      <div class="mt-6 max-w-lg">
+        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Recent entries</p>
+        <div id="recent-activities" class="flex flex-col gap-2">
+          <p class="text-sm text-gray-400">No entries yet.</p>
+        </div>
+      </div>
+
     </section>
 
-    <!-- 7. Harvest / sale (only shown at final stage) -->
-    <section id="harvest-section" class="hidden">
-      <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Harvest &amp; Sale</h2>
-      <div id="harvest-done-msg" class="hidden bg-green-50 border border-green-200 rounded-xl px-4 py-3 text-green-800 text-sm"></div>
-      <form id="harvest-form" class="bg-white rounded-xl border border-gray-200 px-4 py-4 flex flex-col gap-3">
-        <p class="text-sm text-gray-600">Your crop is ready to harvest. Record your sale to see your final report.</p>
+    <!-- ══ PANEL 4: FINANCIALS ════════════════════════════════════════════ -->
+    <section id="panel-financial" class="farm-panel">
 
-        <div class="flex flex-col gap-1">
-          <label for="hv-qty" class="text-sm font-medium text-gray-700">Quantity sold (kg)</label>
-          <input type="number" id="hv-qty" min="0.1" step="any" placeholder="e.g. 42000"
-            class="h-11 rounded-lg border border-gray-300 bg-white px-3 text-sm
-                   focus:outline-none focus:border-brand-secondary">
+      <h2 class="text-xl font-bold text-emerald-900 mb-4">
+        <i class="fa-solid fa-indian-rupee-sign text-emerald-600 mr-1"></i> Financial summary
+      </h2>
+
+      <!-- Summary cards -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+          <p class="text-xs text-gray-500 mb-1">Total spent</p>
+          <p id="fin-total-cost" class="text-2xl font-extrabold text-brand-dark">—</p>
         </div>
-
-        <div class="flex flex-col gap-1">
-          <label for="hv-price" class="text-sm font-medium text-gray-700">Price per kg (₹)</label>
-          <input type="number" id="hv-price" min="0" step="any" placeholder="e.g. 65"
-            class="h-11 rounded-lg border border-gray-300 bg-white px-3 text-sm
-                   focus:outline-none focus:border-brand-secondary">
+        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+          <p class="text-xs text-gray-500 mb-1">Revenue</p>
+          <p id="fin-revenue" class="text-2xl font-extrabold text-brand-dark">—</p>
+          <p id="fin-revenue-note" class="text-xs text-gray-400 mt-0.5"></p>
         </div>
+        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+          <p class="text-xs text-gray-500 mb-1">Profit / Loss</p>
+          <p id="fin-pol" class="text-2xl font-extrabold text-gray-400">—</p>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+          <p class="text-xs text-gray-500 mb-1">Break-even price</p>
+          <p id="fin-bep" class="text-2xl font-extrabold text-brand-dark">—</p>
+          <p id="fin-bep-note" class="text-xs text-gray-400 mt-0.5"></p>
+        </div>
+      </div>
 
-        <span id="hv-error" class="hidden text-red-600 text-xs" role="alert"></span>
+      <!-- Cost by type -->
+      <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6 shadow-sm">
+        <h3 class="font-bold text-emerald-900 mb-3">Cost breakdown</h3>
+        <div id="fin-breakdown" class="divide-y divide-gray-100"></div>
+      </div>
 
-        <button type="submit" id="btn-harvest"
-          class="w-full min-h-[48px] bg-brand-accent text-white text-base font-semibold
-                 rounded-lg hover:opacity-90 active:scale-[0.98] transition">
+      <!-- Revenue scenario -->
+      <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+        <h3 class="font-bold text-emerald-900 mb-1">
+          Revenue calculator
+          <span class="text-red-500 text-xs ml-1">Scenario only</span>
+        </h3>
+        <p class="text-xs text-gray-500 mb-4">Adjust price and yield to explore potential revenue for <span id="sim-plant-count">—</span> plants.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <div>
+            <label class="text-xs font-semibold text-gray-600 block mb-1">
+              Price per kg: <span id="sim-price-val" class="text-emerald-700 font-bold">₹60</span>
+            </label>
+            <input type="range" id="sim-price" min="20" max="120" step="1" value="60"
+              class="w-full accent-emerald-600">
+          </div>
+          <div>
+            <label class="text-xs font-semibold text-gray-600 block mb-1">
+              Yield per tree (kg): <span id="sim-yield-val" class="text-emerald-700 font-bold">25</span>
+            </label>
+            <input type="range" id="sim-yield" min="5" max="60" step="1" value="25"
+              class="w-full accent-emerald-600">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-center">
+            <p class="text-xs text-gray-500 mb-1">Gross revenue</p>
+            <p id="sim-gross" class="text-lg font-bold text-emerald-800">—</p>
+          </div>
+          <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-center">
+            <p class="text-xs text-gray-500 mb-1">Net estimate</p>
+            <p id="sim-net" class="text-lg font-bold text-emerald-800">—</p>
+            <p class="text-xs text-gray-400">after current costs</p>
+          </div>
+        </div>
+        <p class="text-xs text-red-500 mt-3">
+          🔴 Scenario only — verify with actual buyer prices before harvest.
+        </p>
+      </div>
+
+    </section>
+
+    <!-- ══ PANEL 5: HARVEST (final stage only) ════════════════════════════ -->
+    <section id="panel-harvest" class="farm-panel">
+
+      <h2 class="text-xl font-bold text-emerald-900 mb-4">
+        <i class="fa-solid fa-basket-shopping text-emerald-600 mr-1"></i> Harvest &amp; Sale
+      </h2>
+
+      <div id="harvest-done-msg"
+        class="hidden bg-green-50 border border-green-200 rounded-xl px-5 py-4
+               text-green-800 text-sm font-medium mb-4">
+      </div>
+
+      <div id="harvest-form-wrap"
+        class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm max-w-md">
+        <div class="flex items-center gap-3 bg-brand-accent/10 rounded-xl px-4 py-3 mb-4">
+          <span class="text-3xl">🍈</span>
+          <p class="text-sm font-semibold text-brand-dark">
+            Your crop is ready. Record your sale to unlock the complete financial report.
+          </p>
+        </div>
+        <div class="grid grid-cols-2 gap-3 mb-3">
+          <div>
+            <label for="hv-qty" class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Qty sold (kg)</label>
+            <input type="number" id="hv-qty" min="0.1" step="any" placeholder="e.g. 42000"
+              inputmode="decimal"
+              class="w-full h-11 rounded-xl border border-gray-300 bg-white px-3 text-sm font-semibold focus:outline-none focus:border-brand-secondary">
+          </div>
+          <div>
+            <label for="hv-price" class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">₹ / kg</label>
+            <input type="number" id="hv-price" min="0" step="any" placeholder="e.g. 65"
+              inputmode="decimal"
+              class="w-full h-11 rounded-xl border border-gray-300 bg-white px-3 text-sm font-semibold focus:outline-none focus:border-brand-secondary">
+          </div>
+        </div>
+        <p id="hv-error" class="hidden text-red-600 text-sm mb-2" role="alert"></p>
+        <button id="btn-harvest"
+          class="w-full h-12 bg-brand-accent text-white font-bold text-base
+                 rounded-xl hover:opacity-90 active:scale-[0.98] transition">
           Record harvest &amp; sale
         </button>
-      </form>
-    </section>
+      </div>
 
-    <!-- 8. Vendor recommendations (consent-gated, populated by JS) -->
-    <section id="vendor-section" class="hidden">
-      <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Local vendors</h2>
-      <div id="vendor-list" class="flex flex-col gap-3"></div>
-      <p class="text-xs text-gray-400 mt-2">
-        Based on your actual input gaps.
-        <button id="btn-revoke-consent" class="underline text-gray-500 ml-1">Turn off suggestions</button>
-      </p>
-    </section>
-
-    <!-- 9. Vendor consent opt-in (shown when consent is false and gaps exist) -->
-    <section id="vendor-optin" class="hidden bg-white rounded-xl border border-gray-200 px-4 py-4">
-      <p class="text-sm text-gray-700 mb-3">
-        Would you like to see nearby vendors for the inputs you need?
-      </p>
-      <button id="btn-give-consent"
-        class="w-full min-h-[44px] bg-brand-secondary text-white text-sm font-semibold
-               rounded-lg hover:opacity-90 transition">
-        Yes, show me local vendors
-      </button>
     </section>
 
   </main>
 
-  <!-- ── Error state ────────────────────────────────────────────────────────── -->
-  <div id="plan-error"
-    class="hidden mx-4 mt-6 bg-red-50 border border-red-200 rounded-xl px-4 py-3
-           text-red-700 text-sm"
-    role="alert">
-  </div>
+</div><!-- /#page-content -->
 
-  <!-- ── Toast notification ─────────────────────────────────────────────────── -->
-  <div id="toast"
-    class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-brand-dark text-white
-           text-sm font-medium px-5 py-3 rounded-xl shadow-lg opacity-0 pointer-events-none z-50">
+<!-- ── Vendor opt-in (floating, shown when gaps exist + no consent) ───── -->
+<div id="vendor-optin"
+  class="hidden fixed bottom-4 left-4 right-4 max-w-sm mx-auto
+         bg-white border border-gray-200 rounded-2xl shadow-xl px-5 py-4 z-40">
+  <p class="text-sm font-bold text-brand-dark mb-1">Find local suppliers?</p>
+  <p class="text-xs text-brand-muted mb-3">
+    We can show nearby vendors for inputs you need. Your data stays private.
+  </p>
+  <div class="flex gap-2">
+    <button id="btn-give-consent"
+      class="flex-1 h-10 bg-brand-secondary text-white text-sm font-bold rounded-xl hover:opacity-90 transition">
+      Yes, show vendors
+    </button>
+    <button id="btn-dismiss-optin"
+      class="px-4 h-10 text-sm text-gray-500 border border-gray-300 rounded-xl hover:bg-gray-50">
+      Not now
+    </button>
   </div>
+</div>
 
-  <script type="module" src="js/plan.js"></script>
+<!-- ── Vendor cards (floating panel) ──────────────────────────────────── -->
+<div id="vendor-panel"
+  class="hidden fixed bottom-4 left-4 right-4 max-w-sm mx-auto
+         bg-white border border-gray-200 rounded-2xl shadow-xl px-5 py-4 z-40">
+  <div class="flex items-center justify-between mb-3">
+    <p class="text-sm font-bold text-brand-dark">Nearby suppliers for your needs</p>
+    <button id="btn-revoke-consent" class="text-xs text-gray-400 underline">Turn off</button>
+  </div>
+  <div id="vendor-list" class="flex flex-col gap-3"></div>
+</div>
+
+<!-- ── Toast ──────────────────────────────────────────────────────────── -->
+<div id="toast"
+  class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-brand-dark text-white
+         text-sm font-semibold px-5 py-3 rounded-2xl shadow-xl
+         opacity-0 pointer-events-none z-50 flex items-center gap-2">
+</div>
+
+<script type="module" src="js/plan.js"></script>
 </body>
 </html>

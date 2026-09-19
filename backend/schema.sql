@@ -120,7 +120,9 @@ CREATE TABLE IF NOT EXISTS farm_activities (
                 CHECK (activity_type IN ('Fertilizer','Irrigation','Pesticide','Labour','Other')),
   quantity      NUMERIC     NOT NULL CHECK (quantity >= 0),
   unit          TEXT,
-  cost          NUMERIC     NOT NULL CHECK (cost >= 0),
+  -- cost must be 0 for Irrigation (water is free — enforced at both app and DB level).
+  cost          NUMERIC     NOT NULL CHECK (cost >= 0)
+                CHECK (activity_type <> 'Irrigation' OR cost = 0),
   notes         TEXT,
   logged_date   DATE        NOT NULL DEFAULT CURRENT_DATE,
   created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()

@@ -90,6 +90,20 @@ form.addEventListener("submit", async (e) => {
     return;
   }
 
+  // ── Validate state and district ───────────────────────────────────────────
+  if (!stateEl.value) {
+    formError.textContent = "Please select a state.";
+    formError.classList.remove("hidden");
+    stateEl.focus();
+    return;
+  }
+  if (!districtEl.value) {
+    formError.textContent = "Please select a district.";
+    formError.classList.remove("hidden");
+    districtEl.focus();
+    return;
+  }
+
   // ── Validate sowing date (Req 2.5) ────────────────────────────────────────
   const sowingValue = sowingEl.value;
   if (!sowingValue) {

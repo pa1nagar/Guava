@@ -165,7 +165,7 @@ function renderReport(r) {
 // ── Main ──────────────────────────────────────────────────────────────────────
 
 document.addEventListener("DOMContentLoaded", async () => {
-  await routeGuard("plan");   // reuse "plan" guard — any authenticated user
+  await routeGuard("report");   // authenticated users only; no profile-check redirect
 
   try {
     const res = await apiFetch("/api/farmers/me/report");

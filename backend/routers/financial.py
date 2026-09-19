@@ -1,21 +1,22 @@
 """
 financial.py — Financial summary and crop-cycle report endpoints.
 
-GET  /api/farmers/me/financial-summary   Spending + revenue + P&L + break-even.
-POST /api/farmers/me/harvest             Log harvest/sale (write-once per cycle).
-GET  /api/farmers/me/report              Full crop-cycle report.
+GET  /api/farmers/me/financial-summary
+POST /api/farmers/me/harvest             (write-once per crop cycle)
+GET  /api/farmers/me/report
 """
 
+import json
 import logging
-import os
+import pathlib
 from datetime import date
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
-from supabase import Client, create_client
 
 from services.auth import get_user_id
+from services.db import get_db
 from services.financials import (
     total_cost,
     cost_by_activity_type,
@@ -24,29 +25,29 @@ from services.financials import (
     break_even_price,
 )
 
-import json
-import pathlib
-
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-_SUPABASE_URL = os.environ.get("SUPABASE_URL", "")
-_SUPABASE_SERVICE_KEY = os.environ.get("SUPABASE_SERVICE_KEY", "")
-if not _SUPABASE_URL or not _SUPABASE_SERVICE_KEY:
-    raise RuntimeError("SUPABASE_URL or SUPABASE_SERVICE_KEY not set.")
-
-_db: Client = create_client(_SUPABASE_URL, _SUPABASE_SERVICE_KEY)
-
+# Crop knowledge loaded once at module level.
 _KNOWLEDGE_PATH = pathlib.Path(__file__).parent.parent / "data" / "crop_knowledge.json"
+_knowledge_cache: dict | None = None
+
+
+def _get_knowledge() -> dict:
+    global _knowledge_cache
+    if _knowledge_cache is None:
+        _knowledge_cache = json.loads(_KNOWLEDGE_PATH.read_text(encoding="utf-8"))
+    return _knowledge_cache
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def _get_farmer(user_id: str) -> dict:
+    db = get_db()
     try:
         result = (
-            _db.table("farmers")
+            db.table("farmers")
             .select(
                 "id, crop, plant_count, sowing_date, "
                 "expected_yield_kg, vendor_recommendation_consent"
@@ -64,9 +65,10 @@ def _get_farmer(user_id: str) -> dict:
 
 
 def _get_activities(farmer_id: str) -> list[dict]:
+    db = get_db()
     try:
         result = (
-            _db.table("farm_activities")
+            db.table("farm_activities")
             .select("*")
             .eq("farmer_id", farmer_id)
             .order("logged_date", desc=False)
@@ -79,9 +81,10 @@ def _get_activities(farmer_id: str) -> list[dict]:
 
 
 def _get_harvest(farmer_id: str) -> Optional[dict]:
+    db = get_db()
     try:
         result = (
-            _db.table("harvests")
+            db.table("harvests")
             .select("*")
             .eq("farmer_id", farmer_id)
             .maybe_single()
@@ -107,8 +110,8 @@ class FinancialSummaryOut(BaseModel):
 
 
 class HarvestIn(BaseModel):
-    sale_quantity_kg: float = Field(gt=0, description="Quantity sold in kg.")
-    sale_price_per_kg: float = Field(ge=0, description="Price per kg in INR.")
+    sale_quantity_kg: float = Field(gt=0)
+    sale_price_per_kg: float = Field(ge=0)
 
 
 class HarvestOut(BaseModel):
@@ -119,20 +122,12 @@ class HarvestOut(BaseModel):
     revenue: float
 
 
-class ActivitySummaryItem(BaseModel):
-    activity_type: str
-    total_quantity: float
-    total_cost: float
-    unit: Optional[str]
-    entry_count: int
-
-
 class ReportOut(BaseModel):
     crop: str
     sowing_date: str
     plant_count: int
-    stage_coverage: List[str]      # stages that had at least one activity logged
-    stages_with_no_activity: List[str]  # stages with no logged activities
+    stage_coverage: List[str]
+    stages_with_no_activity: List[str]
     total_cost: float
     cost_by_type: dict
     revenue: Optional[float]
@@ -140,31 +135,25 @@ class ReportOut(BaseModel):
     break_even_price_per_kg: Optional[float]
     break_even_note: Optional[str]
     has_harvest: bool
-    activity_history: List[dict]   # raw sorted activity list
+    activity_history: List[dict]
     currency: str = "INR"
 
 
-# ── GET /api/farmers/me/financial-summary ─────────────────────────────────────
+# ── GET /api/farmers/me/financial-summary ────────────────────────────────────
 
 @router.get("/farmers/me/financial-summary", response_model=FinancialSummaryOut)
 def financial_summary(user_id: str = Depends(get_user_id)) -> FinancialSummaryOut:
-    farmer = _get_farmer(user_id)
+    farmer     = _get_farmer(user_id)
     activities = _get_activities(farmer["id"])
-    harvest = _get_harvest(farmer["id"])
+    harvest    = _get_harvest(farmer["id"])
 
-    tc = total_cost(activities)
+    tc     = total_cost(activities)
     by_type = {k: round(v, 2) for k, v in cost_by_activity_type(activities).items()}
 
-    rev = None
-    pol = None
-    bep = None
-    bep_note = None
+    rev = pol = bep = bep_note = None
 
     if harvest:
-        rev = revenue(
-            float(harvest["sale_quantity_kg"]),
-            float(harvest["sale_price_per_kg"]),
-        )
+        rev = revenue(float(harvest["sale_quantity_kg"]), float(harvest["sale_price_per_kg"]))
         pol = profit_or_loss(rev, tc)
 
     bep = break_even_price(tc, farmer.get("expected_yield_kg"))
@@ -185,27 +174,22 @@ def financial_summary(user_id: str = Depends(get_user_id)) -> FinancialSummaryOu
     )
 
 
-# ── POST /api/farmers/me/harvest ──────────────────────────────────────────────
+# ── POST /api/farmers/me/harvest ─────────────────────────────────────────────
 
 @router.post("/farmers/me/harvest", response_model=HarvestOut)
-def log_harvest(
-    body: HarvestIn,
-    user_id: str = Depends(get_user_id),
-) -> HarvestOut:
-    """Log harvest and sale. Write-once per crop cycle.
+def log_harvest(body: HarvestIn, user_id: str = Depends(get_user_id)) -> HarvestOut:
+    """Write-once per crop cycle. Returns 409 if already submitted."""
+    from services import stage as stage_service  # noqa: PLC0415
 
-    A second submission is rejected with 409 Conflict.
-    """
-    from services import stage as stage_service
-
+    db = get_db()
     farmer = _get_farmer(user_id)
 
-    # ── Verify farmer is at the harvest stage ─────────────────────────────────
     sowing_date = (
         date.fromisoformat(farmer["sowing_date"])
         if isinstance(farmer["sowing_date"], str)
         else farmer["sowing_date"]
     )
+
     try:
         sr = stage_service.get_stage(farmer["crop"], sowing_date)
     except (HTTPException, KeyError) as exc:
@@ -215,37 +199,31 @@ def log_harvest(
         raise HTTPException(
             status_code=422,
             detail=(
-                f"Harvest can only be logged once the crop reaches the harvest stage. "
+                f"Harvest can only be logged at the harvest stage. "
                 f"Current stage: {sr.stage['label']}."
             ),
         )
 
-    # ── Reject duplicate submission ───────────────────────────────────────────
-    existing = _get_harvest(farmer["id"])
-    if existing:
+    if _get_harvest(farmer["id"]):
         raise HTTPException(
             status_code=409,
             detail="Harvest has already been recorded for this crop cycle.",
         )
 
-    # ── Insert ────────────────────────────────────────────────────────────────
     payload = {
-        "farmer_id": farmer["id"],
-        "sale_quantity_kg": body.sale_quantity_kg,
-        "sale_price_per_kg": body.sale_price_per_kg,
-        "sale_date": str(date.today()),
+        "farmer_id":          farmer["id"],
+        "sale_quantity_kg":   body.sale_quantity_kg,
+        "sale_price_per_kg":  body.sale_price_per_kg,
+        "sale_date":          str(date.today()),
     }
     try:
-        result = _db.table("harvests").insert(payload).execute()
+        result = db.table("harvests").insert(payload).execute()
     except Exception as exc:
         logger.error("DB insert harvest failed: %s", exc)
         raise HTTPException(status_code=500, detail="Database error.")
 
     row = result.data[0]
-    rev = revenue(
-        float(row["sale_quantity_kg"]),
-        float(row["sale_price_per_kg"]),
-    )
+    rev = revenue(float(row["sale_quantity_kg"]), float(row["sale_price_per_kg"]))
     return HarvestOut(
         id=row["id"],
         sale_quantity_kg=float(row["sale_quantity_kg"]),
@@ -255,97 +233,82 @@ def log_harvest(
     )
 
 
-# ── GET /api/farmers/me/report ────────────────────────────────────────────────
+# ── GET /api/farmers/me/report ───────────────────────────────────────────────
 
 @router.get("/farmers/me/report", response_model=ReportOut)
 def crop_cycle_report(user_id: str = Depends(get_user_id)) -> ReportOut:
-    """Return the full crop-cycle financial report."""
-    farmer = _get_farmer(user_id)
+    from services import stage as stage_service  # noqa: PLC0415
+
+    farmer     = _get_farmer(user_id)
     activities = _get_activities(farmer["id"])
-    harvest = _get_harvest(farmer["id"])
+    harvest    = _get_harvest(farmer["id"])
 
-    # Load stage list.
-    knowledge = json.loads(_KNOWLEDGE_PATH.read_text(encoding="utf-8"))
-    all_stages = knowledge[farmer["crop"].lower()]["stages"]
+    all_stages = _get_knowledge()[farmer["crop"].lower()]["stages"]
 
-    # Determine which stages have at least one activity.
     sowing_date = (
         date.fromisoformat(farmer["sowing_date"])
         if isinstance(farmer["sowing_date"], str)
         else farmer["sowing_date"]
     )
-    sr = None
+
+    current_month = 0
     try:
-        from services import stage as stage_service
         sr = stage_service.get_stage(farmer["crop"], sowing_date)
+        current_month = sr.months_elapsed
     except Exception:
         pass
 
-    current_month = sr.months_elapsed if sr else 0
-
-    # Which stages are "reached" (month_start <= current_month)?
-    reached_stage_ids = {
-        s["stage_id"] for s in all_stages
-        if s["month_start"] <= current_month
-    }
-
-    # Which reached stages have logged activities?
-    # Group activity logged_dates to month offsets.
-    activity_months = set()
+    # Map activity dates to month offsets from sowing date.
+    activity_months: set[int] = set()
     for a in activities:
         ld = a.get("logged_date", "")
         if ld:
             try:
                 ld_date = date.fromisoformat(str(ld))
-                m = (ld_date.year - sowing_date.year) * 12 + (ld_date.month - sowing_date.month)
+                m = (
+                    (ld_date.year - sowing_date.year) * 12
+                    + (ld_date.month - sowing_date.month)
+                )
                 activity_months.add(m)
-            except ValueError:
+            except (ValueError, TypeError):
                 pass
 
-    stages_with_activity = set()
-    stages_without_activity = []
+    stages_with_activity:    set[str]  = set()
+    stages_without_activity: list[str] = []
 
     for s in all_stages:
         if s["month_start"] > current_month:
-            continue
-        # Check if any activity falls within this stage's month range.
-        end = s["month_end"] if s["month_end"] != 9999 else current_month
-        has = any(s["month_start"] <= m <= end for m in activity_months)
-        if has:
+            break  # stages are ordered ascending — nothing beyond here is reached
+        end = min(s["month_end"] if s["month_end"] != 9999 else current_month, current_month)
+        has_log = any(s["month_start"] <= m <= end for m in activity_months)
+        if has_log:
             stages_with_activity.add(s["stage_id"])
         else:
             stages_without_activity.append(s["label"])
 
-    tc = total_cost(activities)
+    tc     = total_cost(activities)
     by_type = {k: round(v, 2) for k, v in cost_by_activity_type(activities).items()}
 
-    rev = None
-    pol = None
-    bep = None
-    bep_note = None
+    rev = pol = bep = bep_note = None
 
     if harvest:
-        rev = revenue(
-            float(harvest["sale_quantity_kg"]),
-            float(harvest["sale_price_per_kg"]),
-        )
+        rev = revenue(float(harvest["sale_quantity_kg"]), float(harvest["sale_price_per_kg"]))
         pol = profit_or_loss(rev, tc)
 
     bep = break_even_price(tc, farmer.get("expected_yield_kg"))
     if bep is None and not farmer.get("expected_yield_kg"):
         bep_note = "Set an expected yield to calculate your break-even price."
 
-    # Build chronological activity history.
     history = [
         {
-            "date": str(a["logged_date"]),
+            "date":          str(a["logged_date"]),
             "activity_type": a["activity_type"],
-            "quantity": float(a["quantity"]),
-            "unit": a.get("unit"),
-            "cost": float(a["cost"]),
-            "notes": a.get("notes"),
+            "quantity":      float(a["quantity"]),
+            "unit":          a.get("unit"),
+            "cost":          float(a["cost"]),
+            "notes":         a.get("notes"),
         }
-        for a in sorted(activities, key=lambda x: x.get("logged_date", ""))
+        for a in activities  # already sorted ascending by logged_date from query
     ]
 
     return ReportOut(

@@ -40,24 +40,29 @@ def _expected_fertilizer_kg(stages: list[dict], up_to_month: int, plant_count: i
     """Return (expected_kg_cumulative, one_stage_dose_kg) for fertilizer.
 
     Sums weekly dose × 4.33 weeks per month for each completed/current stage.
+    Only counts months that have actually elapsed (capped at up_to_month).
     """
     total_g = 0.0
     one_dose_g = 0.0
-    weeks_per_month = 4.33  # average
+    weeks_per_month = 4.33
 
     for stage in stages:
         if stage["month_start"] > up_to_month:
-            break
+            break  # stages are ordered ascending; nothing beyond matters
         q = stage.get("quantities", {})
         gpw = float(q.get("fertilizer_grams_per_plant_per_week", 0) or 0)
-        stage_months = min(
+
+        effective_end = min(
             stage["month_end"] if stage["month_end"] != 9999 else up_to_month,
             up_to_month,
-        ) - stage["month_start"] + 1
+        )
+        # Number of complete months within this stage that have elapsed.
+        stage_months = max(0, effective_end - stage["month_start"] + 1)
 
         total_g += gpw * plant_count * weeks_per_month * stage_months
-        # one_dose = the current stage's weekly total
-        if stage["month_start"] <= up_to_month:
+
+        # Track the current stage's weekly dose for the "behind" threshold.
+        if stage["month_start"] <= up_to_month <= effective_end:
             one_dose_g = gpw * plant_count
 
     return total_g / 1000.0, one_dose_g / 1000.0
@@ -67,6 +72,7 @@ def _expected_irrigation_litres(stages: list[dict], up_to_month: int, plant_coun
     """Return (expected_litres_cumulative, one_stage_dose_litres) for irrigation.
 
     Sums daily litre × 30 days per month for each completed/current stage.
+    Only counts months that have actually elapsed (capped at up_to_month).
     """
     total_l = 0.0
     one_dose_l = 0.0
@@ -77,13 +83,16 @@ def _expected_irrigation_litres(stages: list[dict], up_to_month: int, plant_coun
             break
         q = stage.get("quantities", {})
         lpd = float(q.get("irrigation_litres_per_plant_per_day", 0) or 0)
-        stage_months = min(
+
+        effective_end = min(
             stage["month_end"] if stage["month_end"] != 9999 else up_to_month,
             up_to_month,
-        ) - stage["month_start"] + 1
+        )
+        stage_months = max(0, effective_end - stage["month_start"] + 1)
 
         total_l += lpd * plant_count * days_per_month * stage_months
-        if stage["month_start"] <= up_to_month:
+
+        if stage["month_start"] <= up_to_month <= effective_end:
             one_dose_l = lpd * plant_count
 
     return total_l, one_dose_l
