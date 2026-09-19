@@ -151,14 +151,22 @@ function showToast(msg, ms = 2500) {
 
 async function apiFetch(path, opts = {}) {
   const jwt = await getJwt();
-  return fetch(`${API_BASE_URL}${path}`, {
-    ...opts,
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${jwt}`,
-      ...(opts.headers || {}),
-    },
-  });
+  // 45-second timeout — handles Render free-tier cold starts (typically 30-60s)
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 45000);
+  try {
+    return await fetch(`${API_BASE_URL}${path}`, {
+      ...opts,
+      signal: controller.signal,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${jwt}`,
+        ...(opts.headers || {}),
+      },
+    });
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 // ── Panel switching ───────────────────────────────────────────────────────────
@@ -692,6 +700,12 @@ async function refreshVendors() {
 document.addEventListener("DOMContentLoaded", async () => {
   await routeGuard("plan");
 
+  // Show "server waking up" hint after 5 seconds of loading
+  const coldStartTimer = setTimeout(() => {
+    const msg = document.getElementById("cold-start-msg");
+    if (msg) msg.classList.remove("hidden");
+  }, 5000);
+
   let displayName = "";
   try {
     const { data: { session } } = await supabase.auth.getSession();
@@ -752,12 +766,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     await loadRecentActivities();
     await refreshVendors();
 
+    clearTimeout(coldStartTimer);
     pageLoading.classList.add("hidden");
     pageContent.classList.remove("hidden");
 
   } catch (err) {
+    clearTimeout(coldStartTimer);
     pageLoading.classList.add("hidden");
-    pageErrorMsg.textContent = "Could not load your farm. Please check your connection and try again.";
+    const isTimeout = err.name === "AbortError";
+    pageErrorMsg.textContent = isTimeout
+      ? "The server took too long to respond. Please refresh — it may still be waking up (can take 30s on first load)."
+      : "Could not load your farm. Please check your connection and try again.";
     pageError.classList.remove("hidden");
     console.error(err);
   }

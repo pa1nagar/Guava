@@ -138,7 +138,7 @@ async def get_insights(user_id: str = Depends(get_user_id)) -> dict:
     try:
         result = (
             db.table("farmers")
-            .select("crop, plant_count, state, district, sowing_date")
+            .select("id, crop, plant_count, state, district, sowing_date")
             .eq("user_id", user_id)
             .maybe_single()
             .execute()
@@ -167,17 +167,19 @@ async def get_insights(user_id: str = Depends(get_user_id)) -> dict:
     lat, lon = get_coordinates(row["state"], row["district"])
 
     # ── Load activities for compliance score ──────────────────────────────────
-    try:
-        act_result = (
-            db.table("farm_activities")
-            .select("activity_type, quantity")
-            .eq("farmer_id",
-                db.table("farmers").select("id").eq("user_id", user_id)
-                .maybe_single().execute().data["id"])
-            .execute()
-        )
-        activities = act_result.data or []
-    except Exception:
+    farmer_id = row.get("id")
+    if farmer_id:
+        try:
+            act_result = (
+                db.table("farm_activities")
+                .select("activity_type, quantity")
+                .eq("farmer_id", farmer_id)
+                .execute()
+            )
+            activities = act_result.data or []
+        except Exception:
+            activities = []
+    else:
         activities = []
 
     # ── Parallel API fetches ──────────────────────────────────────────────────
