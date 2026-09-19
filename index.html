@@ -873,5 +873,11 @@
   </footer>
 
   <script type="module" src="js/app.js"></script>
+
+  <!-- Wake up the Render backend as soon as anyone visits the landing page -->
+  <script type="module">
+    import { API_BASE_URL } from "./js/config.js";
+    fetch(`${API_BASE_URL}/health`, { method: "GET" }).catch(() => {});
+  </script>
 </body>
 </html>

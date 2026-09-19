@@ -65,6 +65,13 @@
     import { routeGuard, signInWithGoogle } from "./js/auth.js";
 
     document.addEventListener("DOMContentLoaded", async () => {
+      // Wake the backend immediately when login page loads.
+      // This gives Render ~30 seconds to boot while the farmer reads the page
+      // and clicks "Sign in with Google" — so plan.html loads instantly after.
+      import("./js/config.js").then(({ API_BASE_URL }) => {
+        fetch(`${API_BASE_URL}/health`, { method: "GET" }).catch(() => {});
+      });
+
       await routeGuard("login");
     });
 
