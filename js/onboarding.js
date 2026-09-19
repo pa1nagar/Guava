@@ -21,11 +21,13 @@ const plantCountEl  = document.getElementById("plant-count");
 const stateEl       = document.getElementById("state-select");
 const districtEl    = document.getElementById("district-select");
 const sowingEl      = document.getElementById("sowing-date");
+const yieldEl       = document.getElementById("expected-yield");
 const btnSubmit     = document.getElementById("btn-submit");
 const formError     = document.getElementById("form-error");
 const formLoading   = document.getElementById("form-loading");
 const plantCountErr = document.getElementById("plant-count-error");
 const sowingErr     = document.getElementById("sowing-date-error");
+const yieldErr      = document.getElementById("yield-error");
 
 // ── Initialise ────────────────────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", async () => {
@@ -75,6 +77,7 @@ form.addEventListener("submit", async (e) => {
   plantCountErr.classList.add("hidden");
   sowingErr.textContent = "";
   sowingErr.classList.add("hidden");
+  if (yieldErr) { yieldErr.textContent = ""; yieldErr.classList.add("hidden"); }
   formError.textContent = "";
   formError.classList.add("hidden");
 
@@ -112,12 +115,30 @@ form.addEventListener("submit", async (e) => {
   // ── POST to backend ───────────────────────────────────────────────────────
   try {
     const jwt = await getJwt();
+
+    // Parse optional expected yield.
+    let expectedYieldKg = null;
+    if (yieldEl && yieldEl.value.trim() !== "") {
+      const parsed = parseFloat(yieldEl.value);
+      if (isNaN(parsed) || parsed <= 0) {
+        if (yieldErr) {
+          yieldErr.textContent = "Expected harvest must be a positive number.";
+          yieldErr.classList.remove("hidden");
+        }
+        btnSubmit.disabled = false;
+        formLoading.classList.add("hidden");
+        return;
+      }
+      expectedYieldKg = parsed;
+    }
+
     const payload = {
-      crop:        cropEl.value,
-      plant_count: plantCount,
-      state:       stateEl.value,
-      district:    districtEl.value,
-      sowing_date: sowingValue,
+      crop:             cropEl.value,
+      plant_count:      plantCount,
+      state:            stateEl.value,
+      district:         districtEl.value,
+      sowing_date:      sowingValue,
+      expected_yield_kg: expectedYieldKg,
     };
 
     const res = await fetch(`${API_BASE_URL}/api/profile`, {

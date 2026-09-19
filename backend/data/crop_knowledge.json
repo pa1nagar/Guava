@@ -1,6 +1,8 @@
 {
-  "_comment": "Do not add prose advice here — all text is passed verbatim to Gemini as reference data.",
+  "_comment": "Do not add prose advice here — all text is passed verbatim to Gemini as reference data. Numeric fields are used by backend calculation engines only.",
+  "_schema_version": 2,
   "guava": {
+    "is_final_stage_id": "harvest",
     "stages": [
       {
         "stage_id": "establishment",
@@ -11,7 +13,22 @@
         "irrigation": "Water every day. Give 3 litres per plant each day.",
         "fertigation": "Give 5 grams of 19-19-19 water-soluble fertiliser per plant each week through the drip system.",
         "pest_checks": "Check the base of each stem for white sticky insects or cottony patches.",
-        "reference_plant_count": 1
+        "reference_plant_count": 1,
+        "quantities": {
+          "irrigation_litres_per_plant_per_day": 3,
+          "fertilizer_grams_per_plant_per_week": 5,
+          "fertilizer_name": "19-19-19 WSF",
+          "fertilizer_type": "Fertilizer",
+          "duration_months": 3
+        },
+        "ipm": [
+          {
+            "pest": "Mealybug / cottony scale",
+            "check": "Inspect stem base for white sticky patches",
+            "action": "Remove by hand or apply neem oil spray if present"
+          }
+        ],
+        "activities": ["irrigation", "fertigation", "pest_scouting"]
       },
       {
         "stage_id": "vegetative_growth",
@@ -22,7 +39,22 @@
         "irrigation": "Water every day. Give 4 litres per plant each day.",
         "fertigation": "Give 7 grams of 19-19-19 water-soluble fertiliser per plant each week through the drip system.",
         "pest_checks": "Look for shoot tips that are wilted or dead — this means a borer insect is inside the stem.",
-        "reference_plant_count": 1
+        "reference_plant_count": 1,
+        "quantities": {
+          "irrigation_litres_per_plant_per_day": 4,
+          "fertilizer_grams_per_plant_per_week": 7,
+          "fertilizer_name": "19-19-19 WSF",
+          "fertilizer_type": "Fertilizer",
+          "duration_months": 5
+        },
+        "ipm": [
+          {
+            "pest": "Stem borer",
+            "check": "Inspect shoot tips for wilting or dead tips",
+            "action": "Remove affected shoot, insert wire into entry hole to kill larva"
+          }
+        ],
+        "activities": ["irrigation", "fertigation", "pest_scouting", "canopy_training"]
       },
       {
         "stage_id": "post_monsoon",
@@ -33,7 +65,22 @@
         "irrigation": "Water every day. Give 3 litres per plant each day.",
         "fertigation": "Give 8 grams of 12-6-20 water-soluble fertiliser per plant each week. Add 1 gram of iron chelate per plant each week.",
         "pest_checks": "Check stems for bark damage from caterpillars. Clear weeds from around the base of each tree.",
-        "reference_plant_count": 1
+        "reference_plant_count": 1,
+        "quantities": {
+          "irrigation_litres_per_plant_per_day": 3,
+          "fertilizer_grams_per_plant_per_week": 9,
+          "fertilizer_name": "12-6-20 WSF + Iron chelate",
+          "fertilizer_type": "Fertilizer",
+          "duration_months": 3
+        },
+        "ipm": [
+          {
+            "pest": "Bark caterpillar",
+            "check": "Inspect stems for frass (sawdust-like excreta) or holes",
+            "action": "Remove caterpillar manually; apply chlorpyrifos paste on wound"
+          }
+        ],
+        "activities": ["irrigation", "fertigation", "pest_scouting", "weed_control", "drainage_check"]
       },
       {
         "stage_id": "pre_bloom",
@@ -44,7 +91,22 @@
         "irrigation": "Water every day. Give 4 litres per plant each day.",
         "fertigation": "Give 8 grams of 8-8-32 water-soluble fertiliser per plant each week. Add 3 grams of calcium nitrate per plant each week.",
         "pest_checks": "Check leaf tips for dark spots or blotches that may be early fungal disease.",
-        "reference_plant_count": 1
+        "reference_plant_count": 1,
+        "quantities": {
+          "irrigation_litres_per_plant_per_day": 4,
+          "fertilizer_grams_per_plant_per_week": 11,
+          "fertilizer_name": "8-8-32 WSF + Calcium nitrate",
+          "fertilizer_type": "Fertilizer",
+          "duration_months": 2
+        },
+        "ipm": [
+          {
+            "pest": "Anthracnose / leaf blight",
+            "check": "Look for dark spots or blotches on leaf tips",
+            "action": "Apply copper oxychloride spray if symptoms are found on more than 10% of leaves"
+          }
+        ],
+        "activities": ["irrigation", "fertigation", "pest_scouting", "flower_bud_monitoring"]
       },
       {
         "stage_id": "bloom_fruit_set",
@@ -55,7 +117,22 @@
         "irrigation": "Water every day. Give 10 litres per plant each day.",
         "fertigation": "Give 5 grams of MKP fertiliser per plant each week in Tank B. Add 5 grams of calcium nitrate per plant each week in Tank A.",
         "pest_checks": "Do not spray any insecticides this week — it will harm the bees needed for pollination. Check fruit fly traps daily.",
-        "reference_plant_count": 1
+        "reference_plant_count": 1,
+        "quantities": {
+          "irrigation_litres_per_plant_per_day": 10,
+          "fertilizer_grams_per_plant_per_week": 10,
+          "fertilizer_name": "MKP + Calcium nitrate",
+          "fertilizer_type": "Fertilizer",
+          "duration_months": 2
+        },
+        "ipm": [
+          {
+            "pest": "Fruit fly",
+            "check": "Inspect fruit fly traps daily",
+            "action": "Replace bait in traps; do NOT spray insecticide during flowering"
+          }
+        ],
+        "activities": ["irrigation", "fertigation", "fruit_fly_trap_check", "fruit_set_count"]
       },
       {
         "stage_id": "fruit_development",
@@ -66,7 +143,22 @@
         "irrigation": "Water every day. Give 14 litres per plant each day.",
         "fertigation": "Give 10 grams of SOP fertiliser per plant each week. Add 3 grams of calcium nitrate per plant each week.",
         "pest_checks": "Bag any fruits that are not already covered. Check bags for holes or insect entry.",
-        "reference_plant_count": 1
+        "reference_plant_count": 1,
+        "quantities": {
+          "irrigation_litres_per_plant_per_day": 14,
+          "fertilizer_grams_per_plant_per_week": 13,
+          "fertilizer_name": "SOP + Calcium nitrate",
+          "fertilizer_type": "Fertilizer",
+          "duration_months": 1
+        },
+        "ipm": [
+          {
+            "pest": "Fruit fly / bag damage",
+            "check": "Inspect bags for holes or insect entry",
+            "action": "Replace damaged bags; install additional fruit fly traps"
+          }
+        ],
+        "activities": ["irrigation", "fertigation", "fruit_bagging", "pest_scouting"]
       },
       {
         "stage_id": "drought_stress",
@@ -77,7 +169,22 @@
         "irrigation": "Stop all irrigation completely this week. Do not water at all — this is intentional and important.",
         "fertigation": "No fertiliser this week. The stress period must not be interrupted.",
         "pest_checks": "Check that all fruit bags are intact. Look for any fruit that has fallen early.",
-        "reference_plant_count": 1
+        "reference_plant_count": 1,
+        "quantities": {
+          "irrigation_litres_per_plant_per_day": 0,
+          "fertilizer_grams_per_plant_per_week": 0,
+          "fertilizer_name": "None — drought stress period",
+          "fertilizer_type": "Fertilizer",
+          "duration_months": 1
+        },
+        "ipm": [
+          {
+            "pest": "Premature fruit drop",
+            "check": "Walk the orchard and check for fallen fruit",
+            "action": "Remove and dispose of fallen fruit away from the orchard"
+          }
+        ],
+        "activities": ["bag_inspection", "fallen_fruit_removal"]
       },
       {
         "stage_id": "harvest",
@@ -88,7 +195,22 @@
         "irrigation": "Restart watering. Give 14 litres per plant each day.",
         "fertigation": "Give 5 grams of SOP fertiliser per plant each week for 2 weeks after harvest.",
         "pest_checks": "Remove all fallen fruit from the ground immediately. Burn any diseased fruit — do not compost it.",
-        "reference_plant_count": 1
+        "reference_plant_count": 1,
+        "quantities": {
+          "irrigation_litres_per_plant_per_day": 14,
+          "fertilizer_grams_per_plant_per_week": 5,
+          "fertilizer_name": "SOP (post-harvest)",
+          "fertilizer_type": "Fertilizer",
+          "duration_months": 1
+        },
+        "ipm": [
+          {
+            "pest": "Post-harvest disease",
+            "check": "Inspect harvested fruit for rot or fungal patches",
+            "action": "Remove and burn diseased fruit; do not compost"
+          }
+        ],
+        "activities": ["harvest", "irrigation", "fertigation", "fallen_fruit_removal"]
       },
       {
         "stage_id": "post_harvest_mature",
@@ -99,7 +221,22 @@
         "irrigation": "Water every day. Give 11 litres per plant each day.",
         "fertigation": "Give 10 grams of 19-19-19 water-soluble fertiliser per plant each week. Add 2 grams of humic acid per plant each week.",
         "pest_checks": "Watch new shoots carefully for borer insects. Check the root area for any signs of wilting or rotting.",
-        "reference_plant_count": 1
+        "reference_plant_count": 1,
+        "quantities": {
+          "irrigation_litres_per_plant_per_day": 11,
+          "fertilizer_grams_per_plant_per_week": 12,
+          "fertilizer_name": "19-19-19 WSF + Humic acid",
+          "fertilizer_type": "Fertilizer",
+          "duration_months": null
+        },
+        "ipm": [
+          {
+            "pest": "Stem borer (new shoots)",
+            "check": "Inspect new shoot tips for wilting",
+            "action": "Remove affected shoot; check root zone for collar rot symptoms"
+          }
+        ],
+        "activities": ["irrigation", "fertigation", "pest_scouting", "pruning_monitoring"]
       }
     ]
   }

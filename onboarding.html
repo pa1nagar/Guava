@@ -101,6 +101,28 @@
         <span id="sowing-date-error" class="hidden text-red-600 text-xs" role="alert"></span>
       </div>
 
+      <!-- Expected yield (optional) -->
+      <div class="flex flex-col gap-1">
+        <label for="expected-yield" class="text-sm font-medium text-gray-700">
+          Expected harvest
+          <span class="text-gray-400 font-normal">(optional)</span>
+        </label>
+        <div class="relative">
+          <input
+            type="number"
+            id="expected-yield"
+            name="expected_yield_kg"
+            min="1"
+            step="any"
+            placeholder="e.g. 50000"
+            class="h-11 w-full rounded-lg border border-gray-300 bg-white px-3 pr-10 text-sm focus:outline-none focus:border-brand-secondary"
+          >
+          <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">kg</span>
+        </div>
+        <p class="text-xs text-gray-400">Used later to calculate your break-even price. You can skip this now.</p>
+        <span id="yield-error" class="hidden text-red-600 text-xs" role="alert"></span>
+      </div>
+
       <!-- Submit -->
       <button
         type="submit"
