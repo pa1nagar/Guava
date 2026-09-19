@@ -24,6 +24,7 @@ from routers import profile as profile_router_module
 from routers import activities as activities_router_module
 from routers import financial as financial_router_module
 from routers import vendors as vendors_router_module
+from routers import insights as insights_router_module
 
 logging.basicConfig(
     level=logging.INFO,
@@ -56,6 +57,7 @@ app.include_router(plan_router_module.router, prefix="/api")
 app.include_router(activities_router_module.router, prefix="/api")
 app.include_router(financial_router_module.router, prefix="/api")
 app.include_router(vendors_router_module.router, prefix="/api")
+app.include_router(insights_router_module.router, prefix="/api")
 
 
 # ── Startup validation ────────────────────────────────────────────────────────

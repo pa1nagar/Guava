@@ -181,6 +181,9 @@
         <button id="nav-harvest-btn" class="farm-nav-btn hidden" data-panel="panel-harvest" onclick="switchPanel('panel-harvest')">
           <i class="fa-solid fa-basket-shopping"></i> Harvest
         </button>
+        <button class="farm-nav-btn" data-panel="panel-insights" onclick="switchPanel('panel-insights')">
+          <i class="fa-solid fa-brain"></i> Insights
+        </button>
       </div>
     </nav>
   </header>
@@ -429,6 +432,83 @@
           🔴 Scenario only — verify with actual buyer prices before harvest.
         </p>
       </div>
+
+    </section>
+
+    <!-- ══ PANEL 6: INSIGHTS ═════════════════════════════════════════════ -->
+    <section id="panel-insights" class="farm-panel">
+
+      <div id="insights-loading" class="flex items-center gap-3 py-8 text-gray-400">
+        <div class="w-6 h-6 border-3 border-brand-secondary border-t-transparent rounded-full spin"></div>
+        <p class="text-sm">Loading farm intelligence…</p>
+      </div>
+
+      <div id="insights-content" class="hidden flex flex-col gap-6">
+
+        <!-- ① Weather forecast -->
+        <div>
+          <h2 class="text-xl font-bold text-emerald-900 mb-1">
+            <i class="fa-solid fa-cloud-sun text-emerald-600 mr-1"></i> 7-Day Weather Forecast
+          </h2>
+          <p id="weather-location" class="text-xs text-gray-400 mb-3"></p>
+
+          <!-- Current conditions -->
+          <div id="weather-current"
+            class="bg-brand-primary text-white rounded-2xl p-4 mb-3 flex items-center gap-4">
+          </div>
+
+          <!-- Irrigation advisory -->
+          <div id="irrigation-advisory"
+            class="mb-3 rounded-xl border px-4 py-3 text-sm font-medium">
+          </div>
+
+          <!-- 7-day grid -->
+          <div id="weather-grid"
+            class="grid grid-cols-4 sm:grid-cols-7 gap-2">
+          </div>
+        </div>
+
+        <!-- ② Disease risk alerts -->
+        <div id="disease-risk-section">
+          <h2 class="text-xl font-bold text-emerald-900 mb-3">
+            <i class="fa-solid fa-shield-virus text-emerald-600 mr-1"></i>
+            Pest &amp; Disease Risk (next 3 days)
+          </h2>
+          <div id="disease-risk-list" class="flex flex-col gap-3"></div>
+        </div>
+
+        <!-- ③ Market price calendar -->
+        <div>
+          <h2 class="text-xl font-bold text-emerald-900 mb-1">
+            <i class="fa-solid fa-chart-line text-emerald-600 mr-1"></i>
+            Guava Price Calendar
+          </h2>
+          <p class="text-xs text-gray-500 mb-3">
+            Wholesale modal prices at major mandis. <span class="text-red-500">🔴 Reference only</span>
+          </p>
+
+          <!-- Harvest timing card -->
+          <div id="harvest-timing-card"
+            class="bg-amber-50 border border-amber-300 rounded-2xl p-4 mb-4">
+          </div>
+
+          <!-- 12-month bar chart (CSS bars, no Chart.js needed) -->
+          <div id="price-calendar" class="bg-white border border-gray-200 rounded-2xl p-4">
+            <div id="price-bars" class="flex items-end gap-1 h-32 mb-2"></div>
+            <div id="price-months" class="flex gap-1"></div>
+          </div>
+        </div>
+
+        <!-- ④ Future stage planner -->
+        <div>
+          <h2 class="text-xl font-bold text-emerald-900 mb-3">
+            <i class="fa-solid fa-calendar-check text-emerald-600 mr-1"></i>
+            What's coming next
+          </h2>
+          <div id="future-stages" class="flex flex-col gap-4"></div>
+        </div>
+
+      </div><!-- /#insights-content -->
 
     </section>
 

@@ -762,3 +762,282 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error(err);
   }
 });
+
+
+// ═══════════════════════════════════════════════════════════════════════════
+// INSIGHTS PANEL — Weather, Pest Risk, Market, Future Stages
+// ═══════════════════════════════════════════════════════════════════════════
+
+// WMO weather code → emoji
+function wmoEmoji(code) {
+  if (code === 0 || code === 1) return "☀️";
+  if (code === 2 || code === 3) return "⛅";
+  if (code >= 45 && code <= 48) return "🌫️";
+  if (code >= 51 && code <= 67) return "🌧️";
+  if (code >= 71 && code <= 77) return "❄️";
+  if (code >= 80 && code <= 82) return "🌦️";
+  if (code >= 95) return "⛈️";
+  return "🌤️";
+}
+
+function formatDateShort(iso) {
+  try {
+    const d = new Date(iso + "T00:00:00");
+    return d.toLocaleDateString("en-IN", { weekday: "short", day: "numeric" });
+  } catch { return iso; }
+}
+
+function renderWeather(weather, locationStr) {
+  const locEl = document.getElementById("weather-location");
+  const curEl = document.getElementById("weather-current");
+  const irrEl = document.getElementById("irrigation-advisory");
+  const gridEl = document.getElementById("weather-grid");
+
+  if (locEl) locEl.textContent = `📍 ${locationStr}  ·  Source: Open-Meteo.com`;
+
+  if (!weather.fetched) {
+    if (curEl) curEl.innerHTML = `<p class="text-sm opacity-75">Weather data unavailable. ${weather.error || ""}</p>`;
+    return;
+  }
+
+  const cur = weather.current || {};
+  if (curEl) {
+    curEl.innerHTML = `
+      <span class="text-5xl">${wmoEmoji(cur.weathercode || 0)}</span>
+      <div>
+        <p class="text-3xl font-extrabold">${cur.temperature ?? "—"}°C</p>
+        <p class="text-sm opacity-75">${cur.weather_desc || ""}</p>
+        <p class="text-xs opacity-60 mt-0.5">Wind ${cur.windspeed ?? "—"} km/h</p>
+      </div>
+    `;
+  }
+
+  // Irrigation advisory
+  const irr = weather.irrigation || {};
+  if (irrEl) {
+    const colours = {
+      high_demand:    "bg-red-50 border-red-300 text-red-800",
+      normal:         "bg-green-50 border-green-300 text-green-800",
+      low_demand:     "bg-blue-50 border-blue-300 text-blue-800",
+      drought_period: "bg-amber-50 border-amber-300 text-amber-800",
+      unknown:        "bg-gray-50 border-gray-200 text-gray-600",
+    };
+    irrEl.className = `mb-3 rounded-xl border px-4 py-3 text-sm font-medium ${colours[irr.status] || colours.unknown}`;
+    irrEl.innerHTML = `
+      <span class="font-bold">💧 Irrigation today: </span>${irr.message || "—"}
+      ${irr.et0 ? `<span class="ml-2 text-xs opacity-70">(ET0 ${irr.et0} mm/day)</span>` : ""}
+    `;
+  }
+
+  // 7-day forecast grid
+  if (gridEl) {
+    gridEl.innerHTML = "";
+    for (const day of (weather.forecast || [])) {
+      const card = document.createElement("div");
+      card.className = "bg-white border border-gray-200 rounded-xl p-2 text-center flex flex-col gap-0.5";
+      card.innerHTML = `
+        <p class="text-xs text-gray-400 font-medium">${formatDateShort(day.date)}</p>
+        <p class="text-2xl">${wmoEmoji(day.weathercode || 0)}</p>
+        <p class="text-xs font-bold text-brand-dark">${day.tmax ?? "—"}°</p>
+        <p class="text-xs text-gray-400">${day.tmin ?? "—"}°</p>
+        ${day.rain_mm > 0
+          ? `<p class="text-xs text-blue-600 font-semibold">🌧 ${day.rain_mm}mm</p>`
+          : `<p class="text-xs text-gray-300">—</p>`
+        }
+        ${day.rain_prob > 0
+          ? `<p class="text-xs text-gray-400">${day.rain_prob}%</p>`
+          : ""
+        }
+      `;
+      gridEl.appendChild(card);
+    }
+  }
+}
+
+function renderDiseaseRisks(risks) {
+  const listEl = document.getElementById("disease-risk-list");
+  if (!listEl) return;
+
+  if (!risks || risks.length === 0) {
+    listEl.innerHTML = `
+      <div class="flex items-center gap-3 bg-green-50 border border-green-200 rounded-xl px-4 py-3">
+        <span class="text-2xl">✅</span>
+        <p class="text-sm font-medium text-green-800">
+          No high-risk weather conditions detected for the next 3 days. Continue routine monitoring.
+        </p>
+      </div>`;
+    return;
+  }
+
+  listEl.innerHTML = "";
+  const colourMap = {
+    red:   "bg-red-50 border-red-300 text-red-900",
+    amber: "bg-amber-50 border-amber-200 text-amber-900",
+  };
+
+  for (const r of risks) {
+    const el = document.createElement("div");
+    el.className = `flex items-start gap-3 border rounded-2xl px-4 py-3 ${colourMap[r.colour] || colourMap.amber}`;
+    el.innerHTML = `
+      <span class="text-2xl flex-shrink-0">${r.colour === "red" ? "🚨" : "⚠️"}</span>
+      <div>
+        <p class="text-sm font-bold">${r.disease}
+          <span class="ml-2 text-xs font-semibold px-2 py-0.5 rounded-full
+            ${r.risk === "High" ? "bg-red-200 text-red-800" : "bg-amber-200 text-amber-800"}">
+            ${r.risk} Risk
+          </span>
+        </p>
+        <p class="text-sm mt-1 leading-relaxed">${r.action}</p>
+      </div>
+    `;
+    listEl.appendChild(el);
+  }
+}
+
+function renderMarket(market) {
+  const htCard  = document.getElementById("harvest-timing-card");
+  const barsEl  = document.getElementById("price-bars");
+  const monthsEl= document.getElementById("price-months");
+
+  // Harvest timing
+  const ht = market.harvest_timing || {};
+  if (htCard) {
+    const score = ht.attractiveness_score || 5;
+    const scoreColour = score >= 8 ? "text-green-700" : score >= 6 ? "text-amber-700" : "text-red-700";
+    htCard.innerHTML = `
+      <div class="flex items-start justify-between gap-3 flex-wrap">
+        <div>
+          <p class="text-sm font-bold text-amber-900 mb-1">
+            <i class="fa-solid fa-calendar-star mr-1"></i> Your estimated harvest window
+          </p>
+          <p class="text-2xl font-extrabold text-amber-900">${ht.harvest_month_name || "—"}</p>
+          <p class="text-sm text-amber-800 mt-1">${ht.market_note || ""}</p>
+        </div>
+        <div class="text-right">
+          <p class="text-xs text-amber-700 font-semibold">Expected price</p>
+          <p class="text-xl font-extrabold text-amber-900">${ht.price_range || "—"}</p>
+          <p class="text-sm font-bold mt-1 ${scoreColour}">Score: ${score}/10</p>
+        </div>
+      </div>
+      <p class="text-xs text-amber-700 mt-3 border-t border-amber-200 pt-2">
+        🔴 Reference only — verify with local buyers before harvest.
+      </p>
+    `;
+  }
+
+  // 12-month price bar chart
+  const cal = market.price_calendar || [];
+  if (barsEl && monthsEl) {
+    barsEl.innerHTML = "";
+    monthsEl.innerHTML = "";
+    const maxPrice = Math.max(...cal.map(m => m.modal));
+
+    for (const m of cal) {
+      const pct    = Math.round((m.modal / maxPrice) * 100);
+      const colour = m.score >= 8 ? "#4A7C59"
+                   : m.score >= 6 ? "#F59E0B"
+                   : "#EF4444";
+      const isCur  = m.is_current;
+
+      const bar = document.createElement("div");
+      bar.style.cssText = `flex:1; height:${pct}%; background:${colour}; border-radius:4px 4px 0 0;
+        ${isCur ? "box-shadow:0 0 0 2px #1E3A2B;" : ""}`;
+      bar.title = `${m.month_name}: ₹${m.modal}/kg (${m.note})`;
+      barsEl.appendChild(bar);
+
+      const label = document.createElement("div");
+      label.style.cssText = "flex:1; text-align:center; font-size:10px; color:#6B7280;";
+      label.textContent = m.month_name.slice(0, 3);
+      if (isCur) label.style.cssText += "font-weight:700;color:#1E3A2B;";
+      monthsEl.appendChild(label);
+    }
+  }
+}
+
+function renderFutureStages(stages) {
+  const el = document.getElementById("future-stages");
+  if (!el) return;
+
+  if (!stages || stages.length === 0) {
+    el.innerHTML = `<p class="text-sm text-gray-400">No upcoming stages — you are in the final stage.</p>`;
+    return;
+  }
+
+  el.innerHTML = "";
+  const icons = ["🌿", "🌸", "🍈"];
+  stages.forEach((s, i) => {
+    const card = document.createElement("div");
+    card.className = "bg-white border border-gray-200 rounded-2xl p-4 shadow-sm";
+    card.innerHTML = `
+      <div class="flex items-center gap-2 mb-2">
+        <span class="text-xl">${icons[i] || "🌱"}</span>
+        <p class="text-base font-bold text-brand-dark">${s.label}</p>
+        <span class="ml-auto text-xs text-gray-400">Starts Month ${s.month_start}</span>
+      </div>
+      <p class="text-sm text-gray-600 mb-3 leading-relaxed">${s.description}</p>
+      <div class="grid grid-cols-2 gap-2 text-xs">
+        ${s.fertilizer_name ? `
+          <div class="bg-green-50 rounded-lg px-3 py-2">
+            <p class="text-gray-500 font-semibold">Fertilizer</p>
+            <p class="font-bold text-green-800">${s.fertilizer_name}</p>
+            ${s.fertilizer_kg_per_month > 0
+              ? `<p class="text-green-600">${s.fertilizer_kg_per_month} kg/month</p>` : ""}
+          </div>` : ""}
+        ${s.irrigation_litres_per_day > 0 ? `
+          <div class="bg-blue-50 rounded-lg px-3 py-2">
+            <p class="text-gray-500 font-semibold">Irrigation</p>
+            <p class="font-bold text-blue-800">${s.irrigation_litres_per_day.toLocaleString("en-IN")} L/day</p>
+            <p class="text-blue-600">total for all plants</p>
+          </div>` : ""}
+        ${s.ipm_checks?.length ? `
+          <div class="bg-amber-50 rounded-lg px-3 py-2 col-span-2">
+            <p class="text-gray-500 font-semibold mb-1">Watch for</p>
+            <p class="font-medium text-amber-800">${s.ipm_checks.join(" · ")}</p>
+          </div>` : ""}
+      </div>
+    `;
+    el.appendChild(card);
+  });
+}
+
+// Load insights when panel is first activated
+let _insightsLoaded = false;
+
+const _origSwitchPanel = window.switchPanel;
+window.switchPanel = function(id) {
+  _origSwitchPanel(id);
+  if (id === "panel-insights" && !_insightsLoaded) {
+    _insightsLoaded = true;
+    loadInsights();
+  }
+};
+
+async function loadInsights() {
+  const loadingEl = document.getElementById("insights-loading");
+  const contentEl = document.getElementById("insights-content");
+  if (!loadingEl || !contentEl) return;
+
+  try {
+    const res = await apiFetch("/api/farmers/me/insights");
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    // Location label
+    const locStr = `${data.location?.district}, ${data.location?.state}`;
+
+    renderWeather(data.weather || {}, locStr);
+    renderDiseaseRisks(data.weather?.disease_risks || []);
+    renderMarket(data.market || {});
+    renderFutureStages(data.future_stages || []);
+
+    loadingEl.classList.add("hidden");
+    contentEl.classList.remove("hidden");
+
+  } catch (err) {
+    loadingEl.innerHTML = `
+      <p class="text-sm text-red-600">
+        Could not load insights. Please check your connection and try again.
+      </p>`;
+    console.error("Insights load failed:", err);
+  }
+}
