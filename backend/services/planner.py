@@ -34,11 +34,7 @@ _MODEL = None  # initialised lazily in _get_model()
 
 
 def _get_model():
-    """Return (and lazily initialise) the Gemini model.
-
-    Raises RuntimeError at call time if GEMINI_API_KEY is absent.
-    This allows test imports and mocking without a live key.
-    """
+    """Return (and lazily initialise) the Gemini model."""
     global _MODEL
     if _MODEL is None:
         if not _GEMINI_API_KEY:
@@ -47,11 +43,13 @@ def _get_model():
                 "Add it to your .env file and restart the server."
             )
         genai.configure(api_key=_GEMINI_API_KEY)
+        # gemini-flash-latest always points to the current stable flash model.
+        # This avoids hard-coding a version that may be deprecated.
         _MODEL = genai.GenerativeModel(
-            "gemini-1.5-flash",
+            "gemini-flash-latest",
             generation_config=genai.GenerationConfig(
                 response_mime_type="application/json",
-                temperature=0.2,       # low temperature → less hallucination
+                temperature=0.2,
                 max_output_tokens=1024,
             ),
         )
@@ -239,7 +237,7 @@ Pest check: {stage["pest_checks"]}
 TASK:
 Write a care plan as four short plain-text paragraphs: situation, irrigation, feeding, pest check."""
     try:
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-flash-latest")
         response = model.generate_content(prompt)
         return response.text.strip()
     except Exception as exc:
