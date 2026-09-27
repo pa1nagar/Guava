@@ -1055,36 +1055,6 @@ window.switchPanel = function(id) {
   }
 };
 
-async function loadInsights() {
-  const loadingEl = document.getElementById("insights-loading");
-  const contentEl = document.getElementById("insights-content");
-  if (!loadingEl || !contentEl) return;
-
-  try {
-    const res = await apiFetch("/api/farmers/me/insights");
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-
-    // Location label
-    const locStr = `${data.location?.district}, ${data.location?.state}`;
-
-    renderWeather(data.weather || {}, locStr);
-    renderDiseaseRisks(data.weather?.disease_risks || []);
-    renderMarket(data.market || {});
-    renderFutureStages(data.future_stages || []);
-
-    loadingEl.classList.add("hidden");
-    contentEl.classList.remove("hidden");
-
-  } catch (err) {
-    loadingEl.innerHTML = `
-      <p class="text-sm text-red-600">
-        Could not load insights. Please check your connection and try again.
-      </p>`;
-    console.error("Insights load failed:", err);
-  }
-}
-
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Advanced insights rendering — GDD, climate, compliance, fertilizer budget
