@@ -29,3 +29,20 @@ ACTIVITY_TYPE_QUANTITY_FIELD: dict[str, str] = {
     "Fertilizer": "total_fertilizer_kg_per_week",
     "Irrigation": "total_irrigation_litres_per_day",
 }
+
+# ---------------------------------------------------------------------------
+# Content governance constants (Requirement 1)
+# ---------------------------------------------------------------------------
+
+# All possible lifecycle states for a ContentRecord.
+CONTENT_STATUSES: list[str] = [
+    "DRAFT",
+    "NEEDS_REVIEW",
+    "APPROVED",
+    "EXPIRED",
+    "WITHDRAWN",
+]
+
+# Risk levels applied to ContentRecords.
+# HIGH-risk records require reviewer credentials before saving.
+RISK_LEVELS: list[str] = ["LOW", "MEDIUM", "HIGH"]

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title data-i18n="tasks.pageTitle">Smart Farmer — Tasks</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              bg:        '#FDFBF7',
+              primary:   '#1E3A2B',
+              secondary: '#4A7C59',
+              accent:    '#E07A5F',
+              dark:      '#2B2D42',
+              muted:     '#6B7280'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    body { background: #FDFBF7; font-family: system-ui, sans-serif; }
+    .spin { animation: _spin 0.85s linear infinite; }
+    @keyframes _spin { to { transform: rotate(360deg); } }
+
+    .section-card {
+      background: #fff;
+      border: 1px solid #E5E7EB;
+      border-radius: 1rem;
+      padding: 1.25rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .form-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #6B7280;
+      margin-bottom: 0.25rem;
+    }
+    .form-input {
+      width: 100%;
+      height: 2.75rem;
+      border-radius: 0.75rem;
+      border: 1px solid #D1D5DB;
+      background: #fff;
+      padding: 0 0.75rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .form-input:focus { border-color: #4A7C59; }
+    textarea.form-input { height: auto; padding: 0.75rem; resize: vertical; }
+
+    /* Bottom mobile nav */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; }
+    .bottom-nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem 0.25rem 0.625rem;
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.55);
+      gap: 0.2rem;
+      cursor: pointer;
+      transition: color 0.15s;
+      text-decoration: none;
+    }
+    .bottom-nav-item:hover { color: #fff; }
+    .bottom-nav-item.active { color: #E07A5F; }
+    .bottom-nav-item i { font-size: 1.1rem; }
+  </style>
+</head>
+<body class="min-h-screen bg-brand-bg pb-20">
+
+  <!-- ════════════════ HEADER ════════════════ -->
+  <header class="bg-brand-primary text-white sticky top-0 z-40 shadow-lg">
+    <div class="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between gap-3">
+      <div>
+        <p class="text-green-200 text-xs font-semibold uppercase tracking-wider" data-i18n="nav.tasks">Tasks</p>
+        <h1 class="text-base font-bold" data-i18n="tasks.heading">Farm Tasks</h1>
+      </div>
+      <button id="btn-signout"
+        class="text-green-300/70 text-xs font-medium hover:text-white transition flex-shrink-0" data-i18n="nav.signOut">
+        Sign out
+      </button>
+    </div>
+  </header>
+
+  <!-- ════════════════ MAIN ════════════════ -->
+  <main class="max-w-3xl mx-auto px-4 py-6 flex flex-col gap-6">
+
+    <!-- ── Today's Tasks ──────────────────────────────────────────────── -->
+    <div id="today-tasks-section" class="section-card">
+      <h2 class="font-bold text-emerald-900 text-lg mb-4">
+        <i class="fa-solid fa-sun text-amber-500 mr-1"></i>
+        <span data-i18n="tasks.today">Today's Tasks</span>
+      </h2>
+
+      <div id="today-loading" class="hidden loading-overlay">
+        <span class="loading-spinner loading-spinner--sm"></span>
+        <span data-i18n="loading.tasks">Loading tasks…</span>
+      </div>
+
+      <div id="today-empty" class="hidden">
+        <div class="empty-state" style="padding: 2rem 1rem;">
+          <div class="empty-state__icon">☀️</div>
+          <p class="empty-state__title" data-i18n="empty.noTodayTasks.title">Nothing due today</p>
+          <p class="empty-state__body" data-i18n="empty.noTodayTasks.body">
+            No tasks are scheduled for today. Check back tomorrow or create a task below.
+          </p>
+        </div>
+      </div>
+
+      <div id="today-task-list" class="flex flex-col gap-3"></div>
+    </div>
+
+    <!-- ── All Tasks ──────────────────────────────────────────────────── -->
+    <div class="section-card">
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <h2 class="font-bold text-emerald-900 text-lg">
+          <i class="fa-solid fa-list-check text-emerald-600 mr-1"></i>
+          <span data-i18n="tasks.allTasks">All Tasks</span>
+        </h2>
+        <div class="flex items-center gap-2">
+          <select id="filter-status"
+            class="text-xs border border-gray-300 rounded-lg px-2.5 py-1.5 font-medium text-gray-600 bg-white focus:outline-none focus:border-brand-secondary">
+            <option value="" data-i18n="tasks.filter.all">All statuses</option>
+            <option value="suggested" data-i18n="tasks.status.suggested">Suggested</option>
+            <option value="planned" data-i18n="tasks.status.planned">Planned</option>
+            <option value="due" data-i18n="tasks.status.due">Due</option>
+            <option value="needs-review" data-i18n="tasks.status.needsReview">Needs Review</option>
+            <option value="completed" data-i18n="tasks.status.completed">Completed</option>
+            <option value="skipped" data-i18n="tasks.status.skipped">Skipped</option>
+            <option value="cancelled" data-i18n="tasks.status.cancelled">Cancelled</option>
+          </select>
+          <button id="btn-show-task-form"
+            class="flex items-center gap-1.5 text-sm font-semibold text-brand-secondary border border-brand-secondary px-3 py-1.5 rounded-lg hover:bg-brand-secondary hover:text-white transition">
+            <i class="fa-solid fa-plus"></i>
+            <span data-i18n="tasks.addTask">Add Task</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Task create form (hidden by default) -->
+      <div id="task-form-wrap" class="hidden mb-5">
+        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+          <h3 class="font-bold text-emerald-900 mb-3 text-sm" data-i18n="tasks.newTask">New Task</h3>
+          <form id="task-form" class="flex flex-col gap-3" novalidate>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="sm:col-span-2">
+                <label for="task-title" class="form-label">
+                  <span data-i18n="tasks.field.title">Title</span>
+                  <span class="text-red-500">*</span>
+                </label>
+                <input id="task-title" type="text" maxlength="200" class="form-input"
+                  placeholder="e.g. Apply fertilizer to Block A" required>
+              </div>
+              <div>
+                <label for="task-due-date" class="form-label" data-i18n="tasks.field.dueDate">Due Date</label>
+                <input id="task-due-date" type="date" class="form-input">
+              </div>
+              <div>
+                <label for="task-priority" class="form-label" data-i18n="tasks.field.priority">Priority</label>
+                <select id="task-priority" class="form-input">
+                  <option value="low" data-i18n="tasks.priority.low">Low</option>
+                  <option value="medium" selected data-i18n="tasks.priority.medium">Medium</option>
+                  <option value="high" data-i18n="tasks.priority.high">High</option>
+                </select>
+              </div>
+              <div class="sm:col-span-2">
+                <label for="task-description" class="form-label" data-i18n="tasks.field.description">Description</label>
+                <textarea id="task-description" rows="2" class="form-input"
+                  placeholder="Optional details about this task…"></textarea>
+              </div>
+            </div>
+
+            <p id="task-form-error" class="hidden text-red-600 text-sm" role="alert"></p>
+
+            <div class="flex gap-2 mt-1">
+              <button id="btn-save-task" type="submit"
+                class="flex-1 h-11 bg-brand-primary text-white font-bold rounded-xl hover:bg-brand-secondary transition"
+                data-i18n="tasks.saveTask">
+                Save Task
+              </button>
+              <button id="btn-cancel-task-form" type="button"
+                class="px-4 h-11 text-sm text-gray-500 border border-gray-300 rounded-xl hover:bg-gray-50 transition"
+                data-i18n="form.cancel">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div id="all-tasks-loading" class="hidden loading-overlay">
+        <span class="loading-spinner loading-spinner--sm"></span>
+        <span data-i18n="loading.tasks">Loading tasks…</span>
+      </div>
+
+      <!-- Empty state -->
+      <div id="all-tasks-empty" class="hidden">
+        <div class="empty-state">
+          <div class="empty-state__icon">📋</div>
+          <p class="empty-state__title" data-i18n="empty.noTasks.title">No tasks yet</p>
+          <p class="empty-state__body" data-i18n="empty.noTasks.body">
+            Create your first task to start tracking farm activities with due dates and status.
+          </p>
+        </div>
+      </div>
+
+      <div id="all-task-list" class="flex flex-col gap-3"></div>
+    </div>
+
+  </main>
+
+  <!-- ════════════════ BOTTOM NAV ════════════════ -->
+  <nav class="bottom-nav bg-brand-primary border-t border-emerald-800/50" aria-label="Primary navigation">
+    <div class="flex">
+      <a href="plan.html" class="bottom-nav-item">
+        <i class="fa-solid fa-chart-pie"></i>
+        <span data-i18n="nav.today">Today</span>
+      </a>
+      <a href="farm.html" class="bottom-nav-item">
+        <i class="fa-solid fa-tractor"></i>
+        <span data-i18n="nav.myFarm">My Farm</span>
+      </a>
+      <a href="tasks.html" class="bottom-nav-item active" aria-current="page">
+        <i class="fa-solid fa-list-check"></i>
+        <span data-i18n="nav.tasks">Tasks</span>
+      </a>
+      <a href="plan.html#panel-insights" class="bottom-nav-item">
+        <i class="fa-solid fa-ellipsis"></i>
+        <span data-i18n="nav.more">More</span>
+      </a>
+    </div>
+  </nav>
+
+  <script type="module" src="js/tasks.js"></script>
+</body>
+</html>

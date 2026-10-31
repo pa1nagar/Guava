@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title data-i18n="obs.pageTitle">Smart Farmer — Crop Observations</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              bg:        '#FDFBF7',
+              primary:   '#1E3A2B',
+              secondary: '#4A7C59',
+              accent:    '#E07A5F',
+              dark:      '#2B2D42',
+              muted:     '#6B7280'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    body { background: #FDFBF7; font-family: system-ui, sans-serif; }
+    .section-card {
+      background: #fff;
+      border: 1px solid #E5E7EB;
+      border-radius: 1rem;
+      padding: 1.25rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .form-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #6B7280;
+      margin-bottom: 0.25rem;
+    }
+    .form-input {
+      width: 100%;
+      height: 2.75rem;
+      border-radius: 0.75rem;
+      border: 1px solid #D1D5DB;
+      background: #fff;
+      padding: 0 0.75rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .form-input:focus { border-color: #4A7C59; }
+    textarea.form-input { height: auto; padding: 0.75rem; resize: vertical; }
+
+    /* Photo upload */
+    .photo-upload-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      padding: 0.625rem 1rem;
+      border: 2px dashed #D1D5DB;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #6B7280;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .photo-upload-label:hover {
+      border-color: #4A7C59;
+      background: #F0FDF4;
+      color: #4A7C59;
+    }
+
+    /* Bottom mobile nav */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; }
+    .bottom-nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem 0.25rem 0.625rem;
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.55);
+      gap: 0.2rem;
+      cursor: pointer;
+      transition: color 0.15s;
+      text-decoration: none;
+    }
+    .bottom-nav-item:hover { color: #fff; }
+    .bottom-nav-item.active { color: #E07A5F; }
+    .bottom-nav-item i { font-size: 1.1rem; }
+  </style>
+</head>
+<body class="min-h-screen bg-brand-bg pb-20">
+
+  <!-- ════════════════ HEADER ════════════════ -->
+  <header class="bg-brand-primary text-white sticky top-0 z-40 shadow-lg">
+    <div class="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between gap-3">
+      <div>
+        <p class="text-green-200 text-xs font-semibold uppercase tracking-wider" data-i18n="nav.myFarm">My Farm</p>
+        <h1 class="text-base font-bold" data-i18n="obs.heading">Crop Observations</h1>
+      </div>
+      <button id="btn-signout"
+        class="text-green-300/70 text-xs font-medium hover:text-white transition flex-shrink-0" data-i18n="nav.signOut">
+        Sign out
+      </button>
+    </div>
+  </header>
+
+  <!-- ════════════════ MAIN ════════════════ -->
+  <main class="max-w-3xl mx-auto px-4 py-6 flex flex-col gap-6">
+
+    <!-- ── Observation list ───────────────────────────────────────────── -->
+    <div class="section-card">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-bold text-emerald-900 text-lg">
+          <i class="fa-solid fa-eye text-emerald-600 mr-1"></i>
+          <span data-i18n="obs.observations">Observations</span>
+        </h2>
+        <button id="btn-show-obs-form"
+          class="flex items-center gap-1.5 text-sm font-semibold text-brand-secondary border border-brand-secondary px-3 py-1.5 rounded-lg hover:bg-brand-secondary hover:text-white transition">
+          <i class="fa-solid fa-plus"></i>
+          <span data-i18n="obs.addObservation">Add Observation</span>
+        </button>
+      </div>
+
+      <!-- Observation form (hidden by default) -->
+      <div id="obs-form-wrap" class="hidden mb-5">
+        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+          <h3 class="font-bold text-emerald-900 mb-3 text-sm" data-i18n="obs.newObservation">New Observation</h3>
+          <form id="obs-form" class="flex flex-col gap-3" novalidate>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="obs-date" class="form-label">
+                  <span data-i18n="obs.field.date">Observation Date</span>
+                  <span class="text-red-500">*</span>
+                </label>
+                <input id="obs-date" type="date" class="form-input" required>
+              </div>
+              <div>
+                <label for="obs-severity" class="form-label" data-i18n="obs.field.severity">Severity</label>
+                <select id="obs-severity" class="form-input">
+                  <option value="low" data-i18n="obs.severity.low">Low</option>
+                  <option value="medium" data-i18n="obs.severity.medium">Medium</option>
+                  <option value="high" data-i18n="obs.severity.high">High</option>
+                  <option value="unknown" data-i18n="obs.severity.unknown">Unknown</option>
+                </select>
+              </div>
+
+              <!-- symptom — "unknown / not sure" is a valid value (req 7.2) -->
+              <div class="sm:col-span-2">
+                <label for="obs-symptom" class="form-label" data-i18n="obs.field.symptom">Symptom Description</label>
+                <input id="obs-symptom" type="text" maxlength="500" class="form-input"
+                  placeholder="e.g. yellowing leaves, spots, wilting — or leave blank for unknown / not sure">
+                <p class="text-xs text-gray-400 mt-0.5" data-i18n="obs.symptomHint">
+                  Leave blank to record as "unknown / not sure" — you are not required to name a specific pest or disease.
+                </p>
+              </div>
+
+              <div>
+                <label for="obs-plant-part" class="form-label" data-i18n="obs.field.plantPart">Plant Part Observed</label>
+                <input id="obs-plant-part" type="text" maxlength="100" class="form-input"
+                  placeholder="e.g. leaves, fruit, stem, roots">
+              </div>
+              <div>
+                <label for="obs-spread" class="form-label" data-i18n="obs.field.spreadPattern">Spread Pattern</label>
+                <input id="obs-spread" type="text" maxlength="200" class="form-input"
+                  placeholder="e.g. scattered, one corner, entire row">
+              </div>
+
+              <div>
+                <label for="obs-trees-sampled" class="form-label" data-i18n="obs.field.treesSampled">Trees Sampled</label>
+                <input id="obs-trees-sampled" type="number" min="1" step="1" class="form-input">
+              </div>
+              <div>
+                <label for="obs-trees-affected" class="form-label" data-i18n="obs.field.treesAffected">Trees Affected</label>
+                <input id="obs-trees-affected" type="number" min="0" step="1" class="form-input">
+              </div>
+
+              <div class="sm:col-span-2">
+                <label for="obs-weather-notes" class="form-label" data-i18n="obs.field.weatherNotes">Recent Weather Notes</label>
+                <textarea id="obs-weather-notes" rows="2" class="form-input"
+                  placeholder="e.g. heavy rain for 3 days, dry spell, high humidity"></textarea>
+              </div>
+              <div class="sm:col-span-2">
+                <label for="obs-input-notes" class="form-label" data-i18n="obs.field.inputNotes">Recent Input / Operation Notes</label>
+                <textarea id="obs-input-notes" rows="2" class="form-input"
+                  placeholder="e.g. applied fertilizer 5 days ago, pruned last week"></textarea>
+              </div>
+              <div>
+                <label for="obs-observer" class="form-label" data-i18n="obs.field.observer">Observer Name</label>
+                <input id="obs-observer" type="text" maxlength="100" class="form-input">
+              </div>
+            </div>
+
+            <!-- Photo upload -->
+            <div>
+              <label class="form-label" data-i18n="obs.field.photo">Photo (optional)</label>
+              <label class="photo-upload-label" for="obs-photo">
+                <i class="fa-solid fa-camera text-lg"></i>
+                <span id="obs-photo-label" data-i18n="obs.choosePhoto">Choose photo</span>
+              </label>
+              <input id="obs-photo" type="file" accept="image/jpeg,image/png,image/webp" class="sr-only">
+              <img id="obs-photo-preview" class="hidden mt-2 rounded-xl border border-gray-200 w-full max-h-48 object-contain" alt="Photo preview">
+              <p class="text-xs text-gray-400 mt-0.5" data-i18n="obs.photoHint">
+                JPEG, PNG, or WebP · Max 10 MB · GPS metadata is stripped automatically
+              </p>
+            </div>
+
+            <!-- AI disclaimer (always shown when photo is attached) -->
+            <div class="bg-amber-50 border border-amber-200 rounded-xl px-3 py-2.5">
+              <p class="text-xs font-bold text-amber-800" data-i18n="obs.aiDisclaimer">
+                ⚠️ Any AI analysis is labelled "Preliminary observation — not a diagnosis".
+              </p>
+              <p class="text-xs text-amber-700 mt-0.5" data-i18n="obs.aiDisclaimerBody">
+                If symptoms are severe or spreading rapidly, consult your local KVK, agronomist, or official lab.
+              </p>
+            </div>
+
+            <p id="obs-form-error" class="hidden text-red-600 text-sm" role="alert"></p>
+
+            <div class="flex gap-2 mt-1">
+              <button id="btn-save-obs" type="submit"
+                class="flex-1 h-11 bg-brand-primary text-white font-bold rounded-xl hover:bg-brand-secondary transition"
+                data-i18n="obs.saveObservation">
+                Save Observation
+              </button>
+              <button id="btn-cancel-obs-form" type="button"
+                class="px-4 h-11 text-sm text-gray-500 border border-gray-300 rounded-xl hover:bg-gray-50 transition"
+                data-i18n="form.cancel">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div id="obs-loading" class="hidden loading-overlay">
+        <span class="loading-spinner loading-spinner--sm"></span>
+        <span data-i18n="loading.observations">Loading observations…</span>
+      </div>
+
+      <!-- Empty state -->
+      <div id="obs-list-empty" class="hidden">
+        <div class="empty-state">
+          <div class="empty-state__icon">🔍</div>
+          <p class="empty-state__title" data-i18n="empty.noObservations.title">No observations yet</p>
+          <p class="empty-state__body" data-i18n="empty.noObservations.body">
+            Record crop health observations — symptoms, affected plants, and photos — to build a structured health log.
+          </p>
+        </div>
+      </div>
+
+      <!-- Observation cards -->
+      <div id="obs-list" class="flex flex-col gap-4"></div>
+    </div>
+
+  </main>
+
+  <!-- ════════════════ BOTTOM NAV ════════════════ -->
+  <nav class="bottom-nav bg-brand-primary border-t border-emerald-800/50" aria-label="Primary navigation">
+    <div class="flex">
+      <a href="plan.html" class="bottom-nav-item">
+        <i class="fa-solid fa-chart-pie"></i>
+        <span data-i18n="nav.today">Today</span>
+      </a>
+      <a href="farm.html" class="bottom-nav-item active" aria-current="page">
+        <i class="fa-solid fa-tractor"></i>
+        <span data-i18n="nav.myFarm">My Farm</span>
+      </a>
+      <a href="tasks.html" class="bottom-nav-item">
+        <i class="fa-solid fa-list-check"></i>
+        <span data-i18n="nav.tasks">Tasks</span>
+      </a>
+      <a href="plan.html#panel-insights" class="bottom-nav-item">
+        <i class="fa-solid fa-ellipsis"></i>
+        <span data-i18n="nav.more">More</span>
+      </a>
+    </div>
+  </nav>
+
+  <script type="module" src="js/observations.js"></script>
+</body>
+</html>

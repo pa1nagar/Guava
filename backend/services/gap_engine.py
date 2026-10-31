@@ -13,9 +13,17 @@ A gap is flagged as "behind" when:
 One stage dose is one week's reference dose × plant_count (for fertilizer)
 or one day's reference dose × plant_count (for irrigation).
 
+plant_count sourcing (Requirement 1.8):
+  The caller now passes `plant_count` sourced from the authenticated Farmer's
+  Plot record (the `plots` table), NOT the flat `farmers` profile and NOT a
+  hard-coded farm constant. The engine must NEVER fall back to a hard-coded
+  default such as 2,100 trees — if no Plot is available the caller falls back
+  to the farmer profile's plant_count. The engine itself is agnostic: it
+  simply consumes whatever `plant_count` it is given.
+
 Public API
 ----------
-compute_gaps(stages, current_stage_idx, plant_count, activities) -> list[GapResult]
+compute_gaps(stages, months_elapsed, plant_count, activities) -> list[GapResult]
 """
 
 from __future__ import annotations
@@ -119,8 +127,13 @@ def compute_gaps(
     ----------
     stages          All stage dicts from crop_knowledge for this crop.
     months_elapsed  Current complete months since sowing.
-    plant_count     Farmer's plant count.
-    activities      All farm_activity records for this farmer.
+    plant_count     Number of plants. This MUST be sourced from the
+                    authenticated Farmer's Plot record (``plots`` table) by
+                    the caller — not from a hard-coded default such as 2,100
+                    trees (Requirement 1.8). When no plot_id is supplied the
+                    caller falls back to ``farmers.plant_count``.
+    activities      All farm_activity records for this farmer (optionally
+                    filtered to the plot when a plot_id is in scope).
 
     Returns
     -------

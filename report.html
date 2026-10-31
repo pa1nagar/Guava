@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Guava Care — Crop Report</title>
+  <meta name="robots" content="noindex, nofollow">
+  <title>Smart Farmer — Crop Report</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -27,6 +28,7 @@
     .spin { animation: spin 0.9s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
   </style>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="min-h-screen bg-brand-bg">
 
@@ -99,8 +101,24 @@
     <!-- Cost breakdown -->
     <section>
       <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Cost Breakdown</h2>
+      <!-- Loading indicator for this section -->
+      <div id="cost-breakdown-loading" class="hidden loading-overlay">
+        <span class="loading-spinner loading-spinner--sm"></span>
+        <span data-i18n="loading.costs">Loading costs…</span>
+      </div>
       <div id="cost-breakdown" class="bg-white rounded-xl border border-gray-200 divide-y divide-gray-100">
         <!-- Rows injected by JS -->
+      </div>
+      <!-- Empty state: no expenses yet -->
+      <div id="cost-breakdown-empty" class="hidden">
+        <div class="empty-state">
+          <div class="empty-state__icon">💰</div>
+          <p class="empty-state__title" data-i18n="empty.noExpenses.title">No expenses recorded yet</p>
+          <p class="empty-state__body" data-i18n="empty.noExpenses.body">
+            Log activities with a cost on the My Farm page to see a breakdown here.
+          </p>
+          <a href="plan.html" class="empty-state__action" data-i18n="empty.noExpenses.cta">Go to My Farm →</a>
+        </div>
       </div>
     </section>
 
@@ -113,6 +131,17 @@
       <p id="no-activities" class="hidden text-sm text-gray-400 text-center py-4">
         No activities logged yet.
       </p>
+      <!-- Rich empty state: no harvest recorded -->
+      <div id="no-harvest-empty" class="hidden mt-4">
+        <div class="empty-state">
+          <div class="empty-state__icon">🍈</div>
+          <p class="empty-state__title" data-i18n="empty.noHarvest.title">No harvest recorded yet</p>
+          <p class="empty-state__body" data-i18n="empty.noHarvest.body">
+            Once you record a harvest and sale on the My Farm page, revenue, profit/loss, and break-even price will appear here.
+          </p>
+          <a href="plan.html" class="empty-state__action" data-i18n="empty.noHarvest.cta">Record harvest →</a>
+        </div>
+      </div>
     </section>
 
   </main>

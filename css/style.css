@@ -1,7 +1,143 @@
 /* ============================================================
    Guava Dashboard – custom stylesheet
-   Tasks 3.1 – 3.8
+   Tasks 3.1 – 3.8, 18 (empty states, loading indicators, offline fallback)
    ============================================================ */
+
+/* ── Task 18: Loading spinner ──────────────────────────────────────────────── */
+/* Component-level spinner used during data fetches (toggled via JS) */
+.loading-spinner {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 3px solid #4A7C59;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: loading-spin 0.85s linear infinite;
+  flex-shrink: 0;
+}
+.loading-spinner--sm {
+  width: 1rem;
+  height: 1rem;
+  border-width: 2px;
+}
+.loading-spinner--lg {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-width: 4px;
+}
+@keyframes loading-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Wrapper that shows the spinner centred inside a container */
+.loading-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 2rem 1rem;
+  color: #6B7280;
+  font-size: 0.875rem;
+}
+
+/* ── Task 18: Empty state blocks ───────────────────────────────────────────── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  border: 2px dashed #D1FAE5;
+  border-radius: 1rem;
+  background: #F9FDF9;
+  color: #6B7280;
+}
+.empty-state__icon {
+  font-size: 2.5rem;
+  line-height: 1;
+}
+.empty-state__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1E3A2B;
+  margin: 0;
+}
+.empty-state__body {
+  font-size: 0.875rem;
+  color: #6B7280;
+  max-width: 22rem;
+  line-height: 1.5;
+  margin: 0;
+}
+.empty-state__action {
+  margin-top: 0.25rem;
+  display: inline-block;
+  padding: 0.5rem 1.25rem;
+  background: #1E3A2B;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+  text-decoration: none;
+}
+.empty-state__action:hover {
+  background: #4A7C59;
+}
+
+/* ── Task 18: Staleness / offline banner ───────────────────────────────────── */
+.stale-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.625rem 1rem;
+  background: #FFFBEB;
+  border: 1px solid #FCD34D;
+  border-radius: 0.75rem;
+  font-size: 0.8125rem;
+  color: #92400E;
+  margin-bottom: 0.75rem;
+}
+.stale-banner__text {
+  flex: 1;
+}
+.stale-banner__retry {
+  flex-shrink: 0;
+  padding: 0.375rem 0.875rem;
+  background: #92400E;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.stale-banner__retry:hover {
+  background: #78350F;
+}
+
+/* ── Task 18: Responsive overflow guards ───────────────────────────────────── */
+/* Prevent any element from causing horizontal scroll on narrow viewports */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+img, video, iframe, table {
+  max-width: 100%;
+}
+/* Ensure flex/grid children don't overflow */
+@media (max-width: 375px) {
+  .farm-nav-btn {
+    font-size: 11px;
+    padding: 10px 10px;
+  }
+}
 
 /* 3.8 – Body */
 body {

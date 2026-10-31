@@ -78,7 +78,16 @@ export async function signInWithGoogle() {
 
 /** Signs out and redirects to login.html. */
 export async function signOut() {
+  // Revoke the server-side Supabase session (invalidates the JWT immediately).
   await supabase.auth.signOut();
+
+  // Clear any cached plan data stored by api.js helpers (sf_plan_cache, etc.)
+  // and any other Smart Farmer session keys so the next user gets a clean state.
+  const sfKeys = Object.keys(sessionStorage).filter(
+    (k) => k.startsWith("sf_plan") || k.startsWith("sf_")
+  );
+  sfKeys.forEach((k) => sessionStorage.removeItem(k));
+
   window.location.href = "login.html";
 }
 
@@ -87,13 +96,25 @@ export async function signOut() {
 /**
  * Call on DOMContentLoaded on every protected page.
  *
- * currentPage: 'login' | 'onboarding' | 'plan' | 'report'
+ * currentPage: 'login' | 'onboarding' | 'plan' | 'report' | 'farm' | 'tasks'
+ *
+ * Protected pages ('onboarding', 'plan', 'report', 'farm', 'tasks') redirect
+ * unauthenticated visitors to login.html (Requirement 2.6).
  */
 export async function routeGuard(currentPage) {
   const session = await getSession();
 
+  // Pages that require authentication
+  const PROTECTED_PAGES = new Set([
+    "onboarding",
+    "plan",
+    "report",
+    "farm",
+    "tasks",
+  ]);
+
   if (!session) {
-    if (currentPage !== "login") {
+    if (PROTECTED_PAGES.has(currentPage)) {
       window.location.href = "login.html";
     }
     return;
@@ -115,5 +136,5 @@ export async function routeGuard(currentPage) {
       // Network failure — stay on login page
     }
   }
-  // 'onboarding', 'plan', 'report' → always allow
+  // All other protected pages → allow through (session already confirmed above)
 }

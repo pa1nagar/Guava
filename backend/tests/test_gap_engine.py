@@ -110,3 +110,43 @@ class TestComputeGaps:
         fert = next(g for g in gaps if g.activity_type == "Fertilizer")
         # One month of s1: 5 gpw/plant × 4.33 weeks = 21.65g = ~0.022 kg
         assert fert.expected_kg_or_litres == pytest.approx(5 * 4.33 / 1000, abs=0.01)
+
+
+# ── No hard-coded default plant count (Requirement 1.8 / 18.4) ────────────────
+
+class TestNoHardcodedTreeCount:
+    """The gap engine must never rely on a hard-coded plant-count default.
+
+    Requirement 1.8: every farm-specific value (including tree count) must be
+    derived from the authenticated Farmer's Plot record. Requirement 18.4:
+    the Gap_Engine unit tests must cover the absence of any hard-coded
+    2,100-tree constant.
+    """
+
+    def test_no_2100_constant_in_gap_engine_source(self):
+        """The literal 2100 must not appear anywhere in gap_engine.py.
+
+        This catches both a hard-coded default assignment and any constant
+        that would silently substitute for the caller-supplied plant_count.
+        """
+        import services.gap_engine as gap_mod
+        source = open(gap_mod.__file__, encoding="utf-8").read()
+        assert "2100" not in source, (
+            "gap_engine.py must not contain a hard-coded 2100-tree constant "
+            "(Requirement 1.8)."
+        )
+
+    def test_compute_gaps_uses_supplied_plant_count(self):
+        """Doubling plant_count must roughly double expected cumulative totals.
+
+        This proves the engine consumes the caller-supplied plant_count rather
+        than substituting a fixed default — a behavioural guard against the
+        2,100-tree regression.
+        """
+        gaps_a = compute_gaps(SIMPLE_STAGES, months_elapsed=4, plant_count=100, activities=[])
+        gaps_b = compute_gaps(SIMPLE_STAGES, months_elapsed=4, plant_count=200, activities=[])
+        fert_a = next(g for g in gaps_a if g.activity_type == "Fertilizer")
+        fert_b = next(g for g in gaps_b if g.activity_type == "Fertilizer")
+        assert fert_b.expected_kg_or_litres == pytest.approx(
+            fert_a.expected_kg_or_litres * 2, rel=0.01
+        )

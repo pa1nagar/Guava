@@ -6,8 +6,9 @@
  * No hardcoded values.
  */
 
-import { routeGuard, getJwt, signOut, supabase } from "./auth.js";
-import { API_BASE_URL } from "./config.js";
+import { routeGuard, signOut, supabase } from "./auth.js";
+import { apiFetch, showError, loadCached, saveCache } from "./api.js";
+import { initAiChat } from "./ai-chat.js";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -114,6 +115,19 @@ let _hasBehind  = false;
 let _toastTimer = null;
 let _simTotalCost = 0;
 
+// ── sessionStorage cache helpers (Req 17.3) ───────────────────────────────────
+// Use api.js exports: saveCache(key, data) / loadCached(key)
+// Local wrapper that bundles plan+profile under a single timestamp entry.
+const CACHE_KEY = "sf_plan_cache";
+
+function _savePlanCache(plan, profile) {
+  saveCache(CACHE_KEY, { ts: Date.now(), plan, profile });
+}
+
+function _loadPlanCache() {
+  return loadCached(CACHE_KEY); // returns { ts, plan, profile } or null
+}
+
 // ── Utilities ─────────────────────────────────────────────────────────────────
 
 function fmtINR(n) {
@@ -147,26 +161,6 @@ function showToast(msg, ms = 2500) {
     toastEl.style.opacity = "0";
     toastEl.classList.add("pointer-events-none");
   }, ms);
-}
-
-async function apiFetch(path, opts = {}) {
-  const jwt = await getJwt();
-  // 45-second timeout — handles Render free-tier cold starts (typically 30-60s)
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 45000);
-  try {
-    return await fetch(`${API_BASE_URL}${path}`, {
-      ...opts,
-      signal: controller.signal,
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${jwt}`,
-        ...(opts.headers || {}),
-      },
-    });
-  } finally {
-    clearTimeout(timer);
-  }
 }
 
 // ── Panel switching ───────────────────────────────────────────────────────────
@@ -385,27 +379,36 @@ function renderTasks(plan) {
   tasksStageBadge.textContent = `🌱 ${plan.stage_label} — Month ${plan.months_elapsed}`;
   taskList.innerHTML = "";
 
-  for (const task of (plan.tasks || [])) {
-    const icon  = CAT_ICON[task.category]  || "📋";
-    const label = CAT_LABEL[task.category] || task.category;
-    const accentClass = `task-card-${task.category}`;
+  const taskEmptyEl = document.getElementById("task-list-empty");
 
-    const card = document.createElement("div");
-    card.className = `bg-white rounded-xl border border-gray-200 p-4 shadow-sm ${accentClass}`;
-    card.innerHTML = `
-      <div class="flex items-center gap-2 mb-2">
-        <span class="text-lg">${icon}</span>
-        <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">${label}</span>
-      </div>
-      <p class="text-sm font-semibold text-brand-dark mb-1">${task.title}</p>
-      ${task.quantity != null ? `
-        <div class="inline-flex items-center gap-1.5 bg-gray-50 rounded-lg px-2.5 py-1 mb-2">
-          <span class="text-base font-extrabold text-brand-dark">${task.quantity}</span>
-          <span class="text-xs text-brand-muted">${task.unit || ""}</span>
-        </div>` : ""}
-      <p class="text-sm text-gray-600 leading-relaxed">${task.description}</p>
-    `;
-    taskList.appendChild(card);
+  const tasks = plan.tasks || [];
+  if (tasks.length === 0) {
+    // Req 17.1 — show empty state instead of blank panel
+    if (taskEmptyEl) taskEmptyEl.classList.remove("hidden");
+  } else {
+    if (taskEmptyEl) taskEmptyEl.classList.add("hidden");
+    for (const task of tasks) {
+      const icon  = CAT_ICON[task.category]  || "📋";
+      const label = CAT_LABEL[task.category] || task.category;
+      const accentClass = `task-card-${task.category}`;
+
+      const card = document.createElement("div");
+      card.className = `bg-white rounded-xl border border-gray-200 p-4 shadow-sm ${accentClass}`;
+      card.innerHTML = `
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-lg">${icon}</span>
+          <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">${label}</span>
+        </div>
+        <p class="text-sm font-semibold text-brand-dark mb-1">${task.title}</p>
+        ${task.quantity != null ? `
+          <div class="inline-flex items-center gap-1.5 bg-gray-50 rounded-lg px-2.5 py-1 mb-2">
+            <span class="text-base font-extrabold text-brand-dark">${task.quantity}</span>
+            <span class="text-xs text-brand-muted">${task.unit || ""}</span>
+          </div>` : ""}
+        <p class="text-sm text-gray-600 leading-relaxed">${task.description}</p>
+      `;
+      taskList.appendChild(card);
+    }
   }
 
   taskNotes.innerHTML = "";
@@ -512,14 +515,23 @@ function preFillFromPlan(plan) {
 // ── Recent activities ─────────────────────────────────────────────────────────
 
 async function loadRecentActivities() {
+  const recentLoadingEl = document.getElementById("recent-activities-loading");
+  const recentEmptyEl   = document.getElementById("recent-activities-empty");
+
+  // Show spinner (Req 17.5)
+  if (recentLoadingEl) recentLoadingEl.classList.remove("hidden");
+  if (recentEmptyEl)   recentEmptyEl.classList.add("hidden");
+  recentActEl.innerHTML = "";
+
   try {
     const res = await apiFetch("/api/farmers/me/activities");
+    if (recentLoadingEl) recentLoadingEl.classList.add("hidden");
     if (!res.ok) return;
     const activities = await res.json();
-    recentActEl.innerHTML = "";
     const recent = [...activities].reverse().slice(0, 5);
     if (recent.length === 0) {
-      recentActEl.innerHTML = `<p class="text-sm text-gray-400">No entries yet.</p>`;
+      // Req 17.1 — show friendly empty state
+      if (recentEmptyEl) recentEmptyEl.classList.remove("hidden");
       return;
     }
     for (const a of recent) {
@@ -534,7 +546,10 @@ async function loadRecentActivities() {
       `;
       recentActEl.appendChild(el);
     }
-  } catch { /* non-critical */ }
+  } catch {
+    if (recentLoadingEl) recentLoadingEl.classList.add("hidden");
+    /* non-critical — empty state already visible */
+  }
 }
 
 // ── Log form submit ───────────────────────────────────────────────────────────
@@ -697,6 +712,12 @@ async function refreshVendors() {
 
 // ── Bootstrap ─────────────────────────────────────────────────────────────────
 
+// Exposed so the stale-banner Retry button can call it (Req 17.3)
+window._retryLoad = function() {
+  try { sessionStorage.removeItem(CACHE_KEY); } catch { /* ignore */ }
+  location.reload();
+};
+
 document.addEventListener("DOMContentLoaded", async () => {
   await routeGuard("plan");
 
@@ -712,6 +733,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     displayName = session?.user?.user_metadata?.full_name || "";
   } catch { /* non-critical */ }
 
+  // Refs for new empty/no-farm elements
+  const pageNoFarm  = document.getElementById("page-no-farm");
+  const staleBanner = document.getElementById("stale-banner");
+
   try {
     // ── Step 1: Load critical data first (plan + profile) ──────────────────
     // Show the page as soon as these two respond — don't wait for spending/gaps
@@ -725,12 +750,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     ]);
 
     if (planRes.status === 404 || profileRes.status === 404) {
-      window.location.href = "onboarding.html"; return;
+      // Req 17.1 — no farm yet: show friendly empty state, not a redirect
+      clearTimeout(coldStartTimer);
+      pageLoading.classList.add("hidden");
+      if (pageNoFarm) {
+        pageNoFarm.classList.remove("hidden");
+      } else {
+        window.location.href = "onboarding.html";
+      }
+      return;
     }
     if (!planRes.ok || !profileRes.ok) throw new Error("Load failed");
 
     _plan    = await planRes.json();
     _profile = await profileRes.json();
+
+    // Cache successful load for offline fallback (Req 17.3)
+    _savePlanCache(_plan, _profile);
 
     if (loadingMsg) loadingMsg.textContent = "Building your dashboard…";
 
@@ -794,6 +830,30 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   } catch (err) {
     clearTimeout(coldStartTimer);
+
+    // Req 17.3 — if page hasn't loaded yet try to show cached data
+    const cached = _loadPlanCache();
+    if (cached && !pageContent.classList.contains("hidden") === false) {
+      // We haven't rendered anything yet — use cache
+      _plan    = cached.plan;
+      _profile = cached.profile;
+
+      buildTypePills(["Fertilizer","Irrigation","Pesticide","Labour","Other"]);
+      preFillFromPlan(_plan);
+      renderHeader(_profile, _plan, displayName);
+      renderKPIs(_profile, _plan, { total_cost: 0, by_type: {} }, null);
+      renderSummary(_plan);
+      renderTasks(_plan);
+      renderRoadmap(_plan);
+
+      pageLoading.classList.add("hidden");
+      pageContent.classList.remove("hidden");
+
+      // Show stale-data banner with Retry button (Req 17.3)
+      if (staleBanner) staleBanner.classList.remove("hidden");
+      return;
+    }
+
     // Only show error if page hasn't loaded yet
     if (!pageContent.classList.contains("hidden")) return; // already showing — silent fail
     pageLoading.classList.add("hidden");
@@ -1045,6 +1105,7 @@ function renderFutureStages(stages) {
 
 // Load insights when panel is first activated
 let _insightsLoaded = false;
+let _aiChatReady    = false;
 
 const _origSwitchPanel = window.switchPanel;
 window.switchPanel = function(id) {
@@ -1052,6 +1113,11 @@ window.switchPanel = function(id) {
   if (id === "panel-insights" && !_insightsLoaded) {
     _insightsLoaded = true;
     loadInsights();
+  }
+  if (id === "panel-ai" && !_aiChatReady) {
+    _aiChatReady = true;
+    const container = document.getElementById("ai-chat-container");
+    if (container) initAiChat(container);
   }
 };
 

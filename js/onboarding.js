@@ -10,9 +10,9 @@
  *  - Redirect to plan.html on success
  */
 
-import { routeGuard, getJwt } from "./auth.js";
+import { routeGuard } from "./auth.js";
+import { apiFetch } from "./api.js";
 import { getStates, getDistricts } from "./india-locations.js";
-import { API_BASE_URL } from "./config.js";
 
 // ── DOM refs ──────────────────────────────────────────────────────────────────
 const form          = document.getElementById("onboarding-form");
@@ -128,8 +128,6 @@ form.addEventListener("submit", async (e) => {
 
   // ── POST to backend ───────────────────────────────────────────────────────
   try {
-    const jwt = await getJwt();
-
     // Parse optional expected yield.
     let expectedYieldKg = null;
     if (yieldEl && yieldEl.value.trim() !== "") {
@@ -155,21 +153,22 @@ form.addEventListener("submit", async (e) => {
       expected_yield_kg: expectedYieldKg,
     };
 
-    const res = await fetch(`${API_BASE_URL}/api/profile`, {
+    const res = await apiFetch("/api/profile", {
       method:  "POST",
-      headers: {
-        "Content-Type":  "application/json",
-        "Authorization": `Bearer ${jwt}`,
-      },
       body: JSON.stringify(payload),
     });
 
     if (res.ok) {
+      // Clear any saved draft on success
+      sessionStorage.removeItem("sf_onboarding_draft");
       window.location.href = "plan.html";
       return;
     }
 
     // Handle error responses.
+    // Req 17.3: field values are preserved automatically — we never clear them
+    // on a failed submission, so the farmer can correct and retry without
+    // re-entering everything.
     let detail = "Something went wrong. Please try again.";
     try {
       const data = await res.json();

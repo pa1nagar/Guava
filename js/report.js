@@ -3,31 +3,36 @@
  *
  * Fetches GET /api/farmers/me/report and renders:
  *  - Financial summary (total cost, revenue, profit/loss, break-even)
- *  - Cost breakdown by activity type
- *  - Activity history (chronological)
+ *  - Cost breakdown by activity type  (Req 17.1: empty state when none)
+ *  - Activity history (chronological) (Req 17.1: empty state when none)
  *  - Incomplete-stage warning when stages have no logged activities
+ *  - No-harvest empty state           (Req 17.1)
+ *  - Section-level loading indicator  (Req 17.5)
  */
 
-import { routeGuard, getJwt, signOut } from "./auth.js";
+import { routeGuard, getJwt } from "./auth.js";
 import { API_BASE_URL } from "./config.js";
 
 // ── DOM refs ──────────────────────────────────────────────────────────────────
-const loadingEl       = document.getElementById("report-loading");
-const errorEl         = document.getElementById("report-error");
-const contentEl       = document.getElementById("report-content");
-const cropEl          = document.getElementById("report-crop");
-const metaEl          = document.getElementById("report-meta");
-const incompleteWarnEl= document.getElementById("incomplete-warning");
-const incompleteListEl= document.getElementById("incomplete-list");
-const fsTotalCostEl   = document.getElementById("fs-total-cost");
-const fsRevenueEl     = document.getElementById("fs-revenue");
-const fsRevenueNoteEl = document.getElementById("fs-revenue-note");
-const fsPolEl         = document.getElementById("fs-pol");
-const fsBepEl         = document.getElementById("fs-bep");
-const fsBepNoteEl     = document.getElementById("fs-bep-note");
-const costBreakdownEl = document.getElementById("cost-breakdown");
-const actHistoryEl    = document.getElementById("activity-history");
-const noActivitiesEl  = document.getElementById("no-activities");
+const loadingEl            = document.getElementById("report-loading");
+const errorEl              = document.getElementById("report-error");
+const contentEl            = document.getElementById("report-content");
+const cropEl               = document.getElementById("report-crop");
+const metaEl               = document.getElementById("report-meta");
+const incompleteWarnEl     = document.getElementById("incomplete-warning");
+const incompleteListEl     = document.getElementById("incomplete-list");
+const fsTotalCostEl        = document.getElementById("fs-total-cost");
+const fsRevenueEl          = document.getElementById("fs-revenue");
+const fsRevenueNoteEl      = document.getElementById("fs-revenue-note");
+const fsPolEl              = document.getElementById("fs-pol");
+const fsBepEl              = document.getElementById("fs-bep");
+const fsBepNoteEl          = document.getElementById("fs-bep-note");
+const costBreakdownEl      = document.getElementById("cost-breakdown");
+const costBreakdownLoading = document.getElementById("cost-breakdown-loading");
+const costBreakdownEmpty   = document.getElementById("cost-breakdown-empty");
+const actHistoryEl         = document.getElementById("activity-history");
+const noActivitiesEl       = document.getElementById("no-activities");
+const noHarvestEmptyEl     = document.getElementById("no-harvest-empty");
 
 // ── Utilities ─────────────────────────────────────────────────────────────────
 
@@ -85,7 +90,6 @@ function renderReport(r) {
 
   if (r.profit_or_loss != null) {
     const isProfit = r.profit_or_loss >= 0;
-    fsPolEl.textContent = fmt(Math.abs(r.profit_or_loss));
     fsPolEl.className = `text-xl font-bold ${isProfit ? "text-green-600" : "text-red-600"}`;
     fsPolEl.textContent = (isProfit ? "+" : "−") + fmt(Math.abs(r.profit_or_loss));
   } else {
@@ -102,18 +106,22 @@ function renderReport(r) {
     }
   }
 
-  // Cost breakdown
+  // ── Cost breakdown ──────────────────────────────────────────────────────
+  // Hide the loading indicator if it was ever shown
+  if (costBreakdownLoading) costBreakdownLoading.classList.add("hidden");
+
   costBreakdownEl.innerHTML = "";
   const byType = r.cost_by_type || {};
   const types = Object.keys(byType);
 
   if (types.length === 0) {
-    const row = document.createElement("div");
-    row.className = "px-4 py-3 text-sm text-gray-400";
-    row.textContent = "No costs logged yet.";
-    costBreakdownEl.appendChild(row);
+    // Show friendly empty state (Req 17.1)
+    costBreakdownEl.classList.add("hidden");
+    if (costBreakdownEmpty) costBreakdownEmpty.classList.remove("hidden");
   } else {
-    // Sort by cost descending.
+    costBreakdownEl.classList.remove("hidden");
+    if (costBreakdownEmpty) costBreakdownEmpty.classList.add("hidden");
+
     const sorted = types.sort((a, b) => byType[b] - byType[a]);
     for (const type of sorted) {
       const row = document.createElement("div");
@@ -124,7 +132,6 @@ function renderReport(r) {
       `;
       costBreakdownEl.appendChild(row);
     }
-    // Total row
     const totalRow = document.createElement("div");
     totalRow.className =
       "flex items-center justify-between px-4 py-3 bg-gray-50 rounded-b-xl";
@@ -135,7 +142,7 @@ function renderReport(r) {
     costBreakdownEl.appendChild(totalRow);
   }
 
-  // Activity history
+  // ── Activity history ────────────────────────────────────────────────────
   actHistoryEl.innerHTML = "";
   const history = r.activity_history || [];
   if (history.length === 0) {
@@ -158,6 +165,17 @@ function renderReport(r) {
         </div>
       `;
       actHistoryEl.appendChild(card);
+    }
+  }
+
+  // ── No-harvest empty state (Req 17.1) ───────────────────────────────────
+  // Show when there are no activities AND no harvest recorded, so a brand-new
+  // user understands what this page is for rather than seeing a blank page.
+  if (noHarvestEmptyEl) {
+    if (history.length === 0 && !r.has_harvest) {
+      noHarvestEmptyEl.classList.remove("hidden");
+    } else {
+      noHarvestEmptyEl.classList.add("hidden");
     }
   }
 }
@@ -186,6 +204,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   } catch (err) {
     loadingEl.classList.add("hidden");
+    // Req 17.2: show a friendly message, no stack traces or internal detail
     errorEl.textContent = "Could not load report. Please check your connection and try again.";
     errorEl.classList.remove("hidden");
   }

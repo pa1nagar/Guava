@@ -1,0 +1,9 @@
+# robots.txt — Smart Farmer
+# Private farmer data pages must not be indexed by search engines.
+# Requirement 2.6
+
+User-agent: *
+Disallow: /plan.html
+Disallow: /report.html
+Disallow: /farm.html
+Disallow: /onboarding.html

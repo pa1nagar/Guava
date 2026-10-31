@@ -8,6 +8,13 @@ Cache miss → deterministic tasks + Gemini explanation, then persists.
 All quantities come from the backend. Gemini only phrases them.
 """
 
+# ── Multi-tenant isolation ──────────────────────────────────────────────────
+# Security: user_id is always derived from JWT via Depends(get_user_id).
+# It is NEVER read from the request body. All DB queries filter by user_id
+# or farmer_id IN (SELECT id FROM farmers WHERE user_id = <jwt.sub>).
+# IDOR attempts return 404 (not 403) to avoid confirming resource existence.
+# Requirements: 3.2, 3.3, 3.4
+
 import json
 import logging
 from datetime import datetime, timezone, date as date_type

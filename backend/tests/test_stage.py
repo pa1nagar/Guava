@@ -16,7 +16,7 @@ import pytest
 from datetime import date, timedelta
 from fastapi import HTTPException
 
-from services.stage import get_stage, StageResult
+from services.stage import get_stage, compute_crop_age_months, StageResult
 
 
 def _sowing(months_ago: int, days_offset: int = 0) -> date:
@@ -106,3 +106,76 @@ class TestGetStage:
         assert isinstance(sr.stage, dict)
         assert "stage_id" in sr.stage
         assert "label" in sr.stage
+
+
+class TestComputeCropAgeMonths:
+    """Unit tests for the pure compute_crop_age_months function."""
+
+    def test_same_day_is_zero(self):
+        """Planting today → 0 months elapsed."""
+        today = date(2024, 6, 15)
+        assert compute_crop_age_months(today, today) == 0
+
+    def test_one_month_same_day(self):
+        """Exactly one calendar month later, same day-of-month → 1 month."""
+        planting = date(2024, 1, 15)
+        today = date(2024, 2, 15)
+        assert compute_crop_age_months(planting, today) == 1
+
+    def test_partial_month_floors_to_zero(self):
+        """Less than a full month → 0 (floor behaviour)."""
+        planting = date(2024, 1, 15)
+        today = date(2024, 2, 10)  # 26 days later, day < planting day
+        assert compute_crop_age_months(planting, today) == 0
+
+    def test_day_before_planting_day_subtracts_one(self):
+        """If today.day < planting_date.day, subtract one month."""
+        planting = date(2024, 1, 20)
+        today = date(2024, 3, 10)  # Feb→Mar, but day 10 < 20
+        # Raw: (2024-2024)*12 + (3-1) = 2, then -1 because 10 < 20 → 1
+        assert compute_crop_age_months(planting, today) == 1
+
+    def test_exactly_one_year(self):
+        """One year later, same day-of-month → 12 months."""
+        planting = date(2023, 6, 15)
+        today = date(2024, 6, 15)
+        assert compute_crop_age_months(planting, today) == 12
+
+    def test_crosses_year_boundary(self):
+        """Planting in November, checking in February of next year."""
+        planting = date(2023, 11, 20)
+        today = date(2024, 2, 25)  # day 25 >= 20
+        # (2024-2023)*12 + (2-11) = 12 - 9 = 3
+        assert compute_crop_age_months(planting, today) == 3
+
+    def test_crosses_year_boundary_with_floor(self):
+        planting = date(2023, 11, 25)
+        today = date(2024, 2, 20)  # day 20 < 25
+        # (2024-2023)*12 + (2-11) = 3, then -1 → 2
+        assert compute_crop_age_months(planting, today) == 2
+
+    def test_consistent_with_get_stage(self):
+        """compute_crop_age_months and get_stage agree on months_elapsed."""
+        sowing = _sowing(5)
+        sr = get_stage("guava", sowing)
+        assert compute_crop_age_months(sowing, date.today()) == sr.months_elapsed
+
+    def test_default_today_uses_timezone(self):
+        """When today is None, the function resolves today in the given tz."""
+        planting = date.today()
+        # Should not raise; returns 0 for today's planting
+        result = compute_crop_age_months(planting)
+        assert result == 0
+
+    def test_negative_when_today_before_planting(self):
+        """A reference date before planting yields a negative result."""
+        planting = date(2024, 6, 15)
+        today = date(2024, 5, 15)
+        assert compute_crop_age_months(planting, today) == -1
+
+    def test_custom_timezone_string(self):
+        """A custom timezone string is accepted without error."""
+        planting = date(2024, 1, 1)
+        today = date(2024, 7, 1)
+        result = compute_crop_age_months(planting, today, timezone="UTC")
+        assert result == 6

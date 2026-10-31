@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>My Farm — Guavaa</title>
+  <meta name="robots" content="noindex, nofollow">
+  <title>Smart Farmer — My Farm</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -125,6 +126,18 @@
   </button>
 </div>
 
+<!-- ════════════════════ NO FARM (empty state) ═════════════════ -->
+<div id="page-no-farm" class="hidden min-h-screen flex flex-col items-center justify-center gap-4 px-6">
+  <div class="empty-state" style="max-width: 22rem;">
+    <div class="empty-state__icon">🌱</div>
+    <p class="empty-state__title" data-i18n="empty.noFarm.title">No farm set up yet</p>
+    <p class="empty-state__body" data-i18n="empty.noFarm.body">
+      Add your first farm to start tracking activities, calculating irrigation, and monitoring your crops.
+    </p>
+    <a href="onboarding.html" class="empty-state__action" data-i18n="empty.noFarm.cta">Set up my farm →</a>
+  </div>
+</div>
+
 <!-- ════════════════════ DASHBOARD ════════════════════ -->
 <div id="page-content" class="hidden">
 
@@ -187,6 +200,22 @@
         <button class="farm-nav-btn" data-panel="panel-insights" onclick="switchPanel('panel-insights')">
           <i class="fa-solid fa-brain"></i> Insights
         </button>
+        <button class="farm-nav-btn" data-panel="panel-ai" onclick="switchPanel('panel-ai')">
+          <i class="fa-solid fa-robot"></i> Ask AI
+        </button>
+        <!-- P1 nav items: My Farm, Tasks, More -->
+        <a href="farm.html" class="farm-nav-btn">
+          <i class="fa-solid fa-tractor"></i> My Farm
+        </a>
+        <a href="tasks.html" class="farm-nav-btn">
+          <i class="fa-solid fa-calendar-check"></i> Tasks
+        </a>
+        <a href="observations.html" class="farm-nav-btn">
+          <i class="fa-solid fa-eye"></i> Observations
+        </a>
+        <a href="inventory.html" class="farm-nav-btn">
+          <i class="fa-solid fa-boxes-stacked"></i> Inventory
+        </a>
       </div>
     </nav>
   </header>
@@ -196,6 +225,16 @@
 
     <!-- ══ PANEL 1: OVERVIEW ══════════════════════════════════════════════ -->
     <section id="panel-overview" class="farm-panel active">
+
+      <!-- Stale data / offline banner (hidden until network failure) -->
+      <div id="stale-banner" class="hidden stale-banner">
+        <span class="stale-banner__text" data-i18n="banner.stale.text">
+          ⚠️ Showing cached data — you appear to be offline.
+        </span>
+        <button class="stale-banner__retry" onclick="window._retryLoad()" data-i18n="banner.stale.retry">
+          Retry
+        </button>
+      </div>
 
       <!-- KPI strip -->
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
@@ -283,6 +322,17 @@
 
       <div id="task-list" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6"></div>
 
+      <!-- Empty state: no tasks -->
+      <div id="task-list-empty" class="hidden mb-6">
+        <div class="empty-state">
+          <div class="empty-state__icon">📋</div>
+          <p class="empty-state__title" data-i18n="empty.noTasks.title">No tasks for this week</p>
+          <p class="empty-state__body" data-i18n="empty.noTasks.body">
+            Tasks are generated from your crop stage and planting date. Check back when you're closer to a key growth milestone.
+          </p>
+        </div>
+      </div>
+
       <!-- Notes from AI -->
       <div id="task-notes" class="flex flex-col gap-1"></div>
 
@@ -355,8 +405,20 @@
       <!-- Recent entries -->
       <div class="mt-6 max-w-lg">
         <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Recent entries</p>
+        <!-- Loading state (shown while activities fetch) -->
+        <div id="recent-activities-loading" class="hidden loading-overlay">
+          <span class="loading-spinner loading-spinner--sm"></span>
+          <span data-i18n="loading.activities">Loading entries…</span>
+        </div>
         <div id="recent-activities" class="flex flex-col gap-2">
-          <p class="text-sm text-gray-400">No entries yet.</p>
+          <!-- Empty state: no activities yet -->
+          <div id="recent-activities-empty" class="empty-state" style="padding: 2rem 1rem;">
+            <div class="empty-state__icon">📝</div>
+            <p class="empty-state__title" data-i18n="empty.noActivities.title">No entries yet</p>
+            <p class="empty-state__body" data-i18n="empty.noActivities.body">
+              Log your first activity — fertilizer, irrigation, or labour — to start building your farm history.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -553,6 +615,28 @@
 
     </section>
 
+    <!-- ══ PANEL AI: ASK AI ══════════════════════════════════════════════ -->
+    <section id="panel-ai" class="farm-panel">
+
+      <div class="flex items-start gap-3 mb-4">
+        <div>
+          <h2 class="text-xl font-bold text-emerald-900">
+            <i class="fa-solid fa-robot text-emerald-600 mr-1"></i> Ask Smart Farmer AI
+          </h2>
+          <p class="text-sm text-gray-500 mt-1 max-w-xl">
+            The AI assistant answers <strong>low-risk questions</strong> about your farm records,
+            crop stages, and general agronomy. It <strong>cannot</strong> provide pesticide doses,
+            tank mix recommendations, or chemical treatments — please consult your agronomist
+            or local KVK for those.
+          </p>
+        </div>
+      </div>
+
+      <!-- Chat UI is injected here by ai-chat.js -->
+      <div id="ai-chat-container" class="rounded-xl overflow-hidden"></div>
+
+    </section>
+
     <!-- ══ PANEL 5: HARVEST (final stage only) ════════════════════════════ -->
     <section id="panel-harvest" class="farm-panel">
 
@@ -638,6 +722,53 @@
          text-sm font-semibold px-5 py-3 rounded-2xl shadow-xl
          opacity-0 pointer-events-none z-50 flex items-center gap-2">
 </div>
+
+<!-- ════════════════ BOTTOM MOBILE NAV (Requirement 2.7) ════════════════ -->
+<style>
+  .sf-bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 60; display: flex; }
+  .sf-bottom-nav a {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 0.25rem 0.625rem;
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.55);
+    gap: 0.2rem;
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .sf-bottom-nav a:hover { color: #fff; }
+  .sf-bottom-nav a.sf-active { color: #E07A5F; }
+  .sf-bottom-nav a i { font-size: 1.1rem; }
+  /* Push main content above the nav on small screens */
+  @media (max-width: 767px) {
+    body { padding-bottom: 4rem; }
+  }
+  @media (min-width: 768px) {
+    .sf-bottom-nav { display: none; }
+  }
+</style>
+<nav class="sf-bottom-nav bg-brand-primary border-t border-emerald-800/50" aria-label="Primary navigation">
+  <a href="plan.html" class="sf-active" aria-current="page">
+    <i class="fa-solid fa-chart-pie"></i>
+    <span data-i18n="nav.today">Today</span>
+  </a>
+  <a href="farm.html">
+    <i class="fa-solid fa-tractor"></i>
+    <span data-i18n="nav.myFarm">My Farm</span>
+  </a>
+  <a href="tasks.html">
+    <i class="fa-solid fa-list-check"></i>
+    <span data-i18n="nav.tasks">Tasks</span>
+  </a>
+  <a href="plan.html#panel-insights">
+    <i class="fa-solid fa-ellipsis"></i>
+    <span data-i18n="nav.more">More</span>
+  </a>
+</nav>
 
 <script type="module" src="js/plan.js"></script>
 </body>

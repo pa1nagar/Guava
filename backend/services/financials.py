@@ -81,3 +81,19 @@ def break_even_price(
     if total_expenses <= 0:
         return None
     return total_expenses / expected_yield_kg
+
+
+def net_realisation(gross_sales: float, deductions: float) -> float:
+    """Return the net amount realised after deductions.
+
+    net_realisation = gross_sales - deductions
+
+    Deductions include any mandi commission, transport charges, packaging
+    costs, or other post-sale adjustments that reduce what the farmer
+    actually receives.  Both arguments must be >= 0.
+    """
+    if gross_sales < 0:
+        raise ValueError("gross_sales must be >= 0")
+    if deductions < 0:
+        raise ValueError("deductions must be >= 0")
+    return gross_sales - deductions

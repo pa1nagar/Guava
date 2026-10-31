@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title data-i18n="farm.pageTitle">Smart Farmer — My Farms</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              bg:        '#FDFBF7',
+              primary:   '#1E3A2B',
+              secondary: '#4A7C59',
+              accent:    '#E07A5F',
+              dark:      '#2B2D42',
+              muted:     '#6B7280'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    body { background: #FDFBF7; font-family: system-ui, sans-serif; }
+    .spin { animation: _spin 0.85s linear infinite; }
+    @keyframes _spin { to { transform: rotate(360deg); } }
+
+    .section-card {
+      background: #fff;
+      border: 1px solid #E5E7EB;
+      border-radius: 1rem;
+      padding: 1.25rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .form-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #6B7280;
+      margin-bottom: 0.25rem;
+    }
+    .form-input {
+      width: 100%;
+      height: 2.75rem;
+      border-radius: 0.75rem;
+      border: 1px solid #D1D5DB;
+      background: #fff;
+      padding: 0 0.75rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .form-input:focus { border-color: #4A7C59; }
+    textarea.form-input { height: auto; padding: 0.75rem; resize: vertical; }
+
+    /* Bottom mobile nav */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; }
+    .bottom-nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.5rem 0.25rem 0.625rem;
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.55);
+      gap: 0.2rem;
+      cursor: pointer;
+      transition: color 0.15s;
+      text-decoration: none;
+    }
+    .bottom-nav-item:hover, .bottom-nav-item.active { color: #fff; }
+    .bottom-nav-item.active { color: #E07A5F; }
+    .bottom-nav-item i { font-size: 1.1rem; }
+  </style>
+</head>
+<body class="min-h-screen bg-brand-bg pb-20">
+
+  <!-- ════════════════ HEADER ════════════════ -->
+  <header class="bg-brand-primary text-white sticky top-0 z-40 shadow-lg">
+    <div class="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between gap-3">
+      <div>
+        <p class="text-green-200 text-xs font-semibold uppercase tracking-wider" data-i18n="nav.myFarm">My Farm</p>
+        <h1 class="text-base font-bold" data-i18n="farm.heading">Farms &amp; Plots</h1>
+      </div>
+      <button id="btn-signout"
+        class="text-green-300/70 text-xs font-medium hover:text-white transition flex-shrink-0" data-i18n="nav.signOut">
+        Sign out
+      </button>
+    </div>
+  </header>
+
+  <!-- ════════════════ MAIN ════════════════ -->
+  <main class="max-w-3xl mx-auto px-4 py-6 flex flex-col gap-6">
+
+    <!-- ── Farm list ──────────────────────────────────────────────────────── -->
+    <div class="section-card">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="font-bold text-emerald-900 text-lg">
+          <i class="fa-solid fa-house-chimney-crack text-emerald-600 mr-1"></i>
+          <span data-i18n="farm.myFarms">My Farms</span>
+        </h2>
+        <button id="btn-show-farm-form"
+          class="flex items-center gap-1.5 text-sm font-semibold text-brand-secondary border border-brand-secondary px-3 py-1.5 rounded-lg hover:bg-brand-secondary hover:text-white transition">
+          <i class="fa-solid fa-plus"></i>
+          <span data-i18n="farm.addFarm">Add Farm</span>
+        </button>
+      </div>
+
+      <!-- Farm create form (hidden by default) -->
+      <div id="farm-form-wrap" class="hidden mb-5">
+        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+          <h3 class="font-bold text-emerald-900 mb-3 text-sm" data-i18n="farm.newFarm">New Farm</h3>
+          <form id="farm-form" class="flex flex-col gap-3" novalidate>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="farm-name" class="form-label">
+                  <span data-i18n="farm.field.name">Farm Name</span>
+                  <span class="text-red-500">*</span>
+                </label>
+                <input id="farm-name" type="text" maxlength="100" class="form-input"
+                  placeholder="e.g. Sunrise Orchard" required>
+              </div>
+              <div>
+                <label for="farm-village" class="form-label" data-i18n="farm.field.village">Village / Locality</label>
+                <input id="farm-village" type="text" maxlength="100" class="form-input">
+              </div>
+              <div>
+                <label for="farm-district" class="form-label" data-i18n="farm.field.district">District</label>
+                <input id="farm-district" type="text" maxlength="100" class="form-input">
+              </div>
+              <div>
+                <label for="farm-state" class="form-label" data-i18n="farm.field.state">State</label>
+                <input id="farm-state" type="text" maxlength="100" class="form-input">
+              </div>
+              <div>
+                <label for="farm-country" class="form-label" data-i18n="farm.field.country">Country</label>
+                <input id="farm-country" type="text" maxlength="100" class="form-input" value="India">
+              </div>
+              <div class="flex gap-2">
+                <div class="flex-1">
+                  <label for="farm-area" class="form-label" data-i18n="farm.field.area">Area</label>
+                  <input id="farm-area" type="number" min="0" step="any" class="form-input" placeholder="e.g. 2.5">
+                </div>
+                <div style="width:7rem;">
+                  <label for="farm-area-unit" class="form-label" data-i18n="farm.field.areaUnit">Unit</label>
+                  <select id="farm-area-unit" class="form-input">
+                    <option value="acres">acres</option>
+                    <option value="hectares">hectares</option>
+                    <option value="bigha">bigha</option>
+                    <option value="sqm">sq m</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label for="farm-irrigation" class="form-label" data-i18n="farm.field.irrigationMethod">Irrigation Method</label>
+                <input id="farm-irrigation" type="text" maxlength="100" class="form-input" placeholder="e.g. Drip">
+              </div>
+            </div>
+
+            <div>
+              <label for="farm-notes" class="form-label" data-i18n="farm.field.notes">Notes</label>
+              <textarea id="farm-notes" rows="2" class="form-input"
+                placeholder="Soil type, water source, or any other details…"></textarea>
+            </div>
+
+            <p id="farm-form-error" class="hidden text-red-600 text-sm" role="alert"></p>
+
+            <div class="flex gap-2 mt-1">
+              <button id="btn-save-farm" type="submit"
+                class="flex-1 h-11 bg-brand-primary text-white font-bold rounded-xl hover:bg-brand-secondary transition"
+                data-i18n="farm.saveFarm">
+                Save Farm
+              </button>
+              <button id="btn-cancel-farm-form" type="button"
+                class="px-4 h-11 text-sm text-gray-500 border border-gray-300 rounded-xl hover:bg-gray-50 transition"
+                data-i18n="form.cancel">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Loading state -->
+      <div id="farm-list-loading" class="hidden loading-overlay">
+        <span class="loading-spinner loading-spinner--sm"></span>
+        <span data-i18n="loading.farms">Loading farms…</span>
+      </div>
+
+      <!-- Empty state -->
+      <div id="farm-list-empty" class="hidden">
+        <div class="empty-state">
+          <div class="empty-state__icon">🏡</div>
+          <p class="empty-state__title" data-i18n="empty.noFarms.title">No farms added yet</p>
+          <p class="empty-state__body" data-i18n="empty.noFarms.body">
+            Add your first farm to start tracking plots, activities, and crop cycles.
+          </p>
+        </div>
+      </div>
+
+      <!-- Farm cards -->
+      <div id="farm-list" class="hidden flex flex-col gap-3"></div>
+    </div>
+
+    <!-- ── Plots section (shown when a farm is selected) ─────────────────── -->
+    <div id="plots-section" class="hidden section-card">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h2 class="font-bold text-emerald-900 text-lg">
+            <i class="fa-solid fa-layer-group text-emerald-600 mr-1"></i>
+            <span data-i18n="plot.plots">Plots</span>
+          </h2>
+          <p class="text-xs text-gray-500 mt-0.5">
+            <span data-i18n="plot.farm">Farm:</span>
+            <strong id="active-farm-name" class="text-emerald-800 ml-1"></strong>
+          </p>
+        </div>
+        <button id="btn-show-plot-form"
+          class="flex items-center gap-1.5 text-sm font-semibold text-brand-secondary border border-brand-secondary px-3 py-1.5 rounded-lg hover:bg-brand-secondary hover:text-white transition">
+          <i class="fa-solid fa-plus"></i>
+          <span data-i18n="plot.addPlot">Add Plot</span>
+        </button>
+      </div>
+
+      <!-- Plot create form (hidden by default) -->
+      <div id="plot-form-wrap" class="hidden mb-5">
+        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4">
+          <h3 class="font-bold text-emerald-900 mb-3 text-sm" data-i18n="plot.newPlot">New Plot</h3>
+          <form id="plot-form" class="flex flex-col gap-3" novalidate>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label for="plot-name" class="form-label">
+                  <span data-i18n="plot.field.name">Plot Name / Code</span>
+                  <span class="text-red-500">*</span>
+                </label>
+                <input id="plot-name" type="text" maxlength="100" class="form-input"
+                  placeholder="e.g. Block A" required>
+              </div>
+              <div>
+                <label for="plot-crop" class="form-label" data-i18n="plot.field.crop">Crop</label>
+                <input id="plot-crop" type="text" maxlength="100" class="form-input" placeholder="e.g. Guava">
+              </div>
+              <div>
+                <label for="plot-variety" class="form-label" data-i18n="plot.field.variety">Variety</label>
+                <input id="plot-variety" type="text" maxlength="100" class="form-input" placeholder="e.g. Taiwan Pink">
+              </div>
+              <div>
+                <label for="plot-planting-date" class="form-label" data-i18n="plot.field.plantingDate">Planting Date</label>
+                <input id="plot-planting-date" type="date" class="form-input">
+              </div>
+              <div class="flex gap-2">
+                <div class="flex-1">
+                  <label for="plot-area" class="form-label" data-i18n="plot.field.area">Area</label>
+                  <input id="plot-area" type="number" min="0" step="any" class="form-input">
+                </div>
+                <div style="width:7rem;">
+                  <label for="plot-area-unit" class="form-label" data-i18n="plot.field.areaUnit">Unit</label>
+                  <select id="plot-area-unit" class="form-input">
+                    <option value="acres">acres</option>
+                    <option value="hectares">hectares</option>
+                    <option value="bigha">bigha</option>
+                    <option value="sqm">sq m</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label for="plot-plant-count" class="form-label" data-i18n="plot.field.plantCount">Plant / Tree Count</label>
+                <input id="plot-plant-count" type="number" min="1" step="1" class="form-input">
+              </div>
+              <div>
+                <label for="plot-row-spacing" class="form-label" data-i18n="plot.field.rowSpacing">Row Spacing (m)</label>
+                <input id="plot-row-spacing" type="number" min="0" step="any" class="form-input" placeholder="e.g. 3.0">
+              </div>
+              <div>
+                <label for="plot-within-row-spacing" class="form-label" data-i18n="plot.field.withinRowSpacing">Within-Row Spacing (m)</label>
+                <input id="plot-within-row-spacing" type="number" min="0" step="any" class="form-input" placeholder="e.g. 2.0">
+              </div>
+            </div>
+
+            <div>
+              <label for="plot-notes" class="form-label" data-i18n="plot.field.notes">Notes</label>
+              <textarea id="plot-notes" rows="2" class="form-input"
+                placeholder="Soil notes, planting method, or any other details…"></textarea>
+            </div>
+
+            <p id="plot-form-error" class="hidden text-red-600 text-sm" role="alert"></p>
+
+            <div class="flex gap-2 mt-1">
+              <button id="btn-save-plot" type="submit"
+                class="flex-1 h-11 bg-brand-primary text-white font-bold rounded-xl hover:bg-brand-secondary transition"
+                data-i18n="plot.savePlot">
+                Save Plot
+              </button>
+              <button id="btn-cancel-plot-form" type="button"
+                class="px-4 h-11 text-sm text-gray-500 border border-gray-300 rounded-xl hover:bg-gray-50 transition"
+                data-i18n="form.cancel">
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Loading state -->
+      <div id="plot-list-loading" class="hidden loading-overlay">
+        <span class="loading-spinner loading-spinner--sm"></span>
+        <span data-i18n="loading.plots">Loading plots…</span>
+      </div>
+
+      <!-- Empty state -->
+      <div id="plot-list-empty" class="hidden">
+        <div class="empty-state">
+          <div class="empty-state__icon">🌿</div>
+          <p class="empty-state__title" data-i18n="empty.noPlots.title">No plots yet</p>
+          <p class="empty-state__body" data-i18n="empty.noPlots.body">
+            Add a plot to this farm to track crops, activities, and observations.
+          </p>
+        </div>
+      </div>
+
+      <!-- Plot cards -->
+      <div id="plot-list" class="flex flex-col gap-3"></div>
+    </div>
+
+  </main>
+
+  <!-- ════════════════ PLANT COUNT HISTORY MODAL ════════════════ -->
+  <div id="plant-count-history-modal"
+    class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4"
+    role="dialog" aria-modal="true" aria-labelledby="history-modal-title">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-gray-100">
+        <h2 id="history-modal-title" class="font-bold text-emerald-900" data-i18n="plot.plantCountHistory">
+          Plant Count History
+        </h2>
+        <button id="btn-close-history"
+          class="text-gray-400 hover:text-gray-600 text-xl leading-none" aria-label="Close">✕</button>
+      </div>
+      <div id="plant-count-history-list" class="px-5 py-4 max-h-72 overflow-y-auto text-sm"></div>
+    </div>
+  </div>
+
+  <!-- ════════════════ BOTTOM NAV ════════════════ -->
+  <nav class="bottom-nav bg-brand-primary border-t border-emerald-800/50" aria-label="Primary navigation">
+    <div class="flex">
+      <a href="plan.html" class="bottom-nav-item">
+        <i class="fa-solid fa-chart-pie"></i>
+        <span data-i18n="nav.today">Today</span>
+      </a>
+      <a href="farm.html" class="bottom-nav-item active" aria-current="page">
+        <i class="fa-solid fa-tractor"></i>
+        <span data-i18n="nav.myFarm">My Farm</span>
+      </a>
+      <a href="plan.html#panel-tasks" class="bottom-nav-item">
+        <i class="fa-solid fa-list-check"></i>
+        <span data-i18n="nav.tasks">Tasks</span>
+      </a>
+      <a href="plan.html#panel-insights" class="bottom-nav-item">
+        <i class="fa-solid fa-ellipsis"></i>
+        <span data-i18n="nav.more">More</span>
+      </a>
+    </div>
+  </nav>
+
+  <script type="module" src="js/farm.js"></script>
+</body>
+</html>

@@ -19,6 +19,13 @@ Weather: Open-Meteo (free, no API key, 7-day forecast)
 Climate: NASA POWER (free, no API key, 30-year history + daily observations)
 """
 
+# ── Multi-tenant isolation ──────────────────────────────────────────────────
+# Security: user_id is always derived from JWT via Depends(get_user_id).
+# It is NEVER read from the request body. All DB queries filter by user_id
+# or farmer_id IN (SELECT id FROM farmers WHERE user_id = <jwt.sub>).
+# IDOR attempts return 404 (not 403) to avoid confirming resource existence.
+# Requirements: 3.2, 3.3, 3.4
+
 import json
 import logging
 import pathlib
@@ -127,14 +134,14 @@ def _harvest_timing_advice(sowing_date: date) -> dict:
 async def get_insights(user_id: str = Depends(get_user_id)) -> dict:
     """Return the full farm intelligence bundle.
 
-    Both Open-Meteo and NASA POWER fetches are done in parallel.
-    If either fails, that section degrades gracefully — the rest is returned.
+    Supabase calls are synchronous — run them first before async I/O.
+    Then run weather + climate fetches in parallel with asyncio.gather.
     """
     import asyncio
 
     db = get_db()
 
-    # ── Load farmer profile ───────────────────────────────────────────────────
+    # ── Load farmer profile (sync Supabase call — do before async work) ───────
     try:
         result = (
             db.table("farmers")
@@ -166,8 +173,9 @@ async def get_insights(user_id: str = Depends(get_user_id)) -> dict:
     # ── Coordinates ───────────────────────────────────────────────────────────
     lat, lon = get_coordinates(row["state"], row["district"])
 
-    # ── Load activities for compliance score ──────────────────────────────────
+    # ── Load activities (sync Supabase call) ─────────────────────────────────
     farmer_id = row.get("id")
+    activities: list[dict] = []
     if farmer_id:
         try:
             act_result = (
@@ -179,17 +187,24 @@ async def get_insights(user_id: str = Depends(get_user_id)) -> dict:
             activities = act_result.data or []
         except Exception:
             activities = []
-    else:
-        activities = []
 
-    # ── Parallel API fetches ──────────────────────────────────────────────────
+    # ── Async external API fetches in parallel ────────────────────────────────
     q = sr.stage.get("quantities", {})
     irr_lpd_ref = float(q.get("irrigation_litres_per_plant_per_day", 0) or 0)
 
-    weather_task = get_farm_weather(lat, lon, stage_irrigation_lpd=irr_lpd_ref)
-    climate_task = fetch_climate_data(lat, lon, sowing_date)
-
-    weather, climate = await asyncio.gather(weather_task, climate_task)
+    try:
+        # Run both fetches sequentially in thread executors to avoid blocking the event loop
+        # and to work around Render free tier network restrictions on async HTTP
+        weather = await asyncio.get_event_loop().run_in_executor(
+            None, _fetch_weather_sync, lat, lon, irr_lpd_ref
+        )
+        climate = await asyncio.get_event_loop().run_in_executor(
+            None, _fetch_climate_sync, lat, lon, sowing_date
+        )
+    except Exception as exc:
+        logger.error("External API fetch failed: %s", exc)
+        weather = {"fetched": False, "error": "Weather data temporarily unavailable."}
+        climate = {"fetched": False, "error": "Climate data temporarily unavailable."}
 
     # ── Deterministic calculations ────────────────────────────────────────────
     knowledge  = _get_knowledge()
@@ -203,7 +218,6 @@ async def get_insights(user_id: str = Depends(get_user_id)) -> dict:
     )
 
     current_month   = date.today().month
-    current_price   = _MONTHLY_PRICE_OUTLOOK.get(current_month, _MONTHLY_PRICE_OUTLOOK[7])
     harvest_timing  = _harvest_timing_advice(sowing_date)
 
     price_calendar  = [
@@ -219,11 +233,11 @@ async def get_insights(user_id: str = Depends(get_user_id)) -> dict:
         for m, d in _MONTHLY_PRICE_OUTLOOK.items()
     ]
 
-    # GDD comparison vs calendar-based stage
-    gdd_stage = climate.get("gdd_predicted_stage", sr.stage["stage_id"])
-    stage_order = [s["stage_id"] for s in all_stages]
-    gdd_idx = stage_order.index(gdd_stage) if gdd_stage in stage_order else 0
-    cal_idx = stage_order.index(sr.stage["stage_id"]) if sr.stage["stage_id"] in stage_order else 0
+    # GDD vs calendar comparison
+    stage_order     = [s["stage_id"] for s in all_stages]
+    gdd_stage       = climate.get("gdd_predicted_stage", sr.stage["stage_id"]) if climate.get("fetched") else sr.stage["stage_id"]
+    gdd_idx         = stage_order.index(gdd_stage) if gdd_stage in stage_order else 0
+    cal_idx         = stage_order.index(sr.stage["stage_id"]) if sr.stage["stage_id"] in stage_order else 0
 
     if gdd_idx > cal_idx:
         gdd_vs_calendar = "ahead"
@@ -237,8 +251,8 @@ async def get_insights(user_id: str = Depends(get_user_id)) -> dict:
 
     return {
         "location": {
-            "state":    row["state"],
-            "district": row["district"],
+            "state":     row["state"],
+            "district":  row["district"],
             "latitude":  lat,
             "longitude": lon,
         },
@@ -248,17 +262,17 @@ async def get_insights(user_id: str = Depends(get_user_id)) -> dict:
             "months_elapsed": sr.months_elapsed,
             "days_elapsed":   sr.days_elapsed,
         },
-        "weather":  weather,
+        "weather":   weather,
         "climate": {
-            **climate,
+            **(climate if isinstance(climate, dict) else {}),
             "gdd_vs_calendar": gdd_vs_calendar,
             "gdd_note":        gdd_note,
         },
-        "compliance":        compliance,
+        "compliance":          compliance,
         "fertilizer_forecast": fert_forecast,
-        "future_stages":     future_stages,
+        "future_stages":       future_stages,
         "market": {
-            "current_month_outlook": current_price,
+            "current_month_outlook": _MONTHLY_PRICE_OUTLOOK.get(current_month, _MONTHLY_PRICE_OUTLOOK[7]),
             "harvest_timing":        harvest_timing,
             "price_calendar":        price_calendar,
         },

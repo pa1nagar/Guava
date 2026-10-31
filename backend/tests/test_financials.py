@@ -16,6 +16,7 @@ from services.financials import (
     revenue,
     profit_or_loss,
     break_even_price,
+    net_realisation,
 )
 
 
@@ -133,3 +134,33 @@ class TestBreakEvenPrice:
         # 2100 plants, ~₹7.5 lakh costs, 42 tonnes expected yield → ~₹17.86/kg
         result = break_even_price(750000.0, 42000.0)
         assert result == pytest.approx(750000.0 / 42000.0, rel=1e-4)
+
+
+class TestNetRealisation:
+
+    def test_basic_subtraction(self):
+        assert net_realisation(10000.0, 2000.0) == pytest.approx(8000.0)
+
+    def test_zero_deductions(self):
+        assert net_realisation(50000.0, 0.0) == pytest.approx(50000.0)
+
+    def test_full_deductions(self):
+        assert net_realisation(5000.0, 5000.0) == pytest.approx(0.0)
+
+    def test_zero_gross(self):
+        assert net_realisation(0.0, 0.0) == pytest.approx(0.0)
+
+    def test_negative_gross_raises(self):
+        with pytest.raises(ValueError):
+            net_realisation(-1.0, 100.0)
+
+    def test_negative_deductions_raises(self):
+        with pytest.raises(ValueError):
+            net_realisation(10000.0, -50.0)
+
+    def test_transport_and_mandi_combined(self):
+        """Deductions often combine mandi commission + transport cost."""
+        gross = 65000.0
+        mandi_commission = 3250.0
+        transport = 1500.0
+        assert net_realisation(gross, mandi_commission + transport) == pytest.approx(60250.0)

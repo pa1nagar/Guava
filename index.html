@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Taiwan Pink Guava Master Plan</title>
+  <title>Smart Farmer — Farm Management &amp; Decision Support Platform</title>
+  <meta name="description" content="Smart Farmer is a farm management and decision-support platform for Indian farmers. Track activities, manage plots, run calculators, and get trusted agronomy guidance.">
 
   <!-- Tailwind CSS v3 CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -27,16 +28,13 @@
     }
   </script>
 
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
   <!-- Font Awesome 6 CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <!-- Project stylesheet -->
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="min-h-screen">
+<body class="min-h-screen bg-brand-bg">
 
   <!-- ── Fixed language toggle bar ─────────────────────────────────────── -->
   <div id="lang-bar" style="position:fixed; top:0; left:0; right:0; z-index:99999; background:#1E3A2B; padding:6px 16px; display:flex; align-items:center; justify-content:center; gap:12px;">
@@ -47,831 +45,532 @@
   <!-- Spacer so page content is not hidden behind the fixed bar -->
   <div style="height:44px;"></div>
 
-  <!-- ── Sticky header + navigation ────────────────────────────────────── -->
+  <!-- ── Sticky header ────────────────────────────────────────────────── -->
   <header class="bg-brand-primary text-white sticky top-0 z-50 shadow-lg">
-
-    <!-- Orchard title + status badge -->
-    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-      <div>
-        <h1 class="text-lg font-bold leading-tight">
-          🌿 Taiwan Pink Guava Orchard — Badnawar Tehsil, Dhar District, Madhya Pradesh
-        </h1>
-        <p class="text-xs text-green-200 mt-0.5">2,100 Trees · Vertisol Soil · Precision Agronomy &amp; Commercial Valuation</p>
-      </div>
-      <div class="flex items-center gap-2 flex-wrap">
-        <div class="flex items-center gap-2 text-xs bg-emerald-900/80 px-3 py-1.5 rounded-lg border border-emerald-700">
-          <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span class="font-semibold">🟢 Active — Month 8</span>
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
+      <div class="flex items-center gap-3">
+        <span class="text-2xl">🌾</span>
+        <div>
+          <h1 class="text-lg font-bold leading-tight">Smart Farmer</h1>
+          <p class="text-xs text-green-200 mt-0.5"><span data-i18n="home.header.tagline">Farm management &amp; decision support for Indian farmers</span></p>
         </div>
-        <a href="login.html"
-           id="btn-my-farm"
-           class="text-xs bg-brand-accent text-white font-semibold px-3 py-1.5 rounded-lg
-                  hover:opacity-90 transition whitespace-nowrap">
-          🌿 My Farm →
-        </a>
       </div>
+      <a href="login.html"
+         class="text-sm bg-brand-accent text-white font-semibold px-4 py-2 rounded-lg
+                hover:opacity-90 transition whitespace-nowrap flex items-center gap-2">
+        <i class="fa-solid fa-right-to-bracket"></i>
+        <span data-i18n="home.header.signin">Sign In</span>
+      </a>
     </div>
-
-    <!-- Navigation — 10 tabs -->
-    <nav style="overflow-x: auto; white-space: nowrap;" class="bg-emerald-950 border-t border-emerald-800/60">
-      <div class="inline-flex text-xs font-medium px-2">
-
-        <button id="btn-overview"     data-tab="overview"     onclick="switchTab('overview')"     class="nav-btn active px-3 py-3 flex items-center gap-1.5 hover:bg-emerald-900 transition">
-          <i class="fa-solid fa-chart-pie"></i>
-          <span data-i18n="nav.tab1">Dashboard Overview</span>
-        </button>
-
-        <button id="btn-market"       data-tab="market"       onclick="switchTab('market')"       class="nav-btn px-3 py-3 flex items-center gap-1.5 hover:bg-emerald-900 transition">
-          <i class="fa-solid fa-chart-line"></i>
-          <span data-i18n="nav.tab2">Market &amp; Financial Analytics</span>
-        </button>
-
-        <button id="btn-nutrients"    data-tab="nutrients"    onclick="switchTab('nutrients')"    class="nav-btn px-3 py-3 flex items-center gap-1.5 hover:bg-emerald-900 transition">
-          <i class="fa-solid fa-vial-circle-check"></i>
-          <span data-i18n="nav.tab3">Nutrient Master</span>
-        </button>
-
-        <button id="btn-calendar"     data-tab="calendar"     onclick="switchTab('calendar')"     class="nav-btn px-3 py-3 flex items-center gap-1.5 hover:bg-emerald-900 transition">
-          <i class="fa-solid fa-calendar-days"></i>
-          <span data-i18n="nav.tab4">Farm Calendar</span>
-        </button>
-
-        <button id="btn-irrigation"   data-tab="irrigation"   onclick="switchTab('irrigation')"   class="nav-btn px-3 py-3 flex items-center gap-1.5 hover:bg-emerald-900 transition">
-          <i class="fa-solid fa-droplet"></i>
-          <span data-i18n="nav.tab5">Drip Irrigation Calculator</span>
-        </button>
-
-        <button id="btn-fertigation"  data-tab="fertigation"  onclick="switchTab('fertigation')"  class="nav-btn px-3 py-3 flex items-center gap-1.5 hover:bg-emerald-900 transition">
-          <i class="fa-solid fa-flask"></i>
-          <span data-i18n="nav.tab6">Fertigation Schedules</span>
-        </button>
-
-        <button id="btn-health"       data-tab="health"       onclick="switchTab('health')"       class="nav-btn px-3 py-3 flex items-center gap-1.5 hover:bg-emerald-900 transition">
-          <i class="fa-solid fa-bug"></i>
-          <span data-i18n="nav.tab7">Crop Health &amp; IPM</span>
-        </button>
-
-        <button id="btn-bagging"      data-tab="bagging"      onclick="switchTab('bagging')"      class="nav-btn px-3 py-3 flex items-center gap-1.5 hover:bg-emerald-900 transition">
-          <i class="fa-solid fa-shield-cat"></i>
-          <span data-i18n="nav.tab8">Fruit Bagging &amp; Diagnostics</span>
-        </button>
-
-        <button id="btn-procurement"  data-tab="procurement"  onclick="switchTab('procurement')"  class="nav-btn px-3 py-3 flex items-center gap-1.5 hover:bg-emerald-900 transition">
-          <i class="fa-solid fa-calculator"></i>
-          <span data-i18n="nav.tab9">Procurement Calculator</span>
-        </button>
-
-        <button id="btn-warnings"     data-tab="warnings"     onclick="switchTab('warnings')"     class="nav-btn px-3 py-3 flex items-center gap-1.5 hover:bg-emerald-900 transition">
-          <i class="fa-solid fa-triangle-exclamation"></i>
-          <span data-i18n="nav.tab10">Critical Warnings</span>
-        </button>
-
-      </div>
-    </nav>
   </header>
 
-  <!-- ── Main content — 10 tab panels ─────────────────────────────────── -->
-  <main class="p-4">
-
-    <section id="panel-overview" class="tab-panel">
-      <!-- Tab 1: Executive Dashboard Overview -->
-      <div class="max-w-7xl mx-auto py-6 px-2">
-        <h2 class="text-2xl font-bold text-emerald-900 mb-1">🌿 <span data-i18n="nav.tab1">Dashboard Overview</span></h2>
-        <p class="text-sm text-gray-500 mb-6">Taiwan Pink Guava Orchard — Badnawar Tehsil, Dhar District, Madhya Pradesh</p>
-
-        <!-- KPI Grid -->
-        <div id="exec-kpi-grid" class="kpi-grid grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
-          <div class="bg-white rounded-xl border border-gray-200 p-3 text-center shadow-sm">
-            <div class="text-2xl font-bold text-emerald-800">2,100</div>
-            <div class="text-xs text-gray-500 mt-1"><span data-i18n="exec.kpi.trees">Total Trees</span></div>
-          </div>
-          <div class="bg-white rounded-xl border border-gray-200 p-3 text-center shadow-sm">
-            <div class="text-2xl font-bold text-emerald-800">8</div>
-            <div class="text-xs text-gray-500 mt-1"><span data-i18n="exec.kpi.months">Months to First Harvest</span></div>
-          </div>
-          <div class="bg-white rounded-xl border border-gray-200 p-3 text-center shadow-sm">
-            <div class="text-2xl font-bold text-emerald-800">Vertisol</div>
-            <div class="text-xs text-gray-500 mt-1"><span data-i18n="exec.kpi.soil">Soil Type</span></div>
-          </div>
-          <div class="bg-white rounded-xl border border-gray-200 p-3 text-center shadow-sm">
-            <div class="text-2xl font-bold text-emerald-800">Hasta</div>
-            <div class="text-xs text-gray-500 mt-1"><span data-i18n="exec.kpi.bahar">Bahar Strategy</span></div>
-          </div>
-          <div class="bg-white rounded-xl border border-gray-200 p-3 text-center shadow-sm">
-            <div class="text-2xl font-bold text-orange-600">₹60–₹85</div>
-            <div class="text-xs text-gray-500 mt-1"><span data-i18n="exec.kpi.price">Target Price Range 🔴</span></div>
-          </div>
-          <div class="bg-white rounded-xl border border-gray-200 p-3 text-center shadow-sm">
-            <div class="text-2xl font-bold text-orange-600">~₹30L</div>
-            <div class="text-xs text-gray-500 mt-1"><span data-i18n="exec.kpi.revenue">Projected Revenue/Yr 🔴</span></div>
-          </div>
-        </div>
-
-        <!-- Financial Highlight Cards -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-          <div class="bg-amber-50 border border-amber-300 rounded-xl p-3 text-center">
-            <div class="text-lg font-bold text-amber-800">~₹22.7L <span class="text-red-500 text-xs">🔴</span></div>
-            <div class="text-xs text-gray-600 mt-1"><span data-i18n="exec.financial.yr2revenue">Year-2 First Revenue 🔴</span></div>
-          </div>
-          <div class="bg-amber-50 border border-amber-300 rounded-xl p-3 text-center">
-            <div class="text-lg font-bold text-amber-800">~₹53.6L <span class="text-red-500 text-xs">🔴</span></div>
-            <div class="text-xs text-gray-600 mt-1"><span data-i18n="exec.financial.matureRevenue">Mature Gross Revenue 🔴</span></div>
-          </div>
-          <div class="bg-amber-50 border border-amber-300 rounded-xl p-3 text-center">
-            <div class="text-lg font-bold text-amber-800">3–4 Yrs <span class="text-red-500 text-xs">🔴</span></div>
-            <div class="text-xs text-gray-600 mt-1"><span data-i18n="exec.financial.payback">Payback Period 🔴</span></div>
-          </div>
-          <div class="bg-amber-50 border border-amber-300 rounded-xl p-3 text-center">
-            <div class="text-lg font-bold text-amber-800">+20–35% <span class="text-red-500 text-xs">🔴</span></div>
-            <div class="text-xs text-gray-600 mt-1"><span data-i18n="exec.financial.premium">Bagging Premium 🔴</span></div>
-          </div>
-        </div>
-
-        <!-- Phenological Progress -->
-        <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6">
-          <h3 class="font-bold text-emerald-900 mb-3">Phenological Roadmap</h3>
-          <div class="space-y-2">
-            <div class="flex items-center gap-3">
-              <div class="w-32 text-xs font-semibold text-gray-600"><span data-i18n="exec.phase.1">Phase 1: Establishment (Months 8–12)</span></div>
-              <div class="flex-1 bg-emerald-100 rounded-full h-4 overflow-hidden"><div class="bg-emerald-600 h-4 rounded-full" style="width:40%"></div></div>
-              <div class="text-xs text-gray-500">Months 8–12</div>
-            </div>
-            <div class="flex items-center gap-3">
-              <div class="w-32 text-xs font-semibold text-gray-600"><span data-i18n="exec.phase.2">Phase 2: Bloom &amp; Fruit Set (Months 13–15)</span></div>
-              <div class="flex-1 bg-amber-100 rounded-full h-4 overflow-hidden"><div class="bg-amber-500 h-4 rounded-full" style="width:25%"></div></div>
-              <div class="text-xs text-gray-500">Months 13–15</div>
-            </div>
-            <div class="flex items-center gap-3">
-              <div class="w-32 text-xs font-semibold text-gray-600"><span data-i18n="exec.phase.3">Phase 3: Drought &amp; Harvest (Months 16–17)</span></div>
-              <div class="flex-1 bg-red-100 rounded-full h-4 overflow-hidden"><div class="bg-red-500 h-4 rounded-full" style="width:15%"></div></div>
-              <div class="text-xs text-gray-500">Months 16–17</div>
-            </div>
-            <div class="flex items-center gap-3">
-              <div class="w-32 text-xs font-semibold text-gray-600"><span data-i18n="exec.phase.4">Phase 4: Recovery &amp; Cycle 2 (Months 18–24)</span></div>
-              <div class="flex-1 bg-blue-100 rounded-full h-4 overflow-hidden"><div class="bg-blue-500 h-4 rounded-full" style="width:58%"></div></div>
-              <div class="text-xs text-gray-500">Months 18–24</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Immediate Directives -->
-        <div class="bg-amber-50 border-2 border-amber-400 rounded-xl p-4 mb-6">
-          <h3 class="font-bold text-amber-900 mb-3">⚡ Month 8 — Immediate Directives</h3>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div class="bg-white rounded-lg p-3 border border-amber-200">
-              <div class="font-semibold text-amber-800 text-sm"><span data-i18n="exec.directive.1">Deblossoming — Remove all flowers</span></div>
-              <div class="text-xs text-gray-600 mt-1">Remove every flower bud by hand. No chemical deblossoming on Year-1 trees.</div>
-            </div>
-            <div class="bg-white rounded-lg p-3 border border-amber-200">
-              <div class="font-semibold text-amber-800 text-sm"><span data-i18n="exec.directive.2">Canopy Training — Single stem to 60cm</span></div>
-              <div class="text-xs text-gray-600 mt-1">Train single main stem to 60cm; select 3–4 scaffold branches.</div>
-            </div>
-            <div class="bg-white rounded-lg p-3 border border-amber-200">
-              <div class="font-semibold text-amber-800 text-sm"><span data-i18n="exec.directive.3">Drainage Furrows — Excavate between rows</span></div>
-              <div class="text-xs text-gray-600 mt-1">Critical before monsoon on Vertisol to prevent root-collar waterlogging.</div>
-            </div>
-            <div class="bg-white rounded-lg p-3 border border-amber-200">
-              <div class="font-semibold text-amber-800 text-sm"><span data-i18n="exec.directive.4">Biological Inoculation — Trichoderma + PSB root drench</span></div>
-              <div class="text-xs text-gray-600 mt-1">Apply Trichoderma viride + PSB root zone drench at planting.</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Charts -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div class="bg-white border border-gray-200 rounded-xl p-4">
-            <div class="chart-container"><canvas id="chart-water"></canvas></div>
-          </div>
-          <div class="bg-white border border-gray-200 rounded-xl p-4">
-            <div class="chart-container"><canvas id="chart-npk"></canvas></div>
-          </div>
+  <main>
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- Hero Section                                                    -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <section class="bg-gradient-to-b from-brand-primary to-brand-secondary text-white py-16 px-4">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-3xl sm:text-5xl font-bold mb-4">
+          <span data-i18n="home.hero.title">Smart Farmer</span>
+        </h2>
+        <p class="text-lg sm:text-xl text-green-100 mb-8 max-w-2xl mx-auto">
+          <span data-i18n="home.hero.subtitle">A farm management and decision-support platform built for Indian farmers. Track your activities, manage your plots, use transparent calculators, and get guidance you can trust.</span>
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="login.html"
+             class="bg-brand-accent text-white font-semibold px-6 py-3 rounded-lg
+                    hover:opacity-90 transition text-lg flex items-center justify-center gap-2">
+            <i class="fa-solid fa-tractor"></i>
+            <span data-i18n="home.hero.cta.getStarted">Get Started</span>
+          </a>
+          <a href="#product"
+             class="bg-white text-brand-primary font-semibold px-6 py-3 rounded-lg
+                    hover:bg-green-50 transition text-lg flex items-center justify-center gap-2">
+            <i class="fa-solid fa-circle-info"></i>
+            <span data-i18n="home.hero.cta.learnMore">Learn More</span>
+          </a>
         </div>
       </div>
     </section>
 
-    <section id="panel-market" class="tab-panel" hidden>
-      <div class="max-w-7xl mx-auto py-6 px-2">
-        <h2 class="text-2xl font-bold text-emerald-900 mb-4"><span data-i18n="market.heading">Market &amp; Financial Analytics</span></h2>
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- Product Explanation Section                                     -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <section id="product" class="py-16 px-4">
+      <div class="max-w-7xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-bold text-brand-primary mb-2 text-center">
+          <span data-i18n="home.product.heading">What Smart Farmer Does</span>
+        </h2>
+        <p class="text-gray-500 text-center mb-10 max-w-2xl mx-auto">
+          <span data-i18n="home.product.intro">Five core capabilities to help you manage your farm with confidence.</span>
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        <!-- Financial Simulator -->
-        <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6">
-          <h3 class="font-bold text-emerald-800 mb-3">💹 Financial Scenario Simulator</h3>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-            <div>
-              <label class="text-xs font-semibold text-gray-600 block mb-1"><span data-i18n="simulator.price">Average Price (₹/kg)</span>: <span id="sim-price-val" class="text-emerald-700 font-bold">₹60</span></label>
-              <input type="range" id="sim-price" min="35" max="120" step="1" value="60" class="w-full accent-emerald-600">
-            </div>
-            <div>
-              <label class="text-xs font-semibold text-gray-600 block mb-1"><span data-i18n="simulator.yield2">Year-2 Yield (kg/tree)</span>: <span id="sim-yield2-val" class="text-emerald-700 font-bold">18 kg</span></label>
-              <input type="range" id="sim-yield2" min="10" max="30" step="1" value="18" class="w-full accent-emerald-600">
-            </div>
-            <div>
-              <label class="text-xs font-semibold text-gray-600 block mb-1"><span data-i18n="simulator.yield4">Mature Yield Year 4+ (kg/tree)</span>: <span id="sim-yield4-val" class="text-emerald-700 font-bold">30 kg</span></label>
-              <input type="range" id="sim-yield4" min="25" max="65" step="1" value="30" class="w-full accent-emerald-600">
-            </div>
-            <div>
-              <label class="text-xs font-semibold text-gray-600 block mb-1"><span data-i18n="simulator.bagcost">Bagging &amp; Packing Cost (₹/fruit)</span>: <span id="sim-bagcost-val" class="text-emerald-700 font-bold">₹2.75</span></label>
-              <input type="range" id="sim-bagcost" min="1.50" max="5.00" step="0.25" value="2.75" class="w-full accent-emerald-600">
-            </div>
+          <!-- Farm Profile -->
+          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div class="text-3xl mb-3">🏡</div>
+            <h3 class="text-lg font-bold text-brand-primary mb-2">
+              <span data-i18n="home.product.farmProfile.title">Farm Profile</span>
+            </h3>
+            <p class="text-sm text-gray-600">
+              <span data-i18n="home.product.farmProfile.desc">Create and manage multiple farms and plots. Record crop, variety, planting date, spacing, and plant count for each plot — no hard-coded defaults.</span>
+            </p>
           </div>
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            <div class="bg-emerald-50 rounded-lg p-3 text-center border border-emerald-200">
-              <div class="text-xs text-gray-500 mb-1"><span data-i18n="simulator.gross2">Year-2 Gross Revenue</span></div>
-              <div id="out-gross2" class="text-lg font-bold text-emerald-800">—</div>
-            </div>
-            <div class="bg-emerald-50 rounded-lg p-3 text-center border border-emerald-200">
-              <div class="text-xs text-gray-500 mb-1"><span data-i18n="simulator.net2">Year-2 Net Income</span></div>
-              <div id="out-net2" class="text-lg font-bold text-emerald-800">—</div>
-            </div>
-            <div class="bg-emerald-50 rounded-lg p-3 text-center border border-emerald-200">
-              <div class="text-xs text-gray-500 mb-1"><span data-i18n="simulator.gross4">Year-4+ Gross Revenue</span></div>
-              <div id="out-gross4" class="text-lg font-bold text-emerald-800">—</div>
-            </div>
-            <div class="bg-emerald-50 rounded-lg p-3 text-center border border-emerald-200">
-              <div class="text-xs text-gray-500 mb-1"><span data-i18n="simulator.net4">Year-4+ Net Income</span></div>
-              <div id="out-net4" class="text-lg font-bold text-emerald-800">—</div>
-            </div>
-          </div>
-          <p class="text-xs text-red-600 mt-2"><span data-i18n="simulator.disclaimer">🔴 Scenario only — verify with actual buyer prices before harvest</span></p>
-        </div>
 
-        <!-- Scenario Table -->
-        <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6">
-          <h3 class="font-bold text-emerald-800 mb-3">Gross Revenue Scenario Matrix <span class="text-red-500 text-xs">🔴 Scenario only</span></h3>
-          <div class="overflow-x-auto">
-            <table class="w-full text-xs border-collapse">
-              <thead>
-                <tr class="bg-emerald-800 text-white">
-                  <th class="p-2 text-left"><span data-i18n="market.table.yield">Yield (kg/tree)</span></th>
-                  <th class="p-2 text-right">₹40/kg</th>
-                  <th class="p-2 text-right">₹50/kg</th>
-                  <th class="p-2 text-right">₹60/kg</th>
-                  <th class="p-2 text-right">₹70/kg</th>
-                  <th class="p-2 text-right">₹85/kg</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="border-b"><td class="p-2 font-semibold">20 kg</td><td class="p-2 text-right">₹16.8L</td><td class="p-2 text-right">₹21.0L</td><td class="p-2 text-right">₹25.2L</td><td class="p-2 text-right">₹29.4L</td><td class="p-2 text-right">₹35.7L</td></tr>
-                <tr class="border-b bg-gray-50"><td class="p-2 font-semibold">25 kg</td><td class="p-2 text-right">₹21.0L</td><td class="p-2 text-right">₹26.3L</td><td class="p-2 text-right">₹31.5L</td><td class="p-2 text-right">₹36.8L</td><td class="p-2 text-right">₹44.6L</td></tr>
-                <tr class="border-b"><td class="p-2 font-semibold">30 kg</td><td class="p-2 text-right">₹25.2L</td><td class="p-2 text-right">₹31.5L</td><td class="p-2 text-right bg-amber-50 font-bold">₹37.8L</td><td class="p-2 text-right">₹44.1L</td><td class="p-2 text-right">₹53.6L</td></tr>
-                <tr class="border-b bg-gray-50"><td class="p-2 font-semibold">35 kg</td><td class="p-2 text-right">₹29.4L</td><td class="p-2 text-right">₹36.8L</td><td class="p-2 text-right">₹44.1L</td><td class="p-2 text-right">₹51.5L</td><td class="p-2 text-right">₹62.5L</td></tr>
-                <tr class="border-b"><td class="p-2 font-semibold">40 kg</td><td class="p-2 text-right">₹33.6L</td><td class="p-2 text-right">₹42.0L</td><td class="p-2 text-right">₹50.4L</td><td class="p-2 text-right">₹58.8L</td><td class="p-2 text-right">₹71.4L</td></tr>
-                <tr><td class="p-2 font-semibold">48 kg</td><td class="p-2 text-right">₹40.3L</td><td class="p-2 text-right">₹50.4L</td><td class="p-2 text-right">₹60.5L</td><td class="p-2 text-right">₹70.6L</td><td class="p-2 text-right">₹85.7L</td></tr>
-              </tbody>
-            </table>
+          <!-- Activity History -->
+          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div class="text-3xl mb-3">📋</div>
+            <h3 class="text-lg font-bold text-brand-primary mb-2">
+              <span data-i18n="home.product.activityHistory.title">Activity History</span>
+            </h3>
+            <p class="text-sm text-gray-600">
+              <span data-i18n="home.product.activityHistory.desc">Log every irrigation, fertilisation, scouting, and harvest operation. Your full history is preserved with an audit trail, so nothing is lost.</span>
+            </p>
           </div>
-          <p class="text-xs text-gray-500 mt-2">* Gross revenue only — deduct OPEX (₹4.2L Year 2 / ₹7.5L Year 4+) and bagging cost for net income. 🔴 Scenario only.</p>
-        </div>
 
-        <!-- Bahar Comparison -->
-        <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6">
-          <h3 class="font-bold text-emerald-800 mb-3"><span data-i18n="market.bahar.heading">Bahar Comparison</span></h3>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div class="border-2 border-red-300 bg-red-50 rounded-xl p-3">
-              <div class="font-bold text-red-800">Mrig Bahar</div>
-              <div class="text-xs text-gray-600 mt-1"><span data-i18n="market.bahar.flowering">Flowering</span>: Jun–Jul</div>
-              <div class="text-xs text-gray-600"><span data-i18n="market.bahar.harvest">Harvest Window</span>: Nov–Jan</div>
-              <div class="text-xs text-gray-600"><span data-i18n="market.bahar.modal">Modal Price</span>: ₹18/kg</div>
-              <div class="text-xs font-bold text-red-700 mt-2">⚠ AVOID — Peak winter supply glut</div>
-            </div>
-            <div class="border-2 border-amber-300 bg-amber-50 rounded-xl p-3">
-              <div class="font-bold text-amber-800">Ambe Bahar</div>
-              <div class="text-xs text-gray-600 mt-1"><span data-i18n="market.bahar.flowering">Flowering</span>: Feb–Mar</div>
-              <div class="text-xs text-gray-600"><span data-i18n="market.bahar.harvest">Harvest Window</span>: Aug–Sep</div>
-              <div class="text-xs text-gray-600"><span data-i18n="market.bahar.modal">Modal Price</span>: ₹50/kg</div>
-              <div class="text-xs font-bold text-amber-700 mt-2">✓ VIABLE — Protective bagging essential</div>
-            </div>
-            <div class="border-2 border-emerald-400 bg-emerald-50 rounded-xl p-3">
-              <div class="font-bold text-emerald-800">Hasta Bahar ✅</div>
-              <div class="text-xs text-gray-600 mt-1"><span data-i18n="market.bahar.flowering">Flowering</span>: Oct–Nov</div>
-              <div class="text-xs text-gray-600"><span data-i18n="market.bahar.harvest">Harvest Window</span>: Feb–Apr</div>
-              <div class="text-xs text-gray-600"><span data-i18n="market.bahar.modal">Modal Price</span>: ₹53/kg</div>
-              <div class="text-xs font-bold text-emerald-700 mt-2">✅ OPTIMAL — Spring supply deficit window</div>
-            </div>
+          <!-- Calculators -->
+          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div class="text-3xl mb-3">🧮</div>
+            <h3 class="text-lg font-bold text-brand-primary mb-2">
+              <span data-i18n="home.product.calculators.title">Transparent Calculators</span>
+            </h3>
+            <p class="text-sm text-gray-600">
+              <span data-i18n="home.product.calculators.desc">Irrigation, nutrient, and procurement calculators that show every input and formula. No black boxes — you can verify every result by hand.</span>
+            </p>
           </div>
-        </div>
 
-        <!-- Net Realization Model -->
-        <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6">
-          <h3 class="font-bold text-emerald-800 mb-3"><span data-i18n="market.net.heading">Net Farm-Gate Realization Model</span></h3>
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm border-collapse">
-              <thead>
-                <tr class="bg-emerald-800 text-white">
-                  <th class="p-2 text-left"><span data-i18n="market.net.protocol">Packing Protocol</span></th>
-                  <th class="p-2 text-right"><span data-i18n="market.net.gross">Gross Mandi (₹/kg)</span></th>
-                  <th class="p-2 text-right"><span data-i18n="market.net.deductions">Total Deductions (₹/kg)</span></th>
-                  <th class="p-2 text-right"><span data-i18n="market.net.net">Net Farm-Gate (₹/kg)</span></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="border-b bg-emerald-50"><td class="p-2">Grade A — CFB Carton, Bagged (750km)</td><td class="p-2 text-right">₹65</td><td class="p-2 text-right text-red-600">−₹23.58</td><td class="p-2 text-right font-bold text-emerald-700">₹41.42</td></tr>
-                <tr><td class="p-2">Grade B — Plastic Crate, Unbagged (750km)</td><td class="p-2 text-right">₹38</td><td class="p-2 text-right text-red-600">−₹14.31</td><td class="p-2 text-right font-bold text-emerald-700">₹23.69</td></tr>
-              </tbody>
-            </table>
+          <!-- Trusted Knowledge -->
+          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div class="text-3xl mb-3">📚</div>
+            <h3 class="text-lg font-bold text-brand-primary mb-2">
+              <span data-i18n="home.product.trustedKnowledge.title">Trusted Knowledge</span>
+            </h3>
+            <p class="text-sm text-gray-600">
+              <span data-i18n="home.product.trustedKnowledge.desc">Every agronomy recommendation is sourced, reviewed, and labelled with its evidence status. Unverified content is never shown as an actionable instruction.</span>
+            </p>
           </div>
-          <p class="text-xs text-gray-500 mt-2">Source: Azadpur Mandi, Agmarknet (verified Sep 2026). Includes transport, commission, packaging, wastage, and market charges.</p>
-        </div>
 
-        <!-- Grade Economics Table -->
-        <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6">
-          <h3 class="font-bold text-emerald-800 mb-3">Grade Economics</h3>
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm border-collapse">
-              <thead>
-                <tr class="bg-emerald-800 text-white">
-                  <th class="p-2"><span data-i18n="market.table.grade">Grade</span></th>
-                  <th class="p-2"><span data-i18n="market.table.weight">Weight (g)</span></th>
-                  <th class="p-2"><span data-i18n="market.table.pack">Pack Type</span></th>
-                  <th class="p-2"><span data-i18n="market.table.priceRange">Price Range (₹/kg)</span></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="border-b bg-emerald-50"><td class="p-2 font-bold text-center">A+</td><td class="p-2 text-center">350–500g</td><td class="p-2 text-center">CFB Carton + Foam Net</td><td class="p-2 text-center font-bold text-emerald-700">₹70–₹100</td></tr>
-                <tr class="border-b"><td class="p-2 font-bold text-center">A</td><td class="p-2 text-center">250–349g</td><td class="p-2 text-center">CFB Carton + Foam Net</td><td class="p-2 text-center font-bold text-emerald-700">₹50–₹70</td></tr>
-                <tr class="border-b bg-gray-50"><td class="p-2 font-bold text-center">B</td><td class="p-2 text-center">180–249g</td><td class="p-2 text-center">Plastic Crate / Netted</td><td class="p-2 text-center font-bold text-amber-600">₹30–₹45</td></tr>
-                <tr><td class="p-2 font-bold text-center">C</td><td class="p-2 text-center">&lt;180g</td><td class="p-2 text-center">Loose Crates / Sacks</td><td class="p-2 text-center font-bold text-red-600">₹12–₹22</td></tr>
-              </tbody>
-            </table>
+          <!-- AI Assistance -->
+          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div class="text-3xl mb-3">🤖</div>
+            <h3 class="text-lg font-bold text-brand-primary mb-2">
+              <span data-i18n="home.product.aiAssistance.title">AI Assistance</span>
+            </h3>
+            <p class="text-sm text-gray-600">
+              <span data-i18n="home.product.aiAssistance.desc">Ask questions about your farm records and get plain-language explanations. The AI assistant is scoped to low-risk questions only and never gives chemical recommendations.</span>
+            </p>
           </div>
-        </div>
 
-        <!-- Market Charts -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div class="bg-white border border-gray-200 rounded-xl p-4"><div class="chart-container"><canvas id="chart-seasonal"></canvas></div></div>
-          <div class="bg-white border border-gray-200 rounded-xl p-4"><div class="chart-container"><canvas id="chart-score"></canvas></div></div>
-          <div class="bg-white border border-gray-200 rounded-xl p-4"><div class="chart-container"><canvas id="chart-cashflow"></canvas></div></div>
-          <div class="bg-white border border-gray-200 rounded-xl p-4"><div class="chart-container"><canvas id="chart-grade"></canvas></div></div>
+          <!-- Financial Summary -->
+          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div class="text-3xl mb-3">💰</div>
+            <h3 class="text-lg font-bold text-brand-primary mb-2">
+              <span data-i18n="home.product.financials.title">Financial Summary</span>
+            </h3>
+            <p class="text-sm text-gray-600">
+              <span data-i18n="home.product.financials.desc">Track expenses, record harvests, and see your profit or loss clearly. Scenarios are always labelled distinctly from actuals — no fabricated projections.</span>
+            </p>
+          </div>
+
         </div>
-        <p class="text-xs text-gray-400 mt-3">Price data: Azadpur Mandi, Agmarknet (verified Sep 2026). Production data: NHB Horticulture Statistics.</p>
       </div>
     </section>
 
-    <section id="panel-nutrients" class="tab-panel" hidden>
-      <div class="max-w-7xl mx-auto py-6 px-2">
-        <h2 class="text-2xl font-bold text-emerald-900 mb-2"><span data-i18n="nutrient.heading">Nutrient Master</span></h2>
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- Capability Cards Section                                        -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <section class="bg-gray-50 py-16 px-4">
+      <div class="max-w-7xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-bold text-brand-primary mb-2 text-center">
+          <span data-i18n="home.capabilities.heading">Platform Capabilities</span>
+        </h2>
+        <p class="text-gray-500 text-center mb-10 max-w-2xl mx-auto">
+          <span data-i18n="home.capabilities.intro">What you can use today, and what's coming next.</span>
+        </p>
 
-        <!-- Evidence Legend -->
-        <div class="bg-white border border-gray-200 rounded-xl p-4 mb-4">
-          <h3 class="font-bold text-gray-700 text-sm mb-2">Evidence Grade Legend</h3>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-            <div class="flex items-center gap-2"><span class="badge-A px-2 py-1">🟢 A</span><span data-i18n="common.evidenceLegend.A">NHB/ICAR Official Recommendation</span></div>
-            <div class="flex items-center gap-2"><span class="badge-B px-2 py-1">🔵 B</span><span data-i18n="common.evidenceLegend.B">Peer-reviewed research</span></div>
-            <div class="flex items-center gap-2"><span class="badge-C px-2 py-1">🟡 C</span><span data-i18n="common.evidenceLegend.C">Local adaptation; calibration required</span></div>
-            <div class="flex items-center gap-2"><span class="badge-E px-2 py-1">🔴 E</span><span data-i18n="common.evidenceLegend.E">Scenario/Forecast only</span></div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          <!-- Working: Authentication -->
+          <a href="login.html"
+             class="bg-white border border-emerald-200 rounded-xl p-6 shadow-sm hover:shadow-md transition block">
+            <div class="flex items-center justify-between mb-3">
+              <div class="text-3xl">🔐</div>
+              <span class="text-xs font-semibold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                <span data-i18n="home.capabilities.status.live">Live</span>
+              </span>
+            </div>
+            <h3 class="text-lg font-bold text-brand-primary mb-1">
+              <span data-i18n="home.capabilities.auth.title">Secure Authentication</span>
+            </h3>
+            <p class="text-sm text-gray-600 mb-2">
+              <span data-i18n="home.capabilities.auth.desc">Sign in with Google. Your farm data is private — no other user can access it.</span>
+            </p>
+            <span class="text-sm text-brand-secondary font-semibold flex items-center gap-1">
+              <span data-i18n="home.capabilities.tryIt">Try it</span>
+              <i class="fa-solid fa-arrow-right text-xs"></i>
+            </span>
+          </a>
+
+          <!-- Working: Farm Profile -->
+          <a href="login.html"
+             class="bg-white border border-emerald-200 rounded-xl p-6 shadow-sm hover:shadow-md transition block">
+            <div class="flex items-center justify-between mb-3">
+              <div class="text-3xl">🏡</div>
+              <span class="text-xs font-semibold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                <span data-i18n="home.capabilities.status.live">Live</span>
+              </span>
+            </div>
+            <h3 class="text-lg font-bold text-brand-primary mb-1">
+              <span data-i18n="home.capabilities.farmProfile.title">Farm &amp; Plot Management</span>
+            </h3>
+            <p class="text-sm text-gray-600 mb-2">
+              <span data-i18n="home.capabilities.farmProfile.desc">Create farms and plots with crop, variety, and planting date. Track plant counts with an audit trail.</span>
+            </p>
+            <span class="text-sm text-brand-secondary font-semibold flex items-center gap-1">
+              <span data-i18n="home.capabilities.tryIt">Try it</span>
+              <i class="fa-solid fa-arrow-right text-xs"></i>
+            </span>
+          </a>
+
+          <!-- Working: Activity Log -->
+          <a href="login.html"
+             class="bg-white border border-emerald-200 rounded-xl p-6 shadow-sm hover:shadow-md transition block">
+            <div class="flex items-center justify-between mb-3">
+              <div class="text-3xl">📋</div>
+              <span class="text-xs font-semibold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                <span data-i18n="home.capabilities.status.live">Live</span>
+              </span>
+            </div>
+            <h3 class="text-lg font-bold text-brand-primary mb-1">
+              <span data-i18n="home.capabilities.activityLog.title">Activity Log</span>
+            </h3>
+            <p class="text-sm text-gray-600 mb-2">
+              <span data-i18n="home.capabilities.activityLog.desc">Record irrigation, fertilisation, scouting, and other operations with date, quantity, cost, and notes.</span>
+            </p>
+            <span class="text-sm text-brand-secondary font-semibold flex items-center gap-1">
+              <span data-i18n="home.capabilities.tryIt">Try it</span>
+              <i class="fa-solid fa-arrow-right text-xs"></i>
+            </span>
+          </a>
+
+          <!-- Working: Financial Summary -->
+          <a href="login.html"
+             class="bg-white border border-emerald-200 rounded-xl p-6 shadow-sm hover:shadow-md transition block">
+            <div class="flex items-center justify-between mb-3">
+              <div class="text-3xl">💰</div>
+              <span class="text-xs font-semibold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
+                <span data-i18n="home.capabilities.status.live">Live</span>
+              </span>
+            </div>
+            <h3 class="text-lg font-bold text-brand-primary mb-1">
+              <span data-i18n="home.capabilities.financials.title">Financial Summary</span>
+            </h3>
+            <p class="text-sm text-gray-600 mb-2">
+              <span data-i18n="home.capabilities.financials.desc">See total expenses, revenue from harvests, and break-even price per kg. Actuals and scenarios are always separated.</span>
+            </p>
+            <span class="text-sm text-brand-secondary font-semibold flex items-center gap-1">
+              <span data-i18n="home.capabilities.tryIt">Try it</span>
+              <i class="fa-solid fa-arrow-right text-xs"></i>
+            </span>
+          </a>
+
+          <!-- In Development: Task Calendar -->
+          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-3">
+              <div class="text-3xl">📅</div>
+              <span class="text-xs font-semibold px-2 py-1 rounded-full bg-amber-100 text-amber-700">
+                <span data-i18n="home.capabilities.status.inDev">In Development</span>
+              </span>
+            </div>
+            <h3 class="text-lg font-bold text-gray-500 mb-1">
+              <span data-i18n="home.capabilities.tasks.title">Task Calendar</span>
+            </h3>
+            <p class="text-sm text-gray-500">
+              <span data-i18n="home.capabilities.tasks.desc">See tasks due today, create your own, and track completion. AI-suggested high-risk tasks require your confirmation before saving.</span>
+            </p>
           </div>
-        </div>
 
-        <!-- Filter Buttons -->
-        <div class="flex flex-wrap gap-2 mb-4">
-          <button data-filter-cat="all" onclick="filterNutrients('all')" class="px-4 py-2 rounded-full text-sm font-semibold bg-emerald-700 text-white border border-emerald-700">
-            <span data-i18n="nutrient.filter.all">All Nutrients</span>
+          <!-- In Development: Crop Health Observations -->
+          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-3">
+              <div class="text-3xl">🌱</div>
+              <span class="text-xs font-semibold px-2 py-1 rounded-full bg-amber-100 text-amber-700">
+                <span data-i18n="home.capabilities.status.inDev">In Development</span>
+              </span>
+            </div>
+            <h3 class="text-lg font-bold text-gray-500 mb-1">
+              <span data-i18n="home.capabilities.observations.title">Crop Health Observations</span>
+            </h3>
+            <p class="text-sm text-gray-500">
+              <span data-i18n="home.capabilities.observations.desc">Record symptoms, upload photos, and get a structured log you can share with an expert. AI labels are always preliminary — not a diagnosis.</span>
+            </p>
+          </div>
+
+          <!-- In Development: Inventory -->
+          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-3">
+              <div class="text-3xl">📦</div>
+              <span class="text-xs font-semibold px-2 py-1 rounded-full bg-amber-100 text-amber-700">
+                <span data-i18n="home.capabilities.status.inDev">In Development</span>
+              </span>
+            </div>
+            <h3 class="text-lg font-bold text-gray-500 mb-1">
+              <span data-i18n="home.capabilities.inventory.title">Inventory &amp; Inputs</span>
+            </h3>
+            <p class="text-sm text-gray-500">
+              <span data-i18n="home.capabilities.inventory.desc">Track products on hand, link consumption to activities, and keep a catalogue of what you have purchased.</span>
+            </p>
+          </div>
+
+          <!-- In Development: Calculators -->
+          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-3">
+              <div class="text-3xl">🧮</div>
+              <span class="text-xs font-semibold px-2 py-1 rounded-full bg-amber-100 text-amber-700">
+                <span data-i18n="home.capabilities.status.inDev">In Development</span>
+              </span>
+            </div>
+            <h3 class="text-lg font-bold text-gray-500 mb-1">
+              <span data-i18n="home.capabilities.calculators.title">Deterministic Calculators</span>
+            </h3>
+            <p class="text-sm text-gray-500">
+              <span data-i18n="home.capabilities.calculators.desc">Irrigation runtime, nutrient product mass, and procurement scaling — all with visible formulas and no hidden defaults.</span>
+            </p>
+          </div>
+
+          <!-- In Development: Reports -->
+          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-3">
+              <div class="text-3xl">📄</div>
+              <span class="text-xs font-semibold px-2 py-1 rounded-full bg-amber-100 text-amber-700">
+                <span data-i18n="home.capabilities.status.inDev">In Development</span>
+              </span>
+            </div>
+            <h3 class="text-lg font-bold text-gray-500 mb-1">
+              <span data-i18n="home.capabilities.reports.title">Reports &amp; Export</span>
+            </h3>
+            <p class="text-sm text-gray-500">
+              <span data-i18n="home.capabilities.reports.desc">Download your activity timeline and financial summary as CSV. Exports are audited and never include another farmer's data.</span>
+            </p>
+          </div>
+
+          <!-- In Development: AI Assistant -->
+          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-3">
+              <div class="text-3xl">🤖</div>
+              <span class="text-xs font-semibold px-2 py-1 rounded-full bg-amber-100 text-amber-700">
+                <span data-i18n="home.capabilities.status.inDev">In Development</span>
+              </span>
+            </div>
+            <h3 class="text-lg font-bold text-gray-500 mb-1">
+              <span data-i18n="home.capabilities.ai.title">AI Assistant</span>
+            </h3>
+            <p class="text-sm text-gray-500">
+              <span data-i18n="home.capabilities.ai.desc">Ask questions about your farm data and get plain-language explanations. High-risk agronomy questions are always redirected to a qualified expert.</span>
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- Guava Pilot Section                                             -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <section class="py-16 px-4">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-bold text-brand-primary mb-4 text-center">
+          <span data-i18n="home.pilot.heading">Guava Pilot Programme</span>
+        </h2>
+        <div class="bg-white border border-gray-200 rounded-xl p-6 sm:p-8 shadow-sm">
+          <p class="text-gray-600 mb-4">
+            <span data-i18n="home.pilot.p1">Smart Farmer began as a management tool for a single Taiwan Pink Guava orchard. That pilot helped us build and test the core activity logging, gap detection, and financial summary features.</span>
+          </p>
+          <p class="text-gray-600 mb-4">
+            <span data-i18n="home.pilot.p2">We are now expanding the platform to support any farmer with any crop. The guava pilot continues as a reference implementation — its lessons inform our design, but the platform does not assume a single orchard, a fixed tree count, or a specific location.</span>
+          </p>
+          <p class="text-gray-600">
+            <span data-i18n="home.pilot.p3">If you grow guava or any other crop and want to try Smart Farmer, we welcome you to join the pilot. Your feedback directly shapes what we build next.</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- Trust / AI Explanation Section                                  -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <section class="bg-brand-primary text-white py-16 px-4">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-center">
+          <span data-i18n="home.trust.heading">How We Use AI — and What It Will Not Do</span>
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8">
+
+          <div class="bg-emerald-900/40 rounded-xl p-6 border border-emerald-700/50">
+            <div class="text-2xl mb-3">✅</div>
+            <h3 class="text-lg font-bold text-green-100 mb-2">
+              <span data-i18n="home.trust.does.title">What AI Does</span>
+            </h3>
+            <ul class="space-y-2 text-sm text-green-100">
+              <li class="flex gap-2"><i class="fa-solid fa-check text-green-400 mt-1"></i><span data-i18n="home.trust.does.1">Explains your saved activities, tasks, and financial results in plain language</span></li>
+              <li class="flex gap-2"><i class="fa-solid fa-check text-green-400 mt-1"></i><span data-i18n="home.trust.does.2">Answers questions about your farm records using only your data</span></li>
+              <li class="flex gap-2"><i class="fa-solid fa-check text-green-400 mt-1"></i><span data-i18n="home.trust.does.3">Cites the source and date of any knowledge it references</span></li>
+            </ul>
+          </div>
+
+          <div class="bg-red-900/30 rounded-xl p-6 border border-red-700/50">
+            <div class="text-2xl mb-3">⛔</div>
+            <h3 class="text-lg font-bold text-red-100 mb-2">
+              <span data-i18n="home.trust.doesNot.title">What AI Will Not Do</span>
+            </h3>
+            <ul class="space-y-2 text-sm text-red-100">
+              <li class="flex gap-2"><i class="fa-solid fa-xmark text-red-400 mt-1"></i><span data-i18n="home.trust.doesNot.1">Recommend specific fertilizer doses, pesticide products, or tank mixtures</span></li>
+              <li class="flex gap-2"><i class="fa-solid fa-xmark text-red-400 mt-1"></i><span data-i18n="home.trust.doesNot.2">Diagnose crop diseases from photos</span></li>
+              <li class="flex gap-2"><i class="fa-solid fa-xmark text-red-400 mt-1"></i><span data-i18n="home.trust.doesNot.3">Access or reveal another farmer's data</span></li>
+              <li class="flex gap-2"><i class="fa-solid fa-xmark text-red-400 mt-1"></i><span data-i18n="home.trust.doesNot.4">Execute instructions found in uploaded documents</span></li>
+            </ul>
+          </div>
+
+        </div>
+        <p class="text-center text-green-200 text-sm mt-8 max-w-2xl mx-auto">
+          <span data-i18n="home.trust.note">High-risk agronomy questions are always redirected to your local KVK, agronomist, or product label. Smart Farmer never presents unverified content as an actionable instruction.</span>
+        </p>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- Contact / Join Pilot Form                                       -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <section id="contact" class="py-16 px-4">
+      <div class="max-w-2xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-bold text-brand-primary mb-2 text-center">
+          <span data-i18n="home.contact.heading">Contact Us / Join the Pilot</span>
+        </h2>
+        <p class="text-gray-500 text-center mb-8">
+          <span data-i18n="home.contact.intro">Tell us about yourself and we'll get back to you. No spam — we only use your details to respond to your enquiry.</span>
+        </p>
+
+        <form id="contact-form" class="bg-white border border-gray-200 rounded-xl p-6 sm:p-8 shadow-sm space-y-5">
+
+          <!-- Name -->
+          <div>
+            <label for="contact-name" class="block text-sm font-semibold text-gray-700 mb-1">
+              <span data-i18n="home.contact.name.label">Your Name</span> <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              id="contact-name"
+              name="name"
+              maxlength="100"
+              required
+              class="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-secondary"
+              placeholder=""
+            >
+            <p class="text-xs text-gray-400 mt-1"><span data-i18n="home.contact.name.hint">Required, up to 100 characters</span></p>
+          </div>
+
+          <!-- Contact method: Email -->
+          <div>
+            <label for="contact-email" class="block text-sm font-semibold text-gray-700 mb-1">
+              <span data-i18n="home.contact.email.label">Email</span>
+            </label>
+            <input
+              type="email"
+              id="contact-email"
+              name="email"
+              class="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-secondary"
+              placeholder="you@example.com"
+            >
+          </div>
+
+          <!-- Contact method: Phone -->
+          <div>
+            <label for="contact-phone" class="block text-sm font-semibold text-gray-700 mb-1">
+              <span data-i18n="home.contact.phone.label">Phone</span>
+            </label>
+            <input
+              type="tel"
+              id="contact-phone"
+              name="phone"
+              class="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-secondary"
+              placeholder="+91 XXXXX XXXXX"
+            >
+            <p class="text-xs text-gray-400 mt-1"><span data-i18n="home.contact.method.hint">Provide at least one contact method (email or phone)</span></p>
+          </div>
+
+          <!-- Message (optional) -->
+          <div>
+            <label for="contact-message" class="block text-sm font-semibold text-gray-700 mb-1">
+              <span data-i18n="home.contact.message.label">Message (optional)</span>
+            </label>
+            <textarea
+              id="contact-message"
+              name="message"
+              rows="3"
+              class="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-brand-secondary resize-y"
+            ></textarea>
+          </div>
+
+          <!-- Consent checkbox -->
+          <div class="flex items-start gap-3">
+            <input
+              type="checkbox"
+              id="contact-consent"
+              name="consent"
+              required
+              class="mt-1 w-5 h-5 accent-brand-secondary cursor-pointer"
+            >
+            <label for="contact-consent" class="text-sm text-gray-600">
+              <span data-i18n="home.contact.consent.label">I consent to Smart Farmer storing my name and contact details to respond to this enquiry. I can request deletion at any time.</span> <span class="text-red-500">*</span>
+            </label>
+          </div>
+
+          <!-- Submit button -->
+          <button
+            type="submit"
+            id="contact-submit"
+            class="w-full bg-brand-accent text-white font-semibold px-6 py-3 rounded-lg
+                   hover:opacity-90 transition text-lg flex items-center justify-center gap-2"
+          >
+            <span data-i18n="home.contact.submit">Submit</span>
+            <i class="fa-solid fa-paper-plane"></i>
           </button>
-          <button data-filter-cat="macro" onclick="filterNutrients('macro')" class="px-4 py-2 rounded-full text-sm font-semibold bg-white text-emerald-800 border border-emerald-400 hover:bg-emerald-50">
-            <span data-i18n="nutrient.filter.macro">Primary (N/P/K)</span>
-          </button>
-          <button data-filter-cat="secondary" onclick="filterNutrients('secondary')" class="px-4 py-2 rounded-full text-sm font-semibold bg-white text-emerald-800 border border-emerald-400 hover:bg-emerald-50">
-            <span data-i18n="nutrient.filter.secondary">Secondary (Ca/Mg/S)</span>
-          </button>
-          <button data-filter-cat="micro" onclick="filterNutrients('micro')" class="px-4 py-2 rounded-full text-sm font-semibold bg-white text-emerald-800 border border-emerald-400 hover:bg-emerald-50">
-            <span data-i18n="nutrient.filter.micro">Micronutrients</span>
-          </button>
-          <button data-filter-cat="bio" onclick="filterNutrients('bio')" class="px-4 py-2 rounded-full text-sm font-semibold bg-white text-emerald-800 border border-emerald-400 hover:bg-emerald-50">
-            <span data-i18n="nutrient.filter.bio">Biostimulants</span>
-          </button>
-        </div>
 
-        <p class="text-xs text-red-600 mb-4">🔴 All images are illustrative only — not deficiency photographs. Verify all dosages via soil and leaf tissue analysis.</p>
-
-        <!-- Card Grid (populated by JS) -->
-        <div id="nutrient-card-grid" class="card-grid grid gap-4"></div>
-      </div>
-    </section>
-
-    <section id="panel-calendar" class="tab-panel" hidden>
-      <div class="max-w-7xl mx-auto py-6 px-2">
-        <h2 class="text-2xl font-bold text-emerald-900 mb-1"><span data-i18n="calendar.heading">Farm Calendar</span></h2>
-        <p class="text-sm text-gray-500 mb-4"><span data-i18n="calendar.instructions">Select a month to view detailed agronomic actions</span></p>
-        <p class="text-xs text-gray-400 mb-4">Water target computed from ET₀ × Kc × Kr × 6m² ÷ η (system efficiency)</p>
-
-        <!-- Month Buttons (populated by JS) -->
-        <div id="calendar-month-buttons" class="flex flex-wrap gap-2 mb-4"></div>
-
-        <!-- Detail Card (populated by JS) -->
-        <div id="calendar-detail"></div>
-      </div>
-    </section>
-
-    <section id="panel-irrigation" class="tab-panel" hidden>
-      <div class="max-w-7xl mx-auto py-6 px-2">
-        <h2 class="text-2xl font-bold text-emerald-900 mb-4"><span data-i18n="drip.heading">Drip Irrigation Calculator</span></h2>
-
-        <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6">
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-            <div>
-              <label class="text-xs font-semibold text-gray-600 block mb-1"><span data-i18n="drip.stage">Growth Stage</span></label>
-              <select id="irr-stage" onchange="runIrrigationCalc()" class="w-full border border-gray-300 rounded-lg p-2 text-sm">
-                <option value="8-10">8–10 Months (Post-Monsoon Establishment)</option>
-                <option value="11-12">11–12 Months (Pre-Bloom Hardening)</option>
-                <option value="13-14">13–14 Months (Bloom &amp; Fruit Set)</option>
-                <option value="15">15 Months (Fruit Development)</option>
-                <option value="16">16 Months (Drought Stress / Pre-Harvest)</option>
-                <option value="17">17 Months (Harvest)</option>
-                <option value="18-19">18–19 Months (Post-Harvest Recovery)</option>
-                <option value="20">20 Months (Canopy Expansion)</option>
-                <option value="mature">Mature Tree (Year 4+)</option>
-              </select>
-            </div>
-            <div>
-              <label class="text-xs font-semibold text-gray-600 block mb-1"><span data-i18n="drip.hardware">Dripper Configuration</span></label>
-              <select id="irr-hardware" onchange="runIrrigationCalc()" class="w-full border border-gray-300 rounded-lg p-2 text-sm">
-                <option value="2x4">2 drippers × 4 L/h = 8 L/h per plant</option>
-                <option value="4x4">4 drippers × 4 L/h = 16 L/h per plant</option>
-              </select>
-            </div>
-            <div>
-              <label class="text-xs font-semibold text-gray-600 block mb-1"><span data-i18n="drip.efficiency">System Efficiency (η)</span></label>
-              <input type="number" id="irr-efficiency" min="0.70" max="1.00" step="0.01" value="0.90" oninput="runIrrigationCalc()" class="w-full border border-gray-300 rounded-lg p-2 text-sm">
-            </div>
+          <!-- Success message (hidden until needed) -->
+          <div id="contact-success" class="hidden bg-emerald-50 border border-emerald-300 rounded-lg p-4 text-center">
+            <i class="fa-solid fa-circle-check text-emerald-600 text-xl"></i>
+            <p class="text-emerald-800 font-semibold mt-2">
+              <span data-i18n="home.contact.success">Thank you! We'll be in touch soon.</span>
+            </p>
           </div>
 
-          <div class="bg-emerald-50 rounded-lg p-3 mb-4 text-sm font-mono text-emerald-800 border border-emerald-200">
-            <span data-i18n="drip.formula">Formula: V = ET₀ × Kc × Kr × S ÷ η  (S = 6.0 m²)</span>
+          <!-- Error message (hidden until needed) -->
+          <div id="contact-error" class="hidden bg-red-50 border border-red-300 rounded-lg p-4 text-center" role="alert">
+            <i class="fa-solid fa-circle-exclamation text-red-600 text-xl"></i>
+            <p id="contact-error-msg" class="text-red-800 font-semibold mt-2">
+              <span data-i18n="home.contact.error">Something went wrong. Please try again later.</span>
+            </p>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div class="bg-white border border-gray-200 rounded-xl p-3 text-center">
-              <div class="text-xs text-gray-500 mb-1"><span data-i18n="drip.vol">Volume per Plant (L/day)</span></div>
-              <div id="irr-vol" class="text-xl font-bold text-emerald-700">—</div>
-            </div>
-            <div class="bg-white border border-gray-200 rounded-xl p-3 text-center">
-              <div class="text-xs text-gray-500 mb-1"><span data-i18n="drip.runtime">Daily Run Time (hours)</span></div>
-              <div id="irr-runtime" class="text-xl font-bold text-emerald-700">—</div>
-            </div>
-            <div class="bg-white border border-gray-200 rounded-xl p-3 text-center">
-              <div class="text-xs text-gray-500 mb-1"><span data-i18n="drip.orchardTotal">Orchard Total (L/day)</span></div>
-              <div id="irr-orchard-total" class="text-xl font-bold text-emerald-700">—</div>
-            </div>
-          </div>
-        </div>
+          <!-- Validation hint (hidden until needed) -->
+          <p id="contact-validation" class="hidden text-sm text-red-600 font-semibold text-center">
+            <span data-i18n="home.contact.validation">Please provide your name, at least one contact method, and consent.</span>
+          </p>
 
-        <!-- Irrigation Chart -->
-        <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6">
-          <div class="chart-container"><canvas id="chart-irrigation"></canvas></div>
-        </div>
-
-        <!-- Vertisol Maintenance Protocol -->
-        <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
-          <h3 class="font-bold text-blue-800 mb-3"><span data-i18n="drip.maintenance">Vertisol Drip Maintenance Protocol</span></h3>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
-            <div class="bg-white rounded-lg p-3 border border-blue-100">
-              <div class="font-semibold text-blue-700">🔄 Bi-weekly Line Flush</div>
-              <div class="text-xs text-gray-600 mt-1">Flush all laterals for 5 minutes every 2 weeks to clear sediment from Vertisol clay particles.</div>
-            </div>
-            <div class="bg-white rounded-lg p-3 border border-blue-100">
-              <div class="font-semibold text-blue-700">🧪 Acid Wash</div>
-              <div class="text-xs text-gray-600 mt-1">Inject dilute phosphoric acid to dissolve CaCO₃ precipitates. Frequency depends on water hardness — determine from water chemistry test.</div>
-            </div>
-            <div class="bg-white rounded-lg p-3 border border-blue-100">
-              <div class="font-semibold text-blue-700">💧 Biofilm Chlorination</div>
-              <div class="text-xs text-gray-600 mt-1">Inject 2–4 ppm free chlorine at system tail-end monthly to control biofilm buildup. Verify chlorine levels do not damage drippers.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="panel-fertigation" class="tab-panel" hidden>
-      <div class="max-w-7xl mx-auto py-6 px-2">
-        <h2 class="text-2xl font-bold text-emerald-900 mb-4"><span data-i18n="fert.heading">Fertigation Schedules</span></h2>
-
-        <!-- Annual RDF Targets -->
-        <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6">
-          <h3 class="font-bold text-emerald-800 mb-3"><span data-i18n="fert.rdfHeading">Annual RDF Targets (N-P₂O₅-K₂O per tree)</span></h3>
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm border-collapse">
-              <thead>
-                <tr class="bg-emerald-800 text-white">
-                  <th class="p-2 text-left"><span data-i18n="fert.year">Year</span></th>
-                  <th class="p-2 text-center"><span data-i18n="fert.npk">N-P₂O₅-K₂O (g/tree)</span></th>
-                  <th class="p-2 text-center">Evidence</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="border-b"><td class="p-2">Year 1</td><td class="p-2 text-center font-mono">100-50-100</td><td class="p-2 text-center"><span class="badge-A">🟢 A</span></td></tr>
-                <tr class="border-b bg-gray-50"><td class="p-2">Year 2</td><td class="p-2 text-center font-mono">200-100-200</td><td class="p-2 text-center"><span class="badge-A">🟢 A</span></td></tr>
-                <tr class="border-b"><td class="p-2">Year 3</td><td class="p-2 text-center font-mono">250-120-250</td><td class="p-2 text-center"><span class="badge-B">🔵 B</span></td></tr>
-                <tr><td class="p-2">Mature Year 4+</td><td class="p-2 text-center font-mono">300-150-300</td><td class="p-2 text-center"><span class="badge-C">🟡 C</span></td></tr>
-              </tbody>
-            </table>
-          </div>
-          <p class="text-xs text-amber-700 mt-2">Reference: ICAR-IIHR high-density guava research recommends 340:70:260 g N:P₂O₅:K₂O as an alternative calibration point.</p>
-          <p class="text-xs text-gray-500 mt-1">🟡C — Mature NPK targets must be calibrated with soil test and leaf tissue analysis after Year 2.</p>
-        </div>
-
-        <!-- 3-Tank Protocol -->
-        <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6">
-          <h3 class="font-bold text-emerald-800 mb-3"><span data-i18n="fert.tankHeading">3-Tank Compatibility Protocol</span></h3>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div class="bg-blue-50 border border-blue-200 rounded-xl p-3">
-              <div class="font-bold text-blue-800 text-sm">Tank A</div>
-              <div class="text-xs text-gray-700 mt-1">Calcium Nitrate + soluble micronutrients (Fe, Mn, Zn chelates)</div>
-              <div class="text-xs text-red-600 mt-2 font-semibold">⛔ NEVER mix with phosphates or sulfates</div>
-            </div>
-            <div class="bg-green-50 border border-green-200 rounded-xl p-3">
-              <div class="font-bold text-green-800 text-sm">Tank B</div>
-              <div class="text-xs text-gray-700 mt-1">MAP/DAP + Potassium Nitrate + MKP</div>
-              <div class="text-xs text-gray-500 mt-2">Standard phosphate and potassium sources</div>
-            </div>
-            <div class="bg-amber-50 border border-amber-200 rounded-xl p-3">
-              <div class="font-bold text-amber-800 text-sm">Tank C (if needed)</div>
-              <div class="text-xs text-gray-700 mt-1">WSF with sulfates (SOP, MgSO₄)</div>
-              <div class="text-xs text-red-600 mt-2 font-semibold">⛔ Keep sulfates separate from Tank A</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Stage 1 WSF Schedule -->
-        <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6">
-          <h3 class="font-bold text-emerald-800 mb-3"><span data-i18n="fert.scheduleHeading">Stage 1 WSF Schedule (Months 8–12, 16-week programme)</span></h3>
-          <div class="overflow-x-auto">
-            <table class="w-full text-xs border-collapse">
-              <thead>
-                <tr class="bg-emerald-800 text-white">
-                  <th class="p-2 text-left">Grade/Formula</th>
-                  <th class="p-2 text-right"><span data-i18n="fert.perPlant">Per plant/week (g)</span></th>
-                  <th class="p-2 text-right"><span data-i18n="fert.per100">Per 100 trees/week (g)</span></th>
-                  <th class="p-2 text-right"><span data-i18n="fert.orchard">Orchard 2100 trees/week (kg)</span></th>
-                  <th class="p-2 text-right"><span data-i18n="fert.total16wk">16-week total (kg)</span></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="border-b"><td class="p-2">19-19-19 WSF (Weeks 1–8)</td><td class="p-2 text-right">5–8</td><td class="p-2 text-right">500–800</td><td class="p-2 text-right">10.5–16.8</td><td class="p-2 text-right">84–134</td></tr>
-                <tr class="border-b bg-gray-50"><td class="p-2">12-6-20 WSF (Weeks 9–16)</td><td class="p-2 text-right">8–10</td><td class="p-2 text-right">800–1000</td><td class="p-2 text-right">16.8–21.0</td><td class="p-2 text-right">134–168</td></tr>
-                <tr><td class="p-2">Ca Nitrate supplement</td><td class="p-2 text-right">2–3</td><td class="p-2 text-right">200–300</td><td class="p-2 text-right">4.2–6.3</td><td class="p-2 text-right">34–50</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <p class="text-xs text-gray-500 mt-2">Values sourced from IRRIGATION_STAGES and CALENDAR_DATA constants. 🟡C — calibrate after leaf tissue analysis.</p>
-          <p class="text-xs text-amber-700 mt-1">Reference: ICAR-IIHR high-density guava research recommends 340:70:260 g N:P₂O₅:K₂O as an alternative calibration point.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="panel-health" class="tab-panel" hidden>
-      <div class="max-w-7xl mx-auto py-6 px-2">
-        <h2 class="text-2xl font-bold text-emerald-900 mb-3"><span data-i18n="ipm.heading">Crop Health &amp; IPM</span></h2>
-
-        <!-- Regulatory Disclaimer FIRST -->
-        <div class="bg-red-50 border-2 border-red-400 rounded-xl p-3 mb-4">
-          <p class="text-sm font-semibold text-red-800"><span data-i18n="ipm.disclaimer">⚠ All chemical recommendations must be verified against current CIB&amp;RC registration before application.</span></p>
-        </div>
-
-        <!-- Search and Filter -->
-        <div class="flex flex-col sm:flex-row gap-3 mb-4">
-          <input id="ipm-search" type="text" placeholder="Search pest or disease..." oninput="filterHealthCards()" class="flex-1 border border-gray-300 rounded-lg p-2 text-sm">
-          <select id="ipm-category" onchange="filterHealthCards()" class="border border-gray-300 rounded-lg p-2 text-sm">
-            <option value="all"><span data-i18n="ipm.filterAll">All</span></option>
-            <option value="insect"><span data-i18n="ipm.filterInsect">Insect Pests</span></option>
-            <option value="disease"><span data-i18n="ipm.filterDisease">Diseases</span></option>
-          </select>
-        </div>
-
-        <!-- Card Grid (populated by JS) -->
-        <div id="ipm-card-grid" class="card-grid grid gap-4 mb-6"></div>
-
-        <!-- Visual ID Gallery -->
-        <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6">
-          <h3 class="font-bold text-emerald-800 mb-1">Visual Disease Identification Gallery</h3>
-          <p class="text-xs text-red-600 mb-3">🔴 Image labels: illustrative only, not diagnostic photographs</p>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div class="border rounded-lg p-2 text-center">
-              <div class="img-fallback bg-amber-50 rounded p-3 text-xs text-amber-800">🦟 <strong>Oriental Fruit Fly</strong><br>Pin-prick holes on fruit surface with oozing; premature drop</div>
-            </div>
-            <div class="border rounded-lg p-2 text-center">
-              <div class="img-fallback bg-amber-50 rounded p-3 text-xs text-amber-800">🪲 <strong>Guava Mealybug</strong><br>White cottony masses at stem junctions; sooty mould</div>
-            </div>
-            <div class="border rounded-lg p-2 text-center">
-              <div class="img-fallback bg-amber-50 rounded p-3 text-xs text-amber-800">🐛 <strong>Shoot Borer</strong><br>Wilted shoot tips "dead heart"; entry hole at base</div>
-            </div>
-            <div class="border rounded-lg p-2 text-center">
-              <div class="img-fallback bg-amber-50 rounded p-3 text-xs text-amber-800">🐛 <strong>Bark-Eating Caterpillar</strong><br>Silken webs + frass on bark surface</div>
-            </div>
-            <div class="border rounded-lg p-2 text-center">
-              <div class="img-fallback bg-red-50 rounded p-3 text-xs text-red-800">🍄 <strong>Guava Wilt</strong><br>Sudden canopy yellowing; reddish vascular discolouration</div>
-            </div>
-            <div class="border rounded-lg p-2 text-center">
-              <div class="img-fallback bg-red-50 rounded p-3 text-xs text-red-800">🍄 <strong>Anthracnose</strong><br>Brown sunken lesions on fruit; tip dieback on shoots</div>
-            </div>
-            <div class="border rounded-lg p-2 text-center">
-              <div class="img-fallback bg-red-50 rounded p-3 text-xs text-red-800">🍄 <strong>Fruit Canker</strong><br>Raised corky lesions on fruit surface; black acervuli</div>
-            </div>
-            <div class="border rounded-lg p-2 text-center">
-              <div class="img-fallback bg-red-50 rounded p-3 text-xs text-red-800">🍄 <strong>Stylar End Rot</strong><br>Brown rot from blossom end; firm dry (Ca) or soft wet (Phytoph.)</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- FRAC/IRAC Rotation Panel -->
-        <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6">
-          <h3 class="font-bold text-emerald-800 mb-3"><span data-i18n="ipm.fracHeading">FRAC/IRAC Resistance Rotation Calendar</span></h3>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 text-xs">
-              <div class="font-bold text-blue-800 mb-1">Window 1 — Bloom/Fruit Set</div>
-              <div><strong>Fungicide:</strong> Copper oxychloride (FRAC M1)</div>
-              <div><strong>Insecticide:</strong> Spinosad bait (IRAC 5) — avoid full bloom</div>
-            </div>
-            <div class="bg-green-50 border border-green-200 rounded-xl p-3 text-xs">
-              <div class="font-bold text-green-800 mb-1">Window 2 — Fruit Development</div>
-              <div><strong>Fungicide:</strong> Azoxystrobin (FRAC 11)</div>
-              <div><strong>Insecticide:</strong> Chlorantraniliprole (IRAC 28)</div>
-            </div>
-            <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs">
-              <div class="font-bold text-amber-800 mb-1">Window 3 — Pre-Bagging</div>
-              <div><strong>Fungicide:</strong> Propiconazole (FRAC 3)</div>
-              <div><strong>Insecticide:</strong> Neem oil (IRAC UN)</div>
-            </div>
-            <div class="bg-gray-50 border border-gray-200 rounded-xl p-3 text-xs">
-              <div class="font-bold text-gray-800 mb-1">Window 4 — Post-Harvest</div>
-              <div><strong>Fungicide:</strong> Mancozeb (FRAC M3)</div>
-              <div><strong>Insecticide:</strong> Imidacloprid stem drench (IRAC 4A — once/cycle)</div>
-            </div>
-          </div>
-          <p class="text-xs text-red-600 mt-2">⚠ All chemical applications must be verified against CIB&amp;RC registration before use.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="panel-bagging" class="tab-panel" hidden>
-      <div class="max-w-7xl mx-auto py-6 px-2">
-        <h2 class="text-2xl font-bold text-emerald-900 mb-4"><span data-i18n="bagging.heading">Fruit Bagging &amp; Diagnostics</span></h2>
-
-        <!-- 3-Layer Bagging System -->
-        <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6">
-          <h3 class="font-bold text-emerald-800 mb-3"><span data-i18n="bagging.layers">3-Layer Bagging System</span> <span class="badge-C ml-2">🟡 C</span></h3>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3">
-              <div class="font-bold text-emerald-700 text-sm">Layer 1 — Inner</div>
-              <div class="text-sm text-gray-700 mt-1">EPE Foam Mesh Net — absorbs ethylene, cushions impact, prevents skin abrasion</div>
-            </div>
-            <div class="bg-blue-50 border border-blue-200 rounded-xl p-3">
-              <div class="font-bold text-blue-700 text-sm">Layer 2 — Middle</div>
-              <div class="text-sm text-gray-700 mt-1">Perforated LDPE Bag — moisture escape, pest barrier, prevents Anthracnose</div>
-            </div>
-            <div class="bg-amber-50 border border-amber-200 rounded-xl p-3">
-              <div class="font-bold text-amber-700 text-sm">Layer 3 — Outer</div>
-              <div class="text-sm text-gray-700 mt-1">UV-Reflective Paper Bag — reduces heat stress, prevents sunburn, deters fruit fly</div>
-            </div>
-          </div>
-          <p class="text-xs text-amber-700 mt-3">🟡C — Local validation required. Efficacy data specific to Taiwan Pink on Vertisol not yet published. Trial on sample trees before full orchard deployment.</p>
-        </div>
-
-        <!-- Pre-Bagging Spray -->
-        <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6">
-          <h3 class="font-bold text-emerald-800 mb-3"><span data-i18n="bagging.preSpray">Pre-Bagging Spray Directive</span></h3>
-          <div class="bg-amber-50 border border-amber-300 rounded-xl p-3 text-sm">
-            <p class="font-semibold text-amber-800">Azoxystrobin 0.1% + Neem Oil 2 mL/L — apply 24 hours before bagging. Fruits must be completely dry before bagging.</p>
-            <p class="text-xs text-red-600 mt-2">⚠ Verify CIB&amp;RC registration before application. PHI must be observed.</p>
-          </div>
-        </div>
-
-        <!-- Diagnostic Lookup -->
-        <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6">
-          <h3 class="font-bold text-emerald-800 mb-3"><span data-i18n="bagging.diagHeading">Soil &amp; Water Diagnostic Lookup</span></h3>
-          <div class="mb-3">
-            <label class="text-xs font-semibold text-gray-600 block mb-1"><span data-i18n="bagging.diagSelect">Select parameter to look up</span></label>
-            <select id="diag-param" onchange="runDiagnosticLookup()" class="border border-gray-300 rounded-lg p-2 text-sm w-full max-w-sm">
-              <option value="">— Select —</option>
-              <option value="ph">Soil pH</option>
-              <option value="ece">Soil ECe (Electrical Conductivity)</option>
-              <option value="oc">Organic Carbon (%)</option>
-              <option value="avp">Available Phosphorus (Olsen P)</option>
-              <option value="caco3">Free CaCO₃ (%)</option>
-              <option value="rsc">Irrigation Water RSC</option>
-              <option value="sar">Irrigation Water SAR</option>
-            </select>
-          </div>
-          <div id="diag-output">
-            <p class="text-sm text-gray-500 italic">Select a parameter above to view target range and remediation protocol.</p>
-          </div>
-        </div>
-
-        <!-- RSC/SAR Caveat -->
-        <div class="bg-yellow-50 border border-yellow-300 rounded-xl p-4">
-          <h3 class="font-bold text-yellow-800 mb-2"><span data-i18n="bagging.caveats">RSC/SAR Remediation Caveats</span></h3>
-          <p class="text-sm text-yellow-900">⚠ RSC and SAR remediation doses must be calculated from actual water chemistry analysis — do not apply at a fixed rate. Obtain a complete water chemistry report before calculating Gypsum or acid dosage.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="panel-procurement" class="tab-panel" hidden>
-      <div class="max-w-7xl mx-auto py-6 px-2">
-        <h2 class="text-2xl font-bold text-emerald-900 mb-4"><span data-i18n="procurement.heading">Procurement Calculator</span></h2>
-
-        <!-- Tree Count Slider -->
-        <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6">
-          <label class="text-sm font-semibold text-gray-700 block mb-2">
-            <span data-i18n="procurement.treeCount">Tree Count</span>: <span id="proc-trees-val" class="text-emerald-700 font-bold text-lg">2,100</span>
-          </label>
-          <input type="range" id="proc-trees" min="100" max="5000" step="100" value="2100" oninput="updateProcurement()" class="w-full accent-emerald-600 mb-2">
-          <div class="flex justify-between text-xs text-gray-400"><span>100</span><span>5,000</span></div>
-          <p class="text-xs text-gray-500 mt-2">Base quantities keyed to 2,100 trees. Scaling formula: actual trees ÷ 2,100 × base quantity, rounded up to nearest whole commercial unit.</p>
-          <p class="text-xs text-red-600 mt-1">🔴 Prices and availability must be verified with local suppliers at time of purchase.</p>
-        </div>
-
-        <!-- Output Panels -->
-        <div class="space-y-6">
-          <div class="bg-white border border-gray-200 rounded-xl p-4">
-            <h3 class="font-bold text-emerald-800 mb-3"><span data-i18n="procurement.fertilizers">Fertilizers &amp; WSF</span></h3>
-            <div id="proc-fertilizers"></div>
-          </div>
-          <div class="bg-white border border-gray-200 rounded-xl p-4">
-            <h3 class="font-bold text-emerald-800 mb-3"><span data-i18n="procurement.bio">Micronutrients &amp; Bio-Agents</span></h3>
-            <div id="proc-bio"></div>
-          </div>
-          <div class="bg-white border border-gray-200 rounded-xl p-4">
-            <h3 class="font-bold text-emerald-800 mb-3"><span data-i18n="procurement.hardware">Hardware &amp; Bagging Supplies</span></h3>
-            <div id="proc-hardware"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="panel-warnings" class="tab-panel" hidden>
-      <div class="max-w-7xl mx-auto py-6 px-2">
-        <h2 class="text-2xl font-bold text-red-800 mb-1"><span data-i18n="warnings.heading">Critical Warnings</span></h2>
-        <p class="text-sm text-gray-600 mb-6"><span data-i18n="warnings.intro">The following practices carry documented risk of significant crop loss or tree mortality. Review before each operational phase.</span></p>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-
-          <!-- Card 1 — Severe -->
-          <div class="bg-red-50 border-l-4 border-red-500 rounded-xl p-4">
-            <h4 class="font-bold text-red-800 mb-2"><span data-i18n="warnings.card1.title">⛔ Premature Cropping (Year 1)</span></h4>
-            <p class="text-sm text-red-900"><span data-i18n="warnings.card1.body">Allowing fruit to develop in Year 1 diverts energy from root and canopy establishment. Remove all flowers in Months 8–12.</span></p>
-          </div>
-
-          <!-- Card 2 — Severe -->
-          <div class="bg-red-50 border-l-4 border-red-500 rounded-xl p-4">
-            <h4 class="font-bold text-red-800 mb-2"><span data-i18n="warnings.card2.title">⛔ Root-Collar Waterlogging on Vertisol</span></h4>
-            <p class="text-sm text-red-900"><span data-i18n="warnings.card2.body">Waterlogging &gt;48 hours causes root asphyxiation and Fusarium wilt entry. Maintain drainage furrows before monsoon.</span></p>
-          </div>
-
-          <!-- Card 3 — Caution -->
-          <div class="bg-amber-50 border-l-4 border-amber-500 rounded-xl p-4">
-            <h4 class="font-bold text-amber-800 mb-2"><span data-i18n="warnings.card3.title">⚠ Tractor Rotovation Near Trunk</span></h4>
-            <p class="text-sm text-amber-900"><span data-i18n="warnings.card3.body">Rotovating within 1.5m of trunk severs feeder roots and creates wound entry points. Use hand-weeding within root zone.</span></p>
-          </div>
-
-          <!-- Card 4 — Caution -->
-          <div class="bg-amber-50 border-l-4 border-amber-500 rounded-xl p-4">
-            <h4 class="font-bold text-amber-800 mb-2"><span data-i18n="warnings.card4.title">⚠ Glyphosate Drift</span></h4>
-            <p class="text-sm text-amber-900"><span data-i18n="warnings.card4.body">Drift onto green wood causes defoliation and systemic damage. Use shielded applicators; maintain 3m buffer from canopy.</span></p>
-          </div>
-
-          <!-- Card 5 — Severe -->
-          <div class="bg-red-50 border-l-4 border-red-500 rounded-xl p-4">
-            <h4 class="font-bold text-red-800 mb-2"><span data-i18n="warnings.card5.title">⛔ Calcium Nitrate + Phosphate/Sulphate Tank Mixing</span></h4>
-            <p class="text-sm text-red-900"><span data-i18n="warnings.card5.body">Mixing Calcium Nitrate with phosphates or sulfates causes immediate precipitation, blocking drippers. Use separate tanks.</span></p>
-          </div>
-
-          <!-- Card 6 — Caution -->
-          <div class="bg-amber-50 border-l-4 border-amber-500 rounded-xl p-4">
-            <h4 class="font-bold text-amber-800 mb-2"><span data-i18n="warnings.card6.title">⚠ Unperforated Plastic Bagging</span></h4>
-            <p class="text-sm text-amber-900"><span data-i18n="warnings.card6.body">Sealed bags trap humidity, promoting Anthracnose and physiological disorders. Use only perforated LDPE or paper bags.</span></p>
-          </div>
-
-          <!-- Card 7 — Caution -->
-          <div class="bg-amber-50 border-l-4 border-amber-500 rounded-xl p-4">
-            <h4 class="font-bold text-amber-800 mb-2"><span data-i18n="warnings.card7.title">⚠ Insecticide Spray During Full Bloom</span></h4>
-            <p class="text-sm text-amber-900"><span data-i18n="warnings.card7.body">Broad-spectrum insecticides during anthesis kill pollinators. Suspend chemical insecticides during full bloom (7–10 days).</span></p>
-          </div>
-
-          <!-- Card 8 — Severe -->
-          <div class="bg-red-50 border-l-4 border-red-500 rounded-xl p-4">
-            <h4 class="font-bold text-red-800 mb-2"><span data-i18n="warnings.card8.title">⛔ Chemical Deblossoming on Trees &lt; 12 Months</span></h4>
-            <p class="text-sm text-red-900"><span data-i18n="warnings.card8.body">Spraying Urea or NAA on trees under 12 months causes phytotoxic burn. Manual deblossoming is the recommended safe alternative.</span></p>
-          </div>
-
-          <!-- Card 9 — Caution -->
-          <div class="bg-amber-50 border-l-4 border-amber-500 rounded-xl p-4 lg:col-span-2">
-            <h4 class="font-bold text-amber-800 mb-2"><span data-i18n="warnings.card9.title">⚠ Abrupt Re-irrigation After Drought</span></h4>
-            <p class="text-sm text-amber-900"><span data-i18n="warnings.card9.body">Resuming full irrigation immediately after Month-16 drought causes fruit splitting. Reintroduce gradually over 5–7 days at 30→60→100%.</span></p>
-          </div>
-
-        </div>
-
-        <p class="text-xs text-red-600 mt-4 pt-3 border-t border-red-200">⚠ CIB&amp;RC Disclaimer: All pesticide recommendations must be verified against current CIB&amp;RC registration. Pre-harvest intervals (PHI) must be observed.</p>
+        </form>
       </div>
     </section>
 
   </main>
 
-  <!-- Disclaimer Footer -->
-  <footer class="bg-emerald-900 text-green-100 text-xs p-4 mt-8 text-center">
-    <p>All financial projections are planning scenarios only (🔴 Scenario). Verify all prices with buyers before harvest. NHB/ICAR agronomic references used where stated.</p>
-    <p class="mt-1">⚠ All pesticide recommendations must be verified against current CIB&amp;RC registration. Pre-harvest intervals (PHI) must be observed.</p>
+  <!-- Footer -->
+  <footer class="bg-emerald-900 text-green-100 text-xs p-6 mt-8 text-center">
+    <p class="mb-2"><span data-i18n="home.footer.tagline">Smart Farmer — Farm management &amp; decision support for Indian farmers</span></p>
+    <p><span data-i18n="home.footer.disclaimer">All agronomic content is sourced and labelled with its evidence status. Unverified content is never shown as an actionable instruction. Consult your local KVK or agronomist for crop-specific advice.</span></p>
+    <p class="mt-3"><a href="privacy.html" class="text-green-300 underline hover:text-green-100"><span data-i18n="home.footer.privacy">Privacy Policy</span></a></p>
   </footer>
 
+  <!-- Main homepage script -->
   <script type="module" src="js/app.js"></script>
 
   <!-- Wake up the Render backend as soon as anyone visits the landing page -->

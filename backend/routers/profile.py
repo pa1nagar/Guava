@@ -5,6 +5,13 @@ Saves or updates the farmer's profile in the farmers table.
 Clears the cached plan whenever plan-relevant profile fields change.
 """
 
+# ── Multi-tenant isolation ──────────────────────────────────────────────────
+# Security: user_id is always derived from JWT via Depends(get_user_id).
+# It is NEVER read from the request body. All DB queries filter by user_id
+# or farmer_id IN (SELECT id FROM farmers WHERE user_id = <jwt.sub>).
+# IDOR attempts return 404 (not 403) to avoid confirming resource existence.
+# Requirements: 3.2, 3.3, 3.4
+
 import logging
 from datetime import date
 from typing import Optional

@@ -6,9 +6,15 @@ are defined in this module. To change or add stages, edit the JSON file only.
 
 Public API
 ----------
+compute_crop_age_months(planting_date, today=None, timezone="Asia/Kolkata") -> int
+    Pure function returning complete calendar months elapsed since the
+    planting date.  Timezone-aware via ``zoneinfo`` (Python 3.9+ stdlib).
+    The same floor-based logic that ``get_stage`` uses internally.
+
 get_stage(crop, sowing_date) -> StageResult
     Returns a StageResult dataclass with stage dict, timing fields, and
-    is_final_stage flag.
+    is_final_stage flag.  Internally delegates month computation to
+    ``compute_crop_age_months``.
 
 StageResult fields:
     stage           dict  — full stage object from crop_knowledge.json
@@ -20,7 +26,9 @@ StageResult fields:
 import json
 import pathlib
 from dataclasses import dataclass
-from datetime import date
+from datetime import date, datetime
+from typing import Optional
+from zoneinfo import ZoneInfo
 
 from fastapi import HTTPException
 
@@ -35,6 +43,41 @@ class StageResult:
     months_elapsed: int
     days_elapsed: int
     is_final_stage: bool
+
+
+def compute_crop_age_months(
+    planting_date: date,
+    today: Optional[date] = None,
+    timezone: str = "Asia/Kolkata",
+) -> int:
+    """Return complete calendar months elapsed since ``planting_date``.
+
+    Uses a floor-based calendar month difference — a partial month counts
+    only once the day-of-month of the planting date has been reached.
+    This is the same logic ``get_stage`` relies on, extracted as a pure
+    function so it can be called independently and tested in isolation.
+
+    Timezone-aware: when ``today`` is *not* supplied the current date is
+    resolved in ``timezone`` (IANA name, default ``"Asia/Kolkata"``).
+    When ``today`` is supplied it is used as-is, making the function
+    deterministic and easy to test.
+
+    Args:
+        planting_date: The date the crop was planted / sown.
+        today: Reference date; defaults to today in ``timezone``.
+        timezone: IANA timezone name, used only when ``today`` is None.
+
+    Returns:
+        Complete months elapsed (floor).  May be negative when ``today``
+        predates ``planting_date`` — callers should validate as needed.
+    """
+    if today is None:
+        today = datetime.now(ZoneInfo(timezone)).date()
+
+    months = (today.year - planting_date.year) * 12 + (today.month - planting_date.month)
+    if today.day < planting_date.day:
+        months -= 1
+    return months
 
 
 def get_stage(crop: str, sowing_date: date) -> StageResult:
@@ -59,9 +102,8 @@ def get_stage(crop: str, sowing_date: date) -> StageResult:
     days_elapsed = (today - sowing_date).days
 
     # Integer complete months elapsed (floor, not round).
-    months = (today.year - sowing_date.year) * 12 + (today.month - sowing_date.month)
-    if today.day < sowing_date.day:
-        months -= 1
+    # Delegates to the pure function so the logic lives in one place.
+    months = compute_crop_age_months(sowing_date, today)
 
     crop_key = crop.lower()
     if crop_key not in _knowledge:
