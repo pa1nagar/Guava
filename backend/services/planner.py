@@ -1,5 +1,5 @@
-"""
-planner.py — Gemini plan generation (structured JSON output).
+﻿"""
+planner.py â€” Gemini plan generation (structured JSON output).
 
 Gemini's ONLY job is to produce farmer-friendly explanation text.
 All quantities, stage names, and agricultural facts come from the
@@ -28,7 +28,7 @@ import google.generativeai as genai
 
 logger = logging.getLogger(__name__)
 
-# ── Gemini setup — deferred until first call ──────────────────────────────────
+# â”€â”€ Gemini setup â€” deferred until first call â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 _GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 _MODEL = None  # initialised lazily in _get_model()
 
@@ -48,7 +48,6 @@ def _get_model():
         _MODEL = genai.GenerativeModel(
             "gemini-flash-latest",
             generation_config=genai.GenerationConfig(
-                response_mime_type="application/json",
                 temperature=0.2,
                 max_output_tokens=1024,
             ),
@@ -56,7 +55,7 @@ def _get_model():
     return _MODEL
 
 
-# ── Required output schema ────────────────────────────────────────────────────
+# â”€â”€ Required output schema â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 _REQUIRED_TOP_KEYS = {"summary", "tasks", "warnings", "notes"}
 _REQUIRED_TASK_KEYS = {"category", "title", "description"}
 
@@ -78,15 +77,47 @@ def _validate_response(data: dict) -> bool:
 
 
 def _extract_json(text: str) -> dict | None:
-    """Extract a JSON object from a string that may contain markdown fences."""
+    """Extract a JSON object from a string that may contain markdown fences.
+    
+    Tries multiple strategies in order:
+    1. Direct parse (already plain JSON)
+    2. Strip markdown code fences then parse
+    3. Find first {...} block and parse that
+    """
     if not text or not text.strip():
         return None
-    cleaned = re.sub(r"^```(?:json)?\s*", "", text.strip(), flags=re.MULTILINE)
-    cleaned = re.sub(r"\s*```$", "", cleaned.strip(), flags=re.MULTILINE)
+    
+    # Strategy 1: direct parse
+    try:
+        return json.loads(text.strip())
+    except json.JSONDecodeError:
+        pass
+    
+    # Strategy 2: strip markdown fences
+    cleaned = re.sub(r"^```(?:json)?\s*\n?", "", text.strip(), flags=re.MULTILINE)
+    cleaned = re.sub(r"\n?```\s*$", "", cleaned.strip(), flags=re.MULTILINE)
     try:
         return json.loads(cleaned)
     except json.JSONDecodeError:
-        return None
+        pass
+    
+    # Strategy 3: find the first complete JSON object in the text
+    start = text.find("{")
+    if start != -1:
+        # Walk from the end to find matching closing brace
+        depth = 0
+        for i, ch in enumerate(text[start:], start=start):
+            if ch == "{":
+                depth += 1
+            elif ch == "}":
+                depth -= 1
+                if depth == 0:
+                    try:
+                        return json.loads(text[start:i+1])
+                    except json.JSONDecodeError:
+                        break
+    
+    return None
 
 
 def build_structured_prompt(
@@ -114,7 +145,7 @@ quantities, doses, or instructions that are not present in the reference data.
 Do not change any number. Do not perform any calculation. Do not invent anything.
 Write in simple, plain language that a farmer with little formal education can understand.
 Use short sentences. No jargon. No Latin names. Respond in English only.
-If information is missing, use null in the JSON output — never invent a value.
+If information is missing, use null in the JSON output â€” never invent a value.
 
 The farmer is located in {district}, {state}.
 The farmer has {plant_count} guava plants.
@@ -185,7 +216,7 @@ def generate_plan_structured(
         dict   matching the required schema on success.
         None   if Gemini is unavailable or returns invalid data.
 
-    Never raises — callers use None as a signal to fall back to
+    Never raises â€” callers use None as a signal to fall back to
     deterministic tasks.
     """
     prompt = build_structured_prompt(stage, plant_count, scaled, state, district)
@@ -209,7 +240,7 @@ def generate_plan_structured(
     return data
 
 
-# ── Legacy plain-text entry point (backward compatibility) ───────────────────
+# â”€â”€ Legacy plain-text entry point (backward compatibility) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 def _scale_fertigation(fertigation_text: str, plant_count: int) -> str:
     """Replace numeric gram quantities with plant_count-scaled totals."""
@@ -243,3 +274,5 @@ Write a care plan as four short plain-text paragraphs: situation, irrigation, fe
     except Exception as exc:
         logger.error("Gemini API call failed: %s", exc)
         raise RuntimeError("Gemini unavailable") from exc
+
+
