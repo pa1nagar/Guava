@@ -50,6 +50,8 @@ CATEGORY_LIMITS: dict[str, int] = {
     "file_upload": 20,
     "ai_query": 30,
     "contact_form": 20,
+    "market_prices": 60,
+    "admin_ingest": 5,
 }
 
 

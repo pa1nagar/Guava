@@ -7,12 +7,14 @@
  * before operational use. Evidence grades: 🟢A = strong, 🟡C = indicative.
  *
  * Tasks covered: 6 (Orchard constants), 7 (NUTRIENTS_DATA),
- *                8 (CALENDAR_DATA), 9 (IPM_DATA + FRAC_IRAC_ROTATION),
- *               10 (Market data)
+ *                8 (CALENDAR_DATA), 9 (IPM_DATA + FRAC_IRAC_ROTATION)
  */
 
 // ─────────────────────────────────────────────────────────────────────────────
 // TASK 6 — ORCHARD CONSTANTS
+// CASE STUDY, NOT MARKET DATA: these figures describe the owner's own
+// 2100-tree Taiwan Pink orchard. Market prices come from the live mandi API
+// (Agmarknet / data.gov.in); no price table is stored in this file.
 // ─────────────────────────────────────────────────────────────────────────────
 
 export const ORCHARD = {
@@ -20,15 +22,6 @@ export const ORCHARD = {
   avgFruitWeightKg: 0.400,
   spacingM2: 6.0
 };
-
-export const OPEX_BASE = {
-  yr2: 420000,
-  yr4: 750000
-};
-
-export const SCENARIO_YIELDS = [20, 25, 30, 35, 40, 48];
-
-export const SCENARIO_PRICES = [40, 50, 60, 70, 85];
 
 /**
  * IRRIGATION_STAGES — 9 phenological stages
@@ -631,43 +624,6 @@ export const FRAC_IRAC_ROTATION = [
   }
 ];
 
-// ─────────────────────────────────────────────────────────────────────────────
-// TASK 10 — MARKET DATA
-// ─────────────────────────────────────────────────────────────────────────────
-
-export const MONTHLY_PRICE_DATA = [
-  { month: 'Jan', modal: 20, min: 12, max: 35,  arrivals: 'Very High (>180 t/day)',           score: 2 },
-  { month: 'Feb', modal: 32, min: 20, max: 45,  arrivals: 'Moderate (80–120 t/day)',          score: 6 },
-  { month: 'Mar', modal: 48, min: 35, max: 65,  arrivals: 'Low (40–70 t/day)',                score: 8 },
-  { month: 'Apr', modal: 58, min: 45, max: 75,  arrivals: 'Low (<40 t/day)',                  score: 9 },
-  { month: 'May', modal: 52, min: 40, max: 70,  arrivals: 'Very Low (<30 t/day)',             score: 7 },
-  { month: 'Jun', modal: 50, min: 30, max: 60,  arrivals: 'Very Low (<35 t/day)',             score: 6 },
-  { month: 'Jul', modal: 30, min: 20, max: 45,  arrivals: 'Moderate (60–90 t/day)',           score: 4 },
-  { month: 'Aug', modal: 45, min: 30, max: 80,  arrivals: 'Moderate (70–110 t/day)',          score: 7 },
-  { month: 'Sep', modal: 55, min: 35, max: 100, arrivals: 'Moderate-Low (60–90 t/day)',       score: 9 },
-  { month: 'Oct', modal: 42, min: 30, max: 65,  arrivals: 'Moderate-High (90–130 t/day)',     score: 7 },
-  { month: 'Nov', modal: 28, min: 18, max: 45,  arrivals: 'High (120–160 t/day)',             score: 5 },
-  { month: 'Dec', modal: 18, min: 10, max: 30,  arrivals: 'Extreme Peak (>200 t/day)',        score: 2 }
-];
-
-export const GRADE_ECONOMICS = [
-  { grade: 'A+', label: 'Super Jumbo', weightG: '350–500', pack: 'CFB Carton + Foam Net',     priceMin: 70, priceMax: 100 },
-  { grade: 'A',  label: 'Premium',     weightG: '250–349', pack: 'CFB Carton + Foam Net',     priceMin: 50, priceMax: 70  },
-  { grade: 'B',  label: 'Economy',     weightG: '180–249', pack: 'Plastic Crate / Netted',    priceMin: 30, priceMax: 45  },
-  { grade: 'C',  label: 'Cull',        weightG: '<180',    pack: 'Loose Crates / Sacks',      priceMin: 12, priceMax: 22  }
-];
-
-export const BAHAR_COMPARISON = [
-  { name: 'Mrig Bahar',  flowering: 'Jun–Jul', harvest: 'Nov–Jan', priceRange: '₹12–₹20/kg', modal: 18, verdict: '⚠ AVOID — Peak winter supply glut',         score: 2 },
-  { name: 'Ambe Bahar',  flowering: 'Feb–Mar', harvest: 'Aug–Sep', priceRange: '₹45–₹55/kg', modal: 50, verdict: '✓ VIABLE — Protective bagging essential',    score: 7 },
-  { name: 'Hasta Bahar', flowering: 'Oct–Nov', harvest: 'Feb–Apr', priceRange: '₹48–₹58/kg', modal: 53, verdict: '✅ OPTIMAL — Spring supply deficit window',   score: 9 }
-];
-
-export const NET_REALIZATION_MODEL = [
-  { protocol: 'Grade A — CFB Carton, Bagged (750km)',          grossMandi: 65, totalDeductions: 23.58, netFarmGate: 41.42 },
-  { protocol: 'Grade B — Plastic Crate, Unbagged (750km)',     grossMandi: 38, totalDeductions: 14.31, netFarmGate: 23.69 }
-];
-
 export const PROCUREMENT_BASE = {
   fertilizers: [
     { name: 'Urea (46% N)',                               unit: 'kg', qty2100: 910,    packSize: 50,   packUnit: 'kg bag'       },
@@ -775,14 +731,6 @@ export const TRANSLATIONS = {
     'exec.kpi.months': 'Months to First Harvest',
     'exec.kpi.soil': 'Soil Type',
     'exec.kpi.bahar': 'Bahar Strategy',
-    'exec.kpi.price': 'Target Price Range 🔴',
-    'exec.kpi.revenue': 'Projected Revenue/Yr 🔴',
-
-    // Executive financial highlights
-    'exec.financial.yr2revenue': 'Year-2 First Revenue 🔴',
-    'exec.financial.matureRevenue': 'Mature Gross Revenue 🔴',
-    'exec.financial.payback': 'Payback Period 🔴',
-    'exec.financial.premium': 'Bagging Premium 🔴',
 
     // Phenological phases
     'exec.phase.1': 'Phase 1: Establishment (Months 8–12)',
@@ -796,29 +744,33 @@ export const TRANSLATIONS = {
     'exec.directive.3': 'Drainage Furrows — Excavate between rows',
     'exec.directive.4': 'Biological Inoculation — Trichoderma + PSB root drench',
 
-    // Market tab
-    'market.heading': 'Market & Financial Analytics',
-    'market.chart.seasonal': 'Seasonal Price Trends — Azadpur Mandi (₹/kg)',
-    'market.chart.cashflow': '4-Year Cashflow Projection 🔴 Scenario',
-    'market.chart.grade': 'Illustrative Revenue Share by Grade 🔴',
-    'market.chart.score': 'Monthly Market Attractiveness Score (1–10)',
-    'market.table.yield': 'Yield (kg/tree)',
-    'market.table.price': 'Price (₹/kg)',
-    'market.table.grossRevenue': 'Gross Revenue (₹) — Scenario Only 🔴',
-    'market.table.grade': 'Grade',
-    'market.table.weight': 'Weight (g)',
-    'market.table.pack': 'Pack Type',
-    'market.table.priceRange': 'Price Range (₹/kg)',
-    'market.bahar.heading': 'Bahar Comparison',
-    'market.bahar.flowering': 'Flowering',
-    'market.bahar.harvest': 'Harvest Window',
-    'market.bahar.modal': 'Modal Price',
-    'market.bahar.verdict': 'Verdict',
-    'market.net.heading': 'Net Farm-Gate Realization Model',
-    'market.net.protocol': 'Packing Protocol',
-    'market.net.gross': 'Gross Mandi (₹/kg)',
-    'market.net.deductions': 'Total Deductions (₹/kg)',
-    'market.net.net': 'Net Farm-Gate (₹/kg)',
+    // Mandi prices (real data: Agmarknet / data.gov.in)
+    'mandi.title': 'Guava Mandi Prices',
+    'mandi.subtitle': 'Latest wholesale prices from mandis near you, in ₹ per kg.',
+    'mandi.loading': 'Loading mandi prices…',
+    'mandi.loadError': 'Could not load mandi prices. Please try again later.',
+    'mandi.modal': 'Modal (most common)',
+    'mandi.min': 'Min',
+    'mandi.max': 'Max',
+    'mandi.perKg': '₹ per kg',
+    'mandi.asOf': 'As of {{date}}',
+    'mandi.stale': 'Old price (over 7 days)',
+    'mandi.fresh': 'Recent',
+    'mandi.distance': '~{{km}} km away',
+    'mandi.source': 'Source: Agmarknet / data.gov.in',
+    'mandi.empty.title': 'No mandi prices saved yet',
+    'mandi.empty.body': 'Guava prices are collected from Agmarknet every day. Prices for your area will appear here once they are saved.',
+    'mandi.scope.district': 'Mandis in your district.',
+    'mandi.scope.nearby': 'Nearby mandis, ranked by distance between district centres (approximate; exact mandi locations are not stored).',
+    'mandi.scope.state': 'Exact mandi locations are not available, so some prices are from other mandis in your state.',
+    'mandi.scope.none': 'No saved guava prices for your area yet.',
+    'mandi.history.title': 'Saved price history',
+    'mandi.history.notEnough': 'Not enough price history yet. A trend appears after {{min}} days of saved prices ({{have}} so far).',
+    'mandi.history.range': '{{n}} days saved, {{from}} to {{to}}',
+    'mandi.harvest.title': 'Your estimated harvest window',
+    'mandi.harvest.savedMonth': 'Saved mandi prices for {{month}}: {{days}} day(s), average modal price ₹{{avg}} per kg. These are past prices, not a forecast.',
+    'mandi.harvest.noMonth': 'No saved mandi prices for {{month}} yet ({{days}} days saved so far). A harvest-month price needs a saved year of data.',
+    'mandi.harvest.disclaimer': 'Harvest month is estimated from your sowing date. No future price is predicted. Check with local buyers before harvest.',
 
     // Financial simulator
     'simulator.price': 'Average Price (₹/kg)',
@@ -1366,14 +1318,6 @@ export const TRANSLATIONS = {
     'exec.kpi.months': 'पहली फसल तक महीने',
     'exec.kpi.soil': 'मिट्टी का प्रकार',
     'exec.kpi.bahar': 'बहार रणनीति',
-    'exec.kpi.price': 'लक्ष्य मूल्य सीमा 🔴',
-    'exec.kpi.revenue': 'अनुमानित आय/वर्ष 🔴',
-
-    // Executive financial highlights
-    'exec.financial.yr2revenue': 'वर्ष-2 प्रथम राजस्व 🔴',
-    'exec.financial.matureRevenue': 'परिपक्व सकल राजस्व 🔴',
-    'exec.financial.payback': 'पूंजी वापसी अवधि 🔴',
-    'exec.financial.premium': 'बैगिंग प्रीमियम 🔴',
 
     // Phenological phases
     'exec.phase.1': 'चरण 1: स्थापना (माह 8–12)',
@@ -1387,29 +1331,33 @@ export const TRANSLATIONS = {
     'exec.directive.3': 'जल निकासी खाई — पंक्तियों के बीच खोदें',
     'exec.directive.4': 'जैविक टीकाकरण — ट्राइकोडर्मा + PSB जड़ ड्रेंच',
 
-    // Market tab
-    'market.heading': 'बाजार और वित्तीय विश्लेषण',
-    'market.chart.seasonal': 'मौसमी मूल्य प्रवृत्ति — आजादपुर मंडी (₹/किग्रा)',
-    'market.chart.cashflow': '4-वर्ष नकदी प्रवाह प्रक्षेपण 🔴 परिदृश्य',
-    'market.chart.grade': 'ग्रेड अनुसार राजस्व हिस्सेदारी 🔴 (सांकेतिक)',
-    'market.chart.score': 'मासिक बाजार आकर्षकता स्कोर (1–10)',
-    'market.table.yield': 'उपज (किग्रा/पेड़)',
-    'market.table.price': 'मूल्य (₹/किग्रा)',
-    'market.table.grossRevenue': 'सकल राजस्व (₹) — केवल परिदृश्य 🔴',
-    'market.table.grade': 'ग्रेड',
-    'market.table.weight': 'वजन (ग्रा)',
-    'market.table.pack': 'पैकिंग प्रकार',
-    'market.table.priceRange': 'मूल्य सीमा (₹/किग्रा)',
-    'market.bahar.heading': 'बहार तुलना',
-    'market.bahar.flowering': 'फूल आने का समय',
-    'market.bahar.harvest': 'फसल खिड़की',
-    'market.bahar.modal': 'मोडल मूल्य',
-    'market.bahar.verdict': 'निर्णय',
-    'market.net.heading': 'शुद्ध खेत-गेट प्राप्ति मॉडल',
-    'market.net.protocol': 'पैकिंग प्रोटोकॉल',
-    'market.net.gross': 'सकल मंडी (₹/किग्रा)',
-    'market.net.deductions': 'कुल कटौती (₹/किग्रा)',
-    'market.net.net': 'शुद्ध खेत-गेट (₹/किग्रा)',
+    // मंडी भाव (असली डेटा: Agmarknet / data.gov.in)
+    'mandi.title': 'अमरूद मंडी भाव',
+    'mandi.subtitle': 'आपके नज़दीकी मंडियों के ताज़ा थोक भाव, ₹ प्रति किग्रा में।',
+    'mandi.loading': 'मंडी भाव लोड हो रहे हैं…',
+    'mandi.loadError': 'मंडी भाव लोड नहीं हो सके। कृपया बाद में पुनः प्रयास करें।',
+    'mandi.modal': 'मोडल (सबसे आम भाव)',
+    'mandi.min': 'न्यूनतम',
+    'mandi.max': 'अधिकतम',
+    'mandi.perKg': '₹ प्रति किग्रा',
+    'mandi.asOf': '{{date}} तक का भाव',
+    'mandi.stale': 'पुराना भाव (7 दिन से अधिक)',
+    'mandi.fresh': 'ताज़ा',
+    'mandi.distance': 'लगभग {{km}} किमी दूर',
+    'mandi.source': 'स्रोत: Agmarknet / data.gov.in',
+    'mandi.empty.title': 'अभी कोई मंडी भाव सेव नहीं हुआ है',
+    'mandi.empty.body': 'अमरूद के भाव हर दिन Agmarknet से लिए जाते हैं। आपके क्षेत्र के भाव सेव होते ही यहाँ दिखेंगे।',
+    'mandi.scope.district': 'आपके जिले की मंडियाँ।',
+    'mandi.scope.nearby': 'नज़दीकी मंडियाँ, जिलों के केंद्रों के बीच की दूरी के अनुसार (अनुमानित; मंडी की सटीक जगह सेव नहीं है)।',
+    'mandi.scope.state': 'मंडी की सटीक जगह उपलब्ध नहीं है, इसलिए कुछ भाव आपके राज्य की अन्य मंडियों के हैं।',
+    'mandi.scope.none': 'आपके क्षेत्र के लिए अभी अमरूद का कोई सेव किया हुआ भाव नहीं है।',
+    'mandi.history.title': 'सेव किया गया भाव इतिहास',
+    'mandi.history.notEnough': 'अभी भाव का पर्याप्त इतिहास नहीं है। {{min}} दिन के सेव भाव के बाद रुझान दिखेगा (अभी {{have}} दिन)।',
+    'mandi.history.range': '{{n}} दिन सेव, {{from}} से {{to}}',
+    'mandi.harvest.title': 'आपकी अनुमानित फसल अवधि',
+    'mandi.harvest.savedMonth': '{{month}} के सेव किए गए मंडी भाव: {{days}} दिन, औसत मोडल भाव ₹{{avg}} प्रति किग्रा। ये पिछले भाव हैं, पूर्वानुमान नहीं।',
+    'mandi.harvest.noMonth': '{{month}} के लिए अभी कोई सेव किया हुआ मंडी भाव नहीं है ({{days}} दिन सेव हुए)। फसल के महीने का भाव दिखाने के लिए एक साल का सेव डेटा चाहिए।',
+    'mandi.harvest.disclaimer': 'फसल का महीना आपकी बुवाई की तारीख से अनुमानित है। भविष्य का कोई भाव नहीं बताया गया है। कटाई से पहले स्थानीय खरीदारों से पूछ लें।',
 
     // Financial simulator
     'simulator.price': 'औसत मूल्य (₹/किग्रा)',

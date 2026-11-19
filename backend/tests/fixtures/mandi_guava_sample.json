@@ -1,0 +1,16 @@
+{
+  "_note": "Test fixture in the documented data.gov.in response shape (resource 9ef84268-d588-465a-a308-a864a43d0070). Values are for tests only.",
+  "total": 7,
+  "count": 7,
+  "limit": "500",
+  "offset": "0",
+  "records": [
+    {"state": "Madhya Pradesh", "district": "Indore", "market": "Indore", "commodity": "Guava", "variety": "Other", "grade": "FAQ", "arrival_date": "10/11/2026", "min_price": "3000", "max_price": "4500", "modal_price": "3800"},
+    {"state": "Madhya Pradesh", "district": "Ujjain", "market": "Ujjain", "commodity": "Guava", "variety": "Other", "grade": "FAQ", "arrival_date": "10/11/2026", "min_price": "2800", "max_price": "4000", "modal_price": "3400"},
+    {"state": "Maharashtra", "district": "Pune", "market": "Pune", "commodity": "Guava", "variety": "", "grade": "", "arrival_date": "09/11/2026", "min_price": "4000", "max_price": "6000", "modal_price": "5000"},
+    {"state": "Maharashtra", "district": "Pune", "market": "Pune", "commodity": "Guava", "variety": "", "grade": "", "arrival_date": "09/11/2026", "min_price": "4100", "max_price": "6100", "modal_price": "5100"},
+    {"state": "Madhya Pradesh", "district": "Indore", "market": "Indore", "commodity": "Guava", "variety": "Other", "grade": "FAQ", "arrival_date": "10/11/2026", "min_price": "3000", "max_price": "4500", "modal_price": "NA"},
+    {"state": "Madhya Pradesh", "district": "Indore", "market": "Indore", "commodity": "Banana", "variety": "Other", "grade": "FAQ", "arrival_date": "10/11/2026", "min_price": "1000", "max_price": "2000", "modal_price": "1500"},
+    {"state": "Gujarat", "district": "Surat", "market": "Surat", "commodity": "Guava", "variety": "Other", "grade": "FAQ", "arrival_date": "not a date", "min_price": "3000", "max_price": "4000", "modal_price": "3500"}
+  ]
+}

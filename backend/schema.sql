@@ -1334,3 +1334,29 @@ DO $$ BEGIN
       USING (FALSE);
   END IF;
 END $$;
+
+
+-- ══════════════════════════════════════════════════════════════════════════
+-- market_prices: real mandi price ingestion (Agmarknet / data.gov.in)
+-- Adds the columns the daily ingestion fills and a unique key so re-runs
+-- upsert instead of duplicating. Safe to re-run (IF NOT EXISTS everywhere).
+-- Prices are stored as reported: Rs per quintal. `price` keeps the modal price
+-- for the older reader in routers/financial.py.
+-- ══════════════════════════════════════════════════════════════════════════
+ALTER TABLE market_prices ADD COLUMN IF NOT EXISTS state        TEXT;
+ALTER TABLE market_prices ADD COLUMN IF NOT EXISTS district     TEXT;
+ALTER TABLE market_prices ADD COLUMN IF NOT EXISTS variety      TEXT;
+ALTER TABLE market_prices ADD COLUMN IF NOT EXISTS min_price    NUMERIC CHECK (min_price >= 0);
+ALTER TABLE market_prices ADD COLUMN IF NOT EXISTS max_price    NUMERIC CHECK (max_price >= 0);
+ALTER TABLE market_prices ADD COLUMN IF NOT EXISTS modal_price  NUMERIC CHECK (modal_price >= 0);
+ALTER TABLE market_prices ADD COLUMN IF NOT EXISTS arrival_date DATE;
+ALTER TABLE market_prices ADD COLUMN IF NOT EXISTS fetched_at   TIMESTAMPTZ;
+
+-- One row per mandi, variety, grade and trade date. The ingestion writes empty
+-- strings (not NULL) for a missing district, variety or grade so this key works.
+CREATE UNIQUE INDEX IF NOT EXISTS market_prices_daily_key
+  ON market_prices (source_name, state, district, market_name, commodity,
+                    variety, grade, arrival_date);
+
+CREATE INDEX IF NOT EXISTS market_prices_state_date_idx
+  ON market_prices (commodity, state, arrival_date DESC);

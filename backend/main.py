@@ -34,6 +34,7 @@ from routers import observations as observations_router_module
 from routers import inventory as inventory_router_module
 from routers import calculators as calculators_router_module
 from routers import ai as ai_router_module
+from routers import prices as prices_router_module
 from services.rate_limiter import RateLimiter, check_rate_limit, _extract_ip
 
 logging.basicConfig(
@@ -126,6 +127,7 @@ app.include_router(observations_router_module.router, prefix="/api")
 app.include_router(inventory_router_module.router, prefix="/api")
 app.include_router(calculators_router_module.router, prefix="/api")
 app.include_router(ai_router_module.router, prefix="/api")
+app.include_router(prices_router_module.router, prefix="/api")
 
 
 # â”€â”€ Background scheduler (module-level so shutdown event can stop it) â”€â”€â”€â”€â”€â”€â”€â”€
@@ -148,6 +150,16 @@ def _run_expiry_check() -> None:
         logger.info("Daily expiry check complete â€” %d record(s) expired.", count)
     except Exception as exc:  # noqa: BLE001
         logger.error("Daily expiry check failed: %s", exc)
+
+
+def _run_mandi_price_ingestion() -> None:
+    """Scheduled job: save today's guava mandi prices (Agmarknet / data.gov.in).
+
+    The feed keeps no history, so this daily save builds it. Upserts make a
+    repeat run harmless. run_ingestion never raises; it logs and returns.
+    """
+    from services.mandi_prices import run_ingestion
+    run_ingestion()
 
 
 # â”€â”€ Startup validation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -190,6 +202,16 @@ async def startup_validation() -> None:
         hour=0,
         minute=5,
         id="daily_expiry_check",
+        replace_existing=True,
+    )
+    # Mandi prices: twice a day (07:30 and 19:30 IST) because the feed publishes
+    # late and lags trade dates; upserts keep repeat runs duplicate-free.
+    _scheduler.add_job(
+        _run_mandi_price_ingestion,
+        trigger="cron",
+        hour="7,19",
+        minute=30,
+        id="daily_mandi_price_ingestion",
         replace_existing=True,
     )
     _scheduler.start()

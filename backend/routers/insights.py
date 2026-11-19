@@ -5,9 +5,9 @@ GET  /api/farmers/me/insights   Full advisory bundle:
                                   - 7-day weather forecast (Open-Meteo)
                                   - Disease risk alerts (weather-driven)
                                   - ET0 irrigation advisory
-                                  - Seasonal price outlook
+                                  - Saved mandi price history summary (no forecast)
                                   - Next 3 stages planner
-                                  - Harvest timing recommendation
+                                  - Estimated harvest date (17-month calendar assumption)
                                   - NASA POWER seasonal climate anomaly
                                   - Growing Degree Day (GDD) accumulation
                                   - Monsoon risk index
@@ -44,6 +44,12 @@ from services.climate import (
     input_compliance_score,
 )
 from services import stage as stage_service
+from services.mandi_prices import (
+    MIN_TREND_DAYS,
+    SOURCE_NAME as PRICE_SOURCE,
+    per_kg,
+    summarise_saved_prices,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -58,35 +64,6 @@ def _get_knowledge() -> dict:
     if _knowledge_cache is None:
         _knowledge_cache = json.loads(_KNOWLEDGE_PATH.read_text(encoding="utf-8"))
     return _knowledge_cache
-
-
-# ── Seasonal price data ───────────────────────────────────────────────────────
-_MONTHLY_PRICE_OUTLOOK: dict[int, dict] = {
-    1:  {"modal": 35, "min": 20, "max": 55, "demand": "moderate", "score": 6,
-         "note": "Winter supply moderate, steady demand"},
-    2:  {"modal": 28, "min": 15, "max": 45, "demand": "low",      "score": 4,
-         "note": "Peak winter supply — prices weak"},
-    3:  {"modal": 22, "min": 12, "max": 38, "demand": "low",      "score": 3,
-         "note": "Maximum arrivals, lowest prices of year"},
-    4:  {"modal": 38, "min": 22, "max": 60, "demand": "moderate", "score": 6,
-         "note": "Supply falling, prices recovering"},
-    5:  {"modal": 55, "min": 35, "max": 80, "demand": "high",     "score": 8,
-         "note": "Pre-monsoon gap, good prices"},
-    6:  {"modal": 65, "min": 40, "max": 90, "demand": "high",     "score": 8,
-         "note": "Monsoon gap — very limited supply"},
-    7:  {"modal": 70, "min": 45, "max": 95, "demand": "very_high","score": 9,
-         "note": "Peak price window — minimal competition"},
-    8:  {"modal": 60, "min": 38, "max": 85, "demand": "high",     "score": 8,
-         "note": "Rainy season harvest premium holds"},
-    9:  {"modal": 50, "min": 30, "max": 75, "demand": "moderate", "score": 7,
-         "note": "Supply increasing, prices easing"},
-    10: {"modal": 42, "min": 25, "max": 65, "demand": "moderate", "score": 6,
-         "note": "Hasta Bahar arrivals begin"},
-    11: {"modal": 30, "min": 18, "max": 50, "demand": "low",      "score": 4,
-         "note": "Winter supply builds, prices fall"},
-    12: {"modal": 28, "min": 15, "max": 45, "demand": "low",      "score": 3,
-         "note": "Peak winter arrivals, weakest prices"},
-}
 
 
 def _get_future_stages(all_stages: list[dict], current_stage_id: str, plant_count: int) -> list[dict]:
@@ -113,19 +90,62 @@ def _get_future_stages(all_stages: list[dict], current_stage_id: str, plant_coun
     return future
 
 
-def _harvest_timing_advice(sowing_date: date) -> dict:
-    harvest_date  = sowing_date + timedelta(days=17 * 30)
-    harvest_month = harvest_date.month
-    price_data    = _MONTHLY_PRICE_OUTLOOK.get(harvest_month, _MONTHLY_PRICE_OUTLOOK[7])
+def _harvest_timing_advice(sowing_date: date, saved: dict) -> dict:
+    """Estimated harvest date plus an honest statement about saved price data.
+
+    The harvest date is a calendar assumption (17 months x 30 days after
+    sowing), not a measurement. No future price is predicted: prices are only
+    reported from rows this app has saved from Agmarknet / data.gov.in.
+    """
+    harvest_date = sowing_date + timedelta(days=17 * 30)
+    month_days = saved["harvest_month_days"]
+    month_name = harvest_date.strftime("%B")
+
+    if month_days > 0:
+        note = (
+            f"Saved mandi prices for {month_name} cover {month_days} day(s): "
+            f"average modal Rs {per_kg(saved['harvest_month_avg_quintal'])}/kg. "
+            "These are past prices, not a forecast."
+        )
+    elif saved["distinct_days"] < MIN_TREND_DAYS:
+        note = (
+            "Not enough price history yet. Mandi prices are saved once a day, "
+            f"so far {saved['distinct_days']} day(s) for your state. "
+            "No price is shown for your harvest month."
+        )
+    else:
+        note = (
+            f"No saved mandi prices for {month_name} yet "
+            f"({saved['distinct_days']} day(s) saved so far). "
+            "A harvest-month price needs a saved year of data."
+        )
     return {
         "estimated_harvest_date": str(harvest_date),
         "harvest_month_name":     harvest_date.strftime("%B %Y"),
-        "modal_price_per_kg":     price_data["modal"],
-        "price_range":            f"₹{price_data['min']}–₹{price_data['max']}/kg",
-        "market_demand":          price_data["demand"],
-        "attractiveness_score":   price_data["score"],
-        "market_note":            price_data["note"],
+        "price_note":             note,
+        "harvest_month_saved_days": month_days,
+        "harvest_month_avg_per_kg": per_kg(saved["harvest_month_avg_quintal"]),
     }
+
+
+def _load_saved_prices(db, state: str, sowing_date: date) -> dict:
+    """Summarise the guava prices saved for the farmer's state (never raises)."""
+    harvest_month = (sowing_date + timedelta(days=17 * 30)).month
+    try:
+        result = (
+            db.table("market_prices")
+            .select("arrival_date, modal_price")
+            .eq("commodity", "guava")
+            .eq("state", state)
+            .order("arrival_date", desc=True)
+            .limit(5000)
+            .execute()
+        )
+        rows = result.data or []
+    except Exception as exc:  # noqa: BLE001
+        logger.error("DB select market_prices (insights) failed: %s", exc)
+        rows = []
+    return summarise_saved_prices(rows, harvest_month)
 
 
 # ── GET /api/farmers/me/insights ─────────────────────────────────────────────
@@ -217,21 +237,8 @@ async def get_insights(user_id: str = Depends(get_user_id)) -> dict:
         row["plant_count"], activities,
     )
 
-    current_month   = date.today().month
-    harvest_timing  = _harvest_timing_advice(sowing_date)
-
-    price_calendar  = [
-        {
-            "month":      m,
-            "month_name": date(2024, m, 1).strftime("%b"),
-            "modal":      d["modal"],
-            "score":      d["score"],
-            "demand":     d["demand"],
-            "note":       d["note"],
-            "is_current": m == current_month,
-        }
-        for m, d in _MONTHLY_PRICE_OUTLOOK.items()
-    ]
+    saved_prices   = _load_saved_prices(db, row["state"], sowing_date)
+    harvest_timing = _harvest_timing_advice(sowing_date, saved_prices)
 
     # GDD vs calendar comparison
     stage_order     = [s["stage_id"] for s in all_stages]
@@ -272,8 +279,12 @@ async def get_insights(user_id: str = Depends(get_user_id)) -> dict:
         "fertilizer_forecast": fert_forecast,
         "future_stages":       future_stages,
         "market": {
-            "current_month_outlook": _MONTHLY_PRICE_OUTLOOK.get(current_month, _MONTHLY_PRICE_OUTLOOK[7]),
-            "harvest_timing":        harvest_timing,
-            "price_calendar":        price_calendar,
+            "harvest_timing": harvest_timing,
+            "price_history": {
+                "distinct_days": saved_prices["distinct_days"],
+                "first_date":    saved_prices["first_date"],
+                "last_date":     saved_prices["last_date"],
+                "source":        PRICE_SOURCE,
+            },
         },
     }

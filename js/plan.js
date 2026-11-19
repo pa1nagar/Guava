@@ -9,6 +9,7 @@
 import { routeGuard, signOut, supabase } from "./auth.js";
 import { apiFetch, showError, loadCached, saveCache } from "./api.js";
 import { initAiChat } from "./ai-chat.js";
+import { TRANSLATIONS } from "./data.js";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -997,64 +998,230 @@ function renderDiseaseRisks(risks) {
   }
 }
 
-function renderMarket(market) {
-  const htCard  = document.getElementById("harvest-timing-card");
-  const barsEl  = document.getElementById("price-bars");
-  const monthsEl= document.getElementById("price-months");
+// ── Mandi price board (real data: Agmarknet / data.gov.in) ───────────────────
+// Prices come from GET /api/market-prices/guava (saved daily by the backend).
+// Nothing here is estimated. Text is bilingual (EN / HI) via TRANSLATIONS.
 
-  // Harvest timing
-  const ht = market.harvest_timing || {};
-  if (htCard) {
-    const score = ht.attractiveness_score || 5;
-    const scoreColour = score >= 8 ? "text-green-700" : score >= 6 ? "text-amber-700" : "text-red-700";
-    htCard.innerHTML = `
-      <div class="flex items-start justify-between gap-3 flex-wrap">
-        <div>
-          <p class="text-sm font-bold text-amber-900 mb-1">
-            <i class="fa-solid fa-calendar-star mr-1"></i> Your estimated harvest window
-          </p>
-          <p class="text-2xl font-extrabold text-amber-900">${ht.harvest_month_name || "—"}</p>
-          <p class="text-sm text-amber-800 mt-1">${ht.market_note || ""}</p>
-        </div>
-        <div class="text-right">
-          <p class="text-xs text-amber-700 font-semibold">Expected price</p>
-          <p class="text-xl font-extrabold text-amber-900">${ht.price_range || "—"}</p>
-          <p class="text-sm font-bold mt-1 ${scoreColour}">Score: ${score}/10</p>
-        </div>
-      </div>
-      <p class="text-xs text-amber-700 mt-3 border-t border-amber-200 pt-2">
-        🔴 Reference only — verify with local buyers before harvest.
-      </p>
-    `;
+let _mandiBoard   = null;   // last board payload
+let _mandiHistory = null;   // last history payload
+let _mandiState   = "loading"; // "loading" | "ready" | "error"
+let _harvestTiming = null;
+let _priceHistorySummary = null;
+
+function mandiLang() {
+  try { return localStorage.getItem("sf_lang") === "hi" ? "hi" : "en"; }
+  catch { return "en"; }
+}
+
+function mt(key, vars = {}) {
+  const lang = mandiLang();
+  let text = TRANSLATIONS[lang]?.[key] ?? TRANSLATIONS.en?.[key] ?? key;
+  for (const [k, v] of Object.entries(vars)) text = text.split(`{{${k}}}`).join(String(v));
+  return text;
+}
+
+function mandiEsc(value) {
+  return String(value ?? "").replace(/[&<>"']/g, c => (
+    { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+  ));
+}
+
+function mandiDate(iso) {
+  if (!iso) return "—";
+  const [y, m, d] = String(iso).slice(0, 10).split("-");
+  return y && m && d ? `${d}/${m}/${y}` : "—";
+}
+
+function rupee(value) {
+  return value == null ? "—" : `₹${Number(value).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`;
+}
+
+function renderMandiHeader() {
+  const title = document.getElementById("mandi-title");
+  const sub   = document.getElementById("mandi-subtitle");
+  if (title) title.textContent = mt("mandi.title");
+  if (sub)   sub.textContent   = mt("mandi.subtitle");
+  document.getElementById("mandi-lang-en")?.classList.toggle("font-bold", mandiLang() === "en");
+  document.getElementById("mandi-lang-hi")?.classList.toggle("font-bold", mandiLang() === "hi");
+}
+
+function renderMandiBoard() {
+  const el = document.getElementById("mandi-board");
+  if (!el) return;
+
+  if (_mandiState === "loading") {
+    el.innerHTML = `<p class="text-sm text-gray-400">${mandiEsc(mt("mandi.loading"))}</p>`;
+    return;
+  }
+  if (_mandiState === "error") {
+    el.innerHTML = `<p class="text-sm text-red-600">${mandiEsc(mt("mandi.loadError"))}</p>`;
+    return;
   }
 
-  // 12-month price bar chart
-  const cal = market.price_calendar || [];
-  if (barsEl && monthsEl) {
-    barsEl.innerHTML = "";
-    monthsEl.innerHTML = "";
-    const maxPrice = Math.max(...cal.map(m => m.modal));
+  const board = _mandiBoard || {};
+  if (!board.has_data) {
+    el.innerHTML = `
+      <div class="bg-white border border-gray-200 rounded-2xl p-5 text-center">
+        <p class="text-base font-bold text-gray-700">${mandiEsc(mt("mandi.empty.title"))}</p>
+        <p class="text-sm text-gray-500 mt-1">${mandiEsc(mt("mandi.empty.body"))}</p>
+        <p class="text-xs text-gray-400 mt-3">${mandiEsc(mt("mandi.source"))}</p>
+      </div>`;
+    return;
+  }
 
-    for (const m of cal) {
-      const pct    = Math.round((m.modal / maxPrice) * 100);
-      const colour = m.score >= 8 ? "#4A7C59"
-                   : m.score >= 6 ? "#F59E0B"
-                   : "#EF4444";
-      const isCur  = m.is_current;
+  const scopeKey = `mandi.scope.${board.scope}`;
+  const cards = board.mandis.map(m => {
+    const stale = m.is_stale;
+    const badge = stale
+      ? `<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">${mandiEsc(mt("mandi.stale"))}</span>`
+      : `<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-green-100 text-green-800">${mandiEsc(mt("mandi.fresh"))}</span>`;
+    const where = [m.district, m.state].filter(Boolean).map(mandiEsc).join(", ");
+    const dist = m.distance_km != null && m.match !== "same_district"
+      ? ` · ${mandiEsc(mt("mandi.distance", { km: m.distance_km }))}` : "";
+    const rows = m.prices.map(p => {
+      const label = [p.variety, p.grade].filter(Boolean).map(mandiEsc).join(" · ");
+      return `
+        <div class="grid grid-cols-3 gap-2 text-center ${label ? "mt-2" : ""}">
+          ${label ? `<p class="col-span-3 text-xs text-gray-500 text-left">${label}</p>` : ""}
+          <div class="bg-green-50 rounded-xl py-2">
+            <p class="text-xs text-gray-500">${mandiEsc(mt("mandi.modal"))}</p>
+            <p class="text-lg font-extrabold text-brand-dark">${rupee(p.modal_per_kg)}</p>
+          </div>
+          <div class="bg-gray-50 rounded-xl py-2">
+            <p class="text-xs text-gray-500">${mandiEsc(mt("mandi.min"))}</p>
+            <p class="text-base font-bold text-gray-700">${rupee(p.min_per_kg)}</p>
+          </div>
+          <div class="bg-gray-50 rounded-xl py-2">
+            <p class="text-xs text-gray-500">${mandiEsc(mt("mandi.max"))}</p>
+            <p class="text-base font-bold text-gray-700">${rupee(p.max_per_kg)}</p>
+          </div>
+        </div>`;
+    }).join("");
+    return `
+      <div class="bg-white border ${stale ? "border-amber-300" : "border-gray-200"} rounded-2xl p-4 shadow-sm">
+        <div class="flex items-start justify-between gap-2 flex-wrap">
+          <div>
+            <p class="text-base font-bold text-brand-dark">${mandiEsc(m.market)}</p>
+            <p class="text-xs text-gray-400">${where}${dist}</p>
+          </div>
+          ${badge}
+        </div>
+        <p class="text-xs text-gray-500 mt-1">${mandiEsc(mt("mandi.asOf", { date: mandiDate(m.trade_date) }))} · ${mandiEsc(mt("mandi.perKg"))}</p>
+        ${rows}
+      </div>`;
+  }).join("");
 
-      const bar = document.createElement("div");
-      bar.style.cssText = `flex:1; height:${pct}%; background:${colour}; border-radius:4px 4px 0 0;
-        ${isCur ? "box-shadow:0 0 0 2px #1E3A2B;" : ""}`;
-      bar.title = `${m.month_name}: ₹${m.modal}/kg (${m.note})`;
-      barsEl.appendChild(bar);
+  el.innerHTML = `
+    <p class="text-xs text-gray-500 mb-2">${mandiEsc(mt(scopeKey))}</p>
+    <div class="grid gap-3 sm:grid-cols-2">${cards}</div>
+    <p class="text-xs text-gray-400 mt-3">${mandiEsc(mt("mandi.source"))} · ${mandiEsc(mt("mandi.asOf", { date: mandiDate(board.as_of) }))}</p>`;
+}
 
-      const label = document.createElement("div");
-      label.style.cssText = "flex:1; text-align:center; font-size:10px; color:#6B7280;";
-      label.textContent = m.month_name.slice(0, 3);
-      if (isCur) label.style.cssText += "font-weight:700;color:#1E3A2B;";
-      monthsEl.appendChild(label);
+function renderMandiHistory() {
+  const el = document.getElementById("mandi-history");
+  if (!el) return;
+  if (_mandiState !== "ready" || !_mandiHistory || !_mandiBoard?.has_data) {
+    el.innerHTML = "";
+    return;
+  }
+  const h = _mandiHistory;
+  const title = `<p class="text-sm font-bold text-emerald-900 mb-1">${mandiEsc(mt("mandi.history.title"))}${h.market ? ` · ${mandiEsc(h.market)}` : ""}</p>`;
+
+  if (!h.has_trend) {
+    el.innerHTML = `
+      <div class="bg-white border border-gray-200 rounded-2xl p-4">
+        ${title}
+        <p class="text-sm text-gray-600">${mandiEsc(mt("mandi.history.notEnough", { min: h.min_days_for_trend, have: h.distinct_days }))}</p>
+      </div>`;
+    return;
+  }
+
+  const pts = h.series.filter(s => s.modal_per_kg != null);
+  const max = Math.max(...pts.map(s => s.modal_per_kg), 1);
+  const bars = pts.map(s => `
+    <div title="${mandiEsc(mandiDate(s.trade_date))}: ${rupee(s.modal_per_kg)}"
+         style="flex:1; min-width:3px; height:${Math.max(4, Math.round((s.modal_per_kg / max) * 100))}%; background:#4A7C59; border-radius:3px 3px 0 0;"></div>`).join("");
+  el.innerHTML = `
+    <div class="bg-white border border-gray-200 rounded-2xl p-4">
+      ${title}
+      <div class="flex items-end gap-px h-24 mb-2">${bars}</div>
+      <p class="text-xs text-gray-500">${mandiEsc(mt("mandi.history.range", { n: h.distinct_days, from: mandiDate(h.first_date), to: mandiDate(h.last_date) }))} · ${mandiEsc(mt("mandi.modal"))} ${mandiEsc(mt("mandi.perKg"))}</p>
+      <p class="text-xs text-gray-400 mt-1">${mandiEsc(mt("mandi.source"))}</p>
+    </div>`;
+}
+
+function renderHarvestTiming() {
+  const el = document.getElementById("harvest-timing-card");
+  if (!el) return;
+  const ht = _harvestTiming || {};
+  const days = _priceHistorySummary?.distinct_days ?? 0;
+  const lang = mandiLang() === "hi" ? "hi-IN" : "en-IN";
+  let month = ht.harvest_month_name || "—";
+  if (ht.estimated_harvest_date) {
+    const d = new Date(ht.estimated_harvest_date + "T00:00:00");
+    if (!Number.isNaN(d.getTime())) month = d.toLocaleDateString(lang, { month: "long", year: "numeric" });
+  }
+
+  let note;
+  if ((ht.harvest_month_saved_days || 0) > 0 && ht.harvest_month_avg_per_kg != null) {
+    note = mt("mandi.harvest.savedMonth", {
+      month, days: ht.harvest_month_saved_days, avg: ht.harvest_month_avg_per_kg,
+    });
+  } else if (days < (_mandiHistory?.min_days_for_trend ?? 7)) {
+    note = mt("mandi.history.notEnough", { min: _mandiHistory?.min_days_for_trend ?? 7, have: days });
+  } else {
+    note = mt("mandi.harvest.noMonth", { month, days });
+  }
+
+  el.innerHTML = `
+    <p class="text-sm font-bold text-amber-900 mb-1">
+      <i class="fa-solid fa-calendar-star mr-1"></i> ${mandiEsc(mt("mandi.harvest.title"))}
+    </p>
+    <p class="text-2xl font-extrabold text-amber-900">${mandiEsc(month)}</p>
+    <p class="text-sm text-amber-800 mt-1">${mandiEsc(note)}</p>
+    <p class="text-xs text-amber-700 mt-3 border-t border-amber-200 pt-2">${mandiEsc(mt("mandi.harvest.disclaimer"))}</p>`;
+}
+
+function renderMandiAll() {
+  renderMandiHeader();
+  renderMandiBoard();
+  renderMandiHistory();
+  renderHarvestTiming();
+}
+
+async function loadMandiPrices() {
+  _mandiState = "loading";
+  renderMandiAll();
+  try {
+    const res = await apiFetch("/api/market-prices/guava?limit=5");
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    _mandiBoard = await res.json();
+    _mandiHistory = null;
+    if (_mandiBoard.has_data) {
+      const top = _mandiBoard.mandis[0];
+      const hr = await apiFetch(
+        `/api/market-prices/guava/history?market=${encodeURIComponent(top.market)}&state=${encodeURIComponent(top.state)}`
+      );
+      if (hr.ok) _mandiHistory = await hr.json();
     }
+    _mandiState = "ready";
+  } catch (err) {
+    console.error("Mandi prices load failed:", err);
+    _mandiState = "error";
   }
+  renderMandiAll();
+}
+
+window.setMandiLang = function (lang) {
+  try { localStorage.setItem("sf_lang", lang === "hi" ? "hi" : "en"); } catch { /* ignore */ }
+  renderMandiAll();
+};
+
+function renderMarket(market) {
+  _harvestTiming = market.harvest_timing || {};
+  _priceHistorySummary = market.price_history || {};
+  renderMandiAll();
+  loadMandiPrices();
 }
 
 function renderFutureStages(stages) {

@@ -133,3 +133,25 @@ def get_coordinates(state: str, district: str) -> tuple[float, float]:
             return coords
 
     return INDIA_CENTRE
+
+
+def get_exact_district_coordinates(state: str, district: str):
+    """Return (lat, lon) only when the district is in DISTRICT_COORDS, else None.
+
+    Unlike get_coordinates this never falls back to a state capital, so callers
+    that measure distance do not report a made-up number for unlisted districts.
+    """
+    s, d = (state or "").strip().lower(), (district or "").strip().lower()
+    for (ks, kd), coords in DISTRICT_COORDS.items():
+        if ks.lower() == s and kd.lower() == d:
+            return coords
+    return None
+
+
+def haversine_km(a: tuple[float, float], b: tuple[float, float]) -> float:
+    """Great-circle distance in km between two (lat, lon) points."""
+    from math import asin, cos, radians, sin, sqrt
+
+    lat1, lon1, lat2, lon2 = map(radians, (a[0], a[1], b[0], b[1]))
+    h = sin((lat2 - lat1) / 2) ** 2 + cos(lat1) * cos(lat2) * sin((lon2 - lon1) / 2) ** 2
+    return 2 * 6371.0088 * asin(sqrt(h))

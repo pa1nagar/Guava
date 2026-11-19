@@ -46,7 +46,7 @@ Supabase (Postgres + Auth)      Gemini 1.5 Flash
 
 | Page | File | Purpose |
 |---|---|---|
-| Landing dashboard | `index.html` | Static market & agronomic reference for Taiwan Pink Guava |
+| Landing dashboard | `index.html` | Static agronomic reference for the owner's Taiwan Pink Guava orchard (case study, not market data) |
 | Login | `login.html` | Google OAuth sign-in |
 | Onboarding | `onboarding.html` | First-time farm profile creation |
 | Care plan | `plan.html` | Personalized stage plan, activity logging, spending, gaps |
@@ -89,6 +89,8 @@ All farmer endpoints require `Authorization: Bearer <supabase_jwt>` header.
 | `SUPABASE_URL` | Yes | Your Supabase project URL |
 | `SUPABASE_SERVICE_KEY` | Yes | Service-role key (never expose to frontend) |
 | `GEMINI_API_KEY` | Yes | Google Gemini API key |
+| `DATA_GOV_IN_API_KEY` | For prices | Free data.gov.in key; without it daily mandi price ingestion is skipped |
+| `PRICE_INGEST_ADMIN_TOKEN` | Optional | Enables `POST /api/admin/market-prices/ingest` (header `X-Admin-Token`); disabled when blank |
 | `SUPABASE_JWT_SECRET` | No | Only for legacy HS256 JWT projects |
 
 Copy `backend/.env.example` to `backend/.env` and fill in values.
@@ -308,3 +310,13 @@ The following are explicitly not built and should not be added without a new spe
 - Sensor / drone integrations
 - Credit or loan recommendations
 - Real-time GPS tracking
+
+## Mandi prices
+
+Guava prices come from the official Agmarknet dataset on data.gov.in ("Current daily price of various commodities from various markets (Mandi)", resource `9ef84268-d588-465a-a308-a864a43d0070`, Government Open Data License). The app shows "Source: Agmarknet / data.gov.in".
+
+- The feed keeps no history, so `services/mandi_prices.py` saves it into `market_prices` twice a day (07:30 and 19:30 IST, APScheduler). Rows are upserted per mandi, variety, grade and trade date, so re-runs do not duplicate. Run the migration block at the end of `backend/schema.sql` first.
+- `GET /api/market-prices/guava` returns the latest prices for the farmer's district, then nearby mandis (ranked by district-centre distance, since exact mandi locations are not stored), then the rest of the state. Each price has its source, trade date and a stale flag (over 7 days old).
+- `GET /api/market-prices/guava/history` returns saved daily history for one mandi. A trend shows only after 7 saved days; before that the app says there is not enough history.
+- No price forecast or seasonal table is shown. The earlier hard-coded price tables were removed.
+
