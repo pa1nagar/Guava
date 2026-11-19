@@ -316,7 +316,8 @@ The following are explicitly not built and should not be added without a new spe
 Guava prices come from the official Agmarknet dataset on data.gov.in ("Current daily price of various commodities from various markets (Mandi)", resource `9ef84268-d588-465a-a308-a864a43d0070`, Government Open Data License). The app shows "Source: Agmarknet / data.gov.in".
 
 - The feed keeps no history, so `services/mandi_prices.py` saves it into `market_prices` twice a day (07:30 and 19:30 IST, APScheduler). Rows are upserted per mandi, variety, grade and trade date, so re-runs do not duplicate. Run the migration block at the end of `backend/schema.sql` first.
-- `GET /api/market-prices/guava` returns the latest prices for the farmer's district, then nearby mandis (ranked by district-centre distance, since exact mandi locations are not stored), then the rest of the state. Each price has its source, trade date and a stale flag (over 7 days old).
+- `GET /api/market-prices/guava` returns the latest prices for the farmer's district, then nearby mandis (ranked by district-centre distance, since exact mandi locations are not stored), then the rest of the state. Each price has its source, trade date and a stale flag; the threshold is `STALE_DAYS` in `services/mandi_prices.py` (sent to the UI as `stale_after_days`). Feed and profile district names are matched through aliases in `services/geo.py` (for example Ahilyanagar and Ahmednagar).
+- `GET /api/public/market-prices/guava` needs no login and returns the latest prices in Madhya Pradesh and Maharashtra only (used on the landing page `index.html`). It reads no farmer data, is rate-limited per IP and cached for 10 minutes.
 - `GET /api/market-prices/guava/history` returns saved daily history for one mandi. A trend shows only after 7 saved days; before that the app says there is not enough history.
 - No price forecast or seasonal table is shown. The earlier hard-coded price tables were removed.
 

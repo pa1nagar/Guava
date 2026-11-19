@@ -448,6 +448,15 @@ class TestScenario6CrossFarmerDataRequest:
     Requirements: 14.9, 18.6
     """
 
+    @pytest.fixture(autouse=True)
+    def _no_real_database(self):
+        # The router calls get_db() before build_context(). Without real
+        # Supabase credentials that raises ("Invalid API key") and build_context
+        # is never reached, so these tests only passed on machines with a real
+        # .env. build_context is mocked here; the database must be too.
+        with patch("routers.ai.get_db", return_value=MagicMock()):
+            yield
+
     def test_build_context_called_with_jwt_user_id_not_body_user_id(self):
         """build_context must always be called with the JWT-derived user_id."""
         client = _build_ai_client(user_id=FARMER_A_USER_ID)

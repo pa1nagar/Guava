@@ -12,7 +12,7 @@ from fastapi.testclient import TestClient
 
 from main import app
 from routers import prices as prices_router
-from routers.prices import build_history, build_mandi_board
+from routers.prices import build_history, build_mandi_board, build_public_board
 
 TODAY = date(2026, 11, 12)
 
@@ -133,17 +133,36 @@ class TestBuildHistory:
 
 # ── HTTP endpoints ────────────────────────────────────────────────────────────
 
-def _chain(data):
+def _chain(data, max_rows=None):
+    """Query-builder fake. With a list, .range(a, b) pages through it and the
+    server-side row cap (max_rows, like PostgREST max-rows) is applied."""
     m = MagicMock()
     for name in ("select", "eq", "gte", "order", "limit", "maybe_single"):
         getattr(m, name).return_value = m
-    m.execute.return_value = MagicMock(data=data)
+    window = {}
+
+    def _range(a, b):
+        window["r"] = (a, b)
+        return m
+
+    def _execute():
+        rows = data
+        if isinstance(data, list):
+            if "r" in window:
+                a, b = window["r"]
+                rows = data[a:b + 1]
+            if max_rows is not None:
+                rows = rows[:max_rows]
+        return MagicMock(data=rows)
+
+    m.range.side_effect = _range
+    m.execute.side_effect = _execute
     return m
 
 
-def _db(farmer, prices):
+def _db(farmer, prices, max_rows=None):
     db = MagicMock()
-    tables = {"farmers": _chain(farmer), "market_prices": _chain(prices)}
+    tables = {"farmers": _chain(farmer), "market_prices": _chain(prices, max_rows)}
     db.table.side_effect = lambda n: tables[n]
     db._tables = tables
     return db
@@ -241,3 +260,190 @@ class TestAdminTrigger:
             r = client.post("/api/admin/market-prices/ingest", headers={"X-Admin-Token": "s3cret"})
         assert r.status_code == 200 and r.json()["upserted"] == 3
         run.assert_called_once()
+
+
+# ── Stale threshold: one source of truth ──────────────────────────────────────
+
+class TestStaleThresholdSource:
+    def test_board_and_history_send_the_backend_threshold(self):
+        from services.mandi_prices import STALE_DAYS
+        assert build_mandi_board(ROWS, "Madhya Pradesh", "Indore", 5, TODAY)["stale_after_days"] == STALE_DAYS
+        assert build_history([], TODAY)["stale_after_days"] == STALE_DAYS
+        assert build_public_board(ROWS, TODAY)["stale_after_days"] == STALE_DAYS
+
+    def test_is_stale_flag_follows_the_threshold_exactly(self):
+        from datetime import timedelta
+        from services.mandi_prices import STALE_DAYS
+        on_edge = (TODAY - timedelta(days=STALE_DAYS)).isoformat()
+        past_edge = (TODAY - timedelta(days=STALE_DAYS + 1)).isoformat()
+        rows = [
+            _row("Madhya Pradesh", "Indore", "Edge", on_edge, 3000),
+            _row("Madhya Pradesh", "Indore", "Past", past_edge, 3000),
+        ]
+        by = {m["market"]: m for m in build_mandi_board(rows, "Madhya Pradesh", "Indore", 5, TODAY)["mandis"]}
+        assert by["Edge"]["is_stale"] is False
+        assert by["Past"]["is_stale"] is True
+
+    def test_financial_uses_the_same_constant(self):
+        import inspect
+        from routers import financial
+        from services.mandi_prices import STALE_DAYS
+        assert financial.STALE_DAYS == STALE_DAYS
+        assert "days=7" not in inspect.getsource(financial._get_market_prices)
+
+
+# ── District / state aliases in the board ─────────────────────────────────────
+
+class TestBoardAliases:
+    def test_renamed_district_matches_profile_spelling(self):
+        rows = [_row("Maharashtra", "Ahilyanagar", "APMC Rahata", "2026-11-11", 3000)]
+        b = build_mandi_board(rows, "Maharashtra", "Ahmednagar", 5, TODAY)
+        assert [m["match"] for m in b["mandis"]] == ["same_district"]
+
+    def test_profile_with_new_name_matches_old_feed_name(self):
+        rows = [_row("Maharashtra", "Osmanabad", "Osmanabad", "2026-11-11", 3000)]
+        b = build_mandi_board(rows, "Maharashtra", "Dharashiv", 5, TODAY)
+        assert [m["match"] for m in b["mandis"]] == ["same_district"]
+
+    def test_feed_spelling_chattrapati_sambhajinagar(self):
+        rows = [_row("Maharashtra", "Chattrapati Sambhajinagar", "APMC Chattrapati Sambhajinagar", "2026-11-11", 2500)]
+        b = build_mandi_board(rows, "Maharashtra", "Aurangabad", 5, TODAY)
+        assert b["mandis"][0]["match"] == "same_district"
+
+    def test_state_alias_keralam_and_chattisgarh(self):
+        rows = [
+            _row("Keralam", "Ernakulam", "Kochi", "2026-11-11", 4000),
+            _row("Chattisgarh", "Raipur", "Raipur", "2026-11-11", 3000),
+        ]
+        k = build_mandi_board(rows, "Kerala", "Ernakulam", 5, TODAY)
+        assert k["mandis"][0]["match"] == "same_district"
+        c = build_mandi_board(rows, "Chhattisgarh", "Raipur", 5, TODAY)
+        assert c["mandis"][0]["market"] == "Raipur" and c["mandis"][0]["match"] == "same_district"
+
+    def test_mandis_in_known_districts_rank_as_nearby(self):
+        rows = [
+            _row("Maharashtra", "Nashik", "APMC Nasik", "2026-11-11", 6000),
+            _row("Maharashtra", "Mumbai", "Mumbai- Fruit Market", "2026-11-11", 8000),
+            _row("Maharashtra", "Sangli", "Sangli(Phale, Bhajipala Market)", "2026-11-11", 5000),
+            _row("Maharashtra", "Amarawati", "Amrawati(Frui & Veg. Market)", "2026-11-11", 4000),
+        ]
+        b = build_mandi_board(rows, "Maharashtra", "Pune", 10, TODAY)
+        by = {m["market"]: m for m in b["mandis"]}
+        assert by["APMC Nasik"]["match"] == "nearby"
+        assert by["Mumbai- Fruit Market"]["match"] == "nearby"
+        assert by["Sangli(Phale, Bhajipala Market)"]["match"] == "nearby"
+        assert 100 <= by["APMC Nasik"]["distance_km"] <= 200
+        assert by["Amrawati(Frui & Veg. Market)"]["distance_km"] is not None
+
+
+# ── Row cap: the latest price per mandi is correct whatever the server cap ────
+
+def _many_rows():
+    """2,300 rows for Indore on the newest day, then Ujjain's only row last."""
+    rows = [
+        _row("Madhya Pradesh", "Indore", "Indore", "2026-11-11", 3800, variety=f"V{i}")
+        for i in range(2300)
+    ]
+    rows.append(_row("Madhya Pradesh", "Ujjain", "Ujjain", "2026-11-10", 3400))
+    return rows
+
+
+class TestRowCapPaging:
+    @pytest.mark.parametrize("cap", [1000, 300, 5000])
+    def test_mandi_beyond_the_server_row_cap_is_still_found(self, client, cap):
+        db = _db(FARMER, _many_rows(), max_rows=cap)
+        with patch("routers.prices.get_db", return_value=db):
+            r = client.get("/api/market-prices/guava?limit=5")
+        assert r.status_code == 200
+        markets = [m["market"] for m in r.json()["mandis"]]
+        assert markets == ["Indore", "Ujjain"]
+        indore = r.json()["mandis"][0]
+        assert len(indore["prices"]) == 2300          # nothing from the newest day lost
+
+    def test_requests_are_paged_not_one_big_limit(self, client):
+        db = _db(FARMER, _many_rows(), max_rows=1000)
+        with patch("routers.prices.get_db", return_value=db):
+            client.get("/api/market-prices/guava")
+        calls = db._tables["market_prices"].range.call_args_list
+        assert len(calls) >= 3
+        assert calls[0].args == (0, prices_router._PAGE_SIZE - 1)
+        assert calls[1].args[0] == 1000                # offset advances by rows received
+
+    def test_ordering_is_deterministic_for_paging(self, client):
+        db = _db(FARMER, [])
+        with patch("routers.prices.get_db", return_value=db):
+            client.get("/api/market-prices/guava")
+        ordered = [c.args[0] for c in db._tables["market_prices"].order.call_args_list]
+        assert ordered[0] == "arrival_date" and "market_name" in ordered
+
+    def test_history_is_paged_too(self, client):
+        base = date(2025, 1, 1).toordinal()
+        rows = [
+            _row("Madhya Pradesh", "Indore", "Indore", date.fromordinal(base + i).isoformat(), 3000)
+            for i in range(1500)
+        ]
+        db = _db(FARMER, rows, max_rows=1000)
+        with patch("routers.prices.get_db", return_value=db):
+            r = client.get("/api/market-prices/guava/history?market=Indore&state=Madhya%20Pradesh")
+        assert r.status_code == 200
+        assert r.json()["distinct_days"] == 1500
+        assert r.json()["last_date"] == date.fromordinal(base + 1499).isoformat()
+
+
+# ── Public (logged-out) board ─────────────────────────────────────────────────
+
+class TestPublicBoard:
+    def test_only_public_states_freshest_first_and_capped(self):
+        rows = ROWS + [
+            _row("Maharashtra", "Nashik", "APMC Nasik", "2026-11-11", 6000),
+            _row("Maharashtra", "Mumbai", "Mumbai- Fruit Market", "2026-11-10", 8000),
+        ]
+        b = build_public_board(rows, TODAY, per_state=2)
+        assert {m["state"] for m in b["mandis"]} == {"Madhya Pradesh", "Maharashtra"}
+        mp = [m["market"] for m in b["mandis"] if m["state"] == "Madhya Pradesh"]
+        assert mp == ["Indore", "Ujjain"]            # freshest two of three
+        assert b["scope"] == "public" and b["location"] is None
+        assert all(m["match"] == "public" and m["distance_km"] is None for m in b["mandis"])
+        assert "Jaipur" not in [m["market"] for m in b["mandis"]]
+
+    def test_empty(self):
+        b = build_public_board([], TODAY)
+        assert b["has_data"] is False and b["scope"] == "none"
+
+
+class TestPublicEndpoint:
+    @pytest.fixture(autouse=True)
+    def _fresh_cache(self):
+        prices_router._public_cache.update(at=None, data=None)
+        app.dependency_overrides.clear()
+        yield
+        prices_router._public_cache.update(at=None, data=None)
+
+    def test_works_without_login_and_reads_no_farmer_data(self):
+        db = _db(None, ROWS)
+        with patch("routers.prices.get_db", return_value=db):
+            r = TestClient(app).get("/api/public/market-prices/guava")
+        assert r.status_code == 200
+        body = r.json()
+        assert body["has_data"] is True and body["location"] is None
+        assert body["attribution"] == "Source: Agmarknet / data.gov.in"
+        assert {c.args[0] for c in db.table.call_args_list} == {"market_prices"}
+
+    def test_result_is_cached(self):
+        db = _db(None, ROWS)
+        with patch("routers.prices.get_db", return_value=db):
+            c = TestClient(app)
+            c.get("/api/public/market-prices/guava")
+            first = db.table.call_count
+            c.get("/api/public/market-prices/guava")
+        assert db.table.call_count == first
+
+    def test_db_error_is_500_without_details(self):
+        db = _db(None, [])
+        db._tables["market_prices"].execute.side_effect = RuntimeError("secret detail")
+        with patch("routers.prices.get_db", return_value=db):
+            r = TestClient(app).get("/api/public/market-prices/guava")
+        assert r.status_code == 500 and "secret" not in r.text
+
+    def test_private_endpoint_still_requires_login(self):
+        assert TestClient(app).get("/api/market-prices/guava").status_code in (401, 403, 422)

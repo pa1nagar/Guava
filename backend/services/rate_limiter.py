@@ -51,6 +51,7 @@ CATEGORY_LIMITS: dict[str, int] = {
     "ai_query": 30,
     "contact_form": 20,
     "market_prices": 60,
+    "market_prices_public": 30,
     "admin_ingest": 5,
     "sell_smart_read": 60,
     "sell_smart_write": 20,

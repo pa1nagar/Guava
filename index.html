@@ -94,6 +94,26 @@
     </section>
 
     <!-- ════════════════════════════════════════════════════════════════ -->
+    <!-- Guava mandi prices (public view; real data: Agmarknet)          -->
+    <!-- ════════════════════════════════════════════════════════════════ -->
+    <section id="mandi-prices" class="py-12 px-4 bg-white">
+      <div class="max-w-4xl mx-auto">
+        <div class="flex items-start justify-between gap-3 flex-wrap mb-1">
+          <h2 class="text-2xl sm:text-3xl font-bold text-brand-primary">
+            <i class="fa-solid fa-chart-line text-brand-secondary mr-1"></i>
+            <span id="mandi-title">Guava Mandi Prices</span>
+          </h2>
+          <div class="text-xs text-gray-500" role="group" aria-label="Language">
+            <button type="button" id="mandi-lang-en" onclick="setMandiLang('en')" class="px-2 py-1 rounded-lg border border-gray-200 bg-white">English</button>
+            <button type="button" id="mandi-lang-hi" onclick="setMandiLang('hi')" class="px-2 py-1 rounded-lg border border-gray-200 bg-white">हिन्दी</button>
+          </div>
+        </div>
+        <p id="mandi-subtitle" class="text-xs text-gray-500 mb-4"></p>
+        <div id="mandi-board" class="mb-2"></div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════════ -->
     <!-- Product Explanation Section                                     -->
     <!-- ════════════════════════════════════════════════════════════════ -->
     <section id="product" class="py-16 px-4">
@@ -572,6 +592,13 @@
 
   <!-- Main homepage script -->
   <script type="module" src="js/app.js"></script>
+
+  <!-- Public mandi price card (no login needed). Must load after app.js. -->
+  <script type="module">
+    import { API_BASE_URL } from "./js/config.js";
+    import { loadMandiCard } from "./js/mandi.js";
+    loadMandiCard({ apiBase: API_BASE_URL });
+  </script>
 
   <!-- Wake up the Render backend as soon as anyone visits the landing page -->
   <script type="module">

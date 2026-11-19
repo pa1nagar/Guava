@@ -44,7 +44,9 @@ MAX_PAGES = 20                     # hard stop: 10,000 records for one commodity
 HTTP_TIMEOUT_S = 30.0
 UPSERT_CHUNK = 200
 MIN_TREND_DAYS = 7                 # distinct saved days needed before showing a trend
-STALE_DAYS = 7                     # same threshold as financial._get_market_prices
+# Single source of truth for "old price". routers/financial.py uses it, and the
+# price endpoints send it to the UI as stale_after_days (the UI never hard-codes it).
+STALE_DAYS = 7
 
 # Columns that identify one price row. Must match the unique index in schema.sql.
 CONFLICT_COLUMNS = (

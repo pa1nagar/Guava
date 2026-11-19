@@ -29,6 +29,7 @@ from pydantic import BaseModel, Field
 
 from services.auth import get_user_id
 from services.db import get_db
+from services.mandi_prices import STALE_DAYS
 from services.stage import compute_crop_age_months
 from services.financials import (
     total_cost,
@@ -187,7 +188,7 @@ def _get_market_prices(crop: str) -> list[dict]:
         raise HTTPException(status_code=500, detail="Database error.")
 
     now = datetime.now(timezone.utc)
-    seven_days_ago = now - timedelta(days=7)
+    stale_cutoff = now - timedelta(days=STALE_DAYS)
 
     for p in prices:
         observed = p.get("observed_at")
@@ -201,7 +202,7 @@ def _get_market_prices(crop: str) -> list[dict]:
                 observed_dt = datetime.fromisoformat(observed_str)
                 if observed_dt.tzinfo is None:
                     observed_dt = observed_dt.replace(tzinfo=timezone.utc)
-                is_stale = observed_dt < seven_days_ago
+                is_stale = observed_dt < stale_cutoff
             except (ValueError, TypeError):
                 is_stale = True
         p["is_stale"] = is_stale
