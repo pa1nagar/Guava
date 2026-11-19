@@ -34,8 +34,11 @@ def test_case_insensitive_and_unknown():
     assert loc.resolve_district("", "") is None
 
 
-def test_supplement_basis_label():
+def test_supplement_basis_label(monkeypatch):
+    # Mumbai is now in services.geo too; hide it there to exercise the supplement path.
+    monkeypatch.setattr(loc, "get_exact_district_coordinates", lambda s, d: None)
     assert loc.resolve_district("Maharashtra", "Mumbai")[2] == loc.BASIS_SUPPLEMENT
+    assert loc.resolve_district("Maharashtra", "Solapur")[2] == loc.BASIS_SUPPLEMENT
 
 
 def test_pune_mumbai_distance_plausible():
