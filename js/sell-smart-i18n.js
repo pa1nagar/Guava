@@ -13,6 +13,7 @@ import { TRANSLATIONS } from "./data.js";
 
 export const SELL_EN = {
   "sell_page_title": "Smart Farmer - Where and when to sell",
+  "sell_nav": "Sell",
   "sell_heading": "Where and when to sell",
   "sell_subheading": "Compare nearby mandis, see how prices moved, and set price alerts. Prices come from Agmarknet (data.gov.in) as saved by this app.",
   "sell_back": "Back to Today",
@@ -187,6 +188,7 @@ export const SELL_EN = {
 
 export const SELL_HI = {
   "sell_page_title": "स्मार्ट फार्मर - कहाँ और कब बेचें",
+  "sell_nav": "बेचें",
   "sell_heading": "कहाँ और कब बेचें",
   "sell_subheading": "आस-पास की मंडियों की तुलना करें, भाव कैसे बदले यह देखें और भाव की सूचना लगाएं। भाव Agmarknet (data.gov.in) से हैं, जैसे इस ऐप में सहेजे गए।",
   "sell_back": "आज के पेज पर वापस",
