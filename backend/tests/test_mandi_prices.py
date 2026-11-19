@@ -34,6 +34,12 @@ def _ok_handler(request: httpx.Request) -> httpx.Response:
     return httpx.Response(200, json=_page(request))
 
 
+@pytest.fixture(autouse=True)
+def _no_retry_sleep(monkeypatch):
+    """Retries must not slow the suite down."""
+    monkeypatch.setattr(mp.time, "sleep", lambda s: None)
+
+
 class FakeDb:
     """Records upserts; keeps rows keyed by the conflict columns like Postgres."""
 
@@ -150,6 +156,58 @@ class TestFetch:
         out = mp.fetch_guava_records("KEY", _client(handler))
         assert pages == [0, 2, 4, 6, 7]
         assert len(out) == len(SAMPLE["records"])
+
+    def test_retries_timeout_and_502_then_succeeds(self):
+        attempts = []
+
+        def handler(request):
+            attempts.append(1)
+            if len(attempts) == 1:
+                raise httpx.ReadTimeout("slow")
+            if len(attempts) == 2:
+                return httpx.Response(502)
+            return httpx.Response(200, json=_page(request))
+
+        out = mp.fetch_guava_records("K", _client(handler))
+        assert len(out) == len(SAMPLE["records"])
+        assert len(attempts) >= 3
+
+    def test_gives_up_after_fetch_attempts(self):
+        attempts = []
+
+        def handler(request):
+            attempts.append(1)
+            return httpx.Response(502)
+
+        with pytest.raises(mp.MandiFetchError, match="502"):
+            mp.fetch_guava_records("K", _client(handler))
+        assert len(attempts) == mp.FETCH_ATTEMPTS
+
+    def test_403_and_500_are_not_retried(self):
+        for code in (403, 500):
+            attempts = []
+
+            def handler(request, code=code):
+                attempts.append(1)
+                return httpx.Response(code)
+
+            with pytest.raises(mp.MandiFetchError):
+                mp.fetch_guava_records("K", _client(handler))
+            assert len(attempts) == 1
+
+    def test_default_client_sends_custom_user_agent(self, monkeypatch):
+        # data.gov.in stalls the default python-httpx User-Agent (verified live).
+        captured = {}
+        real_client = httpx.Client
+
+        def fake_client(*args, **kwargs):
+            captured["headers"] = kwargs.get("headers")
+            return real_client(transport=httpx.MockTransport(_ok_handler))
+
+        monkeypatch.setattr(mp.httpx, "Client", fake_client)
+        mp.fetch_guava_records("K")
+        assert captured["headers"]["User-Agent"] == mp.USER_AGENT
+        assert "httpx" not in mp.USER_AGENT.lower()
 
     def test_http_error_raises(self):
         with pytest.raises(mp.MandiFetchError):

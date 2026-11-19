@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import logging
 import os
+import time
 from datetime import date, datetime, timedelta, timezone
 from typing import Any, Iterable, Optional
 
@@ -39,9 +40,15 @@ COMMODITY = "guava"                # value stored in market_prices.commodity
 UNIT = "Rs/Quintal"
 QUINTAL_KG = 100.0
 
-PAGE_LIMIT = 500
-MAX_PAGES = 20                     # hard stop: 10,000 records for one commodity
-HTTP_TIMEOUT_S = 30.0
+PAGE_LIMIT = 100                   # 500-row pages timed out on the live server (Nov 2026)
+MAX_PAGES = 100                    # hard stop: 10,000 records for one commodity
+HTTP_TIMEOUT_S = 60.0
+FETCH_ATTEMPTS = 3                 # per page; the feed is often slow or briefly down
+RETRY_BACKOFF_S = 3.0
+RETRY_STATUSES = (502, 503, 504)
+# data.gov.in stalls requests that carry the default python-httpx User-Agent
+# (verified 19 Nov 2026: default UA timed out, any other UA answered in ~1 s).
+USER_AGENT = "SmartFarmerGuava/1.0 (mandi price sync)"
 UPSERT_CHUNK = 200
 MIN_TREND_DAYS = 7                 # distinct saved days needed before showing a trend
 # Single source of truth for "old price". routers/financial.py uses it, and the
@@ -165,6 +172,29 @@ def parse_records(
 
 # ── Fetch ─────────────────────────────────────────────────────────────────────
 
+def _get_with_retry(http: httpx.Client, params: dict) -> httpx.Response:
+    """GET one page, retrying timeouts, network errors and 502/503/504.
+
+    data.gov.in is often slow or briefly unavailable. Other statuses (400, 403,
+    500, ...) are returned at once so the caller reports them without retrying.
+    """
+    last_error = "no attempt made"
+    for attempt in range(1, FETCH_ATTEMPTS + 1):
+        try:
+            resp = http.get(API_URL, params=params)
+        except httpx.HTTPError as exc:
+            last_error = f"request failed: {type(exc).__name__}"
+        else:
+            if resp.status_code not in RETRY_STATUSES:
+                return resp
+            last_error = f"HTTP {resp.status_code} from data.gov.in"
+        if attempt < FETCH_ATTEMPTS:
+            logger.warning("Mandi fetch attempt %d/%d failed (%s); retrying.",
+                           attempt, FETCH_ATTEMPTS, last_error)
+            time.sleep(RETRY_BACKOFF_S * attempt)
+    raise MandiFetchError(f"{last_error} (after {FETCH_ATTEMPTS} attempts)")
+
+
 def fetch_guava_records(
     api_key: str, client: Optional[httpx.Client] = None
 ) -> list[dict]:
@@ -174,7 +204,9 @@ def fetch_guava_records(
     or a payload without a "records" list.
     """
     own_client = client is None
-    http = client or httpx.Client(timeout=HTTP_TIMEOUT_S)
+    http = client or httpx.Client(
+        timeout=HTTP_TIMEOUT_S, headers={"User-Agent": USER_AGENT}
+    )
     records: list[dict] = []
     try:
         offset = 0
@@ -186,10 +218,7 @@ def fetch_guava_records(
                 "offset": offset,
                 "filters[commodity]": COMMODITY_FEED_NAME,
             }
-            try:
-                resp = http.get(API_URL, params=params)
-            except httpx.HTTPError as exc:
-                raise MandiFetchError(f"request failed: {type(exc).__name__}") from exc
+            resp = _get_with_retry(http, params)
             if resp.status_code == 400:
                 raise MandiFetchError("HTTP 400 from data.gov.in (bad request parameters)")
             if resp.status_code == 403:
