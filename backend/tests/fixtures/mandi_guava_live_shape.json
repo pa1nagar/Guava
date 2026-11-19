@@ -1,0 +1,141 @@
+{
+ "_note": "LIVE-SHAPE fixture. A live fetch of the data.gov.in feed timed out (ReadTimeout) in FEAT-001 (twice) and FEAT-003, so this file is derived from the shape of mandi_guava_sample.json: same field names, string prices in Rs/quintal, DD/MM/YYYY dates, blank variety/grade, repeated mandi rows. Values are for tests only, not market data.",
+ "total": 11,
+ "count": 11,
+ "limit": "500",
+ "offset": "0",
+ "records": [
+  {
+   "state": "Maharashtra",
+   "district": "Pune",
+   "market": "Pune",
+   "commodity": "Guava",
+   "variety": "",
+   "grade": "",
+   "arrival_date": "09/11/2026",
+   "min_price": "4000",
+   "max_price": "6000",
+   "modal_price": "5000"
+  },
+  {
+   "state": "Maharashtra",
+   "district": "Mumbai",
+   "market": "Mumbai",
+   "commodity": "Guava",
+   "variety": "Other",
+   "grade": "FAQ",
+   "arrival_date": "09/11/2026",
+   "min_price": "4800",
+   "max_price": "6400",
+   "modal_price": "5600"
+  },
+  {
+   "state": "Maharashtra",
+   "district": "Nashik",
+   "market": "Nashik",
+   "commodity": "Guava",
+   "variety": "Other",
+   "grade": "FAQ",
+   "arrival_date": "09/11/2026",
+   "min_price": "3700",
+   "max_price": "5100",
+   "modal_price": "4400"
+  },
+  {
+   "state": "Maharashtra",
+   "district": "Solapur",
+   "market": "Solapur",
+   "commodity": "Guava",
+   "variety": "",
+   "grade": "",
+   "arrival_date": "09/11/2026",
+   "min_price": "3400",
+   "max_price": "4600",
+   "modal_price": "4000"
+  },
+  {
+   "state": "Maharashtra",
+   "district": "Pune",
+   "market": "Pune",
+   "commodity": "Guava",
+   "variety": "",
+   "grade": "",
+   "arrival_date": "10/11/2026",
+   "min_price": "4100",
+   "max_price": "6100",
+   "modal_price": "5100"
+  },
+  {
+   "state": "Maharashtra",
+   "district": "Mumbai",
+   "market": "Mumbai",
+   "commodity": "Guava",
+   "variety": "Other",
+   "grade": "FAQ",
+   "arrival_date": "10/11/2026",
+   "min_price": "4900",
+   "max_price": "6500",
+   "modal_price": "5700"
+  },
+  {
+   "state": "Maharashtra",
+   "district": "Nashik",
+   "market": "Nashik",
+   "commodity": "Guava",
+   "variety": "Other",
+   "grade": "FAQ",
+   "arrival_date": "10/11/2026",
+   "min_price": "3800",
+   "max_price": "5200",
+   "modal_price": "4500"
+  },
+  {
+   "state": "Maharashtra",
+   "district": "Solapur",
+   "market": "Solapur",
+   "commodity": "Guava",
+   "variety": "",
+   "grade": "",
+   "arrival_date": "10/11/2026",
+   "min_price": "3500",
+   "max_price": "4700",
+   "modal_price": "4100"
+  },
+  {
+   "state": "Maharashtra",
+   "district": "Pune",
+   "market": "Pune",
+   "commodity": "Guava",
+   "variety": "",
+   "grade": "",
+   "arrival_date": "10/11/2026",
+   "min_price": "5000",
+   "max_price": "7000",
+   "modal_price": "5200"
+  },
+  {
+   "state": "Madhya Pradesh",
+   "district": "Indore",
+   "market": "Indore",
+   "commodity": "Guava",
+   "variety": "Other",
+   "grade": "FAQ",
+   "arrival_date": "10/11/2026",
+   "min_price": "3000",
+   "max_price": "4500",
+   "modal_price": "3800"
+  },
+  {
+   "state": "Madhya Pradesh",
+   "district": "Ujjain",
+   "market": "Ujjain",
+   "commodity": "Guava",
+   "variety": "Other",
+   "grade": "FAQ",
+   "arrival_date": "10/11/2026",
+   "min_price": "2800",
+   "max_price": "4000",
+   "modal_price": "3400"
+  }
+ ]
+}
