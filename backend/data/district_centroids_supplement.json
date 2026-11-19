@@ -1,0 +1,21 @@
+{
+  "_note": "Supplemental coordinates for guava-feed districts missing from services/geo.py DISTRICT_COORDS. Each row is the coordinate of the district HQ city as published on the cited page. It is NOT a computed district centroid. Rows are added only when a public source is found.",
+  "rows": [
+    {
+      "state": "Maharashtra",
+      "district": "Mumbai",
+      "lat": 19.0761,
+      "lon": 72.8775,
+      "kind": "district HQ city",
+      "source_url": "https://en.wikipedia.org/wiki/Mumbai"
+    },
+    {
+      "state": "Maharashtra",
+      "district": "Solapur",
+      "lat": 17.6703,
+      "lon": 75.9011,
+      "kind": "district HQ city",
+      "source_url": "https://en.wikipedia.org/wiki/Solapur"
+    }
+  ]
+}
