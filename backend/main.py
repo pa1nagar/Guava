@@ -35,6 +35,7 @@ from routers import inventory as inventory_router_module
 from routers import calculators as calculators_router_module
 from routers import ai as ai_router_module
 from routers import prices as prices_router_module
+from routers import sell_smart as sell_smart_router_module
 from services.rate_limiter import RateLimiter, check_rate_limit, _extract_ip
 
 logging.basicConfig(
@@ -128,6 +129,7 @@ app.include_router(inventory_router_module.router, prefix="/api")
 app.include_router(calculators_router_module.router, prefix="/api")
 app.include_router(ai_router_module.router, prefix="/api")
 app.include_router(prices_router_module.router, prefix="/api")
+app.include_router(sell_smart_router_module.router, prefix="/api")
 
 
 # â”€â”€ Background scheduler (module-level so shutdown event can stop it) â”€â”€â”€â”€â”€â”€â”€â”€
@@ -160,6 +162,17 @@ def _run_mandi_price_ingestion() -> None:
     """
     from services.mandi_prices import run_ingestion
     run_ingestion()
+
+
+def _run_sell_smart_post_ingestion() -> None:
+    """Scheduled job: quality flags and price alerts for Sell smart.
+
+    Runs 15 minutes after the mandi ingestion. run_post_ingestion never
+    raises; it logs and returns a summary.
+    """
+    from services.sell_smart.jobs import run_post_ingestion
+    from services.sell_smart.repo import SupabaseRepo
+    run_post_ingestion(SupabaseRepo())
 
 
 # â”€â”€ Startup validation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -212,6 +225,16 @@ async def startup_validation() -> None:
         hour="7,19",
         minute=30,
         id="daily_mandi_price_ingestion",
+        replace_existing=True,
+    )
+    # Sell smart quality flags and price alerts: 07:45 and 19:45 IST, after the
+    # longest ingestion run (MAX_PAGES x HTTP_TIMEOUT_S = 10 minutes).
+    _scheduler.add_job(
+        _run_sell_smart_post_ingestion,
+        trigger="cron",
+        hour="7,19",
+        minute=45,
+        id="sell_smart_post_ingestion",
         replace_existing=True,
     )
     _scheduler.start()
