@@ -109,3 +109,29 @@ class TestMandiDistrictCoordinates:
         assert get_coordinates("Maharashtra", "Ahilyanagar") == get_coordinates("Maharashtra", "Ahmednagar")
         assert get_coordinates("Keralam", "Nowhere") == geo.INDIA_CENTRE  # Kerala has no capital entry
         assert get_coordinates("Maharashtra", "Nowhere") == geo.STATE_CAPITALS["Maharashtra"]
+
+
+class TestProfileDistrictCoverage:
+    """Every MP / Maharashtra district a farmer can pick has HQ coordinates."""
+
+    @staticmethod
+    def _districts(state):
+        import re
+        from pathlib import Path
+        js = Path(__file__).resolve().parents[2] / "js" / "india-locations.js"
+        text = js.read_text(encoding="utf-8")
+        start = text.index('"%s": [' % state)
+        end = text.index("]", start)
+        return re.findall(r'"([^"]+)"', text[start + len(state) + 4:end])
+
+    @pytest.mark.parametrize("state,lat,lon", [
+        ("Madhya Pradesh", (21.0, 26.9), (74.0, 82.9)),
+        ("Maharashtra", (15.6, 22.1), (72.6, 80.9)),
+    ])
+    def test_every_listed_district_resolves(self, state, lat, lon):
+        districts = self._districts(state)
+        assert len(districts) > 30
+        for d in districts:
+            coords = get_exact_district_coordinates(state, d)
+            assert coords is not None, f"{state}/{d} has no coordinates"
+            assert lat[0] <= coords[0] <= lat[1] and lon[0] <= coords[1] <= lon[1], (state, d, coords)

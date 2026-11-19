@@ -33,7 +33,7 @@ ROWS = [  # newest first, like the endpoint query
     _row("Madhya Pradesh", "Indore", "Indore", "2026-11-11", 3800, 3000, 4500, "Other", "FAQ"),
     _row("Madhya Pradesh", "Indore", "Indore", "2026-11-04", 3500),   # older, ignored
     _row("Madhya Pradesh", "Ujjain", "Ujjain", "2026-11-10", 3400),
-    _row("Madhya Pradesh", "Rewa", "Rewa", "2026-11-09", 3000),       # same state, no coords
+    _row("Madhya Pradesh", "Unlisted District", "Rewa", "2026-11-09", 3000),  # same state, no coords
     _row("Maharashtra", "Pune", "Pune", "2026-11-02", 5000),           # far, stale
     _row("Rajasthan", "Jaipur", "Jaipur", "2026-11-10", 2500),         # other state, unknown coords
 ]
