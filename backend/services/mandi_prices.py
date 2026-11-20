@@ -183,7 +183,11 @@ def _get_with_retry(http: httpx.Client, params: dict) -> httpx.Response:
         try:
             resp = http.get(API_URL, params=params)
         except httpx.HTTPError as exc:
-            last_error = f"request failed: {type(exc).__name__}"
+            # str(exc) is the low-level network reason (DNS, refused, TLS...).
+            # httpx does not put the request URL (which holds the API key) in it,
+            # but strip the key defensively anyway.
+            detail = str(exc).replace(str(params.get("api-key", "")) or "\0", "***")[:200]
+            last_error = f"request failed: {type(exc).__name__}: {detail}"
         else:
             if resp.status_code not in RETRY_STATUSES:
                 return resp
