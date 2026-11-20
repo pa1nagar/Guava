@@ -30,3 +30,26 @@ def test_threshold_dict_matches_constants():
 def test_default_radius_equals_prices_router():
     from routers.prices import NEARBY_MAX_KM
     assert c.DEFAULT_RADIUS_KM == NEARBY_MAX_KM
+
+
+CAP_NAMES = ("LOOKBACK_DAYS", "MAX_ROAD_KM_OVERRIDES", "MAX_FLAGGED_ROWS",
+             "MAX_NOTIFICATIONS", "PAGE_SIZE", "MAX_PAGES")
+
+
+def test_caps_are_in_thresholds_with_basis():
+    for name in CAP_NAMES:
+        assert name in c.THRESHOLDS, name
+        assert c.THRESHOLDS[name]["value"] == getattr(c, name), name
+        assert len(c.THRESHOLDS[name]["basis"].strip()) > 10, name
+    assert c.LOOKBACK_DAYS == 2 * max(c.TREND_WINDOWS)
+
+
+def test_modules_use_config_values_single_source():
+    from routers import sell_smart as router
+    from services.sell_smart import jobs, repo
+    assert jobs.LOOKBACK_DAYS == c.LOOKBACK_DAYS
+    assert repo.PAGE_SIZE == c.PAGE_SIZE
+    assert repo.MAX_PAGES == c.MAX_PAGES
+    assert router.MAX_ROAD_KM_OVERRIDES == c.MAX_ROAD_KM_OVERRIDES
+    assert router.MAX_FLAGGED_ROWS == c.MAX_FLAGGED_ROWS
+    assert router.MAX_NOTIFICATIONS == c.MAX_NOTIFICATIONS

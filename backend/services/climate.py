@@ -20,6 +20,11 @@ NASA_POWER_CLIM  = "https://power.larc.nasa.gov/api/temporal/climatology/point"
 GDD_BASE_TEMP = 10.0
 GDD_TMAX_CAP  = 35.0
 
+GDD_THRESHOLDS_BASIS = (
+    "Estimate typed in by the app developer; no published source. "
+    "Compare with the calendar stage, do not use alone."
+)
+
 GDD_STAGE_THRESHOLDS: dict[str, float] = {
     "establishment":       0,
     "vegetative_growth":   500,
@@ -47,15 +52,19 @@ FERTILIZER_RATES: dict[str, float] = {
     "Iron chelate":  250.00,
     "Humic acid":     80.00,
 }
-DEFAULT_FERTILIZER_RATE = 55.0
+FERTILIZER_RATES_BASIS = (
+    "Reference prices typed in by the app developer, undated, not live market rates; "
+    "check your dealer price."
+)
 
 
-def _get_fert_rate(fertilizer_name: str) -> float:
+def _get_fert_rate(fertilizer_name: str) -> float | None:
+    """Reference rate in Rs/kg, or None when the fertilizer is not in the table."""
     name_lower = fertilizer_name.lower()
     for key, rate in FERTILIZER_RATES.items():
         if any(part.lower() in name_lower for part in key.split()):
             return rate
-    return DEFAULT_FERTILIZER_RATE
+    return None
 
 
 def _nasa_get(url: str, params: dict) -> dict:
@@ -199,6 +208,8 @@ def _fetch_climate_sync(latitude: float, longitude: float, sowing_date: date) ->
         "gdd_cumulative":        round(gdd_cumulative, 0),
         "gdd_predicted_stage":   gdd_predicted_stage,
         "gdd_thresholds":        GDD_STAGE_THRESHOLDS,
+        "gdd_basis":             GDD_THRESHOLDS_BASIS,
+        "gdd_is_estimate":       True,
         "anomaly_temperature":   temp_anomaly,
         "anomaly_rainfall_mm":   rain_anomaly,
         "anomaly_summary":       anomaly_summary,
@@ -241,7 +252,9 @@ def fertilizer_budget_forecast(stages: list[dict], current_stage_id: str, plant_
             "fertilizer":    fert_name,
             "total_kg":      round(total_kg, 1),
             "rate_per_kg":   rate,
-            "cost_estimate": round(total_kg * rate, 0),
+            "cost_estimate": round(total_kg * rate, 0) if rate is not None else None,
+            "rate_basis":    FERTILIZER_RATES_BASIS,
+            "is_estimate":   True,
             "months":        months,
         })
     return items

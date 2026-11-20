@@ -49,9 +49,9 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/sell-smart")
 
 ATTRIBUTION = "Source: Agmarknet / data.gov.in"
-MAX_ROAD_KM_OVERRIDES = 50   # abuse cap on the size of the road-km map
-MAX_FLAGGED_ROWS = 50        # abuse cap on the flagged-row list in /quality
-MAX_NOTIFICATIONS = 100      # abuse cap on one notifications page
+MAX_ROAD_KM_OVERRIDES = cfg.MAX_ROAD_KM_OVERRIDES
+MAX_FLAGGED_ROWS = cfg.MAX_FLAGGED_ROWS
+MAX_NOTIFICATIONS = cfg.MAX_NOTIFICATIONS
 
 _read_limiter = RateLimiter("sell_smart_read")
 _write_limiter = RateLimiter("sell_smart_write")

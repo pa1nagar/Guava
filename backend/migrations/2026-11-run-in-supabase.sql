@@ -1,5 +1,8 @@
 -- Smart Farmer: run this whole file ONCE in the Supabase SQL editor (safe to re-run).
 -- Part 1: market_prices columns for real mandi prices. Part 2: Sell smart tables.
+-- NOTE: signed-in clients get no INSERT/UPDATE policy on sell_settings or price_alerts;
+-- the backend writes them with the service role. Databases that already ran an older
+-- version of this file: run 2026-11-sell-smart-harden.sql to remove those policies.
 
 -- ══════════════════════════════════════════════════════════════════════════
 -- market_prices: real mandi price ingestion (Agmarknet / data.gov.in)
@@ -60,28 +63,7 @@ DO $$ BEGIN
   END IF;
 END $$;
 
-DO $$ BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_policies
-    WHERE tablename = 'sell_settings' AND policyname = 'Sell settings insert own'
-  ) THEN
-    CREATE POLICY "Sell settings insert own"
-      ON sell_settings FOR INSERT
-      WITH CHECK (auth.uid() = user_id);
-  END IF;
-END $$;
 
-DO $$ BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_policies
-    WHERE tablename = 'sell_settings' AND policyname = 'Sell settings update own'
-  ) THEN
-    CREATE POLICY "Sell settings update own"
-      ON sell_settings FOR UPDATE
-      USING (auth.uid() = user_id)
-      WITH CHECK (auth.uid() = user_id);
-  END IF;
-END $$;
 
 -- -- price_alerts: own-row access, soft removal through deleted_at ------------
 CREATE TABLE IF NOT EXISTS price_alerts (
@@ -116,28 +98,7 @@ DO $$ BEGIN
   END IF;
 END $$;
 
-DO $$ BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_policies
-    WHERE tablename = 'price_alerts' AND policyname = 'Price alerts insert own'
-  ) THEN
-    CREATE POLICY "Price alerts insert own"
-      ON price_alerts FOR INSERT
-      WITH CHECK (auth.uid() = user_id);
-  END IF;
-END $$;
 
-DO $$ BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM pg_policies
-    WHERE tablename = 'price_alerts' AND policyname = 'Price alerts update own'
-  ) THEN
-    CREATE POLICY "Price alerts update own"
-      ON price_alerts FOR UPDATE
-      USING (auth.uid() = user_id)
-      WITH CHECK (auth.uid() = user_id);
-  END IF;
-END $$;
 
 -- -- notifications: owner reads and marks read; rows are inserted by the ------
 -- -- backend (service role bypasses RLS), so there is no INSERT policy. -------

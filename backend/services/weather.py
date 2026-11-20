@@ -30,6 +30,13 @@ WMO_DESCRIPTIONS: dict[int, str] = {
     95: "Thunderstorm", 96: "Thunderstorm with hail",
 }
 
+KVK_NOTE = " Ask your local agriculture officer (KVK) before any spray."
+
+DISEASE_RISK_BASIS = (
+    "Rule of thumb on forecast temperature and rain; not from a published source. "
+    "It is a prompt to inspect the orchard, not a diagnosis."
+)
+
 DISEASE_RISK_RULES = [
     {
         "disease": "Anthracnose / Fruit rot",
@@ -37,8 +44,10 @@ DISEASE_RISK_RULES = [
             tmax >= 25 and tmax <= 32 and rain_mm > 3 and rain_prob > 60
         ),
         "risk": "High",
-        "action": "Apply copper oxychloride (3g/litre) spray within 48 hours.",
+        "action": "Warm, wet weather favours fruit rot. Walk the orchard, remove and bury rotting fruit, and keep the canopy open to air." + KVK_NOTE,
         "colour": "red",
+        "basis": DISEASE_RISK_BASIS,
+        "is_estimate": True,
     },
     {
         "disease": "Fruit fly",
@@ -46,8 +55,10 @@ DISEASE_RISK_RULES = [
             tmax >= 28 and rain_mm < 5
         ),
         "risk": "High",
-        "action": "Check methyl eugenol traps daily. Replace lure if older than 15 days.",
+        "action": "Warm, dry weather favours fruit fly. Check your traps daily and collect fallen fruit." + KVK_NOTE,
         "colour": "red",
+        "basis": DISEASE_RISK_BASIS,
+        "is_estimate": True,
     },
     {
         "disease": "Powdery mildew",
@@ -55,8 +66,10 @@ DISEASE_RISK_RULES = [
             tmax >= 22 and tmax <= 28 and tmin >= 15 and rain_mm < 1
         ),
         "risk": "Moderate",
-        "action": "Monitor young shoots. Apply wettable sulphur (3g/litre) if white powder appears.",
+        "action": "Monitor young shoots for a white powder on the leaves. Remove badly affected shoots." + KVK_NOTE,
         "colour": "amber",
+        "basis": DISEASE_RISK_BASIS,
+        "is_estimate": True,
     },
     {
         "disease": "Stem / Bark borer",
@@ -64,15 +77,19 @@ DISEASE_RISK_RULES = [
             tmax >= 30 and rain_mm < 2
         ),
         "risk": "Moderate",
-        "action": "Inspect shoot tips for wilting or entry holes. Remove affected shoots immediately.",
+        "action": "Inspect shoot tips for wilting or entry holes. Remove affected shoots." + KVK_NOTE,
         "colour": "amber",
+        "basis": DISEASE_RISK_BASIS,
+        "is_estimate": True,
     },
     {
         "disease": "Guava wilt (Fusarium)",
         "trigger": lambda tmax, tmin, rain_mm, rain_prob: rain_mm > 20,
         "risk": "Elevated",
-        "action": "Check root zone for waterlogging. Ensure drainage channels are clear.",
+        "action": "Check the root zone for waterlogging. Keep drainage channels clear." + KVK_NOTE,
         "colour": "amber",
+        "basis": DISEASE_RISK_BASIS,
+        "is_estimate": True,
     },
 ]
 
@@ -91,28 +108,42 @@ def _disease_risks_for_day(tmax, tmin, rain_mm, rain_prob) -> list[dict]:
                     "risk":    rule["risk"],
                     "action":  rule["action"],
                     "colour":  rule["colour"],
+                    "basis":   rule["basis"],
+                    "is_estimate": rule["is_estimate"],
                 })
         except Exception:
             pass
     return risks
 
 
+IRRIGATION_BASIS = (
+    "Estimate. Flat crop coefficient 0.85 for all growth stages, and the demand bands "
+    "(above 6 and above 3 mm/day) are rules of thumb, not from a source. "
+    "Check the soil before changing your schedule."
+)
+
+
 def _irrigation_advisory(et0, stage_irrigation_lpd) -> dict:
     if et0 is None:
-        return {"status": "unknown", "message": "ET0 data unavailable."}
+        return {"status": "unknown", "message": "ET0 data unavailable.",
+                "basis": IRRIGATION_BASIS, "is_estimate": True}
     kc  = 0.85
     etc = et0 * kc
     if not stage_irrigation_lpd or stage_irrigation_lpd == 0:
         return {"status": "drought_period", "et0": round(et0, 2),
-                "message": "Drought stress period — do not irrigate."}
+                "message": "Drought stress period — do not irrigate.",
+                "basis": IRRIGATION_BASIS, "is_estimate": True}
     if etc > 6:
         return {"status": "high_demand", "et0": round(et0, 2), "etc": round(etc, 2),
-                "message": f"ET0 is {et0:.1f} mm/day — water demand is high. Do not reduce irrigation today."}
+                "message": f"ET0 is {et0:.1f} mm/day — water demand is high. Do not reduce irrigation today.",
+                "basis": IRRIGATION_BASIS, "is_estimate": True}
     if etc > 3:
         return {"status": "normal", "et0": round(et0, 2), "etc": round(etc, 2),
-                "message": f"ET0 is {et0:.1f} mm/day — normal water demand. Maintain reference schedule."}
+                "message": f"ET0 is {et0:.1f} mm/day — normal water demand. Maintain reference schedule.",
+                "basis": IRRIGATION_BASIS, "is_estimate": True}
     return {"status": "low_demand", "et0": round(et0, 2), "etc": round(etc, 2),
-            "message": f"ET0 is {et0:.1f} mm/day — cool/cloudy conditions. You may reduce irrigation by 20%."}
+            "message": f"ET0 is {et0:.1f} mm/day — cool/cloudy conditions. You may irrigate a little less if the soil is still moist.",
+            "basis": IRRIGATION_BASIS, "is_estimate": True}
 
 
 def _fetch_weather_sync(latitude: float, longitude: float,

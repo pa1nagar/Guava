@@ -34,6 +34,12 @@ MAX_RADIUS_KM = 1500.0
 MAX_COMMISSION_PCT = 100.0
 MAX_ALERTS_PER_FARMER = 20
 MAX_NAME_LENGTH = 120
+MAX_ROAD_KM_OVERRIDES = 50
+MAX_FLAGGED_ROWS = 50
+MAX_NOTIFICATIONS = 100
+PAGE_SIZE = 1000
+MAX_PAGES = 200
+LOOKBACK_DAYS = 2 * max(TREND_WINDOWS)
 
 # Cross-section price band is the median +/- OUTLIER_MODIFIED_Z robust deviations
 # (see quality.py); UNIT_FACTOR is the quintal vs kg slip.
@@ -99,6 +105,30 @@ THRESHOLDS: dict[str, dict] = {
     "MAX_NAME_LENGTH": {
         "value": MAX_NAME_LENGTH,
         "basis": "Input sanity cap on market and district name length.",
+    },
+    "LOOKBACK_DAYS": {
+        "value": LOOKBACK_DAYS,
+        "basis": "Derived: two windows of the longest trend window (2 x 30 days), so the latest and the previous window both fit.",
+    },
+    "MAX_ROAD_KM_OVERRIDES": {
+        "value": MAX_ROAD_KM_OVERRIDES,
+        "basis": "Abuse cap on the size of one farmer's road-km map. An input sanity cap, not an analytic value.",
+    },
+    "MAX_FLAGGED_ROWS": {
+        "value": MAX_FLAGGED_ROWS,
+        "basis": "Abuse cap on the flagged-row list returned by the quality endpoint. A response size cap, not an analytic value.",
+    },
+    "MAX_NOTIFICATIONS": {
+        "value": MAX_NOTIFICATIONS,
+        "basis": "Abuse cap on one page of notifications. An input sanity cap, not an analytic value.",
+    },
+    "PAGE_SIZE": {
+        "value": PAGE_SIZE,
+        "basis": "Paging cap equal to the Supabase (PostgREST) default maximum of 1000 rows per request. A paging limit, not an analytic value.",
+    },
+    "MAX_PAGES": {
+        "value": MAX_PAGES,
+        "basis": "Abuse/safety paging cap: 200 pages x PAGE_SIZE = 200,000 rows per call. Stops a runaway read loop; not an analytic value.",
     },
     "ALERT_COOLDOWN": {
         "value": "one notification per crossing, at most one per trade date",

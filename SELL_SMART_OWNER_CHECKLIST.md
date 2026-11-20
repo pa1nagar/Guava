@@ -2,12 +2,12 @@
 
 Do these once before telling farmers about "Where and when to sell".
 
-1. **Run the migration.** In the Supabase SQL editor, run `backend/migrations/2026-11-sell-smart.sql`. It is safe to run twice (`IF NOT EXISTS`, policy guards). It creates `sell_settings`, `price_alerts`, `notifications` and `market_price_quality`, all with row-level security. (The same SQL is also appended to `backend/schema.sql`.)
-2. **Render environment variables.** Nothing new is required. `DATA_GOV_IN_API_KEY` must already be set, because Sell smart reads the prices that the ingestion job saves. Do **not** set `SELL_SMART_ALLOW_DEMO` on Render (it is for local demo only, and the demo server also refuses to start when `RENDER` is set).
-3. **Check the Render logs** after the next 07:45 or 19:45 IST. The `sell_smart_post_ingestion` job should log a summary (quality rows written, alerts checked, notifications created). It runs 15 minutes after the 07:30 and 19:30 price ingestion.
+1. **Run the migrations.** `backend/migrations/2026-11-run-in-supabase.sql` is the combined file (mandi price columns plus the Sell smart tables) and you have already run it. Next, in the Supabase SQL editor, run `backend/migrations/2026-11-sell-smart-harden.sql` (removes the client write policies on `price_alerts` and `sell_settings`, adds length checks) and `backend/migrations/2026-11-mandi-ingest-cron.sql`. All three are safe to run twice. The Sell smart tables all have row-level security.
+2. **Render environment variables.** Render's own 07:30 and 19:30 IST price ingestion is now OFF by default (`MANDI_INGEST_ON_RENDER`), because data.gov.in refuses Render's servers. Prices come from the Supabase Edge Function or the PC script, and Sell smart reads what they save. Do **not** set `SELL_SMART_ALLOW_DEMO` on Render (it is for local demo only, and the demo server also refuses to start when `RENDER` is set).
+3. **Check the Render logs** after the next 07:45 or 19:45 IST. The `sell_smart_post_ingestion` job still runs on Render at those times, even though Render no longer fetches prices. It should log a summary (quality rows written, alerts checked, notifications created). It works on the prices the Edge Function or PC script saved earlier.
 4. **Set your own farm location and costs in the app.** Without a farm location the distance starts from your district centre. Without costs the list is sorted by mandi price and asks you to set your own cost. Nothing is filled in for you.
 5. **Review `privacy.html`.** The wording should say that the farm location is used to measure distance to mandis and is not shown to other farmers or sent to the browser as coordinates.
-6. **Demo data warning.** Anything seen with `?demo=1` is synthetic. Never show it to farmers as real prices.
+6. **Demo data warning.** Anything seen with `?demo=1` is synthetic. After the frontend change in this release, `?demo=1` only works on localhost. Never show it to farmers as real prices.
 
 ## What needs more saved history
 
@@ -24,4 +24,4 @@ The feed keeps no history, so these views fill in only as the app saves prices (
 | "Based on N mandis" confidence High | fresh prices, at least 3 mandis, at least 14 saved days (2 x 7) and no flagged share | Medium or Low with the reason |
 | Fairness check | prices from at least 3 mandis within your radius, within 7 days of your sale date | "too few mandis had a price near your sale date" |
 
-Day counts come from the threshold table in `.agents/tasks/sell-smart/plan.md` and are defined, each with its basis, in `backend/services/sell_smart/config.py`.
+Day counts are defined, each with its basis, in `backend/services/sell_smart/config.py`.

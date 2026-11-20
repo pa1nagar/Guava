@@ -49,8 +49,8 @@ def run_expiry_check(
             "run-expiry-check called but SERVICE_SECRET is not configured."
         )
         raise HTTPException(
-            status_code=500,
-            detail="Internal configuration error.",
+            status_code=503,
+            detail="Expiry check is not configured.",
         )
 
     if x_service_secret != expected_secret:

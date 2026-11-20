@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 # Two windows of the longest trend (30 days): enough rows for the cross-section
 # check and for the alert price. Derived from cfg.TREND_WINDOWS, not a new number.
-LOOKBACK_DAYS = 2 * max(cfg.TREND_WINDOWS)
+LOOKBACK_DAYS = cfg.LOOKBACK_DAYS
 
 
 def _same(a, b) -> bool:

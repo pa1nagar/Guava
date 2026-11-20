@@ -16,13 +16,14 @@ from datetime import date, datetime, timezone
 from typing import Any, Optional, Protocol
 
 from services.mandi_prices import COMMODITY
+from services.sell_smart import config as cfg
 
 logger = logging.getLogger(__name__)
 
-# data.gov.in/Supabase return at most 1000 rows per request; pages are walked
+# Supabase (PostgREST) returns at most 1000 rows per request; pages are walked
 # with .range() so a long history is not cut off at one response.
-PAGE_SIZE = 1000
-MAX_PAGES = 200  # abuse/safety cap: 200 pages = 200,000 rows per call
+PAGE_SIZE = cfg.PAGE_SIZE
+MAX_PAGES = cfg.MAX_PAGES
 
 PRICE_COLUMNS = (
     "id, state, district, market_name, variety, grade, min_price, max_price, "

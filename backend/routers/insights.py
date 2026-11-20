@@ -125,6 +125,11 @@ def _harvest_timing_advice(sowing_date: date, saved: dict) -> dict:
         "price_note":             note,
         "harvest_month_saved_days": month_days,
         "harvest_month_avg_per_kg": per_kg(saved["harvest_month_avg_quintal"]),
+        "is_estimate":            True,
+        "basis": (
+            "Estimated date: a calendar assumption of 17 months x 30 days after sowing, "
+            "not a measurement. Prices shown are saved past prices, not a forecast."
+        ),
     }
 
 

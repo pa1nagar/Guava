@@ -66,3 +66,9 @@ def test_required_columns_and_checks_present():
         "'ok', 'warn', 'reject'", "REFERENCES market_prices(id) ON DELETE CASCADE",
     ):
         assert fragment in code, fragment
+
+
+def test_no_client_insert_or_update_policy_on_alerts_or_settings():
+    code = _code()
+    for t in ("price_alerts", "sell_settings"):
+        assert not re.search(rf"ON\s+{t}\s+FOR\s+(INSERT|UPDATE)", code, flags=re.I), t
