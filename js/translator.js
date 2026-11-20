@@ -1,6 +1,6 @@
 /**
  * translator.js — Language toggle engine
- * Imports TRANSLATIONS from data.js and provides setLanguage / getCurrentLang / init
+ * Imports TRANSLATIONS from i18n.js and provides setLanguage / getCurrentLang / init
  * No network requests. Works from file:// protocol.
  *
  * ── i18n Convention ──────────────────────────────────────────────────────────
@@ -26,7 +26,7 @@
  * active language so that Indian number grouping is always applied.
  */
 
-import { TRANSLATIONS } from './data.js';
+import { TRANSLATIONS } from './i18n.js';
 
 /** @type {'en' | 'hi'} */
 let currentLang = 'en';
@@ -61,6 +61,7 @@ export function init() {
  */
 export function setLanguage(lang) {
   currentLang = lang;
+  document.documentElement.lang = lang; // CSS :lang(hi) loosens line height for Devanagari
 
   // Persist preference so the next page load restores it
   try {

@@ -149,6 +149,22 @@ export const API_BASE_URL = "http://localhost:8000";
 Open `index.html`, `plan.html`, etc. directly in a browser, or use Live Server
 (VS Code extension) at `http://localhost:5500`.
 
+Styles are compiled once with the Tailwind CLI and **committed** (`css/tailwind.css`),
+because Netlify publishes the repo root with no build step. Regenerate after any
+class change in `*.html` or `js/*.js` (do not add a root `package.json`):
+
+```
+npx -y tailwindcss@3.4.17 -c tailwind.config.js -i css/tailwind.input.css -o css/tailwind.css --minify
+```
+
+Shared frontend pieces: `js/nav.js` (bottom navigation, `mountNav('tasks')`),
+`js/i18n.js` (English + Hindi strings), `js/lazy.js` (Chart.js loaded on first use),
+`sw.js` + `js/sw-register.js` (offline shell and a saved copy of the public mandi
+prices; never caches signed-in `/api/` requests), `_headers` (no-cache for `sw.js`).
+
+Browser check (mobile and desktop, English and Hindi; needs `pip install playwright`
+and `playwright install chromium`): `python tests/e2e/browser_check.py`. See `tests/e2e/README.md`.
+
 ### Tests
 
 ```powershell

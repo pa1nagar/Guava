@@ -1,13 +1,14 @@
 /**
  * charts.js — Chart.js factory functions
  * All chart instances stored in _instances Map to prevent re-initialisation.
- * Imports data constants from ./data.js
+ * Imports data constants from ./charts-data.js
  */
 
+import { loadChartJs } from './lazy.js';
 import {
   IRRIGATION_STAGES,
   ORCHARD
-} from './data.js';
+} from './charts-data.js';
 
 // Module-level chart instance registry — prevents double-init on tab re-activation
 const _instances = new Map();
@@ -42,7 +43,8 @@ function _getOrCreate(canvasId, config) {
 
 // ─── Overview Tab Charts ──────────────────────────────────────────────────────
 
-export function initOverviewCharts() {
+export async function initOverviewCharts() {
+  await loadChartJs();
   // chart-water: Bar — daily water L/plant/day per stage at η=0.90
   const waterLabels = IRRIGATION_STAGES.map(s => s.label.split(' (')[0]); // short labels
   const waterData   = IRRIGATION_STAGES.map(s =>
@@ -131,7 +133,8 @@ export function initOverviewCharts() {
 
 // ─── Irrigation Tab Chart ─────────────────────────────────────────────────────
 
-export function initIrrigationChart() {
+export async function initIrrigationChart() {
+  await loadChartJs();
   const labels      = IRRIGATION_STAGES.map(s => s.label.split(' (')[0]);
   const perPlant    = IRRIGATION_STAGES.map(s =>
     parseFloat(((s.et0 * s.kc * s.kr * 6.0) / 0.90).toFixed(2))

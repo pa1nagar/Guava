@@ -2,32 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://guava-8wc7.onrender.com" crossorigin>
   <meta name="robots" content="noindex, nofollow">
   <title>Smart Farmer — My Farm</title>
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              bg:        '#FDFBF7',
-              primary:   '#1E3A2B',
-              secondary: '#4A7C59',
-              accent:    '#E07A5F',
-              dark:      '#2B2D42',
-              muted:     '#6B7280'
-            }
-          }
-        }
-      }
-    }
-  </script>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
+  <link rel="stylesheet" href="css/tailwind.css">
   <link rel="stylesheet" href="css/style.css">
 
   <style>
@@ -104,7 +88,7 @@
     .nav-scroll::-webkit-scrollbar { display: none; }
   </style>
 </head>
-<body>
+<body class="has-bottom-nav">
 
 <!-- ════════════════════ LOADING ════════════════════ -->
 <div id="page-loading"
@@ -727,58 +711,10 @@
          opacity-0 pointer-events-none z-50 flex items-center gap-2">
 </div>
 
-<!-- ════════════════ BOTTOM MOBILE NAV (Requirement 2.7) ════════════════ -->
-<style>
-  .sf-bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 60; display: flex; }
-  .sf-bottom-nav a {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem 0.25rem 0.625rem;
-    font-size: 0.6rem;
-    font-weight: 600;
-    color: rgba(255,255,255,0.55);
-    gap: 0.2rem;
-    text-decoration: none;
-    transition: color 0.15s;
-  }
-  .sf-bottom-nav a:hover { color: #fff; }
-  .sf-bottom-nav a.sf-active { color: #E07A5F; }
-  .sf-bottom-nav a i { font-size: 1.1rem; }
-  /* Push main content above the nav on small screens */
-  @media (max-width: 767px) {
-    body { padding-bottom: 4rem; }
-  }
-  @media (min-width: 768px) {
-    .sf-bottom-nav { display: none; }
-  }
-</style>
-<nav class="sf-bottom-nav bg-brand-primary border-t border-emerald-800/50" aria-label="Primary navigation">
-  <a href="plan.html" class="sf-active" aria-current="page">
-    <i class="fa-solid fa-chart-pie"></i>
-    <span data-i18n="nav.today">Today</span>
-  </a>
-  <a href="farm.html">
-    <i class="fa-solid fa-tractor"></i>
-    <span data-i18n="nav.myFarm">My Farm</span>
-  </a>
-  <a href="tasks.html">
-    <i class="fa-solid fa-list-check"></i>
-    <span data-i18n="nav.tasks">Tasks</span>
-  </a>
-  <a href="sell-smart.html">
-    <i class="fa-solid fa-scale-balanced"></i>
-    <span data-i18n="sell_nav">Sell</span>
-  </a>
-  <a href="plan.html#panel-insights">
-    <i class="fa-solid fa-ellipsis"></i>
-    <span data-i18n="nav.more">More</span>
-  </a>
-</nav>
 
 <script type="module">import { installSellTranslations } from "./js/sell-smart-i18n.js"; installSellTranslations();</script>
 <script type="module" src="js/plan.js"></script>
+  <script type="module">import { mountNav } from "./js/nav.js"; mountNav("plan");</script>
+  <script type="module" src="js/sw-register.js"></script>
 </body>
 </html>

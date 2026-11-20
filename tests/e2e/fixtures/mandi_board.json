@@ -1,0 +1,1 @@
+{"has_data":true,"scope":"state","as_of":"2026-01-01","stale_after_days":3,"mandis":[{"market":"Test Mandi (fake)","district":"Test District","state":"Test State","trade_date":"2026-01-01","is_stale":false,"match":"same_district","distance_km":null,"prices":[{"variety":null,"grade":null,"modal_per_kg":10,"min_per_kg":8,"max_per_kg":12}]}]}

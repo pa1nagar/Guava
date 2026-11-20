@@ -14,7 +14,8 @@
  * All display text goes through tr() / data-i18n (js/sell-smart-i18n.js).
  * Server-provided text (market names) is inserted with textContent only.
  */
-import { TRANSLATIONS } from "./data.js";
+import { TRANSLATIONS } from "./i18n.js";
+import { loadChartJs } from "./lazy.js";
 import { installSellTranslations } from "./sell-smart-i18n.js";
 import { init as initTranslator, setLanguage, getCurrentLang, formatNumber } from "./translator.js";
 
@@ -443,13 +444,15 @@ function renderTrends() {
   const canvas = $("trend-chart");
   canvas.setAttribute("aria-label", tr("sell_chart_label"));
   const series = d.series;
-  const drawn = drawTrendChart(canvas, series);
   const values = series.map((p) => p.value_per_kg);
-  $("trend-chart-summary").textContent = drawn
-    ? tr("sell_chart_summary", { from: fmtDate(series[0].trade_date), to: fmtDate(series[series.length - 1].trade_date),
-                                 min: fmt(Math.min(...values)), max: fmt(Math.max(...values)) })
-    : tr("sell_chart_unavailable");
-
+  const done = (drawn) => {
+    $("trend-chart-summary").textContent = drawn
+      ? tr("sell_chart_summary", { from: fmtDate(series[0].trade_date), to: fmtDate(series[series.length - 1].trade_date),
+                                   min: fmt(Math.min(...values)), max: fmt(Math.max(...values)) })
+      : tr("sell_chart_unavailable");
+  };
+  // Chart.js is fetched on first use so it never blocks first paint.
+  loadChartJs().then(() => done(drawTrendChart(canvas, series)), () => done(false));
   $("trend-windows").replaceChildren(...d.windows.map(windowCard));
 
   const vol = d.volatility;

@@ -2,30 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://guava-8wc7.onrender.com" crossorigin>
   <meta name="description" content="Sign in to Smart Farmer — your personal farm management platform.">
   <title>Smart Farmer — Login</title>
 
-  <!-- Tailwind CSS v3 CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
   <!-- Brand colour config (matches index.html) -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              bg:        '#FDFBF7',
-              primary:   '#1E3A2B',
-              secondary: '#4A7C59',
-              accent:    '#E07A5F',
-              dark:      '#2B2D42'
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <link rel="stylesheet" href="css/tailwind.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="min-h-screen bg-brand-bg flex items-center justify-center px-4">
 
@@ -89,5 +74,6 @@
     });
   </script>
 
+  <script type="module" src="js/sw-register.js"></script>
 </body>
 </html>

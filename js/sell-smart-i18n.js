@@ -1,7 +1,7 @@
 /**
  * sell-smart-i18n.js - English and Hindi text for the Sell smart page.
  *
- * Merged into TRANSLATIONS (js/data.js is not edited) by installSellTranslations(),
+ * Merged into TRANSLATIONS (js/i18n.js is not edited) by installSellTranslations(),
  * which sell-smart.js calls before the translator starts.
  *
  * Rules for this file:
@@ -9,7 +9,7 @@
  *  - {name} placeholders are filled by tr() in sell-smart.js
  *  - plain Hindi words a farmer uses; "Rs/kg" is written "Rs per kg" / "रुपये प्रति किलो"
  */
-import { TRANSLATIONS } from "./data.js";
+import { TRANSLATIONS } from "./i18n.js";
 
 export const SELL_EN = {
   "sell_page_title": "Smart Farmer - Where and when to sell",

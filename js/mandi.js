@@ -13,7 +13,7 @@
  * Staleness: the backend decides (is_stale per mandi) and sends
  * stale_after_days; the UI only displays that number.
  */
-import { TRANSLATIONS } from "./data.js";
+import { TRANSLATIONS } from "./i18n.js";
 
 const PUBLIC_PATH  = "/api/public/market-prices/guava";
 const PRIVATE_PATH = "/api/market-prices/guava?limit=5";
@@ -22,6 +22,7 @@ let _board   = null;       // last board payload
 let _history = null;       // last history payload
 let _state   = "loading";  // "loading" | "ready" | "error"
 let _public  = false;
+let _savedAt = null;      // set when the service worker served a saved copy (offline)
 let _onRender = null;
 
 export function mandiLang() {
@@ -136,6 +137,7 @@ function renderBoard() {
     : "";
 
   el.innerHTML = `
+    ${_savedAt ? `<p class="text-sm font-semibold text-amber-800 mb-2" role="status">${mandiEsc(mt("mandi.offlineCopy", { date: mandiDate(_savedAt) }))}</p>` : ""}
     <p class="text-xs text-gray-500 mb-2">${mandiEsc(mt(scopeKey))}</p>
     <div class="grid gap-3 sm:grid-cols-2">${cards}</div>
     <p class="text-xs text-gray-400 mt-3">${mandiEsc(mt("mandi.source"))} · ${mandiEsc(mt("mandi.asOf", { date: mandiDate(board.as_of) }))}</p>
@@ -195,12 +197,15 @@ export async function loadMandiCard({ apiFetch, apiBase = "", onRender } = {}) {
   _public = !apiFetch;
   _onRender = onRender || null;
   _state = "loading";
+  _savedAt = null;
   renderMandiAll();
   try {
     if (_public) {
       const res = await fetch(`${apiBase}${PUBLIC_PATH}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       _board = await res.json();
+      // sw.js adds X-SF-From-Cache when the network failed and a saved copy was served
+      _savedAt = res.headers.get("x-sf-from-cache");
       _history = null;
     } else {
       const res = await apiFetch(PRIVATE_PATH);

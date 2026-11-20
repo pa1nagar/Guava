@@ -13,6 +13,30 @@
 
 import { getJwt, signOut } from "./auth.js";
 import { API_BASE_URL } from "./config.js";
+import { TRANSLATIONS } from "./i18n.js";
+
+// -- Slow-server notice --
+// Render's free tier sleeps; when a request has not answered after 6 s, show a
+// non-blocking status line (in page flow, so it never covers the nav or headers).
+const SLOW_AFTER_MS = 6000;
+let _slowCount = 0;
+function _showSlowNotice() {
+  _slowCount += 1;
+  if (document.getElementById("sf-waking")) return;
+  let lang = "en";
+  try { lang = localStorage.getItem("sf_lang") === "hi" ? "hi" : "en"; } catch { /* ignore */ }
+  const el = document.createElement("div");
+  el.id = "sf-waking";
+  el.className = "sf-status-line";
+  el.setAttribute("role", "status");
+  el.setAttribute("data-i18n", "net.waking");
+  el.textContent = TRANSLATIONS[lang]?.["net.waking"] || TRANSLATIONS.en["net.waking"];
+  document.body.prepend(el);
+}
+function _hideSlowNotice() {
+  _slowCount = Math.max(0, _slowCount - 1);
+  if (_slowCount === 0) document.getElementById("sf-waking")?.remove();
+}
 
 // ── Rate-limit banner ─────────────────────────────────────────────────────────
 
@@ -53,7 +77,7 @@ function _getOrCreateRateLimitBanner() {
   closeBtn.textContent = "✕";
   closeBtn.setAttribute("aria-label", "Dismiss");
   closeBtn.style.cssText =
-    "background:none;border:none;color:#fff;cursor:pointer;font-size:1rem;line-height:1;flex-shrink:0;";
+    "background:none;border:none;color:#fff;cursor:pointer;font-size:1rem;line-height:1;flex-shrink:0;min-width:44px;min-height:44px;";
   closeBtn.addEventListener("click", () => banner.remove());
   banner.appendChild(closeBtn);
 
@@ -128,7 +152,7 @@ export function showError(message) {
     closeBtn.textContent = "✕";
     closeBtn.setAttribute("aria-label", "Dismiss error");
     closeBtn.style.cssText =
-      "background:none;border:none;color:#fff;cursor:pointer;font-size:1rem;line-height:1;flex-shrink:0;";
+      "background:none;border:none;color:#fff;cursor:pointer;font-size:1rem;line-height:1;flex-shrink:0;min-width:44px;min-height:44px;";
     closeBtn.addEventListener("click", () => banner.remove());
     banner.appendChild(closeBtn);
 
@@ -196,6 +220,8 @@ export async function apiFetch(path, options = {}) {
   // 45-second timeout — handles Render free-tier cold starts
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), 45000);
+  let slowShown = false;
+  const slowTimer = setTimeout(() => { slowShown = true; _showSlowNotice(); }, SLOW_AFTER_MS);
 
   let response;
   try {
@@ -210,6 +236,8 @@ export async function apiFetch(path, options = {}) {
     });
   } finally {
     clearTimeout(timer);
+    clearTimeout(slowTimer);
+    if (slowShown) _hideSlowNotice();
   }
 
   // ── 401 Unauthorized — session expired or revoked ─────────────────────────

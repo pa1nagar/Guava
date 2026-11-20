@@ -2,30 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://guava-8wc7.onrender.com" crossorigin>
   <meta name="robots" content="noindex, nofollow">
   <title data-i18n="farm.pageTitle">Smart Farmer — My Farms</title>
 
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              bg:        '#FDFBF7',
-              primary:   '#1E3A2B',
-              secondary: '#4A7C59',
-              accent:    '#E07A5F',
-              dark:      '#2B2D42',
-              muted:     '#6B7280'
-            }
-          }
-        }
-      }
-    }
-  </script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
+  <link rel="stylesheet" href="css/tailwind.css">
   <link rel="stylesheet" href="css/style.css">
 
   <style>
@@ -64,29 +49,9 @@
     .form-input:focus { border-color: #4A7C59; }
     textarea.form-input { height: auto; padding: 0.75rem; resize: vertical; }
 
-    /* Bottom mobile nav */
-    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; }
-    .bottom-nav-item {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 0.5rem 0.25rem 0.625rem;
-      font-size: 0.65rem;
-      font-weight: 600;
-      color: rgba(255,255,255,0.55);
-      gap: 0.2rem;
-      cursor: pointer;
-      transition: color 0.15s;
-      text-decoration: none;
-    }
-    .bottom-nav-item:hover, .bottom-nav-item.active { color: #fff; }
-    .bottom-nav-item.active { color: #E07A5F; }
-    .bottom-nav-item i { font-size: 1.1rem; }
   </style>
 </head>
-<body class="min-h-screen bg-brand-bg pb-20">
+<body class="min-h-screen bg-brand-bg has-bottom-nav">
 
   <!-- ════════════════ HEADER ════════════════ -->
   <header class="bg-brand-primary text-white sticky top-0 z-40 shadow-lg">
@@ -355,28 +320,9 @@
     </div>
   </div>
 
-  <!-- ════════════════ BOTTOM NAV ════════════════ -->
-  <nav class="bottom-nav bg-brand-primary border-t border-emerald-800/50" aria-label="Primary navigation">
-    <div class="flex">
-      <a href="plan.html" class="bottom-nav-item">
-        <i class="fa-solid fa-chart-pie"></i>
-        <span data-i18n="nav.today">Today</span>
-      </a>
-      <a href="farm.html" class="bottom-nav-item active" aria-current="page">
-        <i class="fa-solid fa-tractor"></i>
-        <span data-i18n="nav.myFarm">My Farm</span>
-      </a>
-      <a href="plan.html#panel-tasks" class="bottom-nav-item">
-        <i class="fa-solid fa-list-check"></i>
-        <span data-i18n="nav.tasks">Tasks</span>
-      </a>
-      <a href="plan.html#panel-insights" class="bottom-nav-item">
-        <i class="fa-solid fa-ellipsis"></i>
-        <span data-i18n="nav.more">More</span>
-      </a>
-    </div>
-  </nav>
 
   <script type="module" src="js/farm.js"></script>
+  <script type="module">import { mountNav } from "./js/nav.js"; mountNav("farm");</script>
+  <script type="module" src="js/sw-register.js"></script>
 </body>
 </html>
