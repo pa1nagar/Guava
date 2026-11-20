@@ -1,0 +1,2 @@
+[functions.mandi-ingest]
+verify_jwt = false

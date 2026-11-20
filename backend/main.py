@@ -164,6 +164,17 @@ def _run_mandi_price_ingestion() -> None:
     run_ingestion()
 
 
+def _mandi_ingest_on_render_enabled() -> bool:
+    """True when MANDI_INGEST_ON_RENDER is 1/true/yes/on (default off).
+
+    data.gov.in does not answer Render's IPs, so prices come from the Supabase
+    Edge Function or the PC script unless the owner turns this on.
+    """
+    return os.environ.get("MANDI_INGEST_ON_RENDER", "").strip().lower() in (
+        "1", "true", "yes", "on",
+    )
+
+
 def _run_sell_smart_post_ingestion() -> None:
     """Scheduled job: quality flags and price alerts for Sell smart.
 
@@ -219,14 +230,20 @@ async def startup_validation() -> None:
     )
     # Mandi prices: twice a day (07:30 and 19:30 IST) because the feed publishes
     # late and lags trade dates; upserts keep repeat runs duplicate-free.
-    _scheduler.add_job(
-        _run_mandi_price_ingestion,
-        trigger="cron",
-        hour="7,19",
-        minute=30,
-        id="daily_mandi_price_ingestion",
-        replace_existing=True,
-    )
+    if _mandi_ingest_on_render_enabled():
+        _scheduler.add_job(
+            _run_mandi_price_ingestion,
+            trigger="cron",
+            hour="7,19",
+            minute=30,
+            id="daily_mandi_price_ingestion",
+            replace_existing=True,
+        )
+    else:
+        logger.info(
+            "Mandi ingestion on Render is off (MANDI_INGEST_ON_RENDER not set); "
+            "prices come from the Supabase Edge Function / PC script."
+        )
     # Sell smart quality flags and price alerts: 07:45 and 19:45 IST, after the
     # longest ingestion run (MAX_PAGES x HTTP_TIMEOUT_S = 10 minutes).
     _scheduler.add_job(
