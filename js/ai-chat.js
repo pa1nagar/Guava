@@ -13,12 +13,13 @@
  *   3.8  — 429 responses are surfaced to the farmer with retry guidance.
  */
 
-import { apiFetch, showError } from "./api.js";
+import { apiFetch } from "./api.js";
+import { t } from "./dom.js";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 /** Shown when the API returns non-200 or the network fails. (Req 14.7) */
-const FALLBACK_MSG = "Smart Farmer AI is temporarily unavailable.";
+const fallbackMsg = () => t("ai.unavailable");
 
 /** Character limit matching the backend AIAskRequest.question max_length. */
 const MAX_QUESTION_LEN = 2000;
@@ -110,7 +111,7 @@ function textToFragment(text) {
 function buildUI(containerEl) {
   containerEl.innerHTML = "";
   containerEl.setAttribute("role", "region");
-  containerEl.setAttribute("aria-label", "Smart Farmer AI assistant");
+  containerEl.setAttribute("aria-label", t("ai.region"));
 
   // ── Scrollable message thread ────────────────────────────────────────────
   const messagesEl = document.createElement("div");
@@ -124,20 +125,18 @@ function buildUI(containerEl) {
     "display: flex",
     "flex-direction: column",
     "gap: 1rem",
-    "min-height: 0",
-    "max-height: 55vh",
+    "min-height: 10rem",
+    "max-height: min(50vh, 28rem)",
   ].join(";");
 
   // Welcome message
   const welcome = document.createElement("div");
   welcome.style.cssText =
-    "background:#F0FDF4;border:1px solid #BBF7D0;border-radius:12px;padding:0.875rem 1rem;font-size:0.85rem;color:#166534;";
-  welcome.innerHTML =
-    "<strong>Welcome to Smart Farmer AI</strong> — " +
-    "I can explain your farm records, help you understand crop stages, and " +
-    "answer low-risk agronomic questions. I cannot provide pesticide doses, " +
-    "tank mixes, or chemical recommendations — please consult your agronomist " +
-    "for those.";
+    "background:#F0FDF4;border:1px solid #BBF7D0;border-radius:12px;padding:0.875rem 1rem;font-size:1rem;color:#14532D;line-height:1.6;";
+  const welcomeTitle = document.createElement("strong");
+  welcomeTitle.textContent = t("ai.welcome.title");
+  welcome.appendChild(welcomeTitle);
+  welcome.appendChild(document.createTextNode(" — " + t("ai.welcome.body")));
   messagesEl.appendChild(welcome);
 
   // ── Composer row ─────────────────────────────────────────────────────────
@@ -157,19 +156,20 @@ function buildUI(containerEl) {
 
   const inputEl = document.createElement("textarea");
   inputEl.id = "ai-chat-input";
-  inputEl.placeholder = "Ask something about your farm…";
-  inputEl.setAttribute("aria-label", "Ask the Smart Farmer AI a question");
+  inputEl.placeholder = t("ai.inputPlaceholder");
+  inputEl.setAttribute("aria-label", t("ai.inputLabel"));
   inputEl.setAttribute("rows", "2");
   inputEl.setAttribute("maxlength", String(MAX_QUESTION_LEN));
   inputEl.style.cssText = [
     "flex: 1 1 auto",
+    "min-width: 0",
     "resize: vertical",
     "min-height: 2.75rem",
     "max-height: 7rem",
-    "border: 1.5px solid #D1D5DB",
+    "border: 1.5px solid #6B7280",
     "border-radius: 10px",
     "padding: 0.5rem 0.75rem",
-    "font-size: 0.875rem",
+    "font-size: 1rem",
     "font-family: inherit",
     "outline: none",
     "transition: border-color 0.15s",
@@ -179,7 +179,7 @@ function buildUI(containerEl) {
 
   const sendBtn = document.createElement("button");
   sendBtn.type = "button";
-  sendBtn.setAttribute("aria-label", "Send question");
+  sendBtn.setAttribute("aria-label", t("ai.send"));
   sendBtn.style.cssText = [
     "flex-shrink: 0",
     "height: 2.75rem",
@@ -200,7 +200,7 @@ function buildUI(containerEl) {
   sendBtn.addEventListener("mouseleave", () => { sendBtn.style.background = "#1E3A2B"; });
 
   const charCountEl = document.createElement("span");
-  charCountEl.style.cssText = "font-size:0.7rem;color:#9CA3AF;text-align:right;align-self:flex-end;";
+  charCountEl.style.cssText = "font-size:0.875rem;color:#4B5563;text-align:right;align-self:flex-end;";
   charCountEl.textContent = `0 / ${MAX_QUESTION_LEN}`;
 
   inputRow.appendChild(inputEl);
@@ -241,16 +241,16 @@ function appendUserBubble(messagesEl, text) {
 
   const bubble = document.createElement("div");
   bubble.style.cssText = [
-    "max-width: 80%",
+    "max-width: 85%",
     "background: #1E3A2B",
     "color: #fff",
     "border-radius: 16px 16px 4px 16px",
     "padding: 0.625rem 0.875rem",
-    "font-size: 0.875rem",
-    "line-height: 1.5",
+    "font-size: 1rem",
+    "line-height: 1.6",
     "word-break: break-word",
   ].join(";");
-  bubble.setAttribute("aria-label", "Your question");
+  bubble.setAttribute("aria-label", t("ai.yourQuestion"));
   bubble.textContent = text;
 
   wrap.appendChild(bubble);
@@ -268,7 +268,8 @@ function appendUserBubble(messagesEl, text) {
 function appendTypingIndicator(messagesEl) {
   const wrap = document.createElement("div");
   wrap.style.cssText = "display:flex;align-items:center;gap:0.375rem;";
-  wrap.setAttribute("aria-label", "Smart Farmer AI is thinking");
+  wrap.setAttribute("aria-label", t("ai.thinking"));
+  wrap.setAttribute("role", "status");
   wrap.setAttribute("aria-live", "off");
 
   const style = document.createElement("style");
@@ -305,7 +306,7 @@ function appendTypingIndicator(messagesEl) {
  */
 function appendAiBubble(messagesEl, { responseText, isHighRisk, isFallback }) {
   const outerWrap = document.createElement("div");
-  outerWrap.style.cssText = "display:flex;flex-direction:column;gap:0.375rem;max-width:90%;";
+  outerWrap.style.cssText = "display:flex;flex-direction:column;gap:0.375rem;max-width:95%;";
 
   // ── HIGH-risk refusal badge (Req 14.8) ──────────────────────────────────
   if (isHighRisk) {
@@ -318,15 +319,13 @@ function appendAiBubble(messagesEl, { responseText, isHighRisk, isFallback }) {
       "background: #FEF3C7",
       "border: 1.5px solid #F59E0B",
       "color: #92400E",
-      "font-size: 0.75rem",
+      "font-size: 0.875rem",
       "font-weight: 700",
       "padding: 0.3rem 0.65rem",
       "border-radius: 8px",
       "width: fit-content",
     ].join(";");
-    badge.innerHTML =
-      '<i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>' +
-      " HIGH-RISK — Safety refusal";
+    badge.textContent = "⚠ " + t("ai.refusalBadge");
     outerWrap.appendChild(badge);
   }
 
@@ -340,16 +339,14 @@ function appendAiBubble(messagesEl, { responseText, isHighRisk, isFallback }) {
       "gap: 0.4rem",
       "background: #F3F4F6",
       "border: 1px solid #D1D5DB",
-      "color: #6B7280",
-      "font-size: 0.75rem",
+      "color: #374151",
+      "font-size: 0.875rem",
       "font-weight: 600",
       "padding: 0.3rem 0.65rem",
       "border-radius: 8px",
       "width: fit-content",
     ].join(";");
-    badge.innerHTML =
-      '<i class="fa-solid fa-circle-xmark" aria-hidden="true"></i>' +
-      " AI unavailable";
+    badge.textContent = "✕ " + t("ai.unavailableBadge");
     outerWrap.appendChild(badge);
   }
 
@@ -360,12 +357,12 @@ function appendAiBubble(messagesEl, { responseText, isHighRisk, isFallback }) {
     "border: 1px solid #E5E7EB",
     "border-radius: 4px 16px 16px 16px",
     "padding: 0.75rem 1rem",
-    "font-size: 0.875rem",
+    "font-size: 1rem",
     "line-height: 1.6",
     "color: #111827",
     "word-break: break-word",
     isHighRisk  ? "border-color:#F59E0B;background:#FFFBEB;" : "",
-    isFallback  ? "border-color:#D1D5DB;color:#6B7280;"      : "",
+    isFallback  ? "border-color:#D1D5DB;color:#374151;"      : "",
   ].filter(Boolean).join(";");
 
   if (isFallback) {
@@ -376,14 +373,14 @@ function appendAiBubble(messagesEl, { responseText, isHighRisk, isFallback }) {
 
     if (limitations) {
       const limBlock = document.createElement("div");
-      limBlock.setAttribute("aria-label", "Limitations and missing evidence");
+      limBlock.setAttribute("aria-label", t("ai.limitations.heading"));
       limBlock.style.cssText = [
         "background: #FFFBEB",
         "border: 1px solid #FDE68A",
         "border-radius: 8px",
         "padding: 0.5rem 0.75rem",
         "margin-bottom: 0.625rem",
-        "font-size: 0.8rem",
+        "font-size: 0.9375rem",
         "color: #78350F",
       ].join(";");
       limBlock.appendChild(textToFragment(limitations));
@@ -427,7 +424,7 @@ async function sendQuestion(question, messagesEl, inputEl, sendBtn) {
   appendUserBubble(messagesEl, question);
   const indicator = appendTypingIndicator(messagesEl);
 
-  let responseText = FALLBACK_MSG;
+  let responseText = fallbackMsg();
   let isHighRisk   = false;
   let isFallback   = false;
 
@@ -439,27 +436,31 @@ async function sendQuestion(question, messagesEl, inputEl, sendBtn) {
 
     // 429 is already handled (banner shown) by apiFetch; surface retry text.
     if (res.status === 429) {
-      responseText = "You've sent too many questions. Please wait a moment and try again.";
+      responseText = t("ai.rateLimited");
       isFallback   = true;
     } else if (!res.ok) {
       // Non-200, non-429 — degraded fallback (Req 14.7)
-      responseText = FALLBACK_MSG;
+      responseText = fallbackMsg();
       isFallback   = true;
     } else {
       const data = await res.json();
-      responseText = data.response ?? FALLBACK_MSG;
+      // The refusal text for chemical / dose questions is shown exactly as the server returned it.
+      responseText = data.response ?? fallbackMsg();
       isHighRisk   = Boolean(data.is_high_risk_refusal);
       isFallback   = false;
     }
   } catch (_err) {
     // Network failure — degraded fallback (Req 14.7)
-    responseText = FALLBACK_MSG;
+    responseText = fallbackMsg();
     isFallback   = true;
   }
 
   // Remove typing indicator, then render the reply
   indicator.remove();
   appendAiBubble(messagesEl, { responseText, isHighRisk, isFallback });
+
+  // Keep the question in the box after a failure so the farmer can send it again
+  if (isFallback) inputEl.value = question;
 
   // Re-enable controls
   inputEl.disabled = false;

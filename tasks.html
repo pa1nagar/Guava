@@ -18,36 +18,6 @@
     .spin { animation: _spin 0.85s linear infinite; }
     @keyframes _spin { to { transform: rotate(360deg); } }
 
-    .section-card {
-      background: #fff;
-      border: 1px solid #E5E7EB;
-      border-radius: 1rem;
-      padding: 1.25rem;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    }
-    .form-label {
-      display: block;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #6B7280;
-      margin-bottom: 0.25rem;
-    }
-    .form-input {
-      width: 100%;
-      height: 2.75rem;
-      border-radius: 0.75rem;
-      border: 1px solid #D1D5DB;
-      background: #fff;
-      padding: 0 0.75rem;
-      font-size: 0.875rem;
-      font-weight: 500;
-      outline: none;
-      transition: border-color 0.15s;
-    }
-    .form-input:focus { border-color: #4A7C59; }
-    textarea.form-input { height: auto; padding: 0.75rem; resize: vertical; }
 
   </style>
 </head>
@@ -57,7 +27,7 @@
   <header class="bg-brand-primary text-white sticky top-0 z-40 shadow-lg">
     <div class="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between gap-3">
       <div>
-        <p class="text-green-200 text-xs font-semibold uppercase tracking-wider" data-i18n="nav.tasks">Tasks</p>
+        <p class="text-green-200 text-sm font-semibold uppercase tracking-wider" data-i18n="nav.tasks">Tasks</p>
         <h1 class="text-base font-bold" data-i18n="tasks.heading">Farm Tasks</h1>
       </div>
       <button id="btn-signout"
@@ -69,6 +39,13 @@
 
   <!-- ════════════════ MAIN ════════════════ -->
   <main class="max-w-3xl mx-auto px-4 py-6 flex flex-col gap-6">
+
+    <section class="headline-card" aria-live="polite">
+      <div>
+        <p class="headline-card__label" data-i18n="tasks.headline.today">Tasks due today</p>
+        <p id="headline-today" class="headline-card__value">—</p>
+      </div>
+    </section>
 
     <!-- ── Today's Tasks ──────────────────────────────────────────────── -->
     <div id="today-tasks-section" class="section-card">
@@ -103,8 +80,8 @@
           <span data-i18n="tasks.allTasks">All Tasks</span>
         </h2>
         <div class="flex items-center gap-2">
-          <select id="filter-status"
-            class="text-xs border border-gray-300 rounded-lg px-2.5 py-1.5 font-medium text-gray-600 bg-white focus:outline-none focus:border-brand-secondary">
+          <select id="filter-status" aria-label="Filter by status" data-i18n-aria-label="tasks.filter.status"
+            class="text-sm border border-gray-400 rounded-lg px-2.5 py-1.5 font-medium text-gray-800 bg-white focus:outline-none focus:border-brand-secondary">
             <option value="" data-i18n="tasks.filter.all">All statuses</option>
             <option value="suggested" data-i18n="tasks.status.suggested">Suggested</option>
             <option value="planned" data-i18n="tasks.status.planned">Planned</option>
@@ -135,7 +112,7 @@
                   <span class="text-red-500">*</span>
                 </label>
                 <input id="task-title" type="text" maxlength="200" class="form-input"
-                  placeholder="e.g. Apply fertilizer to Block A" required>
+                  placeholder="e.g. Apply fertilizer to Block A" required data-i18n-placeholder="tasks.ph.title">
               </div>
               <div>
                 <label for="task-due-date" class="form-label" data-i18n="tasks.field.dueDate">Due Date</label>
@@ -152,20 +129,20 @@
               <div class="sm:col-span-2">
                 <label for="task-description" class="form-label" data-i18n="tasks.field.description">Description</label>
                 <textarea id="task-description" rows="2" class="form-input"
-                  placeholder="Optional details about this task…"></textarea>
+                  placeholder="Optional details about this task…" data-i18n-placeholder="tasks.ph.description"></textarea>
               </div>
             </div>
 
             <p id="task-form-error" class="hidden text-red-600 text-sm" role="alert"></p>
 
-            <div class="flex gap-2 mt-1">
+            <div class="flex gap-2 mt-1 sticky-action">
               <button id="btn-save-task" type="submit"
                 class="flex-1 h-11 bg-brand-primary text-white font-bold rounded-xl hover:bg-brand-secondary transition"
                 data-i18n="tasks.saveTask">
                 Save Task
               </button>
               <button id="btn-cancel-task-form" type="button"
-                class="px-4 h-11 text-sm text-gray-500 border border-gray-300 rounded-xl hover:bg-gray-50 transition"
+                class="px-4 h-11 text-sm text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition"
                 data-i18n="form.cancel">
                 Cancel
               </button>

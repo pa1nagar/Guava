@@ -27,7 +27,8 @@
     /* Nav */
     .farm-nav-btn {
       padding: 10px 14px;
-      font-size: 12px;
+      font-size: 1rem;
+      min-height: 44px;
       font-weight: 600;
       color: rgba(255,255,255,0.6);
       display: flex;
@@ -66,7 +67,7 @@
     .type-pill {
       padding: 8px 14px;
       border-radius: 10px;
-      font-size: 13px;
+      font-size: 1rem;
       font-weight: 600;
       border: 2px solid #E5E7EB;
       background: #fff;
@@ -83,6 +84,12 @@
     /* Spend bar */
     .spend-seg { height: 8px; border-radius: 99px; transition: width 0.4s; }
 
+    /* The floating supplier cards must not cover forms or the AI chat */
+    body[data-panel="panel-ai"] #vendor-optin, body[data-panel="panel-ai"] #vendor-panel,
+    body[data-panel="panel-log"] #vendor-optin, body[data-panel="panel-log"] #vendor-panel,
+    body[data-panel="panel-harvest"] #vendor-optin, body[data-panel="panel-harvest"] #vendor-panel,
+    body[data-panel="panel-insights"] #vendor-optin, body[data-panel="panel-insights"] #vendor-panel { display: none; }
+
     /* Scrollable nav */
     .nav-scroll { overflow-x: auto; white-space: nowrap; }
     .nav-scroll::-webkit-scrollbar { display: none; }
@@ -94,8 +101,8 @@
 <div id="page-loading"
   class="min-h-screen flex flex-col items-center justify-center gap-4 text-brand-muted">
   <div class="w-10 h-10 border-4 border-brand-secondary border-t-transparent rounded-full spin"></div>
-  <p class="text-sm font-medium">Loading your farm…</p>
-  <p id="cold-start-msg" class="hidden text-xs text-gray-400 text-center max-w-xs">
+  <p class="text-sm font-medium" data-i18n="plan.loading.farm">Loading your farm…</p>
+  <p id="cold-start-msg" class="hidden text-sm text-gray-600 text-center max-w-xs">
     The server is waking up — this can take up to 30 seconds on the first load.<br>Please wait…
   </p>
 </div>
@@ -105,7 +112,7 @@
   <p class="text-5xl">🌱</p>
   <p id="page-error-msg" class="text-sm text-gray-600 text-center max-w-xs"></p>
   <button onclick="location.reload()"
-    class="px-6 py-2.5 bg-brand-primary text-white text-sm font-semibold rounded-xl">
+    class="px-6 py-2.5 bg-brand-primary text-white text-sm font-semibold rounded-xl" data-i18n="common.retry">
     Try again
   </button>
 </div>
@@ -131,7 +138,7 @@
     <!-- Top row: farm name + sign out -->
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-start justify-between gap-3">
       <div>
-        <p class="text-green-200 text-xs font-semibold uppercase tracking-wider">My Farm</p>
+        <p class="text-green-200 text-sm font-semibold uppercase tracking-wider" data-i18n="nav.myFarm">My Farm</p>
         <h1 id="hdr-farm-name" class="text-base font-bold leading-tight mt-0.5">—</h1>
         <div class="flex items-center gap-2 mt-1 flex-wrap">
           <span id="hdr-crop-pill"
@@ -149,7 +156,7 @@
         </div>
       </div>
       <button id="btn-signout"
-        class="text-green-300/70 text-xs font-medium hover:text-white transition mt-1 flex-shrink-0">
+        class="text-green-300/70 text-xs font-medium hover:text-white transition mt-1 flex-shrink-0" data-i18n="nav.signOut">
         Sign out
       </button>
     </div>
@@ -164,41 +171,41 @@
     </div>
 
     <!-- Tab navigation -->
-    <nav class="nav-scroll bg-emerald-950 border-t border-emerald-800/60">
+    <nav class="nav-scroll bg-emerald-950 border-t border-emerald-800/60" aria-label="Sections" data-i18n-aria-label="plan.tabs.label">
       <div class="inline-flex px-2">
         <button class="farm-nav-btn active" data-panel="panel-overview" onclick="switchPanel('panel-overview')">
-          <i class="fa-solid fa-chart-pie"></i> Overview
+          <i class="fa-solid fa-chart-pie"></i> <span data-i18n="plan.tab.overview">Overview</span>
         </button>
         <button class="farm-nav-btn" data-panel="panel-tasks" onclick="switchPanel('panel-tasks')">
-          <i class="fa-solid fa-list-check"></i> This Week
+          <i class="fa-solid fa-list-check"></i> <span data-i18n="plan.tab.thisWeek">This Week</span>
         </button>
         <button class="farm-nav-btn" data-panel="panel-log" onclick="switchPanel('panel-log')">
-          <i class="fa-solid fa-plus-circle"></i> Log Input
+          <i class="fa-solid fa-plus-circle"></i> <span data-i18n="plan.tab.logInput">Log Input</span>
         </button>
         <button class="farm-nav-btn" data-panel="panel-financial" onclick="switchPanel('panel-financial')">
-          <i class="fa-solid fa-indian-rupee-sign"></i> Financials
+          <i class="fa-solid fa-indian-rupee-sign"></i> <span data-i18n="plan.tab.financials">Financials</span>
         </button>
         <button id="nav-harvest-btn" class="farm-nav-btn hidden" data-panel="panel-harvest" onclick="switchPanel('panel-harvest')">
-          <i class="fa-solid fa-basket-shopping"></i> Harvest
+          <i class="fa-solid fa-basket-shopping"></i> <span data-i18n="plan.tab.harvest">Harvest</span>
         </button>
         <button class="farm-nav-btn" data-panel="panel-insights" onclick="switchPanel('panel-insights')">
-          <i class="fa-solid fa-brain"></i> Insights
+          <i class="fa-solid fa-brain"></i> <span data-i18n="plan.tab.insights">Insights</span>
         </button>
         <button class="farm-nav-btn" data-panel="panel-ai" onclick="switchPanel('panel-ai')">
-          <i class="fa-solid fa-robot"></i> Ask AI
+          <i class="fa-solid fa-robot"></i> <span data-i18n="plan.tab.askAi">Ask AI</span>
         </button>
         <!-- P1 nav items: My Farm, Tasks, More -->
         <a href="farm.html" class="farm-nav-btn">
-          <i class="fa-solid fa-tractor"></i> My Farm
+          <i class="fa-solid fa-tractor"></i> <span data-i18n="nav.myFarm">My Farm</span>
         </a>
         <a href="tasks.html" class="farm-nav-btn">
-          <i class="fa-solid fa-calendar-check"></i> Tasks
+          <i class="fa-solid fa-calendar-check"></i> <span data-i18n="nav.tasks">Tasks</span>
         </a>
         <a href="observations.html" class="farm-nav-btn">
-          <i class="fa-solid fa-eye"></i> Observations
+          <i class="fa-solid fa-eye"></i> <span data-i18n="plan.tab.observations">Observations</span>
         </a>
         <a href="inventory.html" class="farm-nav-btn">
-          <i class="fa-solid fa-boxes-stacked"></i> Inventory
+          <i class="fa-solid fa-boxes-stacked"></i> <span data-i18n="plan.tab.inventory">Inventory</span>
         </a>
       </div>
     </nav>
@@ -220,31 +227,43 @@
         </button>
       </div>
 
+      <!-- Headline: current stage and the next task -->
+      <section class="headline-card mb-6" aria-live="polite">
+        <div class="min-w-0">
+          <p class="headline-card__label" data-i18n="plan.headline.stage">Current stage</p>
+          <p id="headline-stage" class="headline-card__value break-words">—</p>
+        </div>
+        <div class="min-w-0">
+          <p class="headline-card__label" data-i18n="plan.headline.next">Next task</p>
+          <p id="headline-next" class="text-lg font-bold text-brand-dark break-words">—</p>
+        </div>
+      </section>
+
       <!-- KPI strip -->
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
         <div class="bg-white rounded-xl border border-gray-200 p-3 text-center shadow-sm">
           <div id="kpi-plants" class="text-2xl font-bold text-emerald-800">—</div>
-          <div class="text-xs text-gray-500 mt-1">Total Trees</div>
+          <div class="text-xs text-gray-600 mt-1" data-i18n="plan.kpi.trees">Total Trees</div>
         </div>
         <div class="bg-white rounded-xl border border-gray-200 p-3 text-center shadow-sm">
           <div id="kpi-months" class="text-2xl font-bold text-emerald-800">—</div>
-          <div class="text-xs text-gray-500 mt-1">Months Growing</div>
+          <div class="text-xs text-gray-600 mt-1" data-i18n="plan.kpi.months">Months Growing</div>
         </div>
         <div class="bg-white rounded-xl border border-gray-200 p-3 text-center shadow-sm">
           <div id="kpi-stage" class="text-xl font-bold text-brand-accent">—</div>
-          <div class="text-xs text-gray-500 mt-1">Current Stage</div>
+          <div class="text-xs text-gray-600 mt-1" data-i18n="plan.kpi.stage">Current Stage</div>
         </div>
         <div class="bg-white rounded-xl border border-gray-200 p-3 text-center shadow-sm">
           <div id="kpi-spent" class="text-2xl font-bold text-brand-dark">—</div>
-          <div class="text-xs text-gray-500 mt-1">Total Spent</div>
+          <div class="text-xs text-gray-600 mt-1" data-i18n="plan.kpi.spent">Total Spent</div>
         </div>
         <div class="bg-white rounded-xl border border-gray-200 p-3 text-center shadow-sm">
           <div id="kpi-bep" class="text-2xl font-bold text-emerald-800">—</div>
-          <div class="text-xs text-gray-500 mt-1">Break-even /kg</div>
+          <div class="text-xs text-gray-600 mt-1" data-i18n="plan.kpi.bep">Break-even /kg</div>
         </div>
         <div class="bg-white rounded-xl border border-gray-200 p-3 text-center shadow-sm">
           <div id="kpi-district" class="text-xl font-bold text-emerald-800">—</div>
-          <div class="text-xs text-gray-500 mt-1">District</div>
+          <div class="text-xs text-gray-600 mt-1" data-i18n="plan.kpi.district">District</div>
         </div>
       </div>
 
@@ -255,7 +274,7 @@
       <div class="bg-amber-50 border-2 border-amber-300 rounded-xl p-4 mb-6">
         <h3 class="font-bold text-amber-900 mb-2">
           <i class="fa-solid fa-bolt text-amber-500 mr-1"></i>
-          <span id="summary-stage-heading">Current Stage</span>
+          <span id="summary-stage-heading" data-i18n="plan.kpi.stage">Current Stage</span>
         </h3>
         <p id="overview-summary" class="text-sm text-gray-700 leading-relaxed"></p>
       </div>
@@ -265,13 +284,13 @@
         <div class="flex items-start justify-between mb-4">
           <div>
             <h3 class="font-bold text-emerald-900 mb-0.5">
-              <i class="fa-solid fa-receipt text-emerald-600 mr-1"></i> Spending so far
+              <i class="fa-solid fa-receipt text-emerald-600 mr-1"></i> <span data-i18n="plan.spending.title">Spending so far</span>
             </h3>
             <p class="text-3xl font-extrabold text-brand-dark" id="spend-big">—</p>
           </div>
           <a href="report.html"
-            class="text-xs font-semibold text-brand-secondary bg-brand-secondary/10
-                   px-3 py-2 rounded-lg hover:bg-brand-secondary/20 transition">
+            class="tap inline-flex items-center flex-shrink-0 text-sm font-semibold text-brand-secondary bg-brand-secondary/10
+                   px-3 py-2 rounded-lg hover:bg-brand-secondary/20 transition" data-i18n="plan.fullReport">
             Full report →
           </a>
         </div>
@@ -284,7 +303,7 @@
       <!-- Stage roadmap -->
       <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
         <h3 class="font-bold text-emerald-900 mb-4">
-          <i class="fa-solid fa-seedling text-emerald-600 mr-1"></i> Crop Cycle Roadmap
+          <i class="fa-solid fa-seedling text-emerald-600 mr-1"></i> <span data-i18n="plan.roadmap">Crop Cycle Roadmap</span>
         </h3>
         <div id="stage-roadmap" class="space-y-2"></div>
       </div>
@@ -296,7 +315,7 @@
 
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-xl font-bold text-emerald-900">
-          <i class="fa-solid fa-list-check text-emerald-600 mr-1"></i> What to do this week
+          <i class="fa-solid fa-list-check text-emerald-600 mr-1"></i> <span data-i18n="plan.week.title">What to do this week</span>
         </h2>
         <span id="tasks-stage-badge"
           class="text-xs font-semibold bg-brand-secondary/10 border border-brand-secondary
@@ -326,14 +345,14 @@
     <section id="panel-log" class="farm-panel">
 
       <h2 class="text-xl font-bold text-emerald-900 mb-4">
-        <i class="fa-solid fa-plus-circle text-emerald-600 mr-1"></i> Log an input
+        <i class="fa-solid fa-plus-circle text-emerald-600 mr-1"></i> <span data-i18n="plan.log.title">Log an input</span>
       </h2>
 
       <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm max-w-lg">
 
         <!-- Type pills -->
         <div class="mb-4">
-          <p class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Activity type</p>
+          <p class="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-2" data-i18n="plan.log.type">Activity type</p>
           <div id="type-pills" class="flex flex-wrap gap-2"></div>
           <input type="hidden" id="act-type" value="Fertilizer">
         </div>
@@ -341,9 +360,9 @@
         <!-- Quantity + unit -->
         <div class="grid grid-cols-2 gap-3 mb-3">
           <div>
-            <label for="act-qty" class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">
+            <label for="act-qty" class="text-sm font-semibold text-gray-600 uppercase tracking-wider block mb-1">
               Quantity
-              <span id="qty-hint" class="normal-case font-normal text-gray-400 ml-1 text-xs"></span>
+              <span id="qty-hint" class="normal-case font-normal text-gray-600 ml-1 text-xs"></span>
             </label>
             <input type="number" id="act-qty" min="0" step="any" placeholder="0"
               inputmode="decimal"
@@ -351,7 +370,7 @@
                      font-semibold focus:outline-none focus:border-brand-secondary">
           </div>
           <div>
-            <label for="act-unit" class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Unit</label>
+            <label for="act-unit" class="text-sm font-semibold text-gray-600 uppercase tracking-wider block mb-1" data-i18n="plan.log.unit">Unit</label>
             <select id="act-unit"
               class="w-full h-11 rounded-xl border border-gray-300 bg-white px-3 text-sm
                      focus:outline-none focus:border-brand-secondary">
@@ -366,7 +385,7 @@
 
         <!-- Cost (hidden for irrigation) -->
         <div id="cost-row" class="mb-4">
-          <label for="act-cost" class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">
+          <label for="act-cost" class="text-sm font-semibold text-gray-600 uppercase tracking-wider block mb-1" data-i18n="plan.log.cost">
             Cost (₹)
           </label>
           <input type="number" id="act-cost" min="0" step="any" placeholder="0"
@@ -381,14 +400,14 @@
           class="w-full h-12 bg-brand-primary text-white font-bold text-base
                  rounded-xl hover:bg-brand-secondary active:scale-[0.98] transition
                  flex items-center justify-center gap-2">
-          <i class="fa-solid fa-floppy-disk"></i> Save entry
+          <i class="fa-solid fa-floppy-disk"></i> <span data-i18n="plan.log.save">Save entry</span>
         </button>
 
       </div>
 
       <!-- Recent entries -->
       <div class="mt-6 max-w-lg">
-        <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Recent entries</p>
+        <p class="text-sm font-semibold text-gray-600 uppercase tracking-wider mb-3" data-i18n="plan.log.recent">Recent entries</p>
         <!-- Loading state (shown while activities fetch) -->
         <div id="recent-activities-loading" class="hidden loading-overlay">
           <span class="loading-spinner loading-spinner--sm"></span>
@@ -412,55 +431,55 @@
     <section id="panel-financial" class="farm-panel">
 
       <h2 class="text-xl font-bold text-emerald-900 mb-4">
-        <i class="fa-solid fa-indian-rupee-sign text-emerald-600 mr-1"></i> Financial summary
+        <i class="fa-solid fa-indian-rupee-sign text-emerald-600 mr-1"></i> <span data-i18n="plan.fin.title">Financial summary</span>
       </h2>
 
       <!-- Summary cards -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-          <p class="text-xs text-gray-500 mb-1">Total spent</p>
+          <p class="text-sm text-gray-600 mb-1" data-i18n="plan.fin.totalSpent">Total spent</p>
           <p id="fin-total-cost" class="text-2xl font-extrabold text-brand-dark">—</p>
         </div>
         <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-          <p class="text-xs text-gray-500 mb-1">Revenue</p>
+          <p class="text-sm text-gray-600 mb-1" data-i18n="plan.fin.revenue">Revenue</p>
           <p id="fin-revenue" class="text-2xl font-extrabold text-brand-dark">—</p>
-          <p id="fin-revenue-note" class="text-xs text-gray-400 mt-0.5"></p>
+          <p id="fin-revenue-note" class="text-sm text-gray-600 mt-0.5"></p>
         </div>
         <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-          <p class="text-xs text-gray-500 mb-1">Profit / Loss</p>
-          <p id="fin-pol" class="text-2xl font-extrabold text-gray-400">—</p>
+          <p class="text-sm text-gray-600 mb-1" data-i18n="plan.fin.pol">Profit / Loss</p>
+          <p id="fin-pol" class="text-2xl font-extrabold text-gray-600">—</p>
         </div>
         <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-          <p class="text-xs text-gray-500 mb-1">Break-even price</p>
+          <p class="text-sm text-gray-600 mb-1" data-i18n="plan.fin.bep">Break-even price</p>
           <p id="fin-bep" class="text-2xl font-extrabold text-brand-dark">—</p>
-          <p id="fin-bep-note" class="text-xs text-gray-400 mt-0.5"></p>
+          <p id="fin-bep-note" class="text-sm text-gray-600 mt-0.5"></p>
         </div>
       </div>
 
       <!-- Cost by type -->
       <div class="bg-white border border-gray-200 rounded-xl p-4 mb-6 shadow-sm">
-        <h3 class="font-bold text-emerald-900 mb-3">Cost breakdown</h3>
+        <h3 class="font-bold text-emerald-900 mb-3" data-i18n="plan.fin.breakdown">Cost breakdown</h3>
         <div id="fin-breakdown" class="divide-y divide-gray-100"></div>
       </div>
 
       <!-- Revenue scenario -->
       <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
         <h3 class="font-bold text-emerald-900 mb-1">
-          Revenue calculator
-          <span class="text-red-500 text-xs ml-1">Scenario only</span>
+          <span data-i18n="plan.sim.title">Revenue calculator</span>
+          <span class="text-red-500 text-xs ml-1" data-i18n="plan.sim.scenario">Scenario only</span>
         </h3>
-        <p class="text-xs text-gray-500 mb-4">Adjust price and yield to explore potential revenue for <span id="sim-plant-count">—</span> plants.</p>
+        <p class="text-sm text-gray-600 mb-4">Adjust price and yield to explore potential revenue for <span id="sim-plant-count">—</span> plants.</p>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
-            <label class="text-xs font-semibold text-gray-600 block mb-1">
-              Price per kg: <span id="sim-price-val" class="text-emerald-700 font-bold">₹60</span>
+            <label for="sim-price" class="text-sm font-semibold text-gray-700 block mb-1">
+              <span data-i18n="plan.sim.price">Price per kg:</span> <span id="sim-price-val" class="text-emerald-700 font-bold">₹60</span>
             </label>
             <input type="range" id="sim-price" min="20" max="120" step="1" value="60"
               class="w-full accent-emerald-600">
           </div>
           <div>
-            <label class="text-xs font-semibold text-gray-600 block mb-1">
-              Yield per tree (kg): <span id="sim-yield-val" class="text-emerald-700 font-bold">25</span>
+            <label for="sim-yield" class="text-sm font-semibold text-gray-700 block mb-1">
+              <span data-i18n="plan.sim.yield">Yield per tree (kg):</span> <span id="sim-yield-val" class="text-emerald-700 font-bold">25</span>
             </label>
             <input type="range" id="sim-yield" min="5" max="60" step="1" value="25"
               class="w-full accent-emerald-600">
@@ -468,16 +487,16 @@
         </div>
         <div class="grid grid-cols-2 gap-3">
           <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-center">
-            <p class="text-xs text-gray-500 mb-1">Gross revenue</p>
+            <p class="text-sm text-gray-600 mb-1" data-i18n="plan.sim.gross">Gross revenue</p>
             <p id="sim-gross" class="text-lg font-bold text-emerald-800">—</p>
           </div>
           <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-3 text-center">
-            <p class="text-xs text-gray-500 mb-1">Net estimate</p>
+            <p class="text-sm text-gray-600 mb-1" data-i18n="plan.sim.net">Net estimate</p>
             <p id="sim-net" class="text-lg font-bold text-emerald-800">—</p>
-            <p class="text-xs text-gray-400">after current costs</p>
+            <p class="text-sm text-gray-600" data-i18n="plan.sim.afterCosts">after current costs</p>
           </div>
         </div>
-        <p class="text-xs text-red-500 mt-3">
+        <p class="text-sm text-red-500 mt-3">
           🔴 Scenario only — verify with actual buyer prices before harvest.
         </p>
       </div>
@@ -487,9 +506,9 @@
     <!-- ══ PANEL 6: INSIGHTS ═════════════════════════════════════════════ -->
     <section id="panel-insights" class="farm-panel">
 
-      <div id="insights-loading" class="flex items-center gap-3 py-8 text-gray-400">
+      <div id="insights-loading" class="flex items-center gap-3 py-8 text-gray-600">
         <div class="w-6 h-6 border-3 border-brand-secondary border-t-transparent rounded-full spin"></div>
-        <p class="text-sm">Loading farm intelligence…</p>
+        <p class="text-sm" data-i18n="plan.insights.loading">Loading farm intelligence…</p>
       </div>
 
       <div id="insights-content" class="hidden flex flex-col gap-6">
@@ -497,9 +516,9 @@
         <!-- ① Weather forecast -->
         <div>
           <h2 class="text-xl font-bold text-emerald-900 mb-1">
-            <i class="fa-solid fa-cloud-sun text-emerald-600 mr-1"></i> 7-Day Weather Forecast
+            <i class="fa-solid fa-cloud-sun text-emerald-600 mr-1"></i> <span data-i18n="plan.insights.weather">7-Day Weather Forecast</span>
           </h2>
-          <p id="weather-location" class="text-xs text-gray-400 mb-3"></p>
+          <p id="weather-location" class="text-sm text-gray-600 mb-3"></p>
 
           <!-- Current conditions -->
           <div id="weather-current"
@@ -521,7 +540,7 @@
         <div id="disease-risk-section">
           <h2 class="text-xl font-bold text-emerald-900 mb-3">
             <i class="fa-solid fa-shield-virus text-emerald-600 mr-1"></i>
-            Pest &amp; Disease Risk (next 3 days)
+            <span data-i18n="plan.insights.disease">Pest &amp; Disease Risk (next 3 days)</span>
           </h2>
           <div id="disease-risk-list" class="flex flex-col gap-3"></div>
         </div>
@@ -533,12 +552,12 @@
               <i class="fa-solid fa-chart-line text-emerald-600 mr-1"></i>
               <span id="mandi-title">Guava Mandi Prices</span>
             </h2>
-            <div class="text-xs text-gray-500" role="group" aria-label="Language">
+            <div class="text-xs text-gray-600" role="group" aria-label="Language">
               <button type="button" id="mandi-lang-en" onclick="setMandiLang('en')" class="px-2 py-1 rounded-lg border border-gray-200 bg-white">English</button>
               <button type="button" id="mandi-lang-hi" onclick="setMandiLang('hi')" class="px-2 py-1 rounded-lg border border-gray-200 bg-white">हिन्दी</button>
             </div>
           </div>
-          <p id="mandi-subtitle" class="text-xs text-gray-500 mb-3"></p>
+          <p id="mandi-subtitle" class="text-sm text-gray-600 mb-3"></p>
 
           <!-- Nearest mandis -->
           <div id="mandi-board" class="mb-4"></div>
@@ -556,7 +575,7 @@
         <div>
           <h2 class="text-xl font-bold text-emerald-900 mb-3">
             <i class="fa-solid fa-calendar-check text-emerald-600 mr-1"></i>
-            What's coming next
+            <span data-i18n="plan.insights.next">What's coming next</span>
           </h2>
           <div id="future-stages" class="flex flex-col gap-4"></div>
         </div>
@@ -565,8 +584,8 @@
         <div>
           <h2 class="text-xl font-bold text-emerald-900 mb-3">
             <i class="fa-solid fa-temperature-half text-emerald-600 mr-1"></i>
-            Heat Units &amp; Climate
-            <span class="text-xs font-normal text-gray-400 ml-2">Powered by NASA POWER</span>
+            <span data-i18n="plan.insights.heat">Heat Units &amp; Climate</span>
+            <span class="text-xs font-normal text-gray-600 ml-2" data-i18n="plan.insights.nasa">Powered by NASA POWER</span>
           </h2>
           <div id="gdd-section" class="flex flex-col gap-3"></div>
         </div>
@@ -575,7 +594,7 @@
         <div id="monsoon-section">
           <h2 class="text-xl font-bold text-emerald-900 mb-3">
             <i class="fa-solid fa-cloud-showers-heavy text-emerald-600 mr-1"></i>
-            Monsoon Risk Index
+            <span data-i18n="plan.insights.monsoon">Monsoon Risk Index</span>
           </h2>
           <div id="monsoon-card" class="rounded-2xl border px-5 py-4"></div>
         </div>
@@ -584,7 +603,7 @@
         <div>
           <h2 class="text-xl font-bold text-emerald-900 mb-3">
             <i class="fa-solid fa-clipboard-check text-emerald-600 mr-1"></i>
-            Input Compliance Score
+            <span data-i18n="plan.insights.compliance">Input Compliance Score</span>
           </h2>
           <div id="compliance-card" class="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm"></div>
         </div>
@@ -593,9 +612,9 @@
         <div>
           <h2 class="text-xl font-bold text-emerald-900 mb-3">
             <i class="fa-solid fa-sack-dollar text-emerald-600 mr-1"></i>
-            Fertilizer Budget — Remaining Stages
+            <span data-i18n="plan.insights.fert">Fertilizer Budget — Remaining Stages</span>
           </h2>
-          <p class="text-xs text-gray-500 mb-3">Based on actual government MRP and market rates. <span class="text-red-500">🔴 Estimates only</span></p>
+          <p class="text-sm text-gray-700 mb-3"><span class="estimate-pill" data-i18n="estimate.pill">Estimate</span> <span data-i18n="plan.fertNote">Reference prices typed in by the app team, not live market rates. Estimates only: check your dealer price.</span></p>
           <div id="fert-forecast" class="flex flex-col gap-3"></div>
         </div>
 
@@ -609,9 +628,9 @@
       <div class="flex items-start gap-3 mb-4">
         <div>
           <h2 class="text-xl font-bold text-emerald-900">
-            <i class="fa-solid fa-robot text-emerald-600 mr-1"></i> Ask Smart Farmer AI
+            <i class="fa-solid fa-robot text-emerald-600 mr-1"></i> <span data-i18n="plan.ai.title">Ask Smart Farmer AI</span>
           </h2>
-          <p class="text-sm text-gray-500 mt-1 max-w-xl">
+          <p class="text-sm text-gray-600 mt-1 max-w-xl">
             The AI assistant answers <strong>low-risk questions</strong> about your farm records,
             crop stages, and general agronomy. It <strong>cannot</strong> provide pesticide doses,
             tank mix recommendations, or chemical treatments — please consult your agronomist
@@ -629,7 +648,7 @@
     <section id="panel-harvest" class="farm-panel">
 
       <h2 class="text-xl font-bold text-emerald-900 mb-4">
-        <i class="fa-solid fa-basket-shopping text-emerald-600 mr-1"></i> Harvest &amp; Sale
+        <i class="fa-solid fa-basket-shopping text-emerald-600 mr-1"></i> <span data-i18n="plan.harvest.title">Harvest &amp; Sale</span>
       </h2>
 
       <div id="harvest-done-msg"
@@ -641,19 +660,19 @@
         class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm max-w-md">
         <div class="flex items-center gap-3 bg-brand-accent/10 rounded-xl px-4 py-3 mb-4">
           <span class="text-3xl">🍈</span>
-          <p class="text-sm font-semibold text-brand-dark">
+          <p class="text-sm font-semibold text-brand-dark" data-i18n="plan.harvest.ready">
             Your crop is ready. Record your sale to unlock the complete financial report.
           </p>
         </div>
         <div class="grid grid-cols-2 gap-3 mb-3">
           <div>
-            <label for="hv-qty" class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">Qty sold (kg)</label>
+            <label for="hv-qty" class="text-sm font-semibold text-gray-600 uppercase tracking-wider block mb-1" data-i18n="plan.harvest.qty">Qty sold (kg)</label>
             <input type="number" id="hv-qty" min="0.1" step="any" placeholder="e.g. 42000"
               inputmode="decimal"
               class="w-full h-11 rounded-xl border border-gray-300 bg-white px-3 text-sm font-semibold focus:outline-none focus:border-brand-secondary">
           </div>
           <div>
-            <label for="hv-price" class="text-xs font-semibold text-gray-500 uppercase tracking-wider block mb-1">₹ / kg</label>
+            <label for="hv-price" class="text-sm font-semibold text-gray-600 uppercase tracking-wider block mb-1">₹ / kg</label>
             <input type="number" id="hv-price" min="0" step="any" placeholder="e.g. 65"
               inputmode="decimal"
               class="w-full h-11 rounded-xl border border-gray-300 bg-white px-3 text-sm font-semibold focus:outline-none focus:border-brand-secondary">
@@ -662,7 +681,7 @@
         <p id="hv-error" class="hidden text-red-600 text-sm mb-2" role="alert"></p>
         <button id="btn-harvest"
           class="w-full h-12 bg-brand-accent text-white font-bold text-base
-                 rounded-xl hover:opacity-90 active:scale-[0.98] transition">
+                 rounded-xl hover:opacity-90 active:scale-[0.98] transition" data-i18n="plan.harvest.save">
           Record harvest &amp; sale
         </button>
       </div>
@@ -675,19 +694,19 @@
 
 <!-- ── Vendor opt-in (floating, shown when gaps exist + no consent) ───── -->
 <div id="vendor-optin"
-  class="hidden fixed bottom-4 left-4 right-4 max-w-sm mx-auto
+  class="hidden fixed bottom-24 left-4 right-4 max-w-sm mx-auto
          bg-white border border-gray-200 rounded-2xl shadow-xl px-5 py-4 z-40">
-  <p class="text-sm font-bold text-brand-dark mb-1">Find local suppliers?</p>
-  <p class="text-xs text-brand-muted mb-3">
+  <p class="text-sm font-bold text-brand-dark mb-1" data-i18n="plan.vendor.title">Find local suppliers?</p>
+  <p class="text-sm text-brand-muted mb-3" data-i18n="plan.vendor.body">
     We can show nearby vendors for inputs you need. Your data stays private.
   </p>
   <div class="flex gap-2">
     <button id="btn-give-consent"
-      class="flex-1 h-10 bg-brand-secondary text-white text-sm font-bold rounded-xl hover:opacity-90 transition">
+      class="flex-1 h-10 bg-brand-secondary text-white text-sm font-bold rounded-xl hover:opacity-90 transition" data-i18n="plan.vendor.yes">
       Yes, show vendors
     </button>
     <button id="btn-dismiss-optin"
-      class="px-4 h-10 text-sm text-gray-500 border border-gray-300 rounded-xl hover:bg-gray-50">
+      class="px-4 h-10 text-sm text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50" data-i18n="plan.vendor.no">
       Not now
     </button>
   </div>
@@ -695,18 +714,18 @@
 
 <!-- ── Vendor cards (floating panel) ──────────────────────────────────── -->
 <div id="vendor-panel"
-  class="hidden fixed bottom-4 left-4 right-4 max-w-sm mx-auto
+  class="hidden fixed bottom-24 left-4 right-4 max-w-sm mx-auto
          bg-white border border-gray-200 rounded-2xl shadow-xl px-5 py-4 z-40">
   <div class="flex items-center justify-between mb-3">
-    <p class="text-sm font-bold text-brand-dark">Nearby suppliers for your needs</p>
-    <button id="btn-revoke-consent" class="text-xs text-gray-400 underline">Turn off</button>
+    <p class="text-sm font-bold text-brand-dark" data-i18n="plan.vendor.nearby">Nearby suppliers for your needs</p>
+    <button id="btn-revoke-consent" class="text-xs text-gray-600 underline" data-i18n="plan.vendor.off.btn">Turn off</button>
   </div>
   <div id="vendor-list" class="flex flex-col gap-3"></div>
 </div>
 
 <!-- ── Toast ──────────────────────────────────────────────────────────── -->
 <div id="toast"
-  class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-brand-dark text-white
+  class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-brand-dark text-white
          text-sm font-semibold px-5 py-3 rounded-2xl shadow-xl
          opacity-0 pointer-events-none z-50 flex items-center gap-2">
 </div>

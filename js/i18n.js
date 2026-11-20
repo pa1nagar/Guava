@@ -1227,3 +1227,7 @@ export const TRANSLATIONS = {
     'ai.error': 'आपके प्रश्न को संसाधित करते समय एक त्रुटि हुई। कृपया पुनः प्रयास करें।'
   }
 };
+
+import { PAGE_EN, PAGE_HI } from './i18n-pages.js';
+Object.assign(TRANSLATIONS.en, PAGE_EN);
+Object.assign(TRANSLATIONS.hi, PAGE_HI);

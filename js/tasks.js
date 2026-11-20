@@ -12,27 +12,31 @@
 
 import { routeGuard, signOut } from "./auth.js";
 import { apiFetch, showError } from "./api.js";
+import {
+  applyI18n, errorMessage, escapeHtml, initPage, renderLoadError, setBusy, t,
+} from "./dom.js";
+import { formatDate, formatNumber } from "./translator.js";
 
 // ── Status metadata ───────────────────────────────────────────────────────────
 const STATUS_META = {
-  suggested:    { label: "Suggested",    bg: "bg-blue-100",   text: "text-blue-700",   icon: "💡" },
-  planned:      { label: "Planned",      bg: "bg-purple-100", text: "text-purple-700", icon: "📅" },
-  due:          { label: "Due",          bg: "bg-amber-100",  text: "text-amber-700",  icon: "⏰" },
-  completed:    { label: "Completed",    bg: "bg-green-100",  text: "text-green-700",  icon: "✅" },
-  skipped:      { label: "Skipped",      bg: "bg-gray-100",   text: "text-gray-500",   icon: "⏭️" },
-  cancelled:    { label: "Cancelled",    bg: "bg-red-100",    text: "text-red-500",    icon: "❌" },
-  "needs-review": { label: "Needs Review", bg: "bg-orange-100", text: "text-orange-700", icon: "⚠️" },
+  suggested:      { key: "tasks.status.suggested",   bg: "bg-blue-100",   text: "text-blue-800",   icon: "💡" },
+  planned:        { key: "tasks.status.planned",     bg: "bg-purple-100", text: "text-purple-800", icon: "📅" },
+  due:            { key: "tasks.status.due",         bg: "bg-amber-100",  text: "text-amber-800",  icon: "⏰" },
+  completed:      { key: "tasks.status.completed",   bg: "bg-green-100",  text: "text-green-800",  icon: "✅" },
+  skipped:        { key: "tasks.status.skipped",     bg: "bg-gray-100",   text: "text-gray-700",   icon: "⏭️" },
+  cancelled:      { key: "tasks.status.cancelled",   bg: "bg-red-100",    text: "text-red-800",    icon: "❌" },
+  "needs-review": { key: "tasks.status.needsReview", bg: "bg-orange-100", text: "text-orange-800", icon: "⚠️" },
 };
 
 // Valid next-status transitions a farmer can trigger
 const ALLOWED_TRANSITIONS = {
-  suggested:    ["planned", "skipped"],
-  planned:      ["completed", "skipped", "cancelled"],
-  due:          ["completed", "skipped", "cancelled"],
+  suggested:      ["planned", "skipped"],
+  planned:        ["completed", "skipped", "cancelled"],
+  due:            ["completed", "skipped", "cancelled"],
   "needs-review": ["planned", "cancelled"],
-  completed:    [],
-  skipped:      [],
-  cancelled:    [],
+  completed:      [],
+  skipped:        [],
+  cancelled:      [],
 };
 
 // ── State ─────────────────────────────────────────────────────────────────────
@@ -40,10 +44,10 @@ let _tasks = [];
 let _todayTasks = [];
 
 // ── DOM refs ──────────────────────────────────────────────────────────────────
-const todaySection    = document.getElementById("today-tasks-section");
 const todayList       = document.getElementById("today-task-list");
 const todayEmpty      = document.getElementById("today-empty");
 const todayLoading    = document.getElementById("today-loading");
+const headlineToday   = document.getElementById("headline-today");
 
 const allLoading      = document.getElementById("all-tasks-loading");
 const allList         = document.getElementById("all-task-list");
@@ -63,42 +67,33 @@ function setHidden(el, hidden) {
   if (el) el.classList.toggle("hidden", hidden);
 }
 
-function escapeHtml(str) {
-  return String(str || "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
-
-function formatDate(isoStr) {
-  if (!isoStr) return "—";
-  const d = new Date(isoStr);
-  return `${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")}/${d.getFullYear()}`;
+function showFormError(message) {
+  taskFormError.textContent = message;
+  taskFormError.classList.remove("hidden");
 }
 
 // ── Status badge HTML ─────────────────────────────────────────────────────────
 function statusBadge(status) {
-  const m = STATUS_META[status] || { label: status, bg: "bg-gray-100", text: "text-gray-600", icon: "•" };
-  return `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold ${m.bg} ${m.text}">
-    ${m.icon} ${escapeHtml(m.label)}
+  const m = STATUS_META[status];
+  const label = m ? t(m.key) : status;
+  const cls = m ? `${m.bg} ${m.text}` : "bg-gray-100 text-gray-700";
+  return `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-sm font-semibold ${cls}">
+    ${m ? m.icon : "•"} ${escapeHtml(label)}
   </span>`;
 }
 
-// ── Status update dropdown HTML ───────────────────────────────────────────────
+// ── Status update buttons HTML ────────────────────────────────────────────────
 function transitionButtons(task) {
   const transitions = ALLOWED_TRANSITIONS[task.status] || [];
   if (transitions.length === 0) return "";
   return `
-    <div class="flex flex-wrap gap-1.5 mt-2">
-      ${transitions.map(s => {
-        const m = STATUS_META[s] || { label: s };
-        return `<button
-          class="task-status-btn text-xs font-semibold px-2.5 py-1 rounded-lg border border-gray-300 hover:bg-gray-100 transition"
-          data-task-id="${task.id}"
-          data-new-status="${s}">
-          Mark ${escapeHtml(m.label)}
-        </button>`;
+    <div class="flex flex-wrap gap-2 mt-3">
+      ${transitions.map((s) => {
+        const m = STATUS_META[s];
+        return `<button type="button"
+          class="task-status-btn text-sm font-semibold px-3 py-1.5 rounded-lg border border-gray-400 text-gray-800 hover:bg-gray-100 transition"
+          data-task-id="${escapeHtml(task.id)}"
+          data-new-status="${escapeHtml(s)}">${escapeHtml(t("tasks.markAs", { status: m ? t(m.key) : s }))}</button>`;
       }).join("")}
     </div>
   `;
@@ -111,22 +106,21 @@ function taskCardHtml(task) {
     : task.status === "needs-review" ? "border-l-4 border-l-orange-400"
     : task.status === "completed" ? "border-l-4 border-l-green-400"
     : "border-l-4 border-l-gray-200";
+  const source = task.source === "ai" ? t("tasks.source.ai") : task.source === "manual" ? t("tasks.source.manual") : task.source;
 
   return `
-    <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm ${borderClass}" data-task-id="${task.id}">
-      <div class="flex items-start justify-between gap-3">
-        <div class="flex-1 min-w-0">
-          <div class="flex flex-wrap items-center gap-2 mb-1">
-            ${statusBadge(task.status)}
-            ${isHighRisk ? '<span class="text-xs font-semibold bg-red-100 text-red-700 px-2 py-0.5 rounded-full">⚠️ HIGH RISK — review required</span>' : ""}
-          </div>
-          <p class="font-semibold text-emerald-900 text-sm mt-1">${escapeHtml(task.title)}</p>
-          ${task.description ? `<p class="text-xs text-gray-500 mt-0.5 leading-relaxed">${escapeHtml(task.description)}</p>` : ""}
-          <div class="flex flex-wrap gap-x-4 gap-y-0.5 mt-2 text-xs text-gray-400">
-            ${task.due_date ? `<span>📅 Due: ${formatDate(task.due_date)}</span>` : ""}
-            ${task.plot_name ? `<span>🌿 ${escapeHtml(task.plot_name)}</span>` : ""}
-            ${task.source ? `<span>📋 ${escapeHtml(task.source)}</span>` : ""}
-          </div>
+    <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm ${borderClass}" data-task-id="${escapeHtml(task.id)}">
+      <div class="min-w-0">
+        <div class="flex flex-wrap items-center gap-2 mb-1">
+          ${statusBadge(task.status)}
+          ${isHighRisk ? `<span class="text-sm font-semibold bg-red-100 text-red-800 px-2 py-0.5 rounded-full">⚠️ ${escapeHtml(t("tasks.highRisk.badge"))}</span>` : ""}
+        </div>
+        <p class="font-semibold text-emerald-900 text-base mt-1 break-words">${escapeHtml(task.title)}</p>
+        ${task.description ? `<p class="text-sm text-gray-600 mt-0.5 leading-relaxed break-words">${escapeHtml(task.description)}</p>` : ""}
+        <div class="flex flex-wrap gap-x-4 gap-y-0.5 mt-2 text-sm text-gray-600">
+          ${task.due_date ? `<span>📅 ${escapeHtml(t("tasks.due"))}: ${escapeHtml(formatDate(task.due_date))}</span>` : ""}
+          ${task.plot_name ? `<span>🌿 ${escapeHtml(task.plot_name)}</span>` : ""}
+          ${source ? `<span>📋 ${escapeHtml(source)}</span>` : ""}
         </div>
       </div>
       ${transitionButtons(task)}
@@ -135,8 +129,13 @@ function taskCardHtml(task) {
 }
 
 // ── Render task lists ─────────────────────────────────────────────────────────
+function renderHeadline() {
+  if (headlineToday) headlineToday.textContent = formatNumber(_todayTasks.length);
+}
+
 function renderTodayTasks() {
   setHidden(todayLoading, true);
+  renderHeadline();
   if (!_todayTasks || _todayTasks.length === 0) {
     setHidden(todayEmpty, false);
     todayList.innerHTML = "";
@@ -144,6 +143,7 @@ function renderTodayTasks() {
   }
   setHidden(todayEmpty, true);
   todayList.innerHTML = _todayTasks.map(taskCardHtml).join("");
+  applyI18n(todayList);
   bindStatusButtons(todayList);
 }
 
@@ -156,16 +156,17 @@ function renderAllTasks(tasks) {
   }
   setHidden(allEmpty, true);
   allList.innerHTML = tasks.map(taskCardHtml).join("");
+  applyI18n(allList);
   bindStatusButtons(allList);
 }
 
 // ── Bind status update buttons ────────────────────────────────────────────────
 function bindStatusButtons(container) {
-  container.querySelectorAll(".task-status-btn").forEach(btn => {
+  container.querySelectorAll(".task-status-btn").forEach((btn) => {
     btn.addEventListener("click", async () => {
-      const taskId   = btn.getAttribute("data-task-id");
-      const newStatus = btn.getAttribute("data-new-status");
-      await updateTaskStatus(taskId, newStatus);
+      btn.disabled = true;
+      const ok = await updateTaskStatus(btn.getAttribute("data-task-id"), btn.getAttribute("data-new-status"));
+      if (!ok) btn.disabled = false;
     });
   });
 }
@@ -173,35 +174,38 @@ function bindStatusButtons(container) {
 // ── Update task status ────────────────────────────────────────────────────────
 async function updateTaskStatus(taskId, newStatus) {
   try {
-    const res = await apiFetch(`/api/farmers/me/tasks/${taskId}/status`, {
+    const res = await apiFetch(`/api/farmers/me/tasks/${encodeURIComponent(taskId)}/status`, {
       method: "PUT",
       body: JSON.stringify({ status: newStatus }),
     });
     if (!res.ok) {
-      showError("Failed to update task status.");
-      return;
+      showError(await errorMessage(res));
+      return false;
     }
-    // Reload both lists to reflect the change
     await Promise.all([loadTodayTasks(), loadAllTasks()]);
+    return true;
   } catch {
-    showError("Could not update task. Please try again.");
+    showError(t("common.error.network"));
+    return false;
   }
 }
 
 // ── Load today's tasks ────────────────────────────────────────────────────────
 async function loadTodayTasks() {
   setHidden(todayLoading, false);
+  setHidden(todayEmpty, true);
   try {
     const res = await apiFetch("/api/farmers/me/tasks/today");
     if (!res.ok) {
       setHidden(todayLoading, true);
+      renderLoadError(todayList, loadTodayTasks);
       return;
     }
     _todayTasks = await res.json();
     renderTodayTasks();
   } catch {
     setHidden(todayLoading, true);
-    // Today section is non-critical; silently skip if offline
+    renderLoadError(todayList, loadTodayTasks, "common.error.network");
   }
 }
 
@@ -217,15 +221,15 @@ async function loadAllTasks() {
   try {
     const res = await apiFetch(`/api/farmers/me/tasks${params}`);
     if (!res.ok) {
-      showError("Failed to load tasks.");
       setHidden(allLoading, true);
+      renderLoadError(allList, loadAllTasks);
       return;
     }
     _tasks = await res.json();
     renderAllTasks(_tasks);
   } catch {
-    showError("Could not connect to server.");
     setHidden(allLoading, true);
+    renderLoadError(allList, loadAllTasks, "common.error.network");
   }
 }
 
@@ -233,8 +237,6 @@ async function loadAllTasks() {
 async function handleSaveTask(e) {
   e.preventDefault();
   taskFormError.classList.add("hidden");
-  taskFormBtn.disabled = true;
-  taskFormBtn.textContent = "Saving…";
 
   const body = {
     title:       document.getElementById("task-title").value.trim(),
@@ -246,63 +248,41 @@ async function handleSaveTask(e) {
   };
 
   if (!body.title) {
-    taskFormError.textContent = "Task title is required.";
-    taskFormError.classList.remove("hidden");
-    taskFormBtn.disabled = false;
-    taskFormBtn.textContent = "Save Task";
+    showFormError(t("tasks.error.titleRequired"));
     return;
   }
 
+  setBusy(taskFormBtn, true);
   try {
-    const res = await apiFetch("/api/farmers/me/tasks", {
-      method: "POST",
-      body: JSON.stringify(body),
-    });
-
-    if (res.status === 422) {
-      const data = await res.json();
-      const detail = data.detail;
-      taskFormError.textContent = typeof detail === "string"
-        ? detail : Array.isArray(detail)
-        ? detail.map(d => d.msg).join(". ")
-        : "Validation error. Check the form.";
-      taskFormError.classList.remove("hidden");
-      return;
-    }
+    const res = await apiFetch("/api/farmers/me/tasks", { method: "POST", body: JSON.stringify(body) });
     if (!res.ok) {
-      taskFormError.textContent = "Failed to save task. Please try again.";
-      taskFormError.classList.remove("hidden");
+      showFormError(await errorMessage(res));
       return;
     }
-
     taskForm.reset();
     taskFormWrap.classList.add("hidden");
     await Promise.all([loadTodayTasks(), loadAllTasks()]);
   } catch {
-    taskFormError.textContent = "Network error. Please try again.";
-    taskFormError.classList.remove("hidden");
+    showFormError(t("common.error.network"));
   } finally {
-    taskFormBtn.disabled = false;
-    taskFormBtn.textContent = "Save Task";
+    setBusy(taskFormBtn, false);
   }
 }
 
 // ── Initialise ────────────────────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", async () => {
+  initPage();
   await routeGuard("tasks");
 
   document.getElementById("btn-signout")?.addEventListener("click", signOut);
 
-  // Task form
   taskFormToggle?.addEventListener("click", () => {
     taskFormWrap.classList.toggle("hidden");
     taskFormError.classList.add("hidden");
-    taskForm.reset();
   });
   taskFormCancel?.addEventListener("click", () => taskFormWrap.classList.add("hidden"));
   taskForm?.addEventListener("submit", handleSaveTask);
 
-  // Filter
   filterStatus?.addEventListener("change", loadAllTasks);
 
   await Promise.all([loadTodayTasks(), loadAllTasks()]);

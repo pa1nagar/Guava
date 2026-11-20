@@ -50,5 +50,16 @@ def fixture_for(path: str):
     return {}
 
 
+PUBLIC_NEEDLES = ("/api/public/", "/api/market-prices/", "/api/sell-smart")
+
+
+def respond(path: str, method: str = "GET", body: str = "", scenario: str = "ok"):
+    """(status, json) for any mocked API call. Public mandi / sell-smart data is always the ok fixture."""
+    import fixtures_app  # noqa: PLC0415 - sibling module, path is set up by browser_check.py
+    if any(n in path for n in PUBLIC_NEEDLES):
+        return 200, fixture_for(path)
+    return fixtures_app.response_for(path, method, body, scenario)
+
+
 def supabase_stub(anon: bool) -> str:
     return SUPABASE_STUB.replace("__SESSION__", "null" if anon else json.dumps(SESSION))

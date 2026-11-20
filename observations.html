@@ -15,36 +15,6 @@
 
   <style>
     body { background: #FDFBF7; font-family: system-ui, sans-serif; }
-    .section-card {
-      background: #fff;
-      border: 1px solid #E5E7EB;
-      border-radius: 1rem;
-      padding: 1.25rem;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    }
-    .form-label {
-      display: block;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #6B7280;
-      margin-bottom: 0.25rem;
-    }
-    .form-input {
-      width: 100%;
-      height: 2.75rem;
-      border-radius: 0.75rem;
-      border: 1px solid #D1D5DB;
-      background: #fff;
-      padding: 0 0.75rem;
-      font-size: 0.875rem;
-      font-weight: 500;
-      outline: none;
-      transition: border-color 0.15s;
-    }
-    .form-input:focus { border-color: #4A7C59; }
-    textarea.form-input { height: auto; padding: 0.75rem; resize: vertical; }
 
     /* Photo upload */
     .photo-upload-label {
@@ -74,7 +44,7 @@
   <header class="bg-brand-primary text-white sticky top-0 z-40 shadow-lg">
     <div class="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between gap-3">
       <div>
-        <p class="text-green-200 text-xs font-semibold uppercase tracking-wider" data-i18n="nav.myFarm">My Farm</p>
+        <p class="text-green-200 text-sm font-semibold uppercase tracking-wider" data-i18n="nav.myFarm">My Farm</p>
         <h1 class="text-base font-bold" data-i18n="obs.heading">Crop Observations</h1>
       </div>
       <button id="btn-signout"
@@ -129,8 +99,8 @@
               <div class="sm:col-span-2">
                 <label for="obs-symptom" class="form-label" data-i18n="obs.field.symptom">Symptom Description</label>
                 <input id="obs-symptom" type="text" maxlength="500" class="form-input"
-                  placeholder="e.g. yellowing leaves, spots, wilting — or leave blank for unknown / not sure">
-                <p class="text-xs text-gray-400 mt-0.5" data-i18n="obs.symptomHint">
+                  placeholder="e.g. yellowing leaves, spots, wilting — or leave blank for unknown / not sure" data-i18n-placeholder="obs.ph.symptom">
+                <p class="text-sm text-gray-600 mt-0.5" data-i18n="obs.symptomHint">
                   Leave blank to record as "unknown / not sure" — you are not required to name a specific pest or disease.
                 </p>
               </div>
@@ -138,32 +108,32 @@
               <div>
                 <label for="obs-plant-part" class="form-label" data-i18n="obs.field.plantPart">Plant Part Observed</label>
                 <input id="obs-plant-part" type="text" maxlength="100" class="form-input"
-                  placeholder="e.g. leaves, fruit, stem, roots">
+                  placeholder="e.g. leaves, fruit, stem, roots" data-i18n-placeholder="obs.ph.plantPart">
               </div>
               <div>
                 <label for="obs-spread" class="form-label" data-i18n="obs.field.spreadPattern">Spread Pattern</label>
                 <input id="obs-spread" type="text" maxlength="200" class="form-input"
-                  placeholder="e.g. scattered, one corner, entire row">
+                  placeholder="e.g. scattered, one corner, entire row" data-i18n-placeholder="obs.ph.spread">
               </div>
 
               <div>
                 <label for="obs-trees-sampled" class="form-label" data-i18n="obs.field.treesSampled">Trees Sampled</label>
-                <input id="obs-trees-sampled" type="number" min="1" step="1" class="form-input">
+                <input id="obs-trees-sampled" type="number" inputmode="numeric" min="1" step="1" class="form-input">
               </div>
               <div>
                 <label for="obs-trees-affected" class="form-label" data-i18n="obs.field.treesAffected">Trees Affected</label>
-                <input id="obs-trees-affected" type="number" min="0" step="1" class="form-input">
+                <input id="obs-trees-affected" type="number" inputmode="numeric" min="0" step="1" class="form-input">
               </div>
 
               <div class="sm:col-span-2">
                 <label for="obs-weather-notes" class="form-label" data-i18n="obs.field.weatherNotes">Recent Weather Notes</label>
                 <textarea id="obs-weather-notes" rows="2" class="form-input"
-                  placeholder="e.g. heavy rain for 3 days, dry spell, high humidity"></textarea>
+                  placeholder="e.g. heavy rain for 3 days, dry spell, high humidity" data-i18n-placeholder="obs.ph.weather"></textarea>
               </div>
               <div class="sm:col-span-2">
                 <label for="obs-input-notes" class="form-label" data-i18n="obs.field.inputNotes">Recent Input / Operation Notes</label>
                 <textarea id="obs-input-notes" rows="2" class="form-input"
-                  placeholder="e.g. applied fertilizer 5 days ago, pruned last week"></textarea>
+                  placeholder="e.g. applied fertilizer 5 days ago, pruned last week" data-i18n-placeholder="obs.ph.inputs"></textarea>
               </div>
               <div>
                 <label for="obs-observer" class="form-label" data-i18n="obs.field.observer">Observer Name</label>
@@ -179,32 +149,33 @@
                 <span id="obs-photo-label" data-i18n="obs.choosePhoto">Choose photo</span>
               </label>
               <input id="obs-photo" type="file" accept="image/jpeg,image/png,image/webp" class="sr-only">
+              <p id="obs-photo-error" class="hidden text-red-700 text-sm mt-1" role="alert"></p>
               <img id="obs-photo-preview" class="hidden mt-2 rounded-xl border border-gray-200 w-full max-h-48 object-contain" alt="Photo preview">
-              <p class="text-xs text-gray-400 mt-0.5" data-i18n="obs.photoHint">
+              <p class="text-sm text-gray-600 mt-0.5" data-i18n="obs.photoHint">
                 JPEG, PNG, or WebP · Max 10 MB · GPS metadata is stripped automatically
               </p>
             </div>
 
             <!-- AI disclaimer (always shown when photo is attached) -->
             <div class="bg-amber-50 border border-amber-200 rounded-xl px-3 py-2.5">
-              <p class="text-xs font-bold text-amber-800" data-i18n="obs.aiDisclaimer">
+              <p class="text-sm font-bold text-amber-800" data-i18n="obs.aiDisclaimer">
                 ⚠️ Any AI analysis is labelled "Preliminary observation — not a diagnosis".
               </p>
-              <p class="text-xs text-amber-700 mt-0.5" data-i18n="obs.aiDisclaimerBody">
+              <p class="text-sm text-amber-700 mt-0.5" data-i18n="obs.aiDisclaimerBody">
                 If symptoms are severe or spreading rapidly, consult your local KVK, agronomist, or official lab.
               </p>
             </div>
 
             <p id="obs-form-error" class="hidden text-red-600 text-sm" role="alert"></p>
 
-            <div class="flex gap-2 mt-1">
+            <div class="flex gap-2 mt-1 sticky-action">
               <button id="btn-save-obs" type="submit"
                 class="flex-1 h-11 bg-brand-primary text-white font-bold rounded-xl hover:bg-brand-secondary transition"
                 data-i18n="obs.saveObservation">
                 Save Observation
               </button>
               <button id="btn-cancel-obs-form" type="button"
-                class="px-4 h-11 text-sm text-gray-500 border border-gray-300 rounded-xl hover:bg-gray-50 transition"
+                class="px-4 h-11 text-sm text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition"
                 data-i18n="form.cancel">
                 Cancel
               </button>

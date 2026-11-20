@@ -283,3 +283,63 @@ body.has-bottom-nav { padding-bottom: calc(4.5rem + env(safe-area-inset-bottom))
 }
 .sf-offline-banner { background: #92400E; color: #fff; }
 .sf-status-line { background: #FFFBEB; color: #92400E; border-bottom: 1px solid #FCD34D; }
+
+/* ── App pages (farm, plan, tasks, observations, inventory, report) ─────────── */
+.section-card {
+  background: #fff; border: 1px solid #E5E7EB; border-radius: 1rem;
+  padding: 1.25rem; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+@media (max-width: 480px) { .section-card { padding: 1rem; } }
+.form-label {
+  display: block; font-size: 1rem; font-weight: 600; color: #374151; margin-bottom: 0.25rem;
+}
+.form-input {
+  width: 100%; min-height: 2.75rem; border-radius: 0.75rem; border: 1px solid #9CA3AF;
+  background: #fff; padding: 0 0.75rem; font-size: 1rem; font-weight: 500; outline: none;
+  transition: border-color 0.15s;
+}
+.form-input:focus { border-color: #4A7C59; }
+textarea.form-input { height: auto; padding: 0.75rem; resize: vertical; }
+.empty-state__body { font-size: 1rem; }
+a.empty-state__action { min-height: 44px; display: inline-flex; align-items: center; }
+/* Error state with Retry (js/dom.js renderLoadError) */
+.load-error {
+  display: flex; flex-direction: column; align-items: center; gap: 0.75rem; text-align: center;
+  padding: 1.25rem 1rem; background: #FEF2F2; border: 1px solid #FECACA; border-radius: 0.75rem; color: #991B1B;
+}
+.load-error__text { font-size: 1rem; margin: 0; }
+.load-error__retry {
+  padding: 0.5rem 1.5rem; font-size: 1rem; font-weight: 700; color: #fff; background: #1E3A2B;
+  border: 0; border-radius: 0.75rem; cursor: pointer;
+}
+/* Big headline number at the top of each page */
+.headline-card {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25rem 1.5rem; padding: 1rem 1.25rem;
+  background: #fff; border: 2px solid #4A7C59; border-radius: 1rem;
+}
+.headline-card__label { font-size: 1rem; color: #4B5563; margin: 0; }
+.headline-card__value { font-size: 1.875rem; line-height: 2.25rem; font-weight: 700; color: #1E3A2B; margin: 0; }
+:lang(hi) .headline-card__value { line-height: 2.75rem; }
+/* "Estimate" pill used on every number that is a rule of thumb or typed-in reference value */
+.estimate-pill {
+  display: inline-block; padding: 0.125rem 0.625rem; font-size: 0.875rem; font-weight: 700;
+  color: #7C2D12; background: #FFEDD5; border: 1px solid #FDBA74; border-radius: 9999px; white-space: nowrap;
+}
+/* Primary action stays reachable above the bottom navigation on phones */
+@media (max-width: 767px) {
+  .sticky-action {
+    position: sticky; bottom: calc(4.5rem + env(safe-area-inset-bottom)); z-index: 30;
+    background: linear-gradient(to top, #FDFBF7 70%, rgba(253, 251, 247, 0)); padding: 0.5rem 0;
+  }
+}
+/* Buttons that must be full width on phones */
+@media (max-width: 639px) {
+  .btn-block-mobile { width: 100%; justify-content: center; }
+}
+/* plan.html: the tab bar scrolls inside its own container */
+.nav-scroll { overflow-x: auto; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; }
+.farm-nav-btn { min-height: 44px; font-size: 1rem; }
+/* style.css loads after tailwind.css, so component display rules would beat the .hidden utility.
+   Keep "hidden" working on components that set their own display. */
+.loading-overlay.hidden, .stale-banner.hidden, .farm-nav-btn.hidden, .empty-state.hidden,
+.headline-card.hidden, .load-error.hidden { display: none; }

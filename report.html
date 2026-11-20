@@ -6,7 +6,7 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="preconnect" href="https://guava-8wc7.onrender.com" crossorigin>
   <meta name="robots" content="noindex, nofollow">
-  <title>Smart Farmer — Crop Report</title>
+  <title data-i18n="report.pageTitle">Smart Farmer — Crop Report</title>
 
   <style>
     .spin { animation: spin 0.9s linear infinite; }
@@ -19,21 +19,19 @@
 
   <!-- Header -->
   <header class="bg-brand-primary px-4 py-3 flex items-center gap-3">
-    <a href="plan.html" class="text-white/70 text-lg leading-none">←</a>
-    <p class="text-white text-sm font-semibold">🌿 Crop Report</p>
+    <a href="plan.html" class="tap inline-flex items-center justify-center text-white text-xl leading-none"
+      aria-label="Back to plan" data-i18n-aria-label="report.back">←</a>
+    <p class="text-white text-base font-semibold">🌿 <span data-i18n="report.header">Crop Report</span></p>
   </header>
 
   <!-- Loading -->
-  <div id="report-loading" class="flex flex-col items-center gap-3 py-16 text-gray-500">
+  <div id="report-loading" class="flex flex-col items-center gap-3 py-16 text-gray-600">
     <div class="w-8 h-8 border-4 border-brand-secondary border-t-transparent rounded-full spin"></div>
-    <p class="text-sm">Loading your report…</p>
+    <p class="text-base" data-i18n="report.loading">Loading your report…</p>
   </div>
 
-  <!-- Error -->
-  <div id="report-error"
-    class="hidden mx-4 mt-6 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-red-700 text-sm"
-    role="alert">
-  </div>
+  <!-- Error (with Retry) -->
+  <div id="report-error" class="hidden mx-4 mt-6 max-w-lg lg:mx-auto"></div>
 
   <!-- Content -->
   <main id="report-content" class="hidden px-4 py-4 max-w-lg mx-auto flex flex-col gap-5 pb-12">
@@ -41,43 +39,51 @@
     <!-- Crop header -->
     <div>
       <p id="report-crop" class="text-lg font-bold text-brand-dark"></p>
-      <p id="report-meta" class="text-xs text-gray-400 mt-0.5"></p>
+      <p id="report-meta" class="text-sm text-gray-600 mt-0.5"></p>
     </div>
+
+    <!-- Headline: net result -->
+    <section class="headline-card" aria-live="polite">
+      <div>
+        <p class="headline-card__label" data-i18n="report.headline.net">Net result (profit / loss)</p>
+        <p id="headline-net" class="headline-card__value">—</p>
+      </div>
+    </section>
 
     <!-- Incomplete stage warning -->
     <div id="incomplete-warning" class="hidden bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
-      <p class="text-sm font-semibold text-amber-800 mb-1">⚠ Some stages have no logged activities</p>
-      <p class="text-xs text-amber-700 mb-2">
+      <p class="text-base font-semibold text-amber-900 mb-1" data-i18n="report.incomplete.title">⚠ Some stages have no logged activities</p>
+      <p class="text-sm text-amber-800 mb-2" data-i18n="report.incomplete.body">
         The totals below may be incomplete. Zero cost and missing data are not the same thing.
       </p>
-      <ul id="incomplete-list" class="text-xs text-amber-700 list-disc list-inside flex flex-col gap-0.5"></ul>
+      <ul id="incomplete-list" class="text-sm text-amber-800 list-disc list-inside flex flex-col gap-0.5"></ul>
     </div>
 
     <!-- Financial summary cards -->
     <section>
-      <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Financial Summary</h2>
-      <div class="grid grid-cols-2 gap-3">
+      <h2 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-2" data-i18n="report.summary">Financial Summary</h2>
+      <div class="grid grid-cols-1 min-[400px]:grid-cols-2 gap-3">
 
         <div class="bg-white rounded-xl border border-gray-200 px-3 py-3 flex flex-col gap-0.5">
-          <p class="text-xs text-gray-400">Total spent</p>
+          <p class="text-sm text-gray-600" data-i18n="report.totalSpent">Total spent</p>
           <p id="fs-total-cost" class="text-xl font-bold text-brand-dark">—</p>
         </div>
 
         <div class="bg-white rounded-xl border border-gray-200 px-3 py-3 flex flex-col gap-0.5">
-          <p class="text-xs text-gray-400">Revenue</p>
+          <p class="text-sm text-gray-600" data-i18n="report.revenue">Revenue</p>
           <p id="fs-revenue" class="text-xl font-bold text-brand-dark">—</p>
-          <p id="fs-revenue-note" class="text-xs text-gray-400"></p>
+          <p id="fs-revenue-note" class="text-sm text-gray-600"></p>
         </div>
 
         <div class="bg-white rounded-xl border border-gray-200 px-3 py-3 flex flex-col gap-0.5">
-          <p class="text-xs text-gray-400">Profit / Loss</p>
+          <p class="text-sm text-gray-600" data-i18n="report.profitLoss">Profit / Loss</p>
           <p id="fs-pol" class="text-xl font-bold">—</p>
         </div>
 
         <div class="bg-white rounded-xl border border-gray-200 px-3 py-3 flex flex-col gap-0.5">
-          <p class="text-xs text-gray-400">Break-even price</p>
+          <p class="text-sm text-gray-600" data-i18n="report.breakEven">Break-even price</p>
           <p id="fs-bep" class="text-xl font-bold text-brand-dark">—</p>
-          <p id="fs-bep-note" class="text-xs text-gray-400"></p>
+          <p id="fs-bep-note" class="text-sm text-gray-600"></p>
         </div>
 
       </div>
@@ -85,7 +91,7 @@
 
     <!-- Cost breakdown -->
     <section>
-      <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Cost Breakdown</h2>
+      <h2 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-2" data-i18n="report.costBreakdown">Cost Breakdown</h2>
       <!-- Loading indicator for this section -->
       <div id="cost-breakdown-loading" class="hidden loading-overlay">
         <span class="loading-spinner loading-spinner--sm"></span>
@@ -109,11 +115,11 @@
 
     <!-- Activity history -->
     <section>
-      <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">Activity History</h2>
+      <h2 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-2" data-i18n="report.history">Activity History</h2>
       <div id="activity-history" class="flex flex-col gap-2">
         <!-- Cards injected by JS -->
       </div>
-      <p id="no-activities" class="hidden text-sm text-gray-400 text-center py-4">
+      <p id="no-activities" class="hidden text-base text-gray-600 text-center py-4" data-i18n="report.noActivities">
         No activities logged yet.
       </p>
       <!-- Rich empty state: no harvest recorded -->

@@ -70,7 +70,7 @@ function renderBoard() {
   if (!el) return;
 
   if (_state === "loading") {
-    el.innerHTML = `<p class="text-sm text-gray-400">${mandiEsc(mt("mandi.loading"))}</p>`;
+    el.innerHTML = `<p class="text-sm text-gray-600">${mandiEsc(mt("mandi.loading"))}</p>`;
     return;
   }
   if (_state === "error") {
@@ -83,8 +83,8 @@ function renderBoard() {
     el.innerHTML = `
       <div class="bg-white border border-gray-200 rounded-2xl p-5 text-center">
         <p class="text-base font-bold text-gray-700">${mandiEsc(mt("mandi.empty.title"))}</p>
-        <p class="text-sm text-gray-500 mt-1">${mandiEsc(mt("mandi.empty.body"))}</p>
-        <p class="text-xs text-gray-400 mt-3">${mandiEsc(mt("mandi.source"))}</p>
+        <p class="text-sm text-gray-600 mt-1">${mandiEsc(mt("mandi.empty.body"))}</p>
+        <p class="text-sm text-gray-600 mt-3">${mandiEsc(mt("mandi.source"))}</p>
       </div>`;
     return;
   }
@@ -103,17 +103,17 @@ function renderBoard() {
       const label = [p.variety, p.grade].filter(Boolean).map(mandiEsc).join(" · ");
       return `
         <div class="grid grid-cols-3 gap-2 text-center ${label ? "mt-2" : ""}">
-          ${label ? `<p class="col-span-3 text-xs text-gray-500 text-left">${label}</p>` : ""}
+          ${label ? `<p class="col-span-3 text-sm text-gray-600 text-left">${label}</p>` : ""}
           <div class="bg-green-50 rounded-xl py-2">
-            <p class="text-xs text-gray-500">${mandiEsc(mt("mandi.modal"))}</p>
+            <p class="text-sm text-gray-600">${mandiEsc(mt("mandi.modal"))}</p>
             <p class="text-lg font-extrabold text-brand-dark">${rupee(p.modal_per_kg)}</p>
           </div>
           <div class="bg-gray-50 rounded-xl py-2">
-            <p class="text-xs text-gray-500">${mandiEsc(mt("mandi.min"))}</p>
+            <p class="text-sm text-gray-600">${mandiEsc(mt("mandi.min"))}</p>
             <p class="text-base font-bold text-gray-700">${rupee(p.min_per_kg)}</p>
           </div>
           <div class="bg-gray-50 rounded-xl py-2">
-            <p class="text-xs text-gray-500">${mandiEsc(mt("mandi.max"))}</p>
+            <p class="text-sm text-gray-600">${mandiEsc(mt("mandi.max"))}</p>
             <p class="text-base font-bold text-gray-700">${rupee(p.max_per_kg)}</p>
           </div>
         </div>`;
@@ -123,11 +123,11 @@ function renderBoard() {
         <div class="flex items-start justify-between gap-2 flex-wrap">
           <div>
             <p class="text-base font-bold text-brand-dark">${mandiEsc(m.market)}</p>
-            <p class="text-xs text-gray-400">${where}${dist}</p>
+            <p class="text-sm text-gray-600">${where}${dist}</p>
           </div>
           ${badge}
         </div>
-        <p class="text-xs text-gray-500 mt-1">${mandiEsc(mt("mandi.asOf", { date: mandiDate(m.trade_date) }))} · ${mandiEsc(mt("mandi.perKg"))}</p>
+        <p class="text-sm text-gray-600 mt-1">${mandiEsc(mt("mandi.asOf", { date: mandiDate(m.trade_date) }))} · ${mandiEsc(mt("mandi.perKg"))}</p>
         ${rows}
       </div>`;
   }).join("");
@@ -138,9 +138,9 @@ function renderBoard() {
 
   el.innerHTML = `
     ${_savedAt ? `<p class="text-sm font-semibold text-amber-800 mb-2" role="status">${mandiEsc(mt("mandi.offlineCopy", { date: mandiDate(_savedAt) }))}</p>` : ""}
-    <p class="text-xs text-gray-500 mb-2">${mandiEsc(mt(scopeKey))}</p>
+    <p class="text-sm text-gray-600 mb-2">${mandiEsc(mt(scopeKey))}</p>
     <div class="grid gap-3 sm:grid-cols-2">${cards}</div>
-    <p class="text-xs text-gray-400 mt-3">${mandiEsc(mt("mandi.source"))} · ${mandiEsc(mt("mandi.asOf", { date: mandiDate(board.as_of) }))}</p>
+    <p class="text-sm text-gray-600 mt-3">${mandiEsc(mt("mandi.source"))} · ${mandiEsc(mt("mandi.asOf", { date: mandiDate(board.as_of) }))}</p>
     ${signIn}`;
 }
 
@@ -172,8 +172,8 @@ function renderHistory() {
     <div class="bg-white border border-gray-200 rounded-2xl p-4">
       ${title}
       <div class="flex items-end gap-px h-24 mb-2">${bars}</div>
-      <p class="text-xs text-gray-500">${mandiEsc(mt("mandi.history.range", { n: h.distinct_days, from: mandiDate(h.first_date), to: mandiDate(h.last_date) }))} · ${mandiEsc(mt("mandi.modal"))} ${mandiEsc(mt("mandi.perKg"))}</p>
-      <p class="text-xs text-gray-400 mt-1">${mandiEsc(mt("mandi.source"))}</p>
+      <p class="text-sm text-gray-600">${mandiEsc(mt("mandi.history.range", { n: h.distinct_days, from: mandiDate(h.first_date), to: mandiDate(h.last_date) }))} · ${mandiEsc(mt("mandi.modal"))} ${mandiEsc(mt("mandi.perKg"))}</p>
+      <p class="text-sm text-gray-600 mt-1">${mandiEsc(mt("mandi.source"))}</p>
     </div>`;
 }
 

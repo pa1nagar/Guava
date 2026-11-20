@@ -15,35 +15,6 @@
 
   <style>
     body { background: #FDFBF7; font-family: system-ui, sans-serif; }
-    .section-card {
-      background: #fff;
-      border: 1px solid #E5E7EB;
-      border-radius: 1rem;
-      padding: 1.25rem;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    }
-    .form-label {
-      display: block;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #6B7280;
-      margin-bottom: 0.25rem;
-    }
-    .form-input {
-      width: 100%;
-      height: 2.75rem;
-      border-radius: 0.75rem;
-      border: 1px solid #D1D5DB;
-      background: #fff;
-      padding: 0 0.75rem;
-      font-size: 0.875rem;
-      font-weight: 500;
-      outline: none;
-      transition: border-color 0.15s;
-    }
-    .form-input:focus { border-color: #4A7C59; }
 
   </style>
 </head>
@@ -53,7 +24,7 @@
   <header class="bg-brand-primary text-white sticky top-0 z-40 shadow-lg">
     <div class="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between gap-3">
       <div>
-        <p class="text-green-200 text-xs font-semibold uppercase tracking-wider" data-i18n="nav.myFarm">My Farm</p>
+        <p class="text-green-200 text-sm font-semibold uppercase tracking-wider" data-i18n="nav.myFarm">My Farm</p>
         <h1 class="text-base font-bold" data-i18n="inventory.heading">Inputs &amp; Inventory</h1>
       </div>
       <button id="btn-signout"
@@ -65,6 +36,13 @@
 
   <!-- ════════════════ MAIN ════════════════ -->
   <main class="max-w-3xl mx-auto px-4 py-6 flex flex-col gap-6">
+
+    <section class="headline-card" aria-live="polite">
+      <div>
+        <p class="headline-card__label" data-i18n="inventory.headline.attention">Items out of stock or expired / expiring in 30 days</p>
+        <p id="headline-attention" class="headline-card__value">—</p>
+      </div>
+    </section>
 
     <!-- ── Inventory list ─────────────────────────────────────────────── -->
     <div class="section-card">
@@ -93,17 +71,17 @@
                   <span class="text-red-500">*</span>
                 </label>
                 <input id="inv-product-name" type="text" maxlength="200" class="form-input"
-                  placeholder="e.g. 19-19-19 NPK Fertilizer" required>
+                  placeholder="e.g. 19-19-19 NPK Fertilizer" required data-i18n-placeholder="inventory.ph.name">
               </div>
               <div>
                 <label for="inv-active-ingredient" class="form-label" data-i18n="inventory.field.activeIngredient">Active Ingredient / Nutrient Grade</label>
                 <input id="inv-active-ingredient" type="text" maxlength="200" class="form-input"
-                  placeholder="e.g. 19-19-19">
+                  placeholder="e.g. 19-19-19" data-i18n-placeholder="inventory.ph.ingredient">
               </div>
               <div>
                 <label for="inv-formulation" class="form-label" data-i18n="inventory.field.formulation">Formulation</label>
                 <input id="inv-formulation" type="text" maxlength="100" class="form-input"
-                  placeholder="e.g. WP, EC, Granules">
+                  placeholder="e.g. WP, EC, Granules" data-i18n-placeholder="inventory.ph.formulation">
               </div>
               <div>
                 <label for="inv-manufacturer" class="form-label" data-i18n="inventory.field.manufacturer">Manufacturer</label>
@@ -124,9 +102,9 @@
               <div class="flex gap-2">
                 <div class="flex-1">
                   <label for="inv-quantity" class="form-label" data-i18n="inventory.field.quantity">Quantity on Hand</label>
-                  <input id="inv-quantity" type="number" min="0" step="any" class="form-input">
+                  <input id="inv-quantity" type="number" inputmode="decimal" min="0" step="any" class="form-input">
                 </div>
-                <div style="width:7rem;">
+                <div style="width:8rem;">
                   <label for="inv-unit" class="form-label" data-i18n="inventory.field.unit">Unit</label>
                   <select id="inv-unit" class="form-input">
                     <option value="kg">kg</option>
@@ -140,28 +118,28 @@
               </div>
               <div>
                 <label for="inv-purchase-price" class="form-label" data-i18n="inventory.field.purchasePrice">Purchase Price (₹)</label>
-                <input id="inv-purchase-price" type="number" min="0" step="any" class="form-input"
-                  placeholder="per unit">
+                <input id="inv-purchase-price" type="number" inputmode="decimal" min="0" step="any" class="form-input"
+                  placeholder="per unit" data-i18n-placeholder="inventory.ph.price">
               </div>
             </div>
 
             <!-- Disclaimer: product is NOT an endorsed recommendation (req 8.3, 8.4) -->
             <div class="bg-amber-50 border border-amber-200 rounded-xl px-3 py-2.5">
-              <p class="text-xs text-amber-700" data-i18n="inventory.disclaimer">
+              <p class="text-sm text-amber-700" data-i18n="inventory.disclaimer">
                 ⚠️ This is a personal inventory record. Smart Farmer does not confirm that any product is approved for a specific crop, pest, or application.
               </p>
             </div>
 
             <p id="inv-form-error" class="hidden text-red-600 text-sm" role="alert"></p>
 
-            <div class="flex gap-2 mt-1">
+            <div class="flex gap-2 mt-1 sticky-action">
               <button id="btn-save-inv" type="submit"
                 class="flex-1 h-11 bg-brand-primary text-white font-bold rounded-xl hover:bg-brand-secondary transition"
                 data-i18n="inventory.saveItem">
                 Save Item
               </button>
               <button id="btn-cancel-inv-form" type="button"
-                class="px-4 h-11 text-sm text-gray-500 border border-gray-300 rounded-xl hover:bg-gray-50 transition"
+                class="px-4 h-11 text-sm text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition"
                 data-i18n="form.cancel">
                 Cancel
               </button>
@@ -202,7 +180,7 @@
           <span data-i18n="inventory.recordUse">Record Use</span>
         </h2>
         <button id="btn-close-consume"
-          class="text-gray-400 hover:text-gray-600 text-xl leading-none" aria-label="Close">✕</button>
+          class="text-gray-600 hover:text-gray-600 text-xl leading-none" aria-label="Close">✕</button>
       </div>
 
       <div class="px-5 py-4">
@@ -217,30 +195,26 @@
               <span data-i18n="inventory.field.quantityUsed">Quantity Used</span>
               <span class="text-red-500">*</span>
             </label>
-            <input id="consume-quantity" type="number" min="0.001" step="any" class="form-input" required>
+            <input id="consume-quantity" type="number" inputmode="decimal" min="0.001" step="any" class="form-input" required>
           </div>
           <div>
             <label for="consume-activity-id" class="form-label" data-i18n="inventory.field.activityId">
-              Linked Activity ID <span class="normal-case font-normal text-gray-400">(optional)</span>
+              Linked Activity ID <span class="normal-case font-normal text-gray-600">(optional)</span>
             </label>
             <input id="consume-activity-id" type="text" class="form-input"
-              placeholder="Paste the activity UUID to link">
-          </div>
-          <div>
-            <label for="consume-notes" class="form-label" data-i18n="inventory.field.consumeNotes">Notes</label>
-            <input id="consume-notes" type="text" maxlength="300" class="form-input">
+              placeholder="Paste the activity ID to link" data-i18n-placeholder="inventory.ph.activityId">
           </div>
 
           <p id="consume-form-error" class="hidden text-red-600 text-sm" role="alert"></p>
 
-          <div class="flex gap-2 mt-1">
+          <div class="flex gap-2 mt-1 sticky-action">
             <button id="btn-save-consume" type="submit"
               class="flex-1 h-11 bg-brand-primary text-white font-bold rounded-xl hover:bg-brand-secondary transition"
               data-i18n="inventory.saveConsumption">
               Record Use
             </button>
             <button id="btn-cancel-consume" type="button"
-              class="px-4 h-11 text-sm text-gray-500 border border-gray-300 rounded-xl hover:bg-gray-50 transition"
+              class="px-4 h-11 text-sm text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition"
               data-i18n="form.cancel">
               Cancel
             </button>

@@ -4,18 +4,26 @@
  * Handles:
  *  - GET  /api/farmers/me/inventory             → inventory list
  *  - POST /api/farmers/me/inventory             → add inventory item
- *  - PUT  /api/farmers/me/inventory/{id}        → update item
  *  - POST /api/farmers/me/inventory/{id}/consume → record consumption
  *
- * Inventory items are displayed as a farmer-entered catalogue — never as
- * endorsed products. Crop approval is NOT inferred from product name.
- * (Requirements 8.1, 8.3, 8.4)
+ * Field names follow backend/routers/inventory.py (expiry_date, purchase_price,
+ * quantity_consumed). Inventory items are displayed as a farmer-entered
+ * catalogue — never as endorsed products. Crop approval is NOT inferred from
+ * product name. (Requirements 8.1, 8.3, 8.4)
  *
  * Requirements: 8.1, 8.2, 8.3, 8.4
  */
 
 import { routeGuard, signOut } from "./auth.js";
-import { apiFetch, showError } from "./api.js";
+import { apiFetch } from "./api.js";
+import {
+  applyI18n, errorMessage, escapeHtml, initPage, renderLoadError, setBusy, t,
+} from "./dom.js";
+import { formatDate, formatNumber } from "./translator.js";
+
+// An item "expires soon" when its expiry date is within this many days.
+// This is a display convenience for the headline count, not an agronomic value.
+const EXPIRING_SOON_DAYS = 30;
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let _inventory = [];
@@ -25,6 +33,7 @@ let _consumeTargetId = null;
 const invList        = document.getElementById("inventory-list");
 const invListEmpty   = document.getElementById("inventory-list-empty");
 const invLoading     = document.getElementById("inventory-loading");
+const headlineAttn   = document.getElementById("headline-attention");
 
 const invFormWrap    = document.getElementById("inv-form-wrap");
 const invFormToggle  = document.getElementById("btn-show-inv-form");
@@ -46,29 +55,44 @@ function setHidden(el, hidden) {
   if (el) el.classList.toggle("hidden", hidden);
 }
 
-function escapeHtml(str) {
-  return String(str || "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+function showError_(el, message) {
+  el.textContent = message;
+  el.classList.remove("hidden");
 }
 
-function formatDate(isoStr) {
-  if (!isoStr) return null;
-  const d = new Date(isoStr);
-  return `${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")}/${d.getFullYear()}`;
+function daysUntil(dateStr) {
+  if (!dateStr) return null;
+  const d = new Date(dateStr);
+  if (Number.isNaN(d.getTime())) return null;
+  return Math.ceil((d.getTime() - Date.now()) / 86400000);
 }
 
-function isExpired(expiryStr) {
-  if (!expiryStr) return false;
-  return new Date(expiryStr) < new Date();
+function itemState(item) {
+  const days = daysUntil(item.expiry_date);
+  return {
+    expired: days !== null && days < 0,
+    expiringSoon: days !== null && days >= 0 && days <= EXPIRING_SOON_DAYS,
+    outOfStock: item.quantity_on_hand != null && Number(item.quantity_on_hand) <= 0,
+  };
 }
 
 // ── Render inventory ──────────────────────────────────────────────────────────
+function renderHeadline() {
+  const n = _inventory.filter((i) => {
+    const s = itemState(i);
+    return s.expired || s.expiringSoon || s.outOfStock;
+  }).length;
+  if (headlineAttn) headlineAttn.textContent = formatNumber(n);
+}
+
+function badge(cls, key) {
+  return `<span class="text-sm ${cls} px-2 py-0.5 rounded-full font-semibold">${escapeHtml(t(key))}</span>`;
+}
+
 function renderInventory() {
   setHidden(invLoading, true);
   invList.innerHTML = "";
+  renderHeadline();
 
   if (!_inventory || _inventory.length === 0) {
     setHidden(invListEmpty, false);
@@ -76,66 +100,57 @@ function renderInventory() {
   }
   setHidden(invListEmpty, true);
 
-  _inventory.forEach(item => {
-    const expired = isExpired(item.batch_expiry);
-    const lowStock = item.quantity_on_hand != null && item.quantity_on_hand <= 0;
+  _inventory.forEach((item) => {
+    const st = itemState(item);
 
     const card = document.createElement("div");
     card.className = "bg-white border border-gray-200 rounded-xl p-4 shadow-sm";
     card.innerHTML = `
-      <div class="flex items-start justify-between gap-3">
-        <div class="flex-1 min-w-0">
+      <div class="flex flex-col gap-3">
+        <div class="min-w-0">
           <div class="flex flex-wrap items-center gap-2 mb-1">
-            <h3 class="font-bold text-emerald-900 text-sm">${escapeHtml(item.product_name)}</h3>
-            ${expired
-              ? '<span class="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full font-semibold">Expired</span>'
-              : ""}
-            ${lowStock && !expired
-              ? '<span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-semibold">Out of stock</span>'
-              : ""}
+            <h3 class="font-bold text-emerald-900 text-base break-words">${escapeHtml(item.product_name)}</h3>
+            ${st.expired ? badge("bg-red-100 text-red-800", "inventory.expired") : ""}
+            ${st.expiringSoon ? badge("bg-amber-100 text-amber-800", "inventory.expiringSoon") : ""}
+            ${st.outOfStock && !st.expired ? badge("bg-amber-100 text-amber-800", "inventory.outOfStock") : ""}
           </div>
 
-          <div class="flex flex-wrap gap-x-4 gap-y-0.5 text-xs text-gray-500 mt-1">
+          <div class="flex flex-wrap gap-x-4 gap-y-0.5 text-sm text-gray-600 mt-1">
             ${item.active_ingredient ? `<span>🧪 ${escapeHtml(item.active_ingredient)}</span>` : ""}
             ${item.formulation ? `<span>🧴 ${escapeHtml(item.formulation)}</span>` : ""}
             ${item.manufacturer ? `<span>🏭 ${escapeHtml(item.manufacturer)}</span>` : ""}
           </div>
 
-          <div class="flex flex-wrap gap-x-4 gap-y-0.5 text-xs text-gray-400 mt-1.5">
-            <span class="font-semibold text-emerald-700">
+          <div class="flex flex-wrap gap-x-4 gap-y-0.5 text-sm text-gray-600 mt-1.5">
+            <span class="font-semibold text-emerald-800">
               📦 ${item.quantity_on_hand != null
-                ? Number(item.quantity_on_hand).toLocaleString("en-IN") + " " + escapeHtml(item.unit || "")
+                ? escapeHtml(formatNumber(item.quantity_on_hand) + " " + (item.unit || ""))
                 : "—"}
             </span>
-            ${item.purchase_price_inr != null
-              ? `<span>₹${Number(item.purchase_price_inr).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>`
+            ${item.purchase_price != null
+              ? `<span>₹${escapeHtml(formatNumber(item.purchase_price, { minimumFractionDigits: 2, maximumFractionDigits: 2 }))}</span>`
               : ""}
             ${item.supplier_name ? `<span>🏪 ${escapeHtml(item.supplier_name)}</span>` : ""}
-            ${item.batch_expiry ? `<span>📅 Exp: ${formatDate(item.batch_expiry)}</span>` : ""}
+            ${item.expiry_date ? `<span>📅 ${escapeHtml(t("inventory.expires"))}: ${escapeHtml(formatDate(item.expiry_date))}</span>` : ""}
           </div>
 
           <!-- Disclaimer: not an endorsement (requirement 8.4) -->
-          <p class="text-xs text-gray-400 italic mt-2">
-            Farmer-entered record only — not an endorsed product.
-          </p>
+          <p class="text-sm text-gray-500 italic mt-2" data-i18n="inventory.farmerRecordOnly"></p>
         </div>
-        <button
-          class="btn-consume flex-shrink-0 text-xs font-semibold text-brand-secondary
-                 border border-brand-secondary px-3 py-1.5 rounded-lg
-                 hover:bg-brand-secondary hover:text-white transition"
-          data-item-id="${item.id}"
+        <button type="button"
+          class="btn-consume text-sm font-semibold text-brand-secondary border border-brand-secondary px-3 py-1.5 rounded-lg
+                 hover:bg-brand-secondary hover:text-white transition btn-block-mobile"
+          data-item-id="${escapeHtml(item.id)}"
           data-item-name="${escapeHtml(item.product_name)}"
-          data-i18n-btn="inventory.consume"
-          ${lowStock ? "disabled" : ""}>
-          Record Use
-        </button>
+          data-i18n="inventory.recordUse"
+          ${st.outOfStock ? "disabled" : ""}></button>
       </div>
     `;
     invList.appendChild(card);
   });
+  applyI18n(invList);
 
-  // Bind consume buttons
-  invList.querySelectorAll(".btn-consume").forEach(btn => {
+  invList.querySelectorAll(".btn-consume").forEach((btn) => {
     btn.addEventListener("click", () => {
       if (btn.disabled) return;
       openConsumeModal(btn.getAttribute("data-item-id"), btn.getAttribute("data-item-name"));
@@ -152,15 +167,15 @@ async function loadInventory() {
   try {
     const res = await apiFetch("/api/farmers/me/inventory");
     if (!res.ok) {
-      showError("Failed to load inventory.");
       setHidden(invLoading, true);
+      renderLoadError(invList, loadInventory);
       return;
     }
     _inventory = await res.json();
     renderInventory();
   } catch {
-    showError("Could not connect to server.");
     setHidden(invLoading, true);
+    renderLoadError(invList, loadInventory, "common.error.network");
   }
 }
 
@@ -168,61 +183,41 @@ async function loadInventory() {
 async function handleSaveInventory(e) {
   e.preventDefault();
   invFormError.classList.add("hidden");
-  invSaveBtn.disabled = true;
-  invSaveBtn.textContent = "Saving…";
 
+  const val = (id) => document.getElementById(id).value.trim();
+  const price = parseFloat(document.getElementById("inv-purchase-price").value);
   const body = {
-    product_name:       document.getElementById("inv-product-name").value.trim(),
-    active_ingredient:  document.getElementById("inv-active-ingredient").value.trim() || null,
-    formulation:        document.getElementById("inv-formulation").value.trim() || null,
-    manufacturer:       document.getElementById("inv-manufacturer").value.trim() || null,
-    batch_number:       document.getElementById("inv-batch-number").value.trim() || null,
-    batch_expiry:       document.getElementById("inv-batch-expiry").value || null,
-    quantity_on_hand:   parseFloat(document.getElementById("inv-quantity").value) || 0,
-    unit:               document.getElementById("inv-unit").value || null,
-    purchase_price_inr: parseFloat(document.getElementById("inv-purchase-price").value) || null,
-    supplier_name:      document.getElementById("inv-supplier").value.trim() || null,
+    product_name:      val("inv-product-name"),
+    active_ingredient: val("inv-active-ingredient") || null,
+    formulation:       val("inv-formulation") || null,
+    manufacturer:      val("inv-manufacturer") || null,
+    batch_number:      val("inv-batch-number") || null,
+    expiry_date:       document.getElementById("inv-batch-expiry").value || null,
+    quantity_on_hand:  parseFloat(document.getElementById("inv-quantity").value) || 0,
+    unit:              document.getElementById("inv-unit").value || "units",
+    purchase_price:    Number.isNaN(price) ? null : price,
+    supplier_name:     val("inv-supplier") || null,
   };
 
   if (!body.product_name) {
-    invFormError.textContent = "Product name is required.";
-    invFormError.classList.remove("hidden");
-    invSaveBtn.disabled = false;
-    invSaveBtn.textContent = "Save Item";
+    showError_(invFormError, t("inventory.error.nameRequired"));
     return;
   }
 
+  setBusy(invSaveBtn, true);
   try {
-    const res = await apiFetch("/api/farmers/me/inventory", {
-      method: "POST",
-      body: JSON.stringify(body),
-    });
-
-    if (res.status === 422) {
-      const data = await res.json();
-      const detail = data.detail;
-      invFormError.textContent = typeof detail === "string"
-        ? detail : Array.isArray(detail)
-        ? detail.map(d => d.msg).join(". ")
-        : "Validation error.";
-      invFormError.classList.remove("hidden");
-      return;
-    }
+    const res = await apiFetch("/api/farmers/me/inventory", { method: "POST", body: JSON.stringify(body) });
     if (!res.ok) {
-      invFormError.textContent = "Failed to save item. Please try again.";
-      invFormError.classList.remove("hidden");
+      showError_(invFormError, await errorMessage(res));
       return;
     }
-
     invForm.reset();
     invFormWrap.classList.add("hidden");
     await loadInventory();
   } catch {
-    invFormError.textContent = "Network error. Please try again.";
-    invFormError.classList.remove("hidden");
+    showError_(invFormError, t("common.error.network"));
   } finally {
-    invSaveBtn.disabled = false;
-    invSaveBtn.textContent = "Save Item";
+    setBusy(invSaveBtn, false);
   }
 }
 
@@ -233,6 +228,7 @@ function openConsumeModal(itemId, itemName) {
   consumeError.classList.add("hidden");
   consumeForm.reset();
   consumeModal.classList.remove("hidden");
+  document.getElementById("consume-quantity")?.focus();
 }
 
 function closeConsumeModal() {
@@ -243,78 +239,61 @@ function closeConsumeModal() {
 async function handleSaveConsumption(e) {
   e.preventDefault();
   consumeError.classList.add("hidden");
-  consumeSaveBtn.disabled = true;
-  consumeSaveBtn.textContent = "Recording…";
 
   const body = {
-    quantity_used: parseFloat(document.getElementById("consume-quantity").value),
-    activity_id:   document.getElementById("consume-activity-id").value.trim() || null,
-    notes:         document.getElementById("consume-notes").value.trim() || null,
+    quantity_consumed: parseFloat(document.getElementById("consume-quantity").value),
+    activity_id:       document.getElementById("consume-activity-id").value.trim() || null,
   };
 
-  if (!body.quantity_used || body.quantity_used <= 0) {
-    consumeError.textContent = "Quantity used must be greater than 0.";
-    consumeError.classList.remove("hidden");
-    consumeSaveBtn.disabled = false;
-    consumeSaveBtn.textContent = "Record Use";
+  if (!body.quantity_consumed || body.quantity_consumed <= 0) {
+    showError_(consumeError, t("inventory.error.quantityRequired"));
     return;
   }
 
+  setBusy(consumeSaveBtn, true);
   try {
-    const res = await apiFetch(`/api/farmers/me/inventory/${_consumeTargetId}/consume`, {
+    const res = await apiFetch(`/api/farmers/me/inventory/${encodeURIComponent(_consumeTargetId)}/consume`, {
       method: "POST",
       body: JSON.stringify(body),
     });
-
     if (res.status === 404) {
-      consumeError.textContent = "Activity not found. Check the activity ID or leave it blank.";
-      consumeError.classList.remove("hidden");
-      return;
-    }
-    if (res.status === 422) {
-      const data = await res.json();
-      consumeError.textContent = typeof data.detail === "string"
-        ? data.detail : "Validation error.";
-      consumeError.classList.remove("hidden");
+      showError_(consumeError, t("inventory.error.activityNotFound"));
       return;
     }
     if (!res.ok) {
-      consumeError.textContent = "Failed to record consumption. Please try again.";
-      consumeError.classList.remove("hidden");
+      showError_(consumeError, await errorMessage(res));
       return;
     }
-
     closeConsumeModal();
     await loadInventory();
   } catch {
-    consumeError.textContent = "Network error. Please try again.";
-    consumeError.classList.remove("hidden");
+    showError_(consumeError, t("common.error.network"));
   } finally {
-    consumeSaveBtn.disabled = false;
-    consumeSaveBtn.textContent = "Record Use";
+    setBusy(consumeSaveBtn, false);
   }
 }
 
 // ── Initialise ────────────────────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", async () => {
+  initPage();
   await routeGuard("farm"); // inventory is part of the farm feature set
 
   document.getElementById("btn-signout")?.addEventListener("click", signOut);
 
-  // Inventory form
   invFormToggle?.addEventListener("click", () => {
     invFormWrap.classList.toggle("hidden");
     invFormError.classList.add("hidden");
-    invForm.reset();
   });
   invFormCancel?.addEventListener("click", () => invFormWrap.classList.add("hidden"));
   invForm?.addEventListener("submit", handleSaveInventory);
 
-  // Consume modal
   consumeClose?.addEventListener("click", closeConsumeModal);
   consumeCancel?.addEventListener("click", closeConsumeModal);
   consumeModal?.addEventListener("click", (e) => {
     if (e.target === consumeModal) closeConsumeModal();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !consumeModal.classList.contains("hidden")) closeConsumeModal();
   });
   consumeForm?.addEventListener("submit", handleSaveConsumption);
 

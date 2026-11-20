@@ -18,36 +18,6 @@
     .spin { animation: _spin 0.85s linear infinite; }
     @keyframes _spin { to { transform: rotate(360deg); } }
 
-    .section-card {
-      background: #fff;
-      border: 1px solid #E5E7EB;
-      border-radius: 1rem;
-      padding: 1.25rem;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    }
-    .form-label {
-      display: block;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: #6B7280;
-      margin-bottom: 0.25rem;
-    }
-    .form-input {
-      width: 100%;
-      height: 2.75rem;
-      border-radius: 0.75rem;
-      border: 1px solid #D1D5DB;
-      background: #fff;
-      padding: 0 0.75rem;
-      font-size: 0.875rem;
-      font-weight: 500;
-      outline: none;
-      transition: border-color 0.15s;
-    }
-    .form-input:focus { border-color: #4A7C59; }
-    textarea.form-input { height: auto; padding: 0.75rem; resize: vertical; }
 
   </style>
 </head>
@@ -57,7 +27,7 @@
   <header class="bg-brand-primary text-white sticky top-0 z-40 shadow-lg">
     <div class="max-w-3xl mx-auto px-4 py-4 flex items-center justify-between gap-3">
       <div>
-        <p class="text-green-200 text-xs font-semibold uppercase tracking-wider" data-i18n="nav.myFarm">My Farm</p>
+        <p class="text-green-200 text-sm font-semibold uppercase tracking-wider" data-i18n="nav.myFarm">My Farm</p>
         <h1 class="text-base font-bold" data-i18n="farm.heading">Farms &amp; Plots</h1>
       </div>
       <button id="btn-signout"
@@ -69,6 +39,18 @@
 
   <!-- ════════════════ MAIN ════════════════ -->
   <main class="max-w-3xl mx-auto px-4 py-6 flex flex-col gap-6">
+
+    <!-- ── Headline numbers (for the selected farm) ──────────────────────── -->
+    <section class="headline-card" aria-live="polite">
+      <div>
+        <p class="headline-card__label" data-i18n="farm.headline.trees">Total trees</p>
+        <p id="headline-trees" class="headline-card__value">—</p>
+      </div>
+      <div>
+        <p class="headline-card__label" data-i18n="farm.headline.area">Total area</p>
+        <p id="headline-area" class="headline-card__value">—</p>
+      </div>
+    </section>
 
     <!-- ── Farm list ──────────────────────────────────────────────────────── -->
     <div class="section-card">
@@ -94,22 +76,22 @@
               <div>
                 <label for="farm-name" class="form-label">
                   <span data-i18n="farm.field.name">Farm Name</span>
-                  <span class="text-red-500">*</span>
+                  <span class="text-red-500" aria-hidden="true">*</span>
                 </label>
                 <input id="farm-name" type="text" maxlength="100" class="form-input"
-                  placeholder="e.g. Sunrise Orchard" required>
+                  data-i18n-placeholder="farm.ph.name" placeholder="e.g. Sunrise Orchard" required autocomplete="off">
               </div>
               <div>
                 <label for="farm-village" class="form-label" data-i18n="farm.field.village">Village / Locality</label>
                 <input id="farm-village" type="text" maxlength="100" class="form-input">
               </div>
               <div>
-                <label for="farm-district" class="form-label" data-i18n="farm.field.district">District</label>
-                <input id="farm-district" type="text" maxlength="100" class="form-input">
+                <label for="farm-district" class="form-label"><span data-i18n="farm.field.district">District</span> <span class="text-red-500" aria-hidden="true">*</span></label>
+                <input id="farm-district" type="text" maxlength="100" class="form-input" required autocomplete="address-level2">
               </div>
               <div>
-                <label for="farm-state" class="form-label" data-i18n="farm.field.state">State</label>
-                <input id="farm-state" type="text" maxlength="100" class="form-input">
+                <label for="farm-state" class="form-label"><span data-i18n="farm.field.state">State</span> <span class="text-red-500" aria-hidden="true">*</span></label>
+                <input id="farm-state" type="text" maxlength="100" class="form-input" required autocomplete="address-level1">
               </div>
               <div>
                 <label for="farm-country" class="form-label" data-i18n="farm.field.country">Country</label>
@@ -118,40 +100,39 @@
               <div class="flex gap-2">
                 <div class="flex-1">
                   <label for="farm-area" class="form-label" data-i18n="farm.field.area">Area</label>
-                  <input id="farm-area" type="number" min="0" step="any" class="form-input" placeholder="e.g. 2.5">
+                  <input id="farm-area" type="number" inputmode="decimal" min="0" step="any" class="form-input" placeholder="2.5">
                 </div>
-                <div style="width:7rem;">
+                <div style="width:8rem;">
                   <label for="farm-area-unit" class="form-label" data-i18n="farm.field.areaUnit">Unit</label>
                   <select id="farm-area-unit" class="form-input">
-                    <option value="acres">acres</option>
-                    <option value="hectares">hectares</option>
-                    <option value="bigha">bigha</option>
-                    <option value="sqm">sq m</option>
+                    <option value="acres" data-i18n="unit.acres">acres</option>
+                    <option value="hectares" data-i18n="unit.hectares">hectares</option>
+                    <option value="sqm" data-i18n="unit.sqm">sq m</option>
                   </select>
                 </div>
               </div>
               <div>
                 <label for="farm-irrigation" class="form-label" data-i18n="farm.field.irrigationMethod">Irrigation Method</label>
-                <input id="farm-irrigation" type="text" maxlength="100" class="form-input" placeholder="e.g. Drip">
+                <input id="farm-irrigation" type="text" maxlength="100" class="form-input" placeholder="e.g. Drip" data-i18n-placeholder="farm.ph.irrigation">
               </div>
             </div>
 
             <div>
               <label for="farm-notes" class="form-label" data-i18n="farm.field.notes">Notes</label>
               <textarea id="farm-notes" rows="2" class="form-input"
-                placeholder="Soil type, water source, or any other details…"></textarea>
+                placeholder="Soil type, water source, or any other details…" data-i18n-placeholder="farm.ph.notes"></textarea>
             </div>
 
             <p id="farm-form-error" class="hidden text-red-600 text-sm" role="alert"></p>
 
-            <div class="flex gap-2 mt-1">
+            <div class="flex gap-2 mt-1 sticky-action">
               <button id="btn-save-farm" type="submit"
                 class="flex-1 h-11 bg-brand-primary text-white font-bold rounded-xl hover:bg-brand-secondary transition"
                 data-i18n="farm.saveFarm">
                 Save Farm
               </button>
               <button id="btn-cancel-farm-form" type="button"
-                class="px-4 h-11 text-sm text-gray-500 border border-gray-300 rounded-xl hover:bg-gray-50 transition"
+                class="px-4 h-11 text-sm text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition"
                 data-i18n="form.cancel">
                 Cancel
               </button>
@@ -189,7 +170,7 @@
             <i class="fa-solid fa-layer-group text-emerald-600 mr-1"></i>
             <span data-i18n="plot.plots">Plots</span>
           </h2>
-          <p class="text-xs text-gray-500 mt-0.5">
+          <p class="text-sm text-gray-600 mt-0.5">
             <span data-i18n="plot.farm">Farm:</span>
             <strong id="active-farm-name" class="text-emerald-800 ml-1"></strong>
           </p>
@@ -211,68 +192,67 @@
               <div>
                 <label for="plot-name" class="form-label">
                   <span data-i18n="plot.field.name">Plot Name / Code</span>
-                  <span class="text-red-500">*</span>
+                  <span class="text-red-500" aria-hidden="true">*</span>
                 </label>
                 <input id="plot-name" type="text" maxlength="100" class="form-input"
-                  placeholder="e.g. Block A" required>
+                  placeholder="e.g. Block A" required autocomplete="off" data-i18n-placeholder="plot.ph.name">
               </div>
               <div>
-                <label for="plot-crop" class="form-label" data-i18n="plot.field.crop">Crop</label>
-                <input id="plot-crop" type="text" maxlength="100" class="form-input" placeholder="e.g. Guava">
+                <label for="plot-crop" class="form-label"><span data-i18n="plot.field.crop">Crop</span> <span class="text-red-500" aria-hidden="true">*</span></label>
+                <input id="plot-crop" type="text" maxlength="100" class="form-input" placeholder="e.g. Guava" value="Guava" required autocomplete="off" data-i18n-placeholder="plot.ph.crop">
               </div>
               <div>
                 <label for="plot-variety" class="form-label" data-i18n="plot.field.variety">Variety</label>
-                <input id="plot-variety" type="text" maxlength="100" class="form-input" placeholder="e.g. Taiwan Pink">
+                <input id="plot-variety" type="text" maxlength="100" class="form-input" placeholder="e.g. Taiwan Pink" data-i18n-placeholder="plot.ph.variety">
               </div>
               <div>
-                <label for="plot-planting-date" class="form-label" data-i18n="plot.field.plantingDate">Planting Date</label>
-                <input id="plot-planting-date" type="date" class="form-input">
+                <label for="plot-planting-date" class="form-label"><span data-i18n="plot.field.plantingDate">Planting Date</span> <span class="text-red-500" aria-hidden="true">*</span></label>
+                <input id="plot-planting-date" type="date" class="form-input" required>
               </div>
               <div class="flex gap-2">
-                <div class="flex-1">
+                <div class="flex-1 min-w-0">
                   <label for="plot-area" class="form-label" data-i18n="plot.field.area">Area</label>
-                  <input id="plot-area" type="number" min="0" step="any" class="form-input">
+                  <input id="plot-area" type="number" inputmode="decimal" min="0" step="any" class="form-input">
                 </div>
-                <div style="width:7rem;">
+                <div style="width:8rem;">
                   <label for="plot-area-unit" class="form-label" data-i18n="plot.field.areaUnit">Unit</label>
                   <select id="plot-area-unit" class="form-input">
-                    <option value="acres">acres</option>
-                    <option value="hectares">hectares</option>
-                    <option value="bigha">bigha</option>
-                    <option value="sqm">sq m</option>
+                    <option value="acres" data-i18n="unit.acres">acres</option>
+                    <option value="hectares" data-i18n="unit.hectares">hectares</option>
+                    <option value="sqm" data-i18n="unit.sqm">sq m</option>
                   </select>
                 </div>
               </div>
               <div>
-                <label for="plot-plant-count" class="form-label" data-i18n="plot.field.plantCount">Plant / Tree Count</label>
-                <input id="plot-plant-count" type="number" min="1" step="1" class="form-input">
+                <label for="plot-plant-count" class="form-label"><span data-i18n="plot.field.plantCount">Plant / Tree Count</span> <span class="text-red-500" aria-hidden="true">*</span></label>
+                <input id="plot-plant-count" type="number" inputmode="numeric" min="1" step="1" class="form-input" required>
               </div>
               <div>
                 <label for="plot-row-spacing" class="form-label" data-i18n="plot.field.rowSpacing">Row Spacing (m)</label>
-                <input id="plot-row-spacing" type="number" min="0" step="any" class="form-input" placeholder="e.g. 3.0">
+                <input id="plot-row-spacing" type="number" inputmode="decimal" min="0" step="any" class="form-input" placeholder="e.g. 3.0">
               </div>
               <div>
                 <label for="plot-within-row-spacing" class="form-label" data-i18n="plot.field.withinRowSpacing">Within-Row Spacing (m)</label>
-                <input id="plot-within-row-spacing" type="number" min="0" step="any" class="form-input" placeholder="e.g. 2.0">
+                <input id="plot-within-row-spacing" type="number" inputmode="decimal" min="0" step="any" class="form-input" placeholder="e.g. 2.0">
               </div>
             </div>
 
             <div>
               <label for="plot-notes" class="form-label" data-i18n="plot.field.notes">Notes</label>
               <textarea id="plot-notes" rows="2" class="form-input"
-                placeholder="Soil notes, planting method, or any other details…"></textarea>
+                placeholder="Soil notes, planting method, or any other details…" data-i18n-placeholder="plot.ph.notes"></textarea>
             </div>
 
             <p id="plot-form-error" class="hidden text-red-600 text-sm" role="alert"></p>
 
-            <div class="flex gap-2 mt-1">
+            <div class="flex gap-2 mt-1 sticky-action">
               <button id="btn-save-plot" type="submit"
                 class="flex-1 h-11 bg-brand-primary text-white font-bold rounded-xl hover:bg-brand-secondary transition"
                 data-i18n="plot.savePlot">
                 Save Plot
               </button>
               <button id="btn-cancel-plot-form" type="button"
-                class="px-4 h-11 text-sm text-gray-500 border border-gray-300 rounded-xl hover:bg-gray-50 transition"
+                class="px-4 h-11 text-sm text-gray-600 border border-gray-300 rounded-xl hover:bg-gray-50 transition"
                 data-i18n="form.cancel">
                 Cancel
               </button>
@@ -314,7 +294,7 @@
           Plant Count History
         </h2>
         <button id="btn-close-history"
-          class="text-gray-400 hover:text-gray-600 text-xl leading-none" aria-label="Close">✕</button>
+          class="text-gray-600 hover:text-gray-600 text-xl leading-none" aria-label="Close">✕</button>
       </div>
       <div id="plant-count-history-list" class="px-5 py-4 max-h-72 overflow-y-auto text-sm"></div>
     </div>
