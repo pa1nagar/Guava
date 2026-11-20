@@ -9,6 +9,7 @@
 import { routeGuard, signOut, supabase } from "./auth.js";
 import { apiFetch, loadCached, saveCache } from "./api.js";
 import { initAiChat } from "./ai-chat.js";
+import { icon } from "./icons.js";
 import { getMandiHistory, loadMandiCard, mandiEsc, mandiLang, mt } from "./mandi.js";
 import { applyI18n, errorMessage, escapeHtml as esc, getLang, initPage, renderLoadError, setBusy, t } from "./dom.js";
 import { activityTypeLabel, translateApiText } from "./api-text.js";
@@ -274,7 +275,7 @@ function renderRoadmap(plan) {
         isCurrent ? "text-brand-dark" : isPast ? "text-gray-600" : "text-gray-300"
       }">
         ${esc(stageName(id))}
-        ${isCurrent ? `<span class="ml-2 text-xs font-semibold text-brand-accent">${esc(t("plan.now"))}</span>` : ""}
+        ${isCurrent ? `<span class="ml-2 text-xs font-semibold text-brand-accentdark">${esc(t("plan.now"))}</span>` : ""}
       </span>
     `;
 
@@ -1092,7 +1093,7 @@ function renderHarvestTiming() {
 
   el.innerHTML = `
     <p class="text-sm font-bold text-amber-900 mb-1">
-      <i class="fa-solid fa-calendar-star mr-1"></i> ${mandiEsc(mt("mandi.harvest.title"))}
+      ${icon("star", "mr-1")} ${mandiEsc(mt("mandi.harvest.title"))}
     </p>
     <p class="text-2xl font-extrabold text-amber-900">${mandiEsc(month)} ${ht.is_estimate === false ? "" : estimatePill()}</p>
     <p class="text-sm text-amber-800 mt-1">${mandiEsc(note)}</p>

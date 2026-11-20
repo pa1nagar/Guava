@@ -5,11 +5,12 @@
  *   with an X-SF-From-Cache header so the page can say "saved copy from <date>"
  * - NEVER caches a request with an Authorization header or any other /api/ path.
  */
-const STATIC = 'sf-static-v1';
+const STATIC = 'sf-static-v2';
 const META = 'sf-meta';
 const PUBLIC_PRICES = 'https://guava-8wc7.onrender.com/api/public/market-prices/guava';
 const SHELL = ['css/tailwind.css', 'css/style.css', 'js/nav.js', 'js/translator.js', 'js/i18n.js',
-  'js/config.js', 'js/api.js', 'js/auth.js', 'js/dom.js', 'js/i18n-public.js', 'js/i18n-pages.js'];
+  'js/config.js', 'js/api.js', 'js/auth.js', 'js/dom.js', 'js/i18n-public.js', 'js/i18n-pages.js',
+  'js/icons.js', 'js/api-text.js', 'images/hero-480.webp'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(STATIC).then((c) =>

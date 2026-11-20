@@ -17,3 +17,5 @@ backend/.hypothesis/
 # OS
 .DS_Store
 Thumbs.db
+
+images/src/

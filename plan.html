@@ -9,8 +9,6 @@
   <title>Smart Farmer — My Farm</title>
 
 
-  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
   <link rel="stylesheet" href="css/tailwind.css">
   <link rel="stylesheet" href="css/style.css">
 
@@ -174,44 +172,45 @@
     <nav class="nav-scroll bg-emerald-950 border-t border-emerald-800/60" aria-label="Sections" data-i18n-aria-label="plan.tabs.label">
       <div class="inline-flex px-2">
         <button class="farm-nav-btn active" data-panel="panel-overview" onclick="switchPanel('panel-overview')">
-          <i class="fa-solid fa-chart-pie"></i> <span data-i18n="plan.tab.overview">Overview</span>
+          <span class="sf-icon" data-icon="pie" aria-hidden="true"></span> <span data-i18n="plan.tab.overview">Overview</span>
         </button>
         <button class="farm-nav-btn" data-panel="panel-tasks" onclick="switchPanel('panel-tasks')">
-          <i class="fa-solid fa-list-check"></i> <span data-i18n="plan.tab.thisWeek">This Week</span>
+          <span class="sf-icon" data-icon="list" aria-hidden="true"></span> <span data-i18n="plan.tab.thisWeek">This Week</span>
         </button>
         <button class="farm-nav-btn" data-panel="panel-log" onclick="switchPanel('panel-log')">
-          <i class="fa-solid fa-plus-circle"></i> <span data-i18n="plan.tab.logInput">Log Input</span>
+          <span class="sf-icon" data-icon="plusCircle" aria-hidden="true"></span> <span data-i18n="plan.tab.logInput">Log Input</span>
         </button>
         <button class="farm-nav-btn" data-panel="panel-financial" onclick="switchPanel('panel-financial')">
-          <i class="fa-solid fa-indian-rupee-sign"></i> <span data-i18n="plan.tab.financials">Financials</span>
+          <span class="sf-icon" data-icon="rupee" aria-hidden="true"></span> <span data-i18n="plan.tab.financials">Financials</span>
         </button>
         <button id="nav-harvest-btn" class="farm-nav-btn hidden" data-panel="panel-harvest" onclick="switchPanel('panel-harvest')">
-          <i class="fa-solid fa-basket-shopping"></i> <span data-i18n="plan.tab.harvest">Harvest</span>
+          <span class="sf-icon" data-icon="basket" aria-hidden="true"></span> <span data-i18n="plan.tab.harvest">Harvest</span>
         </button>
         <button class="farm-nav-btn" data-panel="panel-insights" onclick="switchPanel('panel-insights')">
-          <i class="fa-solid fa-brain"></i> <span data-i18n="plan.tab.insights">Insights</span>
+          <span class="sf-icon" data-icon="brain" aria-hidden="true"></span> <span data-i18n="plan.tab.insights">Insights</span>
         </button>
         <button class="farm-nav-btn" data-panel="panel-ai" onclick="switchPanel('panel-ai')">
-          <i class="fa-solid fa-robot"></i> <span data-i18n="plan.tab.askAi">Ask AI</span>
+          <span class="sf-icon" data-icon="robot" aria-hidden="true"></span> <span data-i18n="plan.tab.askAi">Ask AI</span>
         </button>
         <!-- P1 nav items: My Farm, Tasks, More -->
         <a href="farm.html" class="farm-nav-btn">
-          <i class="fa-solid fa-tractor"></i> <span data-i18n="nav.myFarm">My Farm</span>
+          <span class="sf-icon" data-icon="tractor" aria-hidden="true"></span> <span data-i18n="nav.myFarm">My Farm</span>
         </a>
         <a href="tasks.html" class="farm-nav-btn">
-          <i class="fa-solid fa-calendar-check"></i> <span data-i18n="nav.tasks">Tasks</span>
+          <span class="sf-icon" data-icon="calendar" aria-hidden="true"></span> <span data-i18n="nav.tasks">Tasks</span>
         </a>
         <a href="observations.html" class="farm-nav-btn">
-          <i class="fa-solid fa-eye"></i> <span data-i18n="plan.tab.observations">Observations</span>
+          <span class="sf-icon" data-icon="eye" aria-hidden="true"></span> <span data-i18n="plan.tab.observations">Observations</span>
         </a>
         <a href="inventory.html" class="farm-nav-btn">
-          <i class="fa-solid fa-boxes-stacked"></i> <span data-i18n="plan.tab.inventory">Inventory</span>
+          <span class="sf-icon" data-icon="box" aria-hidden="true"></span> <span data-i18n="plan.tab.inventory">Inventory</span>
         </a>
       </div>
     </nav>
   </header>
 
   <!-- ── Main panels ─────────────────────────────────────────────────────── -->
+  <div class="sf-banner"><picture><source type="image/webp" srcset="images/orchard-480.webp 480w, images/orchard-960.webp 960w" sizes="100vw"><img src="images/orchard-480.jpg" width="480" height="360" alt="" data-i18n-alt="img.orchard.alt" loading="lazy" decoding="async"></picture></div>
   <main class="max-w-7xl mx-auto px-4 py-6 pb-10">
 
     <!-- ══ PANEL 1: OVERVIEW ══════════════════════════════════════════════ -->
@@ -250,7 +249,7 @@
           <div class="text-xs text-gray-600 mt-1" data-i18n="plan.kpi.months">Months Growing</div>
         </div>
         <div class="bg-white rounded-xl border border-gray-200 p-3 text-center shadow-sm">
-          <div id="kpi-stage" class="text-xl font-bold text-brand-accent">—</div>
+          <div id="kpi-stage" class="text-xl font-bold text-brand-accentdark">—</div>
           <div class="text-xs text-gray-600 mt-1" data-i18n="plan.kpi.stage">Current Stage</div>
         </div>
         <div class="bg-white rounded-xl border border-gray-200 p-3 text-center shadow-sm">
@@ -273,7 +272,7 @@
       <!-- Summary -->
       <div class="bg-amber-50 border-2 border-amber-300 rounded-xl p-4 mb-6">
         <h3 class="font-bold text-amber-900 mb-2">
-          <i class="fa-solid fa-bolt text-amber-500 mr-1"></i>
+          <span class="sf-icon text-amber-500 mr-1" data-icon="bolt" aria-hidden="true"></span>
           <span id="summary-stage-heading" data-i18n="plan.kpi.stage">Current Stage</span>
         </h3>
         <p id="overview-summary" class="text-sm text-gray-700 leading-relaxed"></p>
@@ -284,7 +283,7 @@
         <div class="flex items-start justify-between mb-4">
           <div>
             <h3 class="font-bold text-emerald-900 mb-0.5">
-              <i class="fa-solid fa-receipt text-emerald-600 mr-1"></i> <span data-i18n="plan.spending.title">Spending so far</span>
+              <span class="sf-icon text-emerald-600 mr-1" data-icon="receipt" aria-hidden="true"></span> <span data-i18n="plan.spending.title">Spending so far</span>
             </h3>
             <p class="text-3xl font-extrabold text-brand-dark" id="spend-big">—</p>
           </div>
@@ -303,7 +302,7 @@
       <!-- Stage roadmap -->
       <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
         <h3 class="font-bold text-emerald-900 mb-4">
-          <i class="fa-solid fa-seedling text-emerald-600 mr-1"></i> <span data-i18n="plan.roadmap">Crop Cycle Roadmap</span>
+          <span class="sf-icon text-emerald-600 mr-1" data-icon="seedling" aria-hidden="true"></span> <span data-i18n="plan.roadmap">Crop Cycle Roadmap</span>
         </h3>
         <div id="stage-roadmap" class="space-y-2"></div>
       </div>
@@ -315,7 +314,7 @@
 
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-xl font-bold text-emerald-900">
-          <i class="fa-solid fa-list-check text-emerald-600 mr-1"></i> <span data-i18n="plan.week.title">What to do this week</span>
+          <span class="sf-icon text-emerald-600 mr-1" data-icon="list" aria-hidden="true"></span> <span data-i18n="plan.week.title">What to do this week</span>
         </h2>
         <span id="tasks-stage-badge"
           class="text-xs font-semibold bg-brand-secondary/10 border border-brand-secondary
@@ -328,6 +327,7 @@
       <!-- Empty state: no tasks -->
       <div id="task-list-empty" class="hidden mb-6">
         <div class="empty-state">
+          <picture><source type="image/webp" srcset="images/orchard-480.webp 480w, images/orchard-960.webp 960w" sizes="96px"><img src="images/orchard-480.jpg" width="96" height="96" alt="" loading="lazy" decoding="async"></picture>
           <div class="empty-state__icon">📋</div>
           <p class="empty-state__title" data-i18n="empty.noTasks.title">No tasks for this week</p>
           <p class="empty-state__body" data-i18n="empty.noTasks.body">
@@ -345,7 +345,7 @@
     <section id="panel-log" class="farm-panel">
 
       <h2 class="text-xl font-bold text-emerald-900 mb-4">
-        <i class="fa-solid fa-plus-circle text-emerald-600 mr-1"></i> <span data-i18n="plan.log.title">Log an input</span>
+        <span class="sf-icon text-emerald-600 mr-1" data-icon="plusCircle" aria-hidden="true"></span> <span data-i18n="plan.log.title">Log an input</span>
       </h2>
 
       <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm max-w-lg">
@@ -400,7 +400,7 @@
           class="w-full h-12 bg-brand-primary text-white font-bold text-base
                  rounded-xl hover:bg-brand-secondary active:scale-[0.98] transition
                  flex items-center justify-center gap-2">
-          <i class="fa-solid fa-floppy-disk"></i> <span data-i18n="plan.log.save">Save entry</span>
+          <span class="sf-icon" data-icon="save" aria-hidden="true"></span> <span data-i18n="plan.log.save">Save entry</span>
         </button>
 
       </div>
@@ -431,7 +431,7 @@
     <section id="panel-financial" class="farm-panel">
 
       <h2 class="text-xl font-bold text-emerald-900 mb-4">
-        <i class="fa-solid fa-indian-rupee-sign text-emerald-600 mr-1"></i> <span data-i18n="plan.fin.title">Financial summary</span>
+        <span class="sf-icon text-emerald-600 mr-1" data-icon="rupee" aria-hidden="true"></span> <span data-i18n="plan.fin.title">Financial summary</span>
       </h2>
 
       <!-- Summary cards -->
@@ -516,7 +516,7 @@
         <!-- ① Weather forecast -->
         <div>
           <h2 class="text-xl font-bold text-emerald-900 mb-1">
-            <i class="fa-solid fa-cloud-sun text-emerald-600 mr-1"></i> <span data-i18n="plan.insights.weather">7-Day Weather Forecast</span>
+            <span class="sf-icon text-emerald-600 mr-1" data-icon="cloudSun" aria-hidden="true"></span> <span data-i18n="plan.insights.weather">7-Day Weather Forecast</span>
           </h2>
           <p id="weather-location" class="text-sm text-gray-600 mb-3"></p>
 
@@ -539,7 +539,7 @@
         <!-- ② Disease risk alerts -->
         <div id="disease-risk-section">
           <h2 class="text-xl font-bold text-emerald-900 mb-3">
-            <i class="fa-solid fa-shield-virus text-emerald-600 mr-1"></i>
+            <span class="sf-icon text-emerald-600 mr-1" data-icon="shield" aria-hidden="true"></span>
             <span data-i18n="plan.insights.disease">Pest &amp; Disease Risk (next 3 days)</span>
           </h2>
           <div id="disease-risk-list" class="flex flex-col gap-3"></div>
@@ -549,7 +549,7 @@
         <div>
           <div class="flex items-start justify-between gap-3 flex-wrap mb-1">
             <h2 class="text-xl font-bold text-emerald-900">
-              <i class="fa-solid fa-chart-line text-emerald-600 mr-1"></i>
+              <span class="sf-icon text-emerald-600 mr-1" data-icon="chart" aria-hidden="true"></span>
               <span id="mandi-title">Guava Mandi Prices</span>
             </h2>
             <div class="text-xs text-gray-600" role="group" aria-label="Language">
@@ -574,7 +574,7 @@
         <!-- ④ Future stage planner -->
         <div>
           <h2 class="text-xl font-bold text-emerald-900 mb-3">
-            <i class="fa-solid fa-calendar-check text-emerald-600 mr-1"></i>
+            <span class="sf-icon text-emerald-600 mr-1" data-icon="calendar" aria-hidden="true"></span>
             <span data-i18n="plan.insights.next">What's coming next</span>
           </h2>
           <div id="future-stages" class="flex flex-col gap-4"></div>
@@ -583,7 +583,7 @@
         <!-- ⑤ Growing Degree Days + Climate Anomaly -->
         <div>
           <h2 class="text-xl font-bold text-emerald-900 mb-3">
-            <i class="fa-solid fa-temperature-half text-emerald-600 mr-1"></i>
+            <span class="sf-icon text-emerald-600 mr-1" data-icon="thermo" aria-hidden="true"></span>
             <span data-i18n="plan.insights.heat">Heat Units &amp; Climate</span>
             <span class="text-xs font-normal text-gray-600 ml-2" data-i18n="plan.insights.nasa">Powered by NASA POWER</span>
           </h2>
@@ -593,7 +593,7 @@
         <!-- ⑥ Monsoon risk -->
         <div id="monsoon-section">
           <h2 class="text-xl font-bold text-emerald-900 mb-3">
-            <i class="fa-solid fa-cloud-showers-heavy text-emerald-600 mr-1"></i>
+            <span class="sf-icon text-emerald-600 mr-1" data-icon="rain" aria-hidden="true"></span>
             <span data-i18n="plan.insights.monsoon">Monsoon Risk Index</span>
           </h2>
           <div id="monsoon-card" class="rounded-2xl border px-5 py-4"></div>
@@ -602,7 +602,7 @@
         <!-- ⑦ Input compliance score -->
         <div>
           <h2 class="text-xl font-bold text-emerald-900 mb-3">
-            <i class="fa-solid fa-clipboard-check text-emerald-600 mr-1"></i>
+            <span class="sf-icon text-emerald-600 mr-1" data-icon="clipboard" aria-hidden="true"></span>
             <span data-i18n="plan.insights.compliance">Input Compliance Score</span>
           </h2>
           <div id="compliance-card" class="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm"></div>
@@ -611,7 +611,7 @@
         <!-- ⑧ Fertilizer cost forecast -->
         <div>
           <h2 class="text-xl font-bold text-emerald-900 mb-3">
-            <i class="fa-solid fa-sack-dollar text-emerald-600 mr-1"></i>
+            <span class="sf-icon text-emerald-600 mr-1" data-icon="coins" aria-hidden="true"></span>
             <span data-i18n="plan.insights.fert">Fertilizer Budget — Remaining Stages</span>
           </h2>
           <p class="text-sm text-gray-700 mb-3"><span class="estimate-pill" data-i18n="estimate.pill">Estimate</span> <span data-i18n="plan.fertNote">Reference prices typed in by the app team, not live market rates. Estimates only: check your dealer price.</span></p>
@@ -628,7 +628,7 @@
       <div class="flex items-start gap-3 mb-4">
         <div>
           <h2 class="text-xl font-bold text-emerald-900">
-            <i class="fa-solid fa-robot text-emerald-600 mr-1"></i> <span data-i18n="plan.ai.title">Ask Smart Farmer AI</span>
+            <span class="sf-icon text-emerald-600 mr-1" data-icon="robot" aria-hidden="true"></span> <span data-i18n="plan.ai.title">Ask Smart Farmer AI</span>
           </h2>
           <p class="text-sm text-gray-600 mt-1 max-w-xl">
             The AI assistant answers <strong>low-risk questions</strong> about your farm records,
@@ -648,7 +648,7 @@
     <section id="panel-harvest" class="farm-panel">
 
       <h2 class="text-xl font-bold text-emerald-900 mb-4">
-        <i class="fa-solid fa-basket-shopping text-emerald-600 mr-1"></i> <span data-i18n="plan.harvest.title">Harvest &amp; Sale</span>
+        <span class="sf-icon text-emerald-600 mr-1" data-icon="basket" aria-hidden="true"></span> <span data-i18n="plan.harvest.title">Harvest &amp; Sale</span>
       </h2>
 
       <div id="harvest-done-msg"
@@ -680,7 +680,7 @@
         </div>
         <p id="hv-error" class="hidden text-red-600 text-sm mb-2" role="alert"></p>
         <button id="btn-harvest"
-          class="w-full h-12 bg-brand-accent text-white font-bold text-base
+          class="w-full h-12 bg-brand-accentdark text-white font-bold text-base
                  rounded-xl hover:opacity-90 active:scale-[0.98] transition" data-i18n="plan.harvest.save">
           Record harvest &amp; sale
         </button>
@@ -734,6 +734,7 @@
 <script type="module">import { installSellTranslations } from "./js/sell-smart-i18n.js"; installSellTranslations();</script>
 <script type="module" src="js/plan.js"></script>
   <script type="module">import { mountNav } from "./js/nav.js"; mountNav("plan");</script>
+  <script type="module" src="js/icons.js"></script>
   <script type="module" src="js/sw-register.js"></script>
 </body>
 </html>

@@ -91,6 +91,11 @@ export function setLanguage(lang) {
     }
   });
 
+  document.querySelectorAll('[data-i18n-alt]').forEach(el => {
+    const text = TRANSLATIONS[lang]?.[el.getAttribute('data-i18n-alt')];
+    if (text !== undefined) el.setAttribute('alt', text);
+  });
+
   // Update active-language button styles
   const btnEn = document.getElementById('lang-en');
   const btnHi = document.getElementById('lang-hi');

@@ -8,8 +8,6 @@
   <meta name="robots" content="noindex, nofollow">
   <title data-i18n="obs.pageTitle">Smart Farmer — Crop Observations</title>
 
-  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
   <link rel="stylesheet" href="css/tailwind.css">
   <link rel="stylesheet" href="css/style.css">
 
@@ -61,12 +59,12 @@
     <div class="section-card">
       <div class="flex items-center justify-between mb-4">
         <h2 class="font-bold text-emerald-900 text-lg">
-          <i class="fa-solid fa-eye text-emerald-600 mr-1"></i>
+          <span class="sf-icon text-emerald-600 mr-1" data-icon="eye" aria-hidden="true"></span>
           <span data-i18n="obs.observations">Observations</span>
         </h2>
         <button id="btn-show-obs-form"
           class="flex items-center gap-1.5 text-sm font-semibold text-brand-secondary border border-brand-secondary px-3 py-1.5 rounded-lg hover:bg-brand-secondary hover:text-white transition">
-          <i class="fa-solid fa-plus"></i>
+          <span class="sf-icon" data-icon="plus" aria-hidden="true"></span>
           <span data-i18n="obs.addObservation">Add Observation</span>
         </button>
       </div>
@@ -145,7 +143,7 @@
             <div>
               <label class="form-label" data-i18n="obs.field.photo">Photo (optional)</label>
               <label class="photo-upload-label" for="obs-photo">
-                <i class="fa-solid fa-camera text-lg"></i>
+                <span class="sf-icon text-lg" data-icon="camera" aria-hidden="true"></span>
                 <span id="obs-photo-label" data-i18n="obs.choosePhoto">Choose photo</span>
               </label>
               <input id="obs-photo" type="file" accept="image/jpeg,image/png,image/webp" class="sr-only">
@@ -193,6 +191,7 @@
       <!-- Empty state -->
       <div id="obs-list-empty" class="hidden">
         <div class="empty-state">
+          <picture><source type="image/webp" srcset="images/orchard-480.webp 480w, images/orchard-960.webp 960w" sizes="96px"><img src="images/orchard-480.jpg" width="96" height="96" alt="" loading="lazy" decoding="async"></picture>
           <div class="empty-state__icon">🔍</div>
           <p class="empty-state__title" data-i18n="empty.noObservations.title">No observations yet</p>
           <p class="empty-state__body" data-i18n="empty.noObservations.body">
@@ -210,6 +209,7 @@
 
   <script type="module" src="js/observations.js"></script>
   <script type="module">import { mountNav } from "./js/nav.js"; mountNav("observations");</script>
+  <script type="module" src="js/icons.js"></script>
   <script type="module" src="js/sw-register.js"></script>
 </body>
 </html>

@@ -15,6 +15,7 @@
 
 import { apiFetch } from "./api.js";
 import { t } from "./dom.js";
+import { icon } from "./icons.js";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -195,7 +196,7 @@ function buildUI(containerEl) {
     "font-size: 1rem",
     "transition: background 0.15s",
   ].join(";");
-  sendBtn.innerHTML = '<i class="fa-solid fa-paper-plane" aria-hidden="true"></i>';
+  sendBtn.innerHTML = icon("send");
   sendBtn.addEventListener("mouseenter", () => { sendBtn.style.background = "#4A7C59"; });
   sendBtn.addEventListener("mouseleave", () => { sendBtn.style.background = "#1E3A2B"; });
 

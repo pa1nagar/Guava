@@ -8,8 +8,6 @@
   <meta name="robots" content="noindex, nofollow">
   <title data-i18n="farm.pageTitle">Smart Farmer — My Farms</title>
 
-  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
   <link rel="stylesheet" href="css/tailwind.css">
   <link rel="stylesheet" href="css/style.css">
 
@@ -38,6 +36,7 @@
   </header>
 
   <!-- ════════════════ MAIN ════════════════ -->
+  <div class="sf-banner"><picture><source type="image/webp" srcset="images/orchard-480.webp 480w, images/orchard-960.webp 960w" sizes="100vw"><img src="images/orchard-480.jpg" width="480" height="360" alt="" data-i18n-alt="img.orchard.alt" loading="lazy" decoding="async"></picture></div>
   <main class="max-w-3xl mx-auto px-4 py-6 flex flex-col gap-6">
 
     <!-- ── Headline numbers (for the selected farm) ──────────────────────── -->
@@ -56,12 +55,12 @@
     <div class="section-card">
       <div class="flex items-center justify-between mb-4">
         <h2 class="font-bold text-emerald-900 text-lg">
-          <i class="fa-solid fa-house-chimney-crack text-emerald-600 mr-1"></i>
+          <span class="sf-icon text-emerald-600 mr-1" data-icon="home" aria-hidden="true"></span>
           <span data-i18n="farm.myFarms">My Farms</span>
         </h2>
         <button id="btn-show-farm-form"
           class="flex items-center gap-1.5 text-sm font-semibold text-brand-secondary border border-brand-secondary px-3 py-1.5 rounded-lg hover:bg-brand-secondary hover:text-white transition">
-          <i class="fa-solid fa-plus"></i>
+          <span class="sf-icon" data-icon="plus" aria-hidden="true"></span>
           <span data-i18n="farm.addFarm">Add Farm</span>
         </button>
       </div>
@@ -150,6 +149,7 @@
       <!-- Empty state -->
       <div id="farm-list-empty" class="hidden">
         <div class="empty-state">
+          <picture><source type="image/webp" srcset="images/orchard-480.webp 480w, images/orchard-960.webp 960w" sizes="96px"><img src="images/orchard-480.jpg" width="96" height="96" alt="" loading="lazy" decoding="async"></picture>
           <div class="empty-state__icon">🏡</div>
           <p class="empty-state__title" data-i18n="empty.noFarms.title">No farms added yet</p>
           <p class="empty-state__body" data-i18n="empty.noFarms.body">
@@ -167,7 +167,7 @@
       <div class="flex items-center justify-between mb-4">
         <div>
           <h2 class="font-bold text-emerald-900 text-lg">
-            <i class="fa-solid fa-layer-group text-emerald-600 mr-1"></i>
+            <span class="sf-icon text-emerald-600 mr-1" data-icon="layers" aria-hidden="true"></span>
             <span data-i18n="plot.plots">Plots</span>
           </h2>
           <p class="text-sm text-gray-600 mt-0.5">
@@ -177,7 +177,7 @@
         </div>
         <button id="btn-show-plot-form"
           class="flex items-center gap-1.5 text-sm font-semibold text-brand-secondary border border-brand-secondary px-3 py-1.5 rounded-lg hover:bg-brand-secondary hover:text-white transition">
-          <i class="fa-solid fa-plus"></i>
+          <span class="sf-icon" data-icon="plus" aria-hidden="true"></span>
           <span data-i18n="plot.addPlot">Add Plot</span>
         </button>
       </div>
@@ -303,6 +303,7 @@
 
   <script type="module" src="js/farm.js"></script>
   <script type="module">import { mountNav } from "./js/nav.js"; mountNav("farm");</script>
+  <script type="module" src="js/icons.js"></script>
   <script type="module" src="js/sw-register.js"></script>
 </body>
 </html>

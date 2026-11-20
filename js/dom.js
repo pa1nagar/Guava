@@ -51,6 +51,10 @@ export function applyI18n(root = document) {
     const v = TRANSLATIONS[getLang()]?.[el.getAttribute("data-i18n-placeholder")];
     if (v !== undefined) el.setAttribute("placeholder", v);
   });
+  root.querySelectorAll("[data-i18n-alt]").forEach((el) => {
+    const v = TRANSLATIONS[getLang()]?.[el.getAttribute("data-i18n-alt")];
+    if (v !== undefined) el.setAttribute("alt", v);
+  });
   applyAria(root);
 }
 

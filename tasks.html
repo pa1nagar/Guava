@@ -8,8 +8,6 @@
   <meta name="robots" content="noindex, nofollow">
   <title data-i18n="tasks.pageTitle">Smart Farmer — Tasks</title>
 
-  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
   <link rel="stylesheet" href="css/tailwind.css">
   <link rel="stylesheet" href="css/style.css">
 
@@ -50,7 +48,7 @@
     <!-- ── Today's Tasks ──────────────────────────────────────────────── -->
     <div id="today-tasks-section" class="section-card">
       <h2 class="font-bold text-emerald-900 text-lg mb-4">
-        <i class="fa-solid fa-sun text-amber-500 mr-1"></i>
+        <span class="sf-icon text-amber-500 mr-1" data-icon="sun" aria-hidden="true"></span>
         <span data-i18n="tasks.today">Today's Tasks</span>
       </h2>
 
@@ -61,6 +59,7 @@
 
       <div id="today-empty" class="hidden">
         <div class="empty-state" style="padding: 2rem 1rem;">
+          <picture><source type="image/webp" srcset="images/orchard-480.webp 480w, images/orchard-960.webp 960w" sizes="96px"><img src="images/orchard-480.jpg" width="96" height="96" alt="" loading="lazy" decoding="async"></picture>
           <div class="empty-state__icon">☀️</div>
           <p class="empty-state__title" data-i18n="empty.noTodayTasks.title">Nothing due today</p>
           <p class="empty-state__body" data-i18n="empty.noTodayTasks.body">
@@ -76,7 +75,7 @@
     <div class="section-card">
       <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
         <h2 class="font-bold text-emerald-900 text-lg">
-          <i class="fa-solid fa-list-check text-emerald-600 mr-1"></i>
+          <span class="sf-icon text-emerald-600 mr-1" data-icon="list" aria-hidden="true"></span>
           <span data-i18n="tasks.allTasks">All Tasks</span>
         </h2>
         <div class="flex items-center gap-2">
@@ -93,7 +92,7 @@
           </select>
           <button id="btn-show-task-form"
             class="flex items-center gap-1.5 text-sm font-semibold text-brand-secondary border border-brand-secondary px-3 py-1.5 rounded-lg hover:bg-brand-secondary hover:text-white transition">
-            <i class="fa-solid fa-plus"></i>
+            <span class="sf-icon" data-icon="plus" aria-hidden="true"></span>
             <span data-i18n="tasks.addTask">Add Task</span>
           </button>
         </div>
@@ -176,6 +175,7 @@
 
   <script type="module" src="js/tasks.js"></script>
   <script type="module">import { mountNav } from "./js/nav.js"; mountNav("tasks");</script>
+  <script type="module" src="js/icons.js"></script>
   <script type="module" src="js/sw-register.js"></script>
 </body>
 </html>

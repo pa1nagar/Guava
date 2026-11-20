@@ -61,15 +61,27 @@
     <p class="mt-8">
       <a href="index.html" class="inline-flex items-center min-h-[44px] text-brand-secondary underline" data-i18n="privacy.back">Back to home page</a>
     </p>
+    <section id="credits" aria-labelledby="p-credits">
+      <h2 id="p-credits" class="font-semibold text-lg mt-6 mb-2" data-i18n="privacy.credits.h">Photo credits</h2>
+      <p data-i18n="privacy.credits.intro"></p>
+      <ul class="list-disc pl-5 mt-2 space-y-2">
+      <li><span data-i18n="privacy.credits.hero"></span> <a class="underline text-brand-leaf" href="https://commons.wikimedia.org/wiki/File:Guava_-_Psidium_guajava_fruit_of_Cuba.jpg" rel="noopener" data-i18n="privacy.credits.source">Source and licence</a></li>
+      <li><span data-i18n="privacy.credits.orchard"></span> <a class="underline text-brand-leaf" href="https://commons.wikimedia.org/wiki/File:Psidium_guajava_at_Kadavoor.jpg" rel="noopener" data-i18n="privacy.credits.source">Source and licence</a></li>
+      <li><span data-i18n="privacy.credits.farmer"></span> <a class="underline text-brand-leaf" href="https://commons.wikimedia.org/wiki/File:Indian_farmers.jpg" rel="noopener" data-i18n="privacy.credits.source">Source and licence</a></li>
+      <li><span data-i18n="privacy.credits.market"></span> <a class="underline text-brand-leaf" href="https://commons.wikimedia.org/wiki/File:India_-_Koyambedu_Market_-_Faces_07_(3987088776).jpg" rel="noopener" data-i18n="privacy.credits.source">Source and licence</a></li>
+      </ul>
+    </section>
   </main>
 
   <script type="module">
+    import "./js/i18n-credits.js";
     import { initPage } from "./js/dom.js";
     import { setLanguage } from "./js/translator.js";
     initPage();
     document.getElementById("lang-en").addEventListener("click", () => setLanguage("en"));
     document.getElementById("lang-hi").addEventListener("click", () => setLanguage("hi"));
   </script>
+  <script type="module" src="js/icons.js"></script>
   <script type="module" src="js/sw-register.js"></script>
 </body>
 </html>

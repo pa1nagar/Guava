@@ -9,9 +9,6 @@
 
 
 
-  <!-- Font Awesome 6 CDN -->
-  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"></noscript>
 
   <!-- Project stylesheet -->
   <link rel="stylesheet" href="css/tailwind.css">
@@ -37,9 +34,9 @@
         </div>
       </div>
       <a href="login.html"
-         class="text-sm bg-brand-accent text-white font-semibold px-4 py-2 min-h-[44px] rounded-lg
+         class="text-sm bg-brand-accentdark text-white font-semibold px-4 py-2 min-h-[44px] rounded-lg
                 hover:opacity-90 transition whitespace-nowrap flex items-center gap-2">
-        <i class="fa-solid fa-right-to-bracket"></i>
+        <span class="sf-icon" data-icon="login" aria-hidden="true"></span>
         <span data-i18n="home.header.signin">Sign In</span>
       </a>
     </div>
@@ -57,19 +54,20 @@
         <p class="text-lg sm:text-xl text-green-100 mb-8 max-w-2xl mx-auto">
           <span data-i18n="home.hero.subtitle">A farm management and decision-support platform built for Indian farmers. Track your activities, manage your plots, use transparent calculators, and get guidance you can trust.</span>
         </p>
+        <figure class="sf-hero-photo"><picture><source type="image/webp" srcset="images/hero-480.webp 480w, images/hero-960.webp 960w" sizes="(min-width: 640px) 448px, 100vw"><img src="images/hero-480.jpg" width="480" height="360" alt="" data-i18n-alt="img.hero.alt" fetchpriority="high" decoding="async"></picture></figure>
         <!-- Today's guava mandi price (live, from the public API; filled in by js/mandi.js) -->
         <div id="mandi-hero" class="price-hero max-w-md mx-auto mb-8" aria-live="polite"></div>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
           <a href="login.html"
-             class="bg-brand-accent text-white font-semibold px-6 py-3 rounded-lg
+             class="bg-brand-accentdark text-white font-semibold px-6 py-3 rounded-lg
                     hover:opacity-90 transition text-lg flex items-center justify-center gap-2">
-            <i class="fa-solid fa-tractor"></i>
+            <span class="sf-icon" data-icon="tractor" aria-hidden="true"></span>
             <span data-i18n="home.hero.cta.getStarted">Get Started</span>
           </a>
           <a href="#product"
              class="bg-white text-brand-primary font-semibold px-6 py-3 rounded-lg
                     hover:bg-green-50 transition text-lg flex items-center justify-center gap-2">
-            <i class="fa-solid fa-circle-info"></i>
+            <span class="sf-icon" data-icon="info" aria-hidden="true"></span>
             <span data-i18n="home.hero.cta.learnMore">Learn More</span>
           </a>
         </div>
@@ -81,9 +79,10 @@
     <!-- ════════════════════════════════════════════════════════════════ -->
     <section id="mandi-prices" class="py-12 px-4 bg-white">
       <div class="max-w-4xl mx-auto">
+        <div class="sf-banner rounded-2xl mb-4"><picture><source type="image/webp" srcset="images/market-480.webp 480w, images/market-960.webp 960w" sizes="(min-width: 896px) 896px, 100vw"><img src="images/market-480.jpg" width="480" height="360" alt="" data-i18n-alt="img.market.alt" loading="lazy" decoding="async"></picture></div>
         <div class="flex items-start justify-between gap-3 flex-wrap mb-1">
           <h2 class="text-2xl sm:text-3xl font-bold text-brand-primary">
-            <i class="fa-solid fa-chart-line text-brand-secondary mr-1"></i>
+            <span class="sf-icon text-brand-secondary mr-1" data-icon="chart" aria-hidden="true"></span>
             <span id="mandi-title">Guava Mandi Prices</span>
           </h2>
         </div>
@@ -95,6 +94,20 @@
     <!-- ════════════════════════════════════════════════════════════════ -->
     <!-- Product Explanation Section                                     -->
     <!-- ════════════════════════════════════════════════════════════════ -->
+    <section id="variety" class="py-12 px-4">
+      <div class="max-w-4xl mx-auto">
+        <div class="sf-card flex flex-col sm:flex-row gap-4 items-center">
+          <div class="w-full sm:w-56 flex-none"><picture><source type="image/webp" srcset="images/guava-pink-480.webp 480w, images/guava-pink-960.webp 960w" sizes="(min-width: 640px) 224px, 100vw"><img src="images/guava-pink-480.jpg" width="480" height="480" alt="" data-i18n-alt="img.pink.alt" loading="lazy" decoding="async" class="sf-photo"></picture>
+            <span class="sf-indicative" data-i18n="img.indicative">Indicative photo</span>
+          </div>
+          <div>
+            <h2 class="sf-card__title"><span class="sf-icon text-brand-leaf mr-1" data-icon="leaf" aria-hidden="true"></span><span data-i18n="variety.title">Taiwan Pink guava</span></h2>
+            <p class="mt-2 text-brand-muted" data-i18n="variety.desc">A pink-fleshed guava variety.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="product" class="py-16 px-4">
       <div class="max-w-7xl mx-auto">
         <h2 class="text-2xl sm:text-3xl font-bold text-brand-primary mb-2 text-center">
@@ -206,7 +219,7 @@
             </p>
             <span class="text-sm text-brand-secondary font-semibold flex items-center gap-1">
               <span data-i18n="home.capabilities.tryIt">Try it</span>
-              <i class="fa-solid fa-arrow-right text-sm"></i>
+              <span class="sf-icon text-sm" data-icon="arrow" aria-hidden="true"></span>
             </span>
           </a>
 
@@ -227,7 +240,7 @@
             </p>
             <span class="text-sm text-brand-secondary font-semibold flex items-center gap-1">
               <span data-i18n="home.capabilities.tryIt">Try it</span>
-              <i class="fa-solid fa-arrow-right text-sm"></i>
+              <span class="sf-icon text-sm" data-icon="arrow" aria-hidden="true"></span>
             </span>
           </a>
 
@@ -248,7 +261,7 @@
             </p>
             <span class="text-sm text-brand-secondary font-semibold flex items-center gap-1">
               <span data-i18n="home.capabilities.tryIt">Try it</span>
-              <i class="fa-solid fa-arrow-right text-sm"></i>
+              <span class="sf-icon text-sm" data-icon="arrow" aria-hidden="true"></span>
             </span>
           </a>
 
@@ -269,7 +282,7 @@
             </p>
             <span class="text-sm text-brand-secondary font-semibold flex items-center gap-1">
               <span data-i18n="home.capabilities.tryIt">Try it</span>
-              <i class="fa-solid fa-arrow-right text-sm"></i>
+              <span class="sf-icon text-sm" data-icon="arrow" aria-hidden="true"></span>
             </span>
           </a>
 
@@ -411,9 +424,9 @@
               <span data-i18n="home.trust.does.title">What AI Does</span>
             </h3>
             <ul class="space-y-2 text-sm text-green-100">
-              <li class="flex gap-2"><i class="fa-solid fa-check text-green-400 mt-1"></i><span data-i18n="home.trust.does.1">Explains your saved activities, tasks, and financial results in plain language</span></li>
-              <li class="flex gap-2"><i class="fa-solid fa-check text-green-400 mt-1"></i><span data-i18n="home.trust.does.2">Answers questions about your farm records using only your data</span></li>
-              <li class="flex gap-2"><i class="fa-solid fa-check text-green-400 mt-1"></i><span data-i18n="home.trust.does.3">Cites the source and date of any knowledge it references</span></li>
+              <li class="flex gap-2"><span class="sf-icon text-green-400 mt-1" data-icon="check" aria-hidden="true"></span><span data-i18n="home.trust.does.1">Explains your saved activities, tasks, and financial results in plain language</span></li>
+              <li class="flex gap-2"><span class="sf-icon text-green-400 mt-1" data-icon="check" aria-hidden="true"></span><span data-i18n="home.trust.does.2">Answers questions about your farm records using only your data</span></li>
+              <li class="flex gap-2"><span class="sf-icon text-green-400 mt-1" data-icon="check" aria-hidden="true"></span><span data-i18n="home.trust.does.3">Cites the source and date of any knowledge it references</span></li>
             </ul>
           </div>
 
@@ -423,10 +436,10 @@
               <span data-i18n="home.trust.doesNot.title">What AI Will Not Do</span>
             </h3>
             <ul class="space-y-2 text-sm text-red-100">
-              <li class="flex gap-2"><i class="fa-solid fa-xmark text-red-400 mt-1"></i><span data-i18n="home.trust.doesNot.1">Recommend specific fertilizer doses, pesticide products, or tank mixtures</span></li>
-              <li class="flex gap-2"><i class="fa-solid fa-xmark text-red-400 mt-1"></i><span data-i18n="home.trust.doesNot.2">Diagnose crop diseases from photos</span></li>
-              <li class="flex gap-2"><i class="fa-solid fa-xmark text-red-400 mt-1"></i><span data-i18n="home.trust.doesNot.3">Access or reveal another farmer's data</span></li>
-              <li class="flex gap-2"><i class="fa-solid fa-xmark text-red-400 mt-1"></i><span data-i18n="home.trust.doesNot.4">Execute instructions found in uploaded documents</span></li>
+              <li class="flex gap-2"><span class="sf-icon text-red-400 mt-1" data-icon="x" aria-hidden="true"></span><span data-i18n="home.trust.doesNot.1">Recommend specific fertilizer doses, pesticide products, or tank mixtures</span></li>
+              <li class="flex gap-2"><span class="sf-icon text-red-400 mt-1" data-icon="x" aria-hidden="true"></span><span data-i18n="home.trust.doesNot.2">Diagnose crop diseases from photos</span></li>
+              <li class="flex gap-2"><span class="sf-icon text-red-400 mt-1" data-icon="x" aria-hidden="true"></span><span data-i18n="home.trust.doesNot.3">Access or reveal another farmer's data</span></li>
+              <li class="flex gap-2"><span class="sf-icon text-red-400 mt-1" data-icon="x" aria-hidden="true"></span><span data-i18n="home.trust.doesNot.4">Execute instructions found in uploaded documents</span></li>
             </ul>
           </div>
 
@@ -531,16 +544,16 @@
           <button
             type="submit"
             id="contact-submit"
-            class="w-full bg-brand-accent text-white font-semibold px-6 py-3 rounded-lg
+            class="w-full bg-brand-accentdark text-white font-semibold px-6 py-3 rounded-lg
                    hover:opacity-90 transition text-lg flex items-center justify-center gap-2"
           >
             <span data-i18n="home.contact.submit">Submit</span>
-            <i class="fa-solid fa-paper-plane"></i>
+            <span class="sf-icon" data-icon="send" aria-hidden="true"></span>
           </button>
 
           <!-- Success message (hidden until needed) -->
           <div id="contact-success" class="hidden bg-emerald-50 border border-emerald-300 rounded-lg p-4 text-center">
-            <i class="fa-solid fa-circle-check text-emerald-600 text-xl"></i>
+            <span class="sf-icon text-emerald-600 text-xl" data-icon="checkCircle" aria-hidden="true"></span>
             <p class="text-emerald-800 font-semibold mt-2">
               <span data-i18n="home.contact.success">Thank you! We'll be in touch soon.</span>
             </p>
@@ -548,7 +561,7 @@
 
           <!-- Error message (hidden until needed) -->
           <div id="contact-error" class="hidden bg-red-50 border border-red-300 rounded-lg p-4 text-center" role="alert">
-            <i class="fa-solid fa-circle-exclamation text-red-600 text-xl"></i>
+            <span class="sf-icon text-red-600 text-xl" data-icon="alert" aria-hidden="true"></span>
             <p id="contact-error-msg" class="text-red-800 font-semibold mt-2">
               <span data-i18n="home.contact.error">Something went wrong. Please try again later.</span>
             </p>
@@ -570,6 +583,7 @@
     <p class="mb-2"><span data-i18n="home.footer.tagline">Smart Farmer — Farm management &amp; decision support for Indian farmers</span></p>
     <p><span data-i18n="home.footer.disclaimer">All agronomic content is sourced and labelled with its evidence status. Unverified content is never shown as an actionable instruction. Consult your local KVK or agronomist for crop-specific advice.</span></p>
     <p class="mt-3"><a href="privacy.html" class="inline-flex items-center min-h-[44px] text-green-300 underline hover:text-green-100"><span data-i18n="home.footer.privacy">Privacy Policy</span></a></p>
+<p class="mt-1"><a href="privacy.html#credits" class="inline-flex items-center min-h-[44px] text-green-300 underline hover:text-green-100"><span data-i18n="home.footer.credits">Photo credits</span></a></p>
   </footer>
 
   <!-- Main homepage script -->
@@ -587,6 +601,7 @@
     import { API_BASE_URL } from "./js/config.js";
     fetch(`${API_BASE_URL}/health`, { method: "GET" }).catch(() => {});
   </script>
+  <script type="module" src="js/icons.js"></script>
   <script type="module" src="js/sw-register.js"></script>
 </body>
 </html>
