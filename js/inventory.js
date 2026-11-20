@@ -17,17 +17,22 @@
 import { routeGuard, signOut } from "./auth.js";
 import { apiFetch } from "./api.js";
 import {
-  applyI18n, errorMessage, escapeHtml, initPage, renderLoadError, setBusy, t,
+  applyI18n, errorMessage, escapeHtml, getLang, initPage, renderLoadError, setBusy, t,
 } from "./dom.js";
+import { activityTypeLabel } from "./api-text.js";
 import { formatDate, formatNumber } from "./translator.js";
 
 // An item "expires soon" when its expiry date is within this many days.
 // This is a display convenience for the headline count, not an agronomic value.
 const EXPIRING_SOON_DAYS = 30;
+// How many recent activities the "linked activity" picker offers.
+const RECENT_ACTIVITY_LIMIT = 20;
+const NOTE_PREVIEW_CHARS = 30;
 
 // ── State ─────────────────────────────────────────────────────────────────────
 let _inventory = [];
 let _consumeTargetId = null;
+let _activities = null; // null = not loaded yet
 
 // ── DOM refs ──────────────────────────────────────────────────────────────────
 const invList        = document.getElementById("inventory-list");
@@ -221,12 +226,47 @@ async function handleSaveInventory(e) {
   }
 }
 
+// ── Linked activity picker ────────────────────────────────────────────────────
+// Option label: date, translated activity type, short note. The value is the activity id.
+function activityOptionLabel(a) {
+  const parts = [formatDate(a.logged_date || a.created_at), activityTypeLabel(a.activity_type, getLang())];
+  const note = String(a.notes || "").trim();
+  if (note) parts.push(note.length > NOTE_PREVIEW_CHARS ? note.slice(0, NOTE_PREVIEW_CHARS) + "…" : note);
+  return parts.join(" · ");
+}
+
+function fillActivityPicker() {
+  const sel = document.getElementById("consume-activity-id");
+  if (!sel) return;
+  while (sel.options.length > 1) sel.remove(1); // keep the "None" option
+  (_activities || []).forEach((a) => {
+    const opt = document.createElement("option");
+    opt.value = String(a.id);
+    opt.textContent = activityOptionLabel(a);
+    sel.appendChild(opt);
+  });
+  applyI18n(sel);
+}
+
+async function loadActivitiesForPicker() {
+  try {
+    const res = await apiFetch("/api/farmers/me/activities");
+    if (!res.ok) { _activities = []; return; }
+    const rows = await res.json();
+    // The API lists oldest first; offer the newest ones.
+    _activities = [...rows].reverse().slice(0, RECENT_ACTIVITY_LIMIT);
+  } catch {
+    _activities = [];
+  }
+}
+
 // ── Consume modal ─────────────────────────────────────────────────────────────
 function openConsumeModal(itemId, itemName) {
   _consumeTargetId = itemId;
   if (consumeItemName) consumeItemName.textContent = itemName;
   consumeError.classList.add("hidden");
   consumeForm.reset();
+  fillActivityPicker();
   consumeModal.classList.remove("hidden");
   document.getElementById("consume-quantity")?.focus();
 }
@@ -242,7 +282,7 @@ async function handleSaveConsumption(e) {
 
   const body = {
     quantity_consumed: parseFloat(document.getElementById("consume-quantity").value),
-    activity_id:       document.getElementById("consume-activity-id").value.trim() || null,
+    activity_id:       document.getElementById("consume-activity-id").value || null,
   };
 
   if (!body.quantity_consumed || body.quantity_consumed <= 0) {
@@ -297,5 +337,5 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
   consumeForm?.addEventListener("submit", handleSaveConsumption);
 
-  await loadInventory();
+  await Promise.all([loadInventory(), loadActivitiesForPicker()]);
 });

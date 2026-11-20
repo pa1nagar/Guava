@@ -66,18 +66,27 @@ INVENTORY = [
      "created_at": "2026-01-01T00:00:00", "updated_at": "2026-01-01T00:00:00"},
 ]
 
+# 1x1 transparent PNG (test data) so the thumbnail renders without network access.
+TEST_PHOTO = ("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==")
+
 OBSERVATIONS = [
     {"id": "o1", "user_id": "u1", "plot_id": None, "observed_date": "2026-11-18", "plant_part": "leaves",
      "symptom_description": "Test: yellow leaves on <script>alert(1)</script> one corner", "onset_date": None,
      "spread_pattern": "one corner", "severity": "medium", "trees_sampled": 20, "trees_affected": 3,
      "weather_notes": None, "recent_input_notes": None, "observer_name": "Test Farmer", "ai_analysis": None,
-     "ai_analysis_label": "Preliminary observation — not a diagnosis", "created_at": "2026-11-18T00:00:00"},
+     "ai_analysis_label": "Preliminary observation — not a diagnosis", "created_at": "2026-11-18T00:00:00",
+     "photos": [{"id": "p1", "is_ai_version": False, "created_at": "2026-11-18T00:00:00", "signed_url": TEST_PHOTO},
+                {"id": "p2", "is_ai_version": False, "created_at": "2026-11-18T00:00:00", "signed_url": None}]},
 ]
 
 ACTIVITIES = [
     {"id": "a1", "activity_type": "Fertilizer", "quantity": 10.0, "unit": "kg", "cost": 1200.0, "notes": None,
      "status": "recorded", "plot_id": None, "method": None, "actor": None, "photo_storage_key": None,
      "logged_date": "2026-11-10", "created_at": "2026-11-10T00:00:00"},
+    {"id": "a2", "activity_type": "Labour", "quantity": 4.0, "unit": "hours", "cost": 800.0,
+     "notes": "Test: pruning the north rows before the rains start", "status": "recorded", "plot_id": None,
+     "method": None, "actor": None, "photo_storage_key": None,
+     "logged_date": "2026-11-12", "created_at": "2026-11-12T00:00:00"},
 ]
 SPENDING = {"total_cost": 1200.0, "by_type": {"Fertilizer": 1200.0, "Irrigation": 0.0}}
 GAPS = [{"activity_type": "Fertilizer", "expected": 20.0, "actual": 10.0, "unit": "kg", "status": "behind",

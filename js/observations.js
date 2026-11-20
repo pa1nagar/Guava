@@ -109,10 +109,14 @@ function renderObservations() {
 
       ${obs.photos && obs.photos.length > 0 ? `
         <div class="flex gap-2 mt-2 flex-wrap">
-          ${obs.photos.slice(0, 3).map((p) => `
-            <img src="${escapeHtml(p.signed_url || "")}" alt="${escapeHtml(t("obs.photoAlt"))}" loading="lazy"
+          ${obs.photos.slice(0, 3).map((p) => (p.signed_url ? `
+            <img src="${escapeHtml(p.signed_url)}" alt="${escapeHtml(t("obs.photoAlt"))}" loading="lazy"
+              width="64" height="64" data-photo-thumb
               class="w-16 h-16 object-cover rounded-lg border border-gray-200">
-          `).join("")}
+            <span class="hidden text-sm text-gray-600 self-center">${escapeHtml(t("obs.photo.unavailable"))}</span>
+          ` : `
+            <span class="text-sm text-gray-600 self-center">${escapeHtml(t("obs.photo.unavailable"))}</span>
+          `)).join("")}
         </div>
       ` : ""}
 
@@ -124,6 +128,13 @@ function renderObservations() {
         </div>
       ` : ""}
     `;
+    // A thumbnail that fails to load (expired link, missing file) is replaced by a text label.
+    card.querySelectorAll("img[data-photo-thumb]").forEach((img) => {
+      img.addEventListener("error", () => {
+        img.classList.add("hidden");
+        img.nextElementSibling?.classList.remove("hidden");
+      }, { once: true });
+    });
     obsList.appendChild(card);
   });
   applyI18n(obsList);

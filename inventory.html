@@ -107,12 +107,12 @@
                 <div style="width:8rem;">
                   <label for="inv-unit" class="form-label" data-i18n="inventory.field.unit">Unit</label>
                   <select id="inv-unit" class="form-input">
-                    <option value="kg">kg</option>
-                    <option value="litres">litres</option>
-                    <option value="g">g</option>
-                    <option value="ml">ml</option>
-                    <option value="bags">bags</option>
-                    <option value="units">units</option>
+                    <option value="kg" data-i18n="unit.kg">kg</option>
+                    <option value="litres" data-i18n="unit.litres">litres</option>
+                    <option value="g" data-i18n="unit.g">g</option>
+                    <option value="ml" data-i18n="unit.ml">ml</option>
+                    <option value="bags" data-i18n="unit.bags">bags</option>
+                    <option value="units" data-i18n="unit.units">units</option>
                   </select>
                 </div>
               </div>
@@ -199,10 +199,11 @@
           </div>
           <div>
             <label for="consume-activity-id" class="form-label" data-i18n="inventory.field.activityId">
-              Linked Activity ID <span class="normal-case font-normal text-gray-600">(optional)</span>
+              Linked activity (optional)
             </label>
-            <input id="consume-activity-id" type="text" class="form-input"
-              placeholder="Paste the activity ID to link" data-i18n-placeholder="inventory.ph.activityId">
+            <select id="consume-activity-id" class="form-input">
+              <option value="" data-i18n="inventory.activity.none">None (not linked to an activity)</option>
+            </select>
           </div>
 
           <p id="consume-form-error" class="hidden text-red-600 text-sm" role="alert"></p>

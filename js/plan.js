@@ -10,7 +10,19 @@ import { routeGuard, signOut, supabase } from "./auth.js";
 import { apiFetch, loadCached, saveCache } from "./api.js";
 import { initAiChat } from "./ai-chat.js";
 import { getMandiHistory, loadMandiCard, mandiEsc, mandiLang, mt } from "./mandi.js";
-import { applyI18n, errorMessage, escapeHtml as esc, initPage, renderLoadError, setBusy, t } from "./dom.js";
+import { applyI18n, errorMessage, escapeHtml as esc, getLang, initPage, renderLoadError, setBusy, t } from "./dom.js";
+import { activityTypeLabel, translateApiText } from "./api-text.js";
+
+// Hindi for the fixed English sentences the API sends (falls back to the English text).
+const tx = (s) => translateApiText(s, getLang());
+const typeLabel = (s) => activityTypeLabel(s, getLang());
+// Stage name from the stable stage id, so it follows the language. Falls back to the API label.
+function stageName(stageId, apiLabel) {
+  if (!stageId) return tx(apiLabel || "—");
+  const key = `plan.stage.${stageId}`;
+  const v = t(key);
+  return v && v !== key ? v : tx(apiLabel || stageId || "—");
+}
 
 // A pill that marks any number or advice that is a rule of thumb or a typed-in reference value.
 function estimatePill() {
@@ -19,7 +31,7 @@ function estimatePill() {
 // Note line with the "basis" text returned by the API (why the number is only an estimate).
 function basisNote(basis) {
   if (!basis) return "";
-  return `<p class="text-sm text-gray-600 mt-1 break-words">${esc(basis)}</p>`;
+  return `<p class="text-sm text-gray-600 mt-1 break-words">${esc(tx(basis))}</p>`;
 }
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -39,7 +51,6 @@ const STAGE_IDS = [
 ];
 
 const CAT_ICON  = { fertilizer:"🌱", irrigation:"💧", ipm:"🔍", activity:"📋" };
-const CAT_LABEL = { fertilizer:"Fertilizer", irrigation:"Irrigation", ipm:"Pest & Disease", activity:"Activity" };
 
 // ── DOM refs ──────────────────────────────────────────────────────────────────
 const pageLoading   = document.getElementById("page-loading");
@@ -198,11 +209,11 @@ function renderHeader(profile, plan, displayName) {
   hdrCropPill.textContent = `🌿 ${crop.charAt(0).toUpperCase() + crop.slice(1)}`;
   hdrLocation.textContent = [district, profile.state].filter(Boolean).join(", ");
 
-  hdrStageText.textContent = `${plan.stage_label} — Month ${plan.months_elapsed}`;
+  hdrStageText.textContent = t("plan.monthStage", { n: plan.months_elapsed, stage: stageName(plan.stage_id, plan.stage_label) });
   hdrActiveBadge.classList.remove("hidden");
 
-  hdrSowingLabel.textContent = `Planted ${fmtDate(profile.sowing_date)}`;
-  hdrDaysLabel.textContent   = `${plan.days_elapsed} days growing`;
+  hdrSowingLabel.textContent = t("plan.planted", { date: fmtDate(profile.sowing_date) });
+  hdrDaysLabel.textContent   = t("plan.daysGrowing", { n: plan.days_elapsed });
 
   // Stage progress dots
   stageDots.innerHTML = "";
@@ -227,7 +238,7 @@ function renderHeader(profile, plan, displayName) {
 function renderKPIs(profile, plan, spend, fs) {
   kpiPlants.textContent   = Number(profile.plant_count || 0).toLocaleString("en-IN");
   kpiMonths.textContent   = plan.months_elapsed;
-  kpiStage.textContent    = String(plan.stage_label || "—").split(" ").slice(0,2).join(" ");
+  kpiStage.textContent    = stageName(plan.stage_id, plan.stage_label).split(" ").slice(0,2).join(" ");
   kpiSpent.textContent    = fmtINR(spend.total_cost);
   kpiDistrict.textContent = String(profile.district || "—").split(" ")[0];
 
@@ -241,18 +252,6 @@ function renderKPIs(profile, plan, spend, fs) {
 // ── Stage roadmap ─────────────────────────────────────────────────────────────
 
 function renderRoadmap(plan) {
-  const STAGE_LABELS = {
-    establishment:       "Establishment",
-    vegetative_growth:   "Vegetative Growth",
-    post_monsoon:        "Post-Monsoon",
-    pre_bloom:           "Pre-Bloom",
-    bloom_fruit_set:     "Bloom & Fruit Set",
-    fruit_development:   "Fruit Development",
-    drought_stress:      "Drought Stress",
-    harvest:             "Harvest",
-    post_harvest_mature: "Post-Harvest",
-  };
-
   stageRoadmap.innerHTML = "";
   const currentIdx = STAGE_IDS.indexOf(plan.stage_id);
 
@@ -274,8 +273,8 @@ function renderRoadmap(plan) {
       <span class="text-sm font-${isCurrent ? "bold" : "medium"} ${
         isCurrent ? "text-brand-dark" : isPast ? "text-gray-600" : "text-gray-300"
       }">
-        ${STAGE_LABELS[id] || id}
-        ${isCurrent ? `<span class="ml-2 text-xs font-semibold text-brand-accent">← Now</span>` : ""}
+        ${esc(stageName(id))}
+        ${isCurrent ? `<span class="ml-2 text-xs font-semibold text-brand-accent">${esc(t("plan.now"))}</span>` : ""}
       </span>
     `;
 
@@ -304,7 +303,7 @@ function renderGaps(gaps) {
       <span class="text-xl flex-shrink-0">⚠️</span>
       <div class="min-w-0">
         <p class="text-sm font-semibold text-amber-900 break-words">
-          ${esc(g.message || `You may be behind on ${String(g.activity_type || "").toLowerCase()} for this stage.`)}
+          ${esc(tx(g.message || `You may be behind on ${String(g.activity_type || "").toLowerCase()} for this stage.`))}
         </p>
         <p class="text-sm text-amber-800 mt-0.5">
           ${esc(t("plan.gap.expected"))} <strong>${esc(g.expected)} ${esc(g.unit)}</strong> ·
@@ -323,13 +322,13 @@ function renderGaps(gaps) {
 // ── Summary ───────────────────────────────────────────────────────────────────
 
 function renderSummary(plan) {
-  summaryHeading.textContent = `Month ${plan.months_elapsed} — ${plan.stage_label}`;
+  summaryHeading.textContent = t("plan.monthStage", { n: plan.months_elapsed, stage: stageName(plan.stage_id, plan.stage_label) });
   overviewSum.textContent = plan.summary || "";
 
   // Headline: current stage and the first task of the week
   const stageEl = document.getElementById("headline-stage");
   const nextEl  = document.getElementById("headline-next");
-  if (stageEl) stageEl.textContent = plan.stage_label || "—";
+  if (stageEl) stageEl.textContent = stageName(plan.stage_id, plan.stage_label);
   if (nextEl) {
     const first = (plan.tasks || [])[0];
     nextEl.textContent = first ? first.title : t("plan.headline.noTask");
@@ -370,7 +369,7 @@ function renderSpending(spend) {
 
       const leg = document.createElement("div");
       leg.className = "flex items-center gap-1.5 text-xs text-gray-600";
-      leg.innerHTML = `<span class="w-2 h-2 rounded-full" style="background:${colour}"></span>${esc(type)} ${esc(fmtINR(amt))}`;
+      leg.innerHTML = `<span class="w-2 h-2 rounded-full" style="background:${colour}"></span>${esc(typeLabel(type))} ${esc(fmtINR(amt))}`;
       spendLegend.appendChild(leg);
     }
 
@@ -380,28 +379,28 @@ function renderSpending(spend) {
     for (const [type, amt] of sorted) {
       const row = document.createElement("div");
       row.className = "flex items-center justify-between py-2.5";
-      row.innerHTML = `<span class="text-sm text-gray-700 break-words">${esc(type)}</span>
+      row.innerHTML = `<span class="text-sm text-gray-700 break-words">${esc(typeLabel(type))}</span>
                        <span class="text-sm font-semibold text-brand-dark">${esc(fmtINRFull(amt))}</span>`;
       finBreakdown.appendChild(row);
     }
     const totRow = document.createElement("div");
     totRow.className = "flex items-center justify-between py-2.5 bg-gray-50 -mx-4 px-4 rounded-b-xl mt-1";
-    totRow.innerHTML = `<span class="text-sm font-bold text-gray-800">Total</span>
+    totRow.innerHTML = `<span class="text-sm font-bold text-gray-800">${esc(t("plan.total"))}</span>
                         <span class="text-sm font-bold text-brand-dark">${fmtINRFull(total)}</span>`;
     finBreakdown.appendChild(totRow);
   } else {
     const p = document.createElement("p");
     p.className = "text-sm text-gray-600 py-2";
-    p.textContent = "No costs logged yet.";
+    p.textContent = t("plan.noCosts");
     spendLegend.appendChild(p);
-    finBreakdown.innerHTML = `<p class="text-sm text-gray-600 py-2">No costs logged yet.</p>`;
+    finBreakdown.innerHTML = `<p class="text-sm text-gray-600 py-2">${esc(t("plan.noCosts"))}</p>`;
   }
 }
 
 // ── Tasks ─────────────────────────────────────────────────────────────────────
 
 function renderTasks(plan) {
-  tasksStageBadge.textContent = `🌱 ${plan.stage_label} — Month ${plan.months_elapsed}`;
+  tasksStageBadge.textContent = `🌱 ${t("plan.monthStage", { n: plan.months_elapsed, stage: stageName(plan.stage_id, plan.stage_label) })}`;
   taskList.innerHTML = "";
 
   const taskEmptyEl = document.getElementById("task-list-empty");
@@ -414,7 +413,8 @@ function renderTasks(plan) {
     if (taskEmptyEl) taskEmptyEl.classList.add("hidden");
     for (const task of tasks) {
       const icon  = CAT_ICON[task.category]  || "📋";
-      const label = CAT_LABEL[task.category] || task.category;
+      const catKey = `plan.cat.${task.category}`;
+      const label = t(catKey) !== catKey ? t(catKey) : task.category;
       const accentClass = `task-card-${task.category}`;
 
       const card = document.createElement("div");
@@ -440,7 +440,7 @@ function renderTasks(plan) {
   for (const note of (plan.notes || [])) {
     const p = document.createElement("p");
     p.className = "text-sm text-gray-600 italic";
-    p.textContent = note;
+    p.textContent = tx(note);
     taskNotes.appendChild(p);
   }
 }
@@ -455,7 +455,7 @@ function renderFinancialSummary(fs) {
     finRevenue.textContent = fmtINRFull(fs.revenue);
   } else {
     finRevenue.textContent = "—";
-    finRevenueNote.textContent = fs.has_harvest ? "" : "Log harvest to see revenue";
+    finRevenueNote.textContent = fs.has_harvest ? "" : t("plan.logHarvestForRevenue");
   }
 
   if (fs.profit_or_loss != null) {
@@ -501,7 +501,7 @@ function buildTypePills(types) {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.dataset.type = t;
-    btn.textContent = t;
+    btn.textContent = typeLabel(t);
     btn.className = `type-pill ${t === "Fertilizer" ? "selected" : ""}`;
     btn.addEventListener("click", () => selectType(t));
     typePillsEl.appendChild(btn);
@@ -532,7 +532,7 @@ function preFillFromPlan(plan) {
   if (fertTask?.quantity != null) {
     actQtyEl.value  = fertTask.quantity;
     actUnitEl.value = fertTask.unit?.includes("kg") ? "kg" : "kg";
-    qtyHintEl.textContent = `ref: ${fertTask.quantity} ${fertTask.unit || ""}`;
+    qtyHintEl.textContent = t("plan.refQty", { q: fertTask.quantity, u: fertTask.unit || "" });
   }
   selectType("Fertilizer");
 }
@@ -564,7 +564,7 @@ async function loadRecentActivities() {
       el.className = "flex items-center justify-between bg-white border border-gray-100 rounded-xl px-4 py-2.5";
       el.innerHTML = `
         <div class="min-w-0">
-          <p class="text-sm font-semibold text-brand-dark break-words">${esc(a.activity_type)}</p>
+          <p class="text-sm font-semibold text-brand-dark break-words">${esc(typeLabel(a.activity_type))}</p>
           <p class="text-sm text-gray-600">${esc(fmtDate(a.logged_date))} · ${esc(a.quantity)} ${esc(a.unit || "")}</p>
         </div>
         <p class="text-sm font-semibold text-brand-dark flex-shrink-0">${esc(fmtINRFull(a.cost))}</p>
@@ -984,7 +984,7 @@ function renderWeather(weather, locationStr) {
     };
     irrEl.className = `mb-3 rounded-xl border px-4 py-3 text-sm font-medium ${colours[irr.status] || colours.unknown}`;
     irrEl.innerHTML = `
-      <p class="text-sm"><span class="font-bold">💧 ${esc(t("plan.irrigation.today"))}: </span>${esc(irr.message || "—")}
+      <p class="text-sm"><span class="font-bold">💧 ${esc(t("plan.irrigation.today"))}: </span>${esc(tx(irr.message) || "—")}
       ${irr.et0 ? `<span class="ml-2 text-sm opacity-80">(ET0 ${esc(irr.et0)} mm/day)</span>` : ""}</p>
       <p class="mt-1">${estimatePill()}</p>
       ${basisNote(irr.basis)}
@@ -1043,14 +1043,14 @@ function renderDiseaseRisks(risks) {
     el.innerHTML = `
       <span class="text-2xl flex-shrink-0">${r.colour === "red" ? "🚨" : "⚠️"}</span>
       <div class="min-w-0">
-        <p class="text-sm font-bold break-words">${esc(r.disease)}
+        <p class="text-sm font-bold break-words">${esc(tx(r.disease))}
           <span class="ml-1 text-sm font-semibold px-2 py-0.5 rounded-full
             ${r.risk === "High" ? "bg-red-200 text-red-900" : "bg-amber-200 text-amber-900"}">
-            ${esc(r.risk)} ${esc(t("plan.disease.risk"))}
+            ${esc(tx(r.risk))} ${esc(t("plan.disease.risk"))}
           </span>
           ${estimatePill()}
         </p>
-        <p class="text-sm mt-1 leading-relaxed break-words">${esc(r.action)}</p>
+        <p class="text-sm mt-1 leading-relaxed break-words">${esc(tx(r.action))}</p>
         ${basisNote(r.basis)}
       </div>
     `;
@@ -1123,7 +1123,7 @@ function renderFutureStages(stages) {
     card.innerHTML = `
       <div class="flex flex-wrap items-center gap-2 mb-2">
         <span class="text-xl">${icons[i] || "🌱"}</span>
-        <p class="text-base font-bold text-brand-dark break-words">${esc(s.label)}</p>
+        <p class="text-base font-bold text-brand-dark break-words">${esc(stageName(s.stage_id, s.label))}</p>
         <span class="ml-auto text-sm text-gray-600">${esc(t("plan.future.starts", { month: s.month_start }))}</span>
       </div>
       <p class="text-sm text-gray-700 mb-3 leading-relaxed break-words">${esc(s.description)}</p>
@@ -1186,13 +1186,6 @@ function renderGDDAndClimate(climate, currentStageId) {
 
   const gdd = Number(climate.gdd_cumulative || 0);
   const thresholds = climate.gdd_thresholds || {};
-  const STAGE_LABELS = {
-    establishment:"Establishment", vegetative_growth:"Vegetative Growth",
-    post_monsoon:"Post-Monsoon", pre_bloom:"Pre-Bloom",
-    bloom_fruit_set:"Bloom & Fruit Set", fruit_development:"Fruit Development",
-    drought_stress:"Drought Stress", harvest:"Harvest", post_harvest_mature:"Post-Harvest",
-  };
-
   // Next stage threshold
   const stageOrder = Object.keys(thresholds);
   const curIdx = stageOrder.indexOf(currentStageId);
@@ -1224,15 +1217,15 @@ function renderGDDAndClimate(climate, currentStageId) {
       </div>
       ${nextStageId ? `
         <div class="mb-1 flex flex-wrap justify-between gap-x-3 text-sm text-gray-700">
-          <span>${esc(t("plan.gdd.current"))}: ${esc(STAGE_LABELS[currentStageId] || currentStageId)}</span>
-          <span>${esc(t("plan.gdd.next"))}: ${esc(STAGE_LABELS[nextStageId] || nextStageId)} · ${esc(nextThreshold)} GDD</span>
+          <span>${esc(t("plan.gdd.current"))}: ${esc(stageName(currentStageId))}</span>
+          <span>${esc(t("plan.gdd.next"))}: ${esc(stageName(nextStageId))} · ${esc(nextThreshold)} GDD</span>
         </div>
         <div class="h-3 bg-gray-100 rounded-full overflow-hidden" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${progressPct.toFixed(0)}">
           <div class="h-3 bg-brand-secondary rounded-full transition-all" style="width:${progressPct.toFixed(1)}%"></div>
         </div>
         <p class="text-sm text-gray-600 mt-1">${esc(t("plan.gdd.progress", { pct: progressPct.toFixed(0) }))}</p>
       ` : `<p class="text-sm text-gray-600">${esc(t("plan.gdd.final"))}</p>`}
-      <p class="text-sm mt-3 font-medium ${gddColour} break-words">${esc(climate.gdd_note || "")}</p>
+      <p class="text-sm mt-3 font-medium ${gddColour} break-words">${esc(tx(climate.gdd_note || ""))}</p>
       <p class="mt-2">${climate.gdd_is_estimate === false ? "" : estimatePill()}</p>
       ${basisNote(climate.gdd_basis)}
     </div>
@@ -1258,7 +1251,7 @@ function renderGDDAndClimate(climate, currentStageId) {
           ` : `<p class="text-sm text-gray-600">${esc(t("plan.climate.noData"))}</p>`}
         </div>
       </div>
-      <p class="text-sm text-gray-700 leading-relaxed break-words">${esc(climate.anomaly_summary || "")}</p>
+      <p class="text-sm text-gray-700 leading-relaxed break-words">${esc(tx(climate.anomaly_summary || ""))}</p>
     </div>
   `;
 }
@@ -1286,7 +1279,7 @@ function renderMonsoonRisk(climate) {
       <span class="text-3xl">${icons[risk] || "✅"}</span>
       <div class="min-w-0">
         <p class="text-sm font-bold text-gray-800">${esc(title)}</p>
-        <p class="text-sm text-gray-700 mt-1 leading-relaxed break-words">${esc(climate.waterlogging_message || "")}</p>
+        <p class="text-sm text-gray-700 mt-1 leading-relaxed break-words">${esc(tx(climate.waterlogging_message || ""))}</p>
       </div>
     </div>
     <div class="grid grid-cols-2 gap-3 text-center mt-2">
@@ -1332,7 +1325,7 @@ function renderCompliance(compliance) {
         </p>
       </div>
     </div>
-    <p class="text-sm text-gray-700 leading-relaxed mb-3 break-words">${esc(compliance.interpretation || "")}</p>
+    <p class="text-sm text-gray-700 leading-relaxed mb-3 break-words">${esc(tx(compliance.interpretation || ""))}</p>
     <div class="grid grid-cols-2 gap-3">
       <div class="${bgColour} rounded-xl p-3 text-center">
         <p class="text-sm text-gray-700">${esc(t("plan.compliance.logged"))}</p>
@@ -1371,7 +1364,7 @@ function renderFertForecast(items) {
     card.innerHTML = `
       <div class="flex flex-col min-[400px]:flex-row min-[400px]:items-start justify-between gap-3">
         <div class="flex-1 min-w-0">
-          <p class="text-sm font-bold text-brand-dark break-words">${esc(item.stage_label)}</p>
+          <p class="text-sm font-bold text-brand-dark break-words">${esc(stageName(item.stage_id, item.stage_label))}</p>
           <p class="text-sm text-gray-600 mt-0.5 break-words">${esc(item.fertilizer)}</p>
           <p class="text-sm text-gray-600 mt-1">
             ${esc(item.total_kg)} kg · ${hasRate ? `₹${esc(item.rate_per_kg)}/kg` : esc(t("plan.fert.priceNotSet"))} · ${esc(t("plan.fert.months", { n: months }))}
@@ -1383,7 +1376,7 @@ function renderFertForecast(items) {
           ${estimatePill()}
         </div>
       </div>
-      <p class="text-sm text-gray-600 mt-2 break-words">${esc(item.rate_basis || t("plan.fert.checkDealer"))}</p>
+      <p class="text-sm text-gray-600 mt-2 break-words">${esc(tx(item.rate_basis) || t("plan.fert.checkDealer"))}</p>
     `;
     el.appendChild(card);
   }

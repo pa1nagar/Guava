@@ -30,6 +30,7 @@ Requirements: 7.1, 7.2, 7.4
 
 import io
 import logging
+import os
 import uuid
 from datetime import date
 from typing import List, Optional
@@ -49,6 +50,12 @@ _DEFAULT_AI_LABEL = "Preliminary observation — not a diagnosis"
 
 # ── Photo upload constants (reused from activities.py — Requirement 7.4) ─────
 _MAX_PHOTO_BYTES = 10 * 1024 * 1024
+# Private Supabase Storage bucket for observation photos. The owner creates it once in the
+# Supabase dashboard (see docs/observation-photos-storage.md). Never public.
+_PHOTO_BUCKET = os.environ.get("OBSERVATION_PHOTO_BUCKET", "observation-photos").strip() or "observation-photos"
+# Signed links last one hour; the page asks for fresh ones each time it loads the list.
+_SIGNED_URL_SECONDS = 3600
+_MIME_BY_EXT = {"jpg": "image/jpeg", "png": "image/png", "webp": "image/webp"}
 
 _MIME_SIGNATURES: dict[str, bytes] = {
     "image/jpeg": b"\xff\xd8\xff",
@@ -140,6 +147,14 @@ class ObservationIn(BaseModel):
         return v
 
 
+class ObservationPhotoRefOut(BaseModel):
+    """A saved photo as listed on an observation. signed_url is None when storage is not set up."""
+    id: str
+    is_ai_version: bool
+    signed_url: Optional[str] = None
+    created_at: str
+
+
 class ObservationOut(BaseModel):
     id: str
     user_id: str
@@ -158,6 +173,7 @@ class ObservationOut(BaseModel):
     ai_analysis: Optional[str] = None
     ai_analysis_label: str
     created_at: str
+    photos: List[ObservationPhotoRefOut] = []
 
 
 class ObservationPhotoOut(BaseModel):
@@ -186,6 +202,62 @@ class SignedUrlResponse(BaseModel):
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
+
+def _signed_url(storage_key: str) -> Optional[str]:
+    """One-hour signed URL for a stored photo, or None when storage is missing or fails.
+
+    Uses the service client's storage API. Never raises: a missing bucket must not break the list.
+    """
+    try:
+        res = get_db().storage.from_(_PHOTO_BUCKET).create_signed_url(storage_key, _SIGNED_URL_SECONDS)
+    except Exception as exc:
+        logger.warning("Signed URL failed for %s: %s", storage_key, exc)
+        return None
+    url = None
+    if isinstance(res, dict):
+        url = res.get("signedURL") or res.get("signedUrl") or res.get("signed_url")
+    else:
+        url = getattr(res, "signedURL", None) or getattr(res, "signed_url", None)
+    return str(url) if url else None
+
+
+def _photos_by_observation(user_id: str, observation_ids: list[str]) -> dict[str, list[ObservationPhotoRefOut]]:
+    """Photos for the given observations in ONE query, owner rows only. Original photos come first."""
+    if not observation_ids:
+        return {}
+    try:
+        result = (
+            db_photos_query(user_id, observation_ids)
+        )
+        rows = result.data or []
+    except Exception as exc:
+        # The list still works without photos.
+        logger.warning("DB select observation photos failed: %s", exc)
+        return {}
+    grouped: dict[str, list[ObservationPhotoRefOut]] = {}
+    for r in rows:
+        grouped.setdefault(str(r["observation_id"]), []).append(
+            ObservationPhotoRefOut(
+                id=str(r["id"]),
+                is_ai_version=bool(r.get("is_ai_version")),
+                signed_url=_signed_url(r["storage_key"]) if r.get("storage_key") else None,
+                created_at=str(r.get("created_at") or ""),
+            )
+        )
+    return grouped
+
+
+def db_photos_query(user_id: str, observation_ids: list[str]):
+    return (
+        get_db()
+        .table("observation_photos")
+        .select("*")
+        .eq("user_id", user_id)
+        .in_("observation_id", observation_ids)
+        .order("is_ai_version", desc=False)
+        .execute()
+    )
+
 
 def _row_to_observation_out(row: dict) -> ObservationOut:
     """Convert a DB row to ObservationOut, applying the ai_analysis_label default.
@@ -269,7 +341,13 @@ def list_observations(
         logger.error("DB select observations failed: %s", exc)
         raise HTTPException(status_code=500, detail="Database error.")
 
-    return [_row_to_observation_out(r) for r in rows]
+    photos = _photos_by_observation(user_id, [str(r["id"]) for r in rows])
+    out = []
+    for r in rows:
+        obs = _row_to_observation_out(r)
+        obs.photos = photos.get(obs.id, [])
+        out.append(obs)
+    return out
 
 
 # ── POST /api/farmers/me/observations ────────────────────────────────────────
@@ -410,8 +488,14 @@ def upload_observation_photo(
         logger.error("DB insert observation photo failed: %s", exc)
         raise HTTPException(status_code=500, detail="Database error.")
 
-    # In production, cleaned_bytes would be uploaded to Supabase Storage at
-    # this key. We store the key only; serving is done via the GET endpoint.
+    # Upload the cleaned bytes to the private bucket. If the bucket is missing the row above is
+    # still saved and the photo simply has no link yet (the owner creates the bucket once).
+    try:
+        get_db().storage.from_(_PHOTO_BUCKET).upload(
+            storage_key, cleaned_bytes, {"content-type": detected_mime}
+        )
+    except Exception as exc:
+        logger.warning("Photo bytes not uploaded (bucket %s): %s", _PHOTO_BUCKET, exc)
     logger.info(
         "Observation photo stored: observation_id=%s is_ai_version=%s key=%s size=%d",
         observation_id,
@@ -473,10 +557,9 @@ def get_observation_photo_url(
 
     photo = result.data
 
-    # In production: generate a short-lived signed URL via Supabase Storage.
-    # For now, return the storage key as a placeholder URL.
     storage_key = photo["storage_key"]
-    signed_url = storage_key  # placeholder — replace with real signed URL in prod
+    # Real one-hour signed URL; falls back to the key when storage is not set up.
+    signed_url = _signed_url(storage_key) or storage_key
 
     return SignedUrlResponse(
         photo_id=str(photo["id"]),
