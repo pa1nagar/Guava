@@ -7,6 +7,7 @@
 
 import { setLanguage, init } from './translator.js';
 import { API_BASE_URL } from './config.js';
+import { t, errorMessage } from './dom.js';
 
 // ─── Language ────────────────────────────────────────────────────────────────
 
@@ -62,30 +63,25 @@ async function handleContactSubmit(event) {
 
   // ── Client-side validation ──────────────────────────────────────────────
 
-  // Name is required
-  if (!name) {
+  const fail = (key, field) => {
+    const txt = document.getElementById('contact-validation-text');
+    if (txt) { txt.removeAttribute('data-i18n'); txt.textContent = t(key); }
     validationEl?.classList.remove('hidden');
-    return;
-  }
-
-  // At least one contact method is required
-  if (!email && !phone) {
-    validationEl?.classList.remove('hidden');
-    return;
-  }
-
-  // Consent is required
-  if (!consent) {
-    validationEl?.classList.remove('hidden');
-    return;
-  }
-
+    document.getElementById(field)?.focus();
+  };
+  if (!name) return fail('home.contact.v.name', 'contact-name');
+  if (!email && !phone) return fail('home.contact.v.contact', 'contact-email');
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return fail('home.contact.v.email', 'contact-email');
+  if (!consent) return fail('home.contact.v.consent', 'contact-consent');
   // ── Submit to backend ────────────────────────────────────────────────────
 
   const submitBtn = document.getElementById('contact-submit');
   if (submitBtn) {
     submitBtn.disabled = true;
     submitBtn.classList.add('opacity-60', 'cursor-not-allowed');
+    submitBtn.setAttribute('aria-busy', 'true');
+    submitBtn.dataset.label = submitBtn.innerHTML;
+    submitBtn.textContent = t('home.contact.sending');
   }
 
   try {
@@ -106,25 +102,22 @@ async function handleContactSubmit(event) {
       successEl?.classList.remove('hidden');
       form.reset();
     } else if (response.status === 422) {
-      // Validation failure from server — show error, keep form values
-      const data = await response.json().catch(() => ({}));
-      const detail = data?.detail || 'Validation error.';
-      if (errorMsgEl) errorMsgEl.textContent = detail;
+      // Validation failure from server: show a plain message, keep form values
+      if (errorMsgEl) errorMsgEl.textContent = t('home.contact.serverInvalid');
       errorEl?.classList.remove('hidden');
     } else if (response.status === 429) {
-      // Rate-limited — show retry message
       const retryAfter = response.headers.get('Retry-After');
-      const retryText = retryAfter
-        ? `Too many submissions. Please retry in ${retryAfter} seconds.`
-        : 'Too many submissions. Please try again later.';
-      if (errorMsgEl) errorMsgEl.textContent = retryText;
+      if (errorMsgEl) errorMsgEl.textContent = retryAfter
+        ? t('home.contact.rateLimited', { seconds: retryAfter })
+        : t('home.contact.rateLimitedLater');
       errorEl?.classList.remove('hidden');
     } else {
-      // Other server errors — show generic error, keep form values
+      // Other server errors: generic message, keep form values
+      if (errorMsgEl) errorMsgEl.textContent = await errorMessage(response);
       errorEl?.classList.remove('hidden');
-    }
-  } catch (err) {
+    }  } catch (err) {
     // Network failure — show error, keep form values for retry
+    if (errorMsgEl) errorMsgEl.textContent = t('common.error.network');
     errorEl?.classList.remove('hidden');
   } finally {
     if (submitBtn) {

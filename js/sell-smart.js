@@ -6,10 +6,11 @@
  * nothing is computed here except display formatting and the min/max of the
  * saved series for the chart summary.
  *
- * Demo mode: only when the URL has ?demo=1. The page then calls
+ * Demo mode: only when the URL has ?demo=1 AND the page is opened from this
+ * computer (host 127.0.0.1, localhost, or a file:// path). The page then calls
  * http://127.0.0.1:8001 (scripts/run_sell_smart_demo.py), skips sign-in and
- * shows a DEMO DATA banner. Without ?demo=1 no demo code path runs and no
- * request goes to port 8001.
+ * shows a DEMO DATA banner. On any other host (for example the live site) the
+ * flag is ignored: the normal sign-in gate runs and no request goes to port 8001.
  *
  * All display text goes through tr() / data-i18n (js/sell-smart-i18n.js).
  * Server-provided text (market names) is inserted with textContent only.
@@ -20,7 +21,8 @@ import { installSellTranslations } from "./sell-smart-i18n.js";
 import { init as initTranslator, setLanguage, getCurrentLang, formatNumber } from "./translator.js";
 
 const params = new URLSearchParams(window.location.search);
-const DEMO = params.get("demo") === "1";
+const LOCAL_HOSTS = ["127.0.0.1", "localhost", ""]; // "" is file://
+const DEMO = params.get("demo") === "1" && LOCAL_HOSTS.includes(window.location.hostname);
 const DEMO_BASE = "http://127.0.0.1:8001";
 const BASE = "/api/sell-smart";
 
@@ -285,9 +287,9 @@ function mandiCard(e, costsSet, ranked) {
         h("p", { class: "font-bold text-emerald-900" }, ranked && e.rank ? `${e.rank}. ` : "", e.market_name, ` (${e.district})`),
         h("div", { class: "mt-1 flex flex-wrap gap-1" }, badges)),
       h("div", { class: "text-right" },
-        h("p", { class: "text-xs text-brand-muted" }, costsSet && hasNet ? tr("sell_net") : tr("sell_gross")),
-        h("p", { class: "text-xl font-bold text-emerald-900" }, fmt(headline)),
-        h("p", { class: "text-xs text-brand-muted" }, tr("sell_unit_rs_kg")))),
+        h("p", { class: "text-sm text-brand-muted" }, costsSet && hasNet ? tr("sell_net") : tr("sell_gross")),
+        h("p", { class: "text-3xl font-bold text-emerald-900" }, fmt(headline)),
+        h("p", { class: "text-sm text-brand-muted" }, tr("sell_unit_rs_kg")))),
     h("dl", { class: "mt-2 grid grid-cols-2 gap-x-3 gap-y-1 text-sm" },
       h("dt", { class: "text-brand-muted" }, tr("sell_gross")), h("dd", {}, `${fmt(e.gross_per_kg)} ${tr("sell_unit_rs_kg")}`),
       h("dt", { class: "text-brand-muted" }, tr("sell_distance")), h("dd", {}, distance),
@@ -446,10 +448,14 @@ function renderTrends() {
   const series = d.series;
   const values = series.map((p) => p.value_per_kg);
   const done = (drawn) => {
-    $("trend-chart-summary").textContent = drawn
+    // The text summary is always shown (it is the text alternative for the chart).
+    // When Chart.js cannot load (offline), the empty canvas is hidden and a note is added.
+    const summary = series.length
       ? tr("sell_chart_summary", { from: fmtDate(series[0].trade_date), to: fmtDate(series[series.length - 1].trade_date),
                                    min: fmt(Math.min(...values)), max: fmt(Math.max(...values)) })
-      : tr("sell_chart_unavailable");
+      : "";
+    $("trend-chart-summary").textContent = drawn ? summary : `${tr("sell_chart_unavailable")} ${summary}`.trim();
+    canvas.parentElement.classList.toggle("hidden", !drawn);
   };
   // Chart.js is fetched on first use so it never blocks first paint.
   loadChartJs().then(() => done(drawTrendChart(canvas, series)), () => done(false));
@@ -524,15 +530,55 @@ function alertRow(a) {
   const place = alertPlace(a);
   const line = tr(a.direction === "at_or_below" ? "sell_alert_line_below" : "sell_alert_line_above",
     { place, target: fmt(a.target_rs_per_kg) });
-  return h("li", { class: "border border-gray-200 rounded-xl p-3" },
+  const li = h("li", { class: "border border-gray-200 rounded-xl p-3" },
     h("p", { class: "font-medium break-words" }, line),
     h("p", { class: "mt-1" }, h("span", { class: `badge ${a.is_active ? "badge-ok" : "badge-old"}` },
       tr(a.is_active ? "sell_alert_active" : "sell_alert_paused"))),
     h("div", { class: "mt-2 flex flex-wrap gap-2" },
+      h("button", { type: "button", class: "btn btn-secondary", "aria-label": `${tr("sell_alert_edit")}: ${line}`,
+        onclick: () => startEditAlert(a, li) }, tr("sell_alert_edit")),
       h("button", { type: "button", class: "btn btn-secondary", "aria-label": `${tr(a.is_active ? "sell_alert_pause" : "sell_alert_resume")}: ${line}`,
         onclick: () => toggleAlert(a) }, tr(a.is_active ? "sell_alert_pause" : "sell_alert_resume")),
       h("button", { type: "button", class: "btn btn-danger", "aria-label": `${tr("sell_alert_delete")}: ${line}`,
         onclick: () => deleteAlert(a) }, tr("sell_alert_delete"))));
+  return li;
+}
+
+/** Change the target price of one alert in place (PUT /alerts/{id}). */
+function startEditAlert(a, li) {
+  const inputId = `edit-target-${a.id}`;
+  const input = h("input", { id: inputId, type: "number", inputmode: "decimal", min: "0.01", step: "any",
+    class: "form-input", value: String(a.target_rs_per_kg) });
+  const msg = h("p", { class: "status-line mt-1", role: "status", "aria-live": "polite" });
+  const save = h("button", { type: "button", class: "btn btn-primary", onclick: async () => {
+    const target = numOrNull(input);
+    if (target === null || Number.isNaN(target) || target <= 0) {
+      msg.textContent = tr("sell_error_validation");
+      msg.classList.add("is-error");
+      return;
+    }
+    save.disabled = true;
+    try {
+      const r = await request(`${BASE}/alerts/${encodeURIComponent(a.id)}`, "PUT", { target_rs_per_kg: target });
+      if (!r.ok) {
+        msg.textContent = tr(r.status === 422 ? "sell_error_validation" : "sell_error_save");
+        msg.classList.add("is-error");
+        save.disabled = false;
+        return;
+      }
+      await loadAlerts();
+    } catch (_) {
+      msg.textContent = tr("sell_error_save");
+      msg.classList.add("is-error");
+      save.disabled = false;
+    }
+  } }, tr("sell_alert_save_price"));
+  const cancel = h("button", { type: "button", class: "btn btn-secondary", onclick: () => renderAlerts() }, tr("sell_alert_cancel"));
+  li.replaceChildren(
+    h("label", { class: "form-label", for: inputId }, tr("sell_alert_target")),
+    input, msg,
+    h("div", { class: "mt-2 flex flex-wrap gap-2" }, save, cancel));
+  input.focus();
 }
 
 function renderAlerts() {
@@ -571,7 +617,7 @@ async function addAlert(ev) {
     const r = await request(`${BASE}/alerts`, "POST", {
       state: w.s, district: w.d, market_name: w.m, target_rs_per_kg: target, direction: $("alert-direction").value,
     });
-    if (r.status === 409) { status.textContent = tr("sell_error_limit"); status.classList.add("is-error"); return; }
+    if (r.status === 409) { status.textContent = tr("sell_error_limit", { max: data.alerts?.max_alerts ?? 20 }); status.classList.add("is-error"); return; }
     if (!r.ok) {
       status.textContent = tr(r.status === 422 ? "sell_error_validation" : "sell_error_save");
       status.classList.add("is-error");
@@ -594,7 +640,7 @@ async function toggleAlert(a) {
   try {
     const r = await request(`${BASE}/alerts/${encodeURIComponent(a.id)}`, "PUT", { is_active: !a.is_active });
     if (!r.ok) {
-      status.textContent = tr(r.status === 409 ? "sell_error_limit" : "sell_error_save");
+      status.textContent = tr(r.status === 409 ? "sell_error_limit" : "sell_error_save", { max: data.alerts?.max_alerts ?? 20 });
       status.classList.add("is-error");
       return;
     }
@@ -694,7 +740,12 @@ async function loadFairness() {
     if (r.status === 404) { empty("fair", "sell_location_none"); return; }
     if (!r.ok) { failed("fair"); return; }
     data.fair = r.data;
-    if (r.data.status !== "ok") { empty("fair", r.data.reason_key || "sell_fairness_no_sale"); return; }
+    if (r.data.status !== "ok") {
+      // The API sends `reason` (for example "no_origin"); the text key is sell_fairness_<reason>.
+      const reasonKey = `sell_fairness_${r.data.reason}`;
+      empty("fair", TRANSLATIONS.en[reasonKey] ? reasonKey : "sell_fairness_no_sale");
+      return;
+    }
     renderFairness();
     ready("fair");
   } catch (_) { failed("fair"); }

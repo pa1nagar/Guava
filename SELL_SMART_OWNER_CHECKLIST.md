@@ -7,7 +7,7 @@ Do these once before telling farmers about "Where and when to sell".
 3. **Check the Render logs** after the next 07:45 or 19:45 IST. The `sell_smart_post_ingestion` job still runs on Render at those times, even though Render no longer fetches prices. It should log a summary (quality rows written, alerts checked, notifications created). It works on the prices the Edge Function or PC script saved earlier.
 4. **Set your own farm location and costs in the app.** Without a farm location the distance starts from your district centre. Without costs the list is sorted by mandi price and asks you to set your own cost. Nothing is filled in for you.
 5. **Review `privacy.html`.** The wording should say that the farm location is used to measure distance to mandis and is not shown to other farmers or sent to the browser as coordinates.
-6. **Demo data warning.** Anything seen with `?demo=1` is synthetic. After the frontend change in this release, `?demo=1` only works on localhost. Never show it to farmers as real prices.
+6. **Demo data warning.** Anything seen with `?demo=1` is synthetic. After the frontend change in this release, `?demo=1` only works when the page is opened from this computer (127.0.0.1, localhost or a file:// page); on the live site the flag is ignored. Never show it to farmers as real prices.
 
 ## What needs more saved history
 

@@ -24,6 +24,7 @@ let _state   = "loading";  // "loading" | "ready" | "error"
 let _public  = false;
 let _savedAt = null;      // set when the service worker served a saved copy (offline)
 let _onRender = null;
+let _lastOpts = null;      // arguments of the last loadMandiCard() call, so Retry can re-run it
 
 export function mandiLang() {
   try { return localStorage.getItem("sf_lang") === "hi" ? "hi" : "en"; }
@@ -74,7 +75,8 @@ function renderBoard() {
     return;
   }
   if (_state === "error") {
-    el.innerHTML = `<p class="text-sm text-red-600">${mandiEsc(mt("mandi.loadError"))}</p>`;
+    el.innerHTML = `<div class="load-error" role="alert"><p class="load-error__text">${mandiEsc(mt("mandi.loadError"))}</p><button type="button" class="load-error__retry">${mandiEsc(mt("mandi.retry"))}</button></div>`;
+    el.querySelector(".load-error__retry")?.addEventListener("click", () => loadMandiCard(_lastOpts || {}));
     return;
   }
 
@@ -94,8 +96,8 @@ function renderBoard() {
   const cards = board.mandis.map(m => {
     const stale = m.is_stale;
     const badge = stale
-      ? `<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">${mandiEsc(mt("mandi.stale", { days: staleDays ?? "" }))}</span>`
-      : `<span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-green-100 text-green-800">${mandiEsc(mt("mandi.fresh"))}</span>`;
+      ? `<span class="text-sm font-semibold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">${mandiEsc(mt("mandi.stale", { days: staleDays ?? "" }))}</span>`
+      : `<span class="text-sm font-semibold px-2 py-0.5 rounded-full bg-green-100 text-green-800">${mandiEsc(mt("mandi.fresh"))}</span>`;
     const where = [m.district, m.state].filter(Boolean).map(mandiEsc).join(", ");
     const dist = m.distance_km != null && m.match !== "same_district"
       ? ` · ${mandiEsc(mt("mandi.distance", { km: m.distance_km }))}` : "";
@@ -177,8 +179,53 @@ function renderHistory() {
     </div>`;
 }
 
+/** Largest-number headline on the public page: the newest saved price (js/mandi.js feeds #mandi-hero). */
+function renderHero() {
+  const el = document.getElementById("mandi-hero");
+  if (!el) return;
+  el.dataset.state = _state === "ready" ? "ok" : _state;
+  const retryBtn = `<button type="button" class="load-error__retry" data-mandi-retry>${mandiEsc(mt("mandi.retry"))}</button>`;
+  if (_state === "loading") {
+    el.innerHTML = `<p class="price-hero__meta" role="status">${mandiEsc(mt("mandi.loading"))}</p>`;
+    return;
+  }
+  if (_state === "error") {
+    el.innerHTML = `<p class="price-hero__meta text-red-700">${mandiEsc(mt("mandi.loadError"))}</p>${retryBtn}`;
+    el.querySelector("[data-mandi-retry]")?.addEventListener("click", () => loadMandiCard(_lastOpts || {}));
+    return;
+  }
+  const board = _board || {};
+  // Newest trade date first; the board already lists freshest mandis first per state.
+  const mandis = (board.mandis || []).filter(m => (m.prices || []).some(p => p.modal_per_kg != null));
+  mandis.sort((a, b) => String(b.trade_date).localeCompare(String(a.trade_date)));
+  const top = board.has_data ? mandis[0] : null;
+  if (!top) {
+    el.dataset.state = "empty";
+    el.innerHTML = `
+      <h2 class="price-hero__unit">${mandiEsc(mt("mandi.hero.title"))}</h2>
+      <p class="price-hero__value">—</p>
+      <p class="price-hero__unit">${mandiEsc(mt("mandi.hero.empty"))}</p>
+      <p class="price-hero__meta">${mandiEsc(mt("mandi.hero.emptyBody"))}</p>
+      <p class="price-hero__meta">${mandiEsc(mt("mandi.source"))}</p>`;
+    return;
+  }
+  const p = top.prices.find(x => x.modal_per_kg != null);
+  const quintal = p.modal_per_quintal != null
+    ? `<p class="price-hero__quintal">${mandiEsc(mt("mandi.hero.perQuintal", { value: Number(p.modal_per_quintal).toLocaleString("en-IN", { maximumFractionDigits: 0 }) }))}</p>` : "";
+  el.innerHTML = `
+    <h2 class="price-hero__unit">${mandiEsc(mt("mandi.hero.title"))}</h2>
+    <p class="price-hero__value">${rupee(p.modal_per_kg)}</p>
+    <p class="price-hero__unit">${mandiEsc(mt("mandi.perKg"))} · ${mandiEsc(mt("mandi.modal"))}</p>
+    ${quintal}
+    <p class="price-hero__meta font-semibold">${mandiEsc(mt("mandi.hero.at", { market: top.market, state: top.state }))}</p>
+    <p class="price-hero__meta">${mandiEsc(mt("mandi.asOf", { date: mandiDate(top.trade_date) }))}${top.is_stale ? ` · ${mandiEsc(mt("mandi.hero.stale"))}` : ""}</p>
+    <p class="price-hero__meta">${mandiEsc(mt("mandi.source"))}</p>
+    ${_savedAt ? `<p class="price-hero__meta font-semibold text-amber-800" role="status">${mandiEsc(mt("mandi.offlineCopy", { date: mandiDate(_savedAt) }))}</p>` : ""}`;
+}
+
 export function renderMandiAll() {
   renderHeader();
+  renderHero();
   renderBoard();
   renderHistory();
   if (_onRender) _onRender();
@@ -194,6 +241,7 @@ export function renderMandiAll() {
  * @param {Function} [opts.onRender]  called after every render.
  */
 export async function loadMandiCard({ apiFetch, apiBase = "", onRender } = {}) {
+  _lastOpts = { apiFetch, apiBase, onRender };
   _public = !apiFetch;
   _onRender = onRender || null;
   _state = "loading";

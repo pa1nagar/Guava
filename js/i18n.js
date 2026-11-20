@@ -1231,3 +1231,6 @@ export const TRANSLATIONS = {
 import { PAGE_EN, PAGE_HI } from './i18n-pages.js';
 Object.assign(TRANSLATIONS.en, PAGE_EN);
 Object.assign(TRANSLATIONS.hi, PAGE_HI);
+import { PUBLIC_EN, PUBLIC_HI } from './i18n-public.js';
+Object.assign(TRANSLATIONS.en, PUBLIC_EN);
+Object.assign(TRANSLATIONS.hi, PUBLIC_HI);

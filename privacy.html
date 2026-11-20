@@ -7,31 +7,69 @@
   <link rel="stylesheet" href="css/tailwind.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="max-w-2xl mx-auto px-4 py-8 text-gray-800 text-sm leading-relaxed">
+<body class="bg-brand-bg text-gray-800">
+  <div id="lang-bar" class="lang-bar">
+    <span class="lang-bar__label">🌐 <span data-i18n="home.lang.label">Language</span>:</span>
+    <button type="button" id="lang-en" class="lang-pill lang-active" lang="en">English</button>
+    <button type="button" id="lang-hi" class="lang-pill" lang="hi">हिन्दी</button>
+  </div>
 
-  <h1 class="text-2xl font-bold mb-4">Privacy Policy</h1>
-  <p class="text-gray-500 mb-6">Last updated: September 2026</p>
+  <main class="max-w-2xl mx-auto px-4 py-8 text-base leading-relaxed">
+    <h1 class="text-2xl font-bold mb-2" data-i18n="privacy.title">Privacy Policy</h1>
+    <p class="text-gray-600 mb-6" data-i18n="privacy.updated">Last updated: November 2026</p>
 
-  <h2 class="font-semibold text-base mt-6 mb-2">What we collect</h2>
-  <p>When you sign in with Google, we receive your name and email address. We also store the farm details you provide: crop type, number of plants, state, district, and planting date.</p>
+    <section aria-labelledby="p-collect">
+      <h2 id="p-collect" class="font-semibold text-lg mt-6 mb-2" data-i18n="privacy.collect.h">What we collect</h2>
+      <p data-i18n="privacy.collect.p">When you sign in with Google, we receive your name and email address. We also store the farm details you provide: crop type, number of plants, state, district, and planting date.</p>
+    </section>
 
-  <h2 class="font-semibold text-base mt-6 mb-2">How we use it</h2>
-  <p>Your farm details are used only to generate your personalized crop care plan. We do not sell, share, or use your data for advertising.</p>
+    <section aria-labelledby="p-use">
+      <h2 id="p-use" class="font-semibold text-lg mt-6 mb-2" data-i18n="privacy.use.h">How we use it</h2>
+      <p data-i18n="privacy.use.p">Your farm details are used only to generate your personalized crop care plan. We do not sell, share, or use your data for advertising.</p>
+    </section>
 
-  <h2 class="font-semibold text-base mt-6 mb-2">Data storage</h2>
-  <p>Your data is stored securely in Supabase (hosted on AWS). Each farmer can only access their own data.</p>
+    <section aria-labelledby="p-location">
+      <h2 id="p-location" class="font-semibold text-lg mt-6 mb-2" data-i18n="privacy.location.h">Your farm location</h2>
+      <p data-i18n="privacy.location.p">Your farm location (state and district, or the point you set) is used on our server only, to work out the distance from your farm to mandis. It is not shown to other farmers and is not sent to your browser as coordinates.</p>
+    </section>
 
-  <h2 class="font-semibold text-base mt-6 mb-2">Third-party services</h2>
-  <p>We use Google Sign-In for authentication and Google Gemini to generate care plan text. No personal information is sent to Gemini — only your crop, plant count, and growth stage.</p>
+    <section aria-labelledby="p-storage">
+      <h2 id="p-storage" class="font-semibold text-lg mt-6 mb-2" data-i18n="privacy.storage.h">Data storage</h2>
+      <p data-i18n="privacy.storage.p">Your data is stored securely in Supabase (hosted on AWS). Each farmer can only access their own data.</p>
+    </section>
 
-  <h2 class="font-semibold text-base mt-6 mb-2">Deleting your data</h2>
-  <p>To delete your account and data, email us or sign out and we will remove your record on request.</p>
+    <section aria-labelledby="p-third">
+      <h2 id="p-third" class="font-semibold text-lg mt-6 mb-2" data-i18n="privacy.third.h">Third-party services</h2>
+      <p data-i18n="privacy.third.p">We use Google Sign-In for authentication and Google Gemini to generate care plan text. No personal information is sent to Gemini — only your crop, plant count, and growth stage.</p>
+    </section>
 
-  <h2 class="font-semibold text-base mt-6 mb-2">Contact</h2>
-  <p>For any questions, contact us through <a href="https://guavaa.netlify.app" class="text-green-700 underline">guavaa.netlify.app</a>.</p>
+    <section aria-labelledby="p-offline">
+      <h2 id="p-offline" class="font-semibold text-lg mt-6 mb-2" data-i18n="privacy.offline.h">Saved copies on your phone</h2>
+      <p data-i18n="privacy.offline.p">To work with a weak connection, the app keeps a saved copy of its own pages and of the public mandi prices on your phone. It does not save your private farm data on the phone this way.</p>
+    </section>
 
-  <p class="mt-8 text-gray-400 text-xs">Smart Farmer — guavaa.netlify.app</p>
+    <section aria-labelledby="p-delete">
+      <h2 id="p-delete" class="font-semibold text-lg mt-6 mb-2" data-i18n="privacy.delete.h">Deleting your data</h2>
+      <p data-i18n="privacy.delete.p">To delete your account and data, email us or sign out and we will remove your record on request.</p>
+    </section>
 
+    <section aria-labelledby="p-contact">
+      <h2 id="p-contact" class="font-semibold text-lg mt-6 mb-2" data-i18n="privacy.contact.h">Contact</h2>
+      <p data-i18n="privacy.contact.p">For any questions, contact us through the contact form on our home page.</p>
+    </section>
+
+    <p class="mt-8">
+      <a href="index.html" class="inline-flex items-center min-h-[44px] text-brand-secondary underline" data-i18n="privacy.back">Back to home page</a>
+    </p>
+  </main>
+
+  <script type="module">
+    import { initPage } from "./js/dom.js";
+    import { setLanguage } from "./js/translator.js";
+    initPage();
+    document.getElementById("lang-en").addEventListener("click", () => setLanguage("en"));
+    document.getElementById("lang-hi").addEventListener("click", () => setLanguage("hi"));
+  </script>
   <script type="module" src="js/sw-register.js"></script>
 </body>
 </html>

@@ -2,17 +2,24 @@
  * onboarding.js — First-time farmer form logic.
  *
  * Responsibilities:
- *  - Route guard (redirect away if already has a profile)
- *  - Populate State dropdown from india-locations.js
+ *  - Route guard (redirect to login when signed out)
+ *  - Populate State dropdown (launch states only) from india-locations.js
  *  - Cascade District dropdown on State change
- *  - Client-side validation (plant count, future sowing date)
- *  - POST to /api/profile with JWT
+ *  - Client-side validation (plant count, future sowing date, optional yield)
+ *  - POST to /api/profile with JWT, show backend 4xx messages in plain words
  *  - Redirect to plan.html on success
+ *
+ * All text goes through t() / data-i18n (EN and HI, js/i18n-public.js).
+ * The sign-in library comes from a CDN, so auth.js and api.js are imported
+ * inside try/catch: if they cannot load, the page shows a message, not a blank screen.
  */
 
-import { routeGuard } from "./auth.js";
-import { apiFetch } from "./api.js";
 import { getStates, getDistricts } from "./india-locations.js";
+import { initPage, t, errorMessage, setBusy } from "./dom.js";
+import { setLanguage } from "./translator.js";
+
+// States offered at launch (the repo data has all states; the backend and mandi data target these two).
+const LAUNCH_STATES = ["Madhya Pradesh", "Maharashtra"];
 
 // ── DOM refs ──────────────────────────────────────────────────────────────────
 const form          = document.getElementById("onboarding-form");
@@ -29,162 +36,158 @@ const plantCountErr = document.getElementById("plant-count-error");
 const sowingErr     = document.getElementById("sowing-date-error");
 const yieldErr      = document.getElementById("yield-error");
 
-// ── Initialise ────────────────────────────────────────────────────────────────
-document.addEventListener("DOMContentLoaded", async () => {
-  await routeGuard("onboarding");
+let apiFetch = null;
 
-  // Default sowing date to today.
-  sowingEl.value = new Date().toISOString().split("T")[0];
+function showFormError(text) {
+  formError.textContent = text;
+  formError.classList.remove("hidden");
+}
 
-  // Populate State dropdown.
-  for (const state of getStates()) {
-    const opt = document.createElement("option");
-    opt.value = state;
-    opt.textContent = state;
-    stateEl.appendChild(opt);
-  }
-});
+function fieldError(el, key) {
+  el.textContent = t(key);
+  el.classList.remove("hidden");
+}
 
-// ── State → District cascade ──────────────────────────────────────────────────
-stateEl.addEventListener("change", () => {
+function resetDistricts() {
   const selected = stateEl.value;
-
-  // Clear current options.
-  districtEl.innerHTML = '<option value="">Select district</option>';
-
+  districtEl.replaceChildren();
+  const first = document.createElement("option");
+  first.value = "";
+  first.setAttribute("data-i18n", "onb.district.placeholder");
+  first.textContent = t("onb.district.placeholder");
+  districtEl.appendChild(first);
   if (!selected) {
     districtEl.disabled = true;
     return;
   }
-
   for (const district of getDistricts(selected)) {
     const opt = document.createElement("option");
     opt.value = district;
     opt.textContent = district;
     districtEl.appendChild(opt);
   }
-
   districtEl.disabled = false;
-  districtEl.value = ""; // reset to blank default
-});
+  districtEl.value = "";
+}
+
+function fillStates() {
+  const known = new Set(getStates());
+  for (const state of LAUNCH_STATES.filter((s) => known.has(s))) {
+    const opt = document.createElement("option");
+    opt.value = state;
+    opt.textContent = state;
+    stateEl.appendChild(opt);
+  }
+}
+
+// ── Initialise ────────────────────────────────────────────────────────────────
+async function start() {
+  initPage();
+  document.getElementById("lang-en").addEventListener("click", () => setLanguage("en"));
+  document.getElementById("lang-hi").addEventListener("click", () => setLanguage("hi"));
+
+  // Default sowing date to today (local date, not UTC).
+  const now = new Date();
+  sowingEl.value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+  sowingEl.max = sowingEl.value;
+  fillStates();
+
+  try {
+    const [auth, api] = await Promise.all([import("./auth.js"), import("./api.js")]);
+    apiFetch = api.apiFetch;
+    await auth.routeGuard("onboarding");
+  } catch (_) {
+    btnSubmit.disabled = true;
+    showFormError(t("onb.err.unreachable"));
+  }
+}
+
+// ── State → District cascade ──────────────────────────────────────────────────
+stateEl.addEventListener("change", resetDistricts);
 
 // ── Form submission ───────────────────────────────────────────────────────────
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
-
-  // Clear previous errors.
-  plantCountErr.textContent = "";
-  plantCountErr.classList.add("hidden");
-  sowingErr.textContent = "";
-  sowingErr.classList.add("hidden");
-  if (yieldErr) { yieldErr.textContent = ""; yieldErr.classList.add("hidden"); }
-  formError.textContent = "";
-  formError.classList.add("hidden");
-
-  // ── Validate plant count ──────────────────────────────────────────────────
-  const plantCount = parseInt(plantCountEl.value, 10);
-  if (!plantCountEl.value || isNaN(plantCount) || plantCount < 1) {
-    plantCountErr.textContent = "Number of plants must be at least 1.";
-    plantCountErr.classList.remove("hidden");
-    plantCountEl.focus();
+  if (!apiFetch) {
+    showFormError(t("onb.err.unreachable"));
     return;
   }
 
-  // ── Validate state and district ───────────────────────────────────────────
+  for (const el of [plantCountErr, sowingErr, yieldErr, formError]) {
+    el.textContent = "";
+    el.classList.add("hidden");
+  }
+
+  const plantCount = Number(plantCountEl.value);
+  if (!plantCountEl.value || !Number.isInteger(plantCount) || plantCount < 1) {
+    fieldError(plantCountErr, "onb.err.plantCount");
+    plantCountEl.focus();
+    return;
+  }
   if (!stateEl.value) {
-    formError.textContent = "Please select a state.";
-    formError.classList.remove("hidden");
+    showFormError(t("onb.err.state"));
     stateEl.focus();
     return;
   }
   if (!districtEl.value) {
-    formError.textContent = "Please select a district.";
-    formError.classList.remove("hidden");
+    showFormError(t("onb.err.district"));
     districtEl.focus();
     return;
   }
 
-  // ── Validate sowing date (Req 2.5) ────────────────────────────────────────
   const sowingValue = sowingEl.value;
   if (!sowingValue) {
-    sowingErr.textContent = "Please enter the planting date.";
-    sowingErr.classList.remove("hidden");
+    fieldError(sowingErr, "onb.err.date");
     sowingEl.focus();
     return;
   }
-  // Compare dates at midnight local time to avoid timezone-offset false positives.
-  const sowingDate = new Date(sowingValue + "T00:00:00");
-  const today      = new Date(new Date().toISOString().split("T")[0] + "T00:00:00");
-  if (sowingDate > today) {
-    sowingErr.textContent = "Planting date cannot be in the future.";
-    sowingErr.classList.remove("hidden");
+  // Compare calendar dates (YYYY-MM-DD strings sort correctly) to avoid timezone false positives.
+  if (sowingValue > sowingEl.max) {
+    fieldError(sowingErr, "onb.err.dateFuture");
     sowingEl.focus();
     return;
   }
 
-  // ── Show loading state ────────────────────────────────────────────────────
-  btnSubmit.disabled = true;
+  let expectedYieldKg = null;
+  if (yieldEl.value.trim() !== "") {
+    const parsed = Number(yieldEl.value);
+    if (!Number.isFinite(parsed) || parsed <= 0) {
+      fieldError(yieldErr, "onb.err.yield");
+      yieldEl.focus();
+      return;
+    }
+    expectedYieldKg = parsed;
+  }
+
+  // Submit disabled while saving.
+  setBusy(btnSubmit, true);
   formLoading.classList.remove("hidden");
 
-  // ── POST to backend ───────────────────────────────────────────────────────
   try {
-    // Parse optional expected yield.
-    let expectedYieldKg = null;
-    if (yieldEl && yieldEl.value.trim() !== "") {
-      const parsed = parseFloat(yieldEl.value);
-      if (isNaN(parsed) || parsed <= 0) {
-        if (yieldErr) {
-          yieldErr.textContent = "Expected harvest must be a positive number.";
-          yieldErr.classList.remove("hidden");
-        }
-        btnSubmit.disabled = false;
-        formLoading.classList.add("hidden");
-        return;
-      }
-      expectedYieldKg = parsed;
-    }
-
-    const payload = {
-      crop:             cropEl.value,
-      plant_count:      plantCount,
-      state:            stateEl.value,
-      district:         districtEl.value,
-      sowing_date:      sowingValue,
-      expected_yield_kg: expectedYieldKg,
-    };
-
     const res = await apiFetch("/api/profile", {
-      method:  "POST",
-      body: JSON.stringify(payload),
+      method: "POST",
+      body: JSON.stringify({
+        crop: cropEl.value,
+        plant_count: plantCount,
+        state: stateEl.value,
+        district: districtEl.value,
+        sowing_date: sowingValue,
+        expected_yield_kg: expectedYieldKg,
+      }),
     });
-
     if (res.ok) {
-      // Clear any saved draft on success
       sessionStorage.removeItem("sf_onboarding_draft");
       window.location.href = "plan.html";
       return;
     }
-
-    // Handle error responses.
-    // Req 17.3: field values are preserved automatically — we never clear them
-    // on a failed submission, so the farmer can correct and retry without
-    // re-entering everything.
-    let detail = "Something went wrong. Please try again.";
-    try {
-      const data = await res.json();
-      if (res.status === 422 && data.detail) {
-        detail = data.detail;
-      }
-    } catch (_) { /* ignore parse errors */ }
-
-    formError.textContent = detail;
-    formError.classList.remove("hidden");
-
+    // Field values are kept on failure so the farmer can correct and retry.
+    showFormError(await errorMessage(res));
   } catch (_) {
-    formError.textContent = "Something went wrong. Please check your connection and try again.";
-    formError.classList.remove("hidden");
+    showFormError(t("onb.err.network"));
   } finally {
-    btnSubmit.disabled = false;
+    setBusy(btnSubmit, false);
     formLoading.classList.add("hidden");
   }
 });
+
+start();

@@ -7,73 +7,111 @@
   <link rel="preconnect" href="https://guava-8wc7.onrender.com" crossorigin>
   <meta name="description" content="Sign in to Smart Farmer — your personal farm management platform.">
   <title>Smart Farmer — Login</title>
-
-  <!-- Brand colour config (matches index.html) -->
   <link rel="stylesheet" href="css/tailwind.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="min-h-screen bg-brand-bg flex items-center justify-center px-4">
-
-  <div class="w-full max-w-sm flex flex-col items-center gap-3 text-center">
-
-    <!-- Brand mark -->
-    <div class="text-5xl">🌿</div>
-    <h1 class="text-2xl font-bold text-brand-primary">Smart Farmer</h1>
-    <p class="text-sm text-gray-500">Your personal farm management platform</p>
-
-    <div class="mt-6 w-full flex flex-col gap-3">
-
-      <!-- Sign-in button -->
-      <button
-        id="btn-google-signin"
-        class="w-full min-h-[48px] bg-brand-primary text-white text-base font-semibold
-               rounded-lg flex items-center justify-center gap-2
-               hover:bg-brand-secondary active:scale-[0.98] transition"
-      >
-        <!-- Simple "G" mark -->
-        <span class="text-lg font-bold">G</span>
-        Sign in with Google
-      </button>
-
-      <p class="text-xs text-gray-400">Free · No password needed</p>
-
-      <!-- Error display (hidden until needed) -->
-      <span
-        id="auth-error"
-        class="hidden text-red-600 text-sm mt-1"
-        role="alert"
-      ></span>
-
-    </div>
+<body class="min-h-screen bg-brand-bg flex flex-col">
+  <div id="lang-bar" class="lang-bar">
+    <span class="lang-bar__label">🌐 <span data-i18n="home.lang.label">Language</span>:</span>
+    <button type="button" id="lang-en" class="lang-pill lang-active" lang="en">English</button>
+    <button type="button" id="lang-hi" class="lang-pill" lang="hi">हिन्दी</button>
   </div>
 
+  <main class="flex-1 flex items-center justify-center px-4 py-8">
+    <div class="w-full max-w-sm flex flex-col items-center gap-3 text-center">
+      <div class="text-5xl" aria-hidden="true">🌿</div>
+      <h1 class="text-2xl font-bold text-brand-primary">Smart Farmer</h1>
+      <p class="text-base text-gray-600" data-i18n="login.tagline">Your personal farm management platform</p>
+
+      <div class="mt-6 w-full flex flex-col gap-3">
+        <button
+          type="button"
+          id="btn-google-signin"
+          class="w-full min-h-[48px] bg-brand-primary text-white text-base font-semibold
+                 rounded-lg flex items-center justify-center gap-2
+                 hover:bg-brand-secondary active:scale-[0.98] transition disabled:opacity-60"
+        >
+          <span class="text-lg font-bold" aria-hidden="true">G</span>
+          <span id="signin-label" data-i18n="login.signin">Sign in with Google</span>
+        </button>
+        <p class="text-base text-gray-600" data-i18n="login.free">Free · No password needed</p>
+
+        <p id="auth-status" class="hidden text-base text-gray-700" role="status"></p>
+        <div id="auth-error-box" class="hidden flex flex-col items-center gap-2" role="alert">
+          <span id="auth-error" class="text-red-700 text-base font-semibold"></span>
+          <button type="button" id="btn-retry" class="load-error__retry" data-i18n="common.retry">Retry</button>
+        </div>
+        <a href="index.html" class="inline-flex items-center justify-center min-h-[44px] text-brand-secondary underline text-base" data-i18n="login.home">Back to home page</a>
+      </div>
+    </div>
+  </main>
+
   <script type="module">
-    import { routeGuard, signInWithGoogle } from "./js/auth.js";
+    import { initPage, t } from "./js/dom.js";
+    import { setLanguage } from "./js/translator.js";
+    initPage();
+    document.getElementById("lang-en").addEventListener("click", () => setLanguage("en"));
+    document.getElementById("lang-hi").addEventListener("click", () => setLanguage("hi"));
 
-    document.addEventListener("DOMContentLoaded", async () => {
-      // Wake the backend immediately when login page loads.
-      // This gives Render ~30 seconds to boot while the farmer reads the page
-      // and clicks "Sign in with Google" — so plan.html loads instantly after.
-      import("./js/config.js").then(({ API_BASE_URL }) => {
-        fetch(`${API_BASE_URL}/health`, { method: "GET" }).catch(() => {});
-      });
+    const btn = document.getElementById("btn-google-signin");
+    const label = document.getElementById("signin-label");
+    const statusEl = document.getElementById("auth-status");
+    const errBox = document.getElementById("auth-error-box");
+    const errEl = document.getElementById("auth-error");
+    const retryBtn = document.getElementById("btn-retry");
+    let auth = null;
 
-      await routeGuard("login");
-    });
+    function showError(key, withRetry) {
+      statusEl.classList.add("hidden");
+      errEl.textContent = t(key);
+      errBox.classList.remove("hidden");
+      retryBtn.classList.toggle("hidden", !withRetry);
+    }
+    function clearError() { errBox.classList.add("hidden"); errEl.textContent = ""; }
 
-    document.getElementById("btn-google-signin").addEventListener("click", async () => {
-      const errEl = document.getElementById("auth-error");
-      errEl.classList.add("hidden");
-      errEl.textContent = "";
+    // Wake the backend while the farmer reads the page (Render's free tier sleeps).
+    import("./js/config.js").then(({ API_BASE_URL }) => {
+      fetch(`${API_BASE_URL}/health`, { method: "GET" }).catch(() => {});
+    }).catch(() => {});
+
+    async function start() {
+      clearError();
       try {
-        await signInWithGoogle();
-      } catch (err) {
-        errEl.textContent = "Sign-in failed. Please try again.";
-        errEl.classList.remove("hidden");
+        // The sign-in library comes from a CDN. If it cannot be loaded, say so instead of a blank page.
+        auth = auth || await import("./js/auth.js");
+      } catch (_) {
+        btn.disabled = true;
+        showError("login.unreachable", true);
+        return;
+      }
+      btn.disabled = false;
+      statusEl.textContent = t("login.checking");
+      statusEl.classList.remove("hidden");
+      let outcome;
+      try { outcome = await auth.routeGuard("login"); } catch (_) { outcome = "server_down"; }
+      if (outcome === "server_down") { showError("login.serverDown", true); return; }
+      statusEl.classList.add("hidden");
+    }
+    retryBtn.addEventListener("click", start);
+
+    btn.addEventListener("click", async () => {
+      if (!auth) { await start(); if (!auth) return; }
+      clearError();
+      btn.disabled = true;
+      label.removeAttribute("data-i18n");
+      label.textContent = t("login.opening");
+      try {
+        await auth.signInWithGoogle();
+      } catch (_) {
+        btn.disabled = false;
+        label.setAttribute("data-i18n", "login.signin");
+        label.textContent = t("login.signin");
+        showError("login.error", false);
       }
     });
-  </script>
 
+    start();
+  </script>
   <script type="module" src="js/sw-register.js"></script>
 </body>
 </html>

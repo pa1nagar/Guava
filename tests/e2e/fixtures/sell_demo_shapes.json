@@ -1,0 +1,927 @@
+{
+ "settings": {
+  "settings": {
+   "transport_mode": "per_quintal_per_km",
+   "transport_rs_per_quintal_per_km": 2.5,
+   "transport_rs_per_quintal_flat": null,
+   "handling_rs_per_quintal": 40.0,
+   "commission_pct": 4.0,
+   "radius_km": null,
+   "road_km_overrides": {}
+  },
+  "costs_set": true,
+  "default_radius_km": 300.0,
+  "max_radius_km": 1500.0,
+  "location_basis": "district_centre",
+  "transport_suggestion": {
+   "mode": "flat_per_quintal",
+   "rs_per_quintal": 300.0,
+   "n_sales": 1,
+   "label": "from 1 logged sale(s)"
+  },
+  "demo": false
+ },
+ "ranking": {
+  "status": "ok",
+  "costs_set": true,
+  "radius_km": 300.0,
+  "ranked_by": "net",
+  "formula": {
+   "template_key": "sell_formula_net",
+   "text_en": "Net Rs/kg = modal price - transport - handling - (modal price x commission % / 100)",
+   "transport_text_en": {
+    "per_quintal_per_km": "transport Rs/kg = (Rs per quintal per km x km) / 100",
+    "flat_per_quintal": "transport Rs/kg = flat Rs per quintal / 100"
+   },
+   "handling_text_en": "handling Rs/kg = handling Rs per quintal / 100"
+  },
+  "ranked": [
+   {
+    "id": "Maharashtra|Pune|Pune",
+    "state": "Maharashtra",
+    "district": "Pune",
+    "market_name": "Pune",
+    "trade_date": "2026-11-20",
+    "stale": false,
+    "gross_per_kg": 45.5,
+    "n_rows": 1,
+    "varieties": [
+     {
+      "variety": "Demo",
+      "grade": "FAQ"
+     }
+    ],
+    "location_known": true,
+    "location_basis": "district centre (services.geo)",
+    "distance_km": 0.0,
+    "distance_basis": "straight_line",
+    "distance_label": "straight-line distance to the mandi district centre; road distance is longer",
+    "transport_per_kg": 0.0,
+    "handling_per_kg": 0.4,
+    "commission_per_kg": 1.82,
+    "net_per_kg": 43.28,
+    "substitution": "Rs 45.50 - Rs 0.00 - Rs 0.40 - Rs 1.82 = Rs 43.28",
+    "rank": 1,
+    "is_stale": false,
+    "source": "Agmarknet / data.gov.in",
+    "quality_flags": [],
+    "distance_label_key": "sell_distance_straight"
+   },
+   {
+    "id": "Maharashtra|Mumbai|Mumbai",
+    "state": "Maharashtra",
+    "district": "Mumbai",
+    "market_name": "Mumbai",
+    "trade_date": "2026-11-20",
+    "stale": false,
+    "gross_per_kg": 44.5,
+    "n_rows": 1,
+    "varieties": [
+     {
+      "variety": "Demo",
+      "grade": "FAQ"
+     }
+    ],
+    "location_known": true,
+    "location_basis": "district centre (services.geo)",
+    "distance_km": 120.49391932064067,
+    "distance_basis": "straight_line",
+    "distance_label": "straight-line distance to the mandi district centre; road distance is longer",
+    "transport_per_kg": 3.012347983016017,
+    "handling_per_kg": 0.4,
+    "commission_per_kg": 1.78,
+    "net_per_kg": 39.30765201698399,
+    "substitution": "Rs 44.50 - Rs 3.01 - Rs 0.40 - Rs 1.78 = Rs 39.31",
+    "rank": 2,
+    "is_stale": false,
+    "source": "Agmarknet / data.gov.in",
+    "quality_flags": [],
+    "distance_label_key": "sell_distance_straight"
+   },
+   {
+    "id": "Maharashtra|Satara|Satara",
+    "state": "Maharashtra",
+    "district": "Satara",
+    "market_name": "Satara",
+    "trade_date": "2026-11-20",
+    "stale": false,
+    "gross_per_kg": 43.5,
+    "n_rows": 1,
+    "varieties": [
+     {
+      "variety": "Demo",
+      "grade": "FAQ"
+     }
+    ],
+    "location_known": true,
+    "location_basis": "district centre (services.geo)",
+    "distance_km": 94.5686401595539,
+    "distance_basis": "straight_line",
+    "distance_label": "straight-line distance to the mandi district centre; road distance is longer",
+    "transport_per_kg": 2.3642160039888473,
+    "handling_per_kg": 0.4,
+    "commission_per_kg": 1.74,
+    "net_per_kg": 38.995783996011156,
+    "substitution": "Rs 43.50 - Rs 2.36 - Rs 0.40 - Rs 1.74 = Rs 39.00",
+    "rank": 3,
+    "is_stale": false,
+    "source": "Agmarknet / data.gov.in",
+    "quality_flags": [],
+    "distance_label_key": "sell_distance_straight"
+   },
+   {
+    "id": "Maharashtra|Nashik|Nashik",
+    "state": "Maharashtra",
+    "district": "Nashik",
+    "market_name": "Nashik",
+    "trade_date": "2026-11-20",
+    "stale": false,
+    "gross_per_kg": 42.0,
+    "n_rows": 1,
+    "varieties": [
+     {
+      "variety": "Demo",
+      "grade": "FAQ"
+     }
+    ],
+    "location_known": true,
+    "location_basis": "district centre (services.geo)",
+    "distance_km": 163.62184318770568,
+    "distance_basis": "straight_line",
+    "distance_label": "straight-line distance to the mandi district centre; road distance is longer",
+    "transport_per_kg": 4.0905460796926425,
+    "handling_per_kg": 0.4,
+    "commission_per_kg": 1.68,
+    "net_per_kg": 35.82945392030736,
+    "substitution": "Rs 42.00 - Rs 4.09 - Rs 0.40 - Rs 1.68 = Rs 35.83",
+    "rank": 4,
+    "is_stale": false,
+    "source": "Agmarknet / data.gov.in",
+    "quality_flags": [],
+    "distance_label_key": "sell_distance_straight"
+   },
+   {
+    "id": "Maharashtra|Solapur|Solapur",
+    "state": "Maharashtra",
+    "district": "Solapur",
+    "market_name": "Solapur",
+    "trade_date": "2026-11-20",
+    "stale": false,
+    "gross_per_kg": 36.5,
+    "n_rows": 1,
+    "varieties": [
+     {
+      "variety": "Demo",
+      "grade": "FAQ"
+     }
+    ],
+    "location_known": true,
+    "location_basis": "district centre (services.geo)",
+    "distance_km": 235.4214954730427,
+    "distance_basis": "straight_line",
+    "distance_label": "straight-line distance to the mandi district centre; road distance is longer",
+    "transport_per_kg": 5.885537386826067,
+    "handling_per_kg": 0.4,
+    "commission_per_kg": 1.46,
+    "net_per_kg": 28.754462613173935,
+    "substitution": "Rs 36.50 - Rs 5.89 - Rs 0.40 - Rs 1.46 = Rs 28.75",
+    "rank": 5,
+    "is_stale": false,
+    "source": "Agmarknet / data.gov.in",
+    "quality_flags": [],
+    "distance_label_key": "sell_distance_straight"
+   }
+  ],
+  "unranked": [],
+  "outside_radius": 5,
+  "source": "Agmarknet / data.gov.in",
+  "attribution": "Source: Agmarknet / data.gov.in",
+  "unit": "Rs/kg (Agmarknet reports Rs/quintal; divided by 100)",
+  "location_basis": "district_centre",
+  "has_data": true,
+  "quality": {
+   "total_rows": 582,
+   "n_mandis": 10,
+   "last_updated": "2026-11-20",
+   "days_saved": 61,
+   "fresh": true,
+   "flag_counts": {},
+   "rejected": 0,
+   "warned": 0,
+   "confidence": "High"
+  },
+  "as_of": "2026-11-20",
+  "demo": false
+ },
+ "trends": {
+  "scope": {
+   "market": null,
+   "state": "Maharashtra",
+   "district": "Pune"
+  },
+  "source": "Agmarknet / data.gov.in",
+  "attribution": "Source: Agmarknet / data.gov.in",
+  "unit": "Rs/kg (Agmarknet reports Rs/quintal; divided by 100)",
+  "has_data": true,
+  "series": [
+   {
+    "trade_date": "2026-09-21",
+    "value_per_kg": 48.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-09-22",
+    "value_per_kg": 50.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-09-23",
+    "value_per_kg": 49.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-09-24",
+    "value_per_kg": 48.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-09-25",
+    "value_per_kg": 48.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-09-26",
+    "value_per_kg": 50.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-09-27",
+    "value_per_kg": 48.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-09-28",
+    "value_per_kg": 49.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-09-29",
+    "value_per_kg": 50.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-09-30",
+    "value_per_kg": 47.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-01",
+    "value_per_kg": 48.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-02",
+    "value_per_kg": 48.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-03",
+    "value_per_kg": 49.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-04",
+    "value_per_kg": 47.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-05",
+    "value_per_kg": 48.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-06",
+    "value_per_kg": 49.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-07",
+    "value_per_kg": 48.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-08",
+    "value_per_kg": 47.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-09",
+    "value_per_kg": 49.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-10",
+    "value_per_kg": 47.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-12",
+    "value_per_kg": 49.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-13",
+    "value_per_kg": 46.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-14",
+    "value_per_kg": 48.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-15",
+    "value_per_kg": 47.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-16",
+    "value_per_kg": 46.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-17",
+    "value_per_kg": 47.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-18",
+    "value_per_kg": 47.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-19",
+    "value_per_kg": 47.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-20",
+    "value_per_kg": 47.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-21",
+    "value_per_kg": 46.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-22",
+    "value_per_kg": 46.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-23",
+    "value_per_kg": 46.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-24",
+    "value_per_kg": 46.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-25",
+    "value_per_kg": 47.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-26",
+    "value_per_kg": 46.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-27",
+    "value_per_kg": 47.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-28",
+    "value_per_kg": 47.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-29",
+    "value_per_kg": 46.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-30",
+    "value_per_kg": 46.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-10-31",
+    "value_per_kg": 46.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-11-01",
+    "value_per_kg": 46.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-11-02",
+    "value_per_kg": 46.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-11-03",
+    "value_per_kg": 47.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-11-04",
+    "value_per_kg": 47.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-11-05",
+    "value_per_kg": 47.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-11-06",
+    "value_per_kg": 46.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-11-07",
+    "value_per_kg": 45.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-11-08",
+    "value_per_kg": 44.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-11-09",
+    "value_per_kg": 45.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-11-10",
+    "value_per_kg": 45.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-11-11",
+    "value_per_kg": 46.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-11-12",
+    "value_per_kg": 45.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-11-13",
+    "value_per_kg": 45.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-11-14",
+    "value_per_kg": 45.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-11-15",
+    "value_per_kg": 45.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-11-16",
+    "value_per_kg": 45.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-11-17",
+    "value_per_kg": 44.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-11-18",
+    "value_per_kg": 45.0,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-11-19",
+    "value_per_kg": 43.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   },
+   {
+    "trade_date": "2026-11-20",
+    "value_per_kg": 45.5,
+    "n_rows": 1,
+    "n_mandis": 1
+   }
+  ],
+  "windows": [
+   {
+    "window_days": 7,
+    "days_saved": 732,
+    "observations": {
+     "latest": 7,
+     "previous": 7
+    },
+    "median_latest": 45.0,
+    "median_previous": 45.0,
+    "change_rs_per_kg": 0.0,
+    "change_pct": 0.0,
+    "needs": null,
+    "needs_key": null,
+    "needs_params": null,
+    "status": "ok"
+   },
+   {
+    "window_days": 14,
+    "days_saved": 732,
+    "observations": {
+     "latest": 14,
+     "previous": 14
+    },
+    "median_latest": 45.0,
+    "median_previous": 46.5,
+    "change_rs_per_kg": -1.5,
+    "change_pct": -3.225806451612903,
+    "needs": null,
+    "needs_key": null,
+    "needs_params": null,
+    "status": "ok"
+   },
+   {
+    "window_days": 30,
+    "days_saved": 732,
+    "observations": {
+     "latest": 30,
+     "previous": 29
+    },
+    "median_latest": 46.0,
+    "median_previous": 48.0,
+    "change_rs_per_kg": null,
+    "change_pct": null,
+    "needs": null,
+    "needs_key": "needs_more_days",
+    "needs_params": {
+     "more_days": 12,
+     "window": 30
+    },
+    "status": "needs"
+   }
+  ],
+  "volatility": {
+   "window_days": 30,
+   "observations": 30,
+   "days_saved": 732,
+   "median": 46.0,
+   "mad": 1.0,
+   "relative_mad": 0.021739130434782608,
+   "relative_mad_pct": 2.1739130434782608,
+   "needs": null,
+   "needs_key": null,
+   "needs_params": null,
+   "status": "ok"
+  },
+  "seasonal": {
+   "days_saved": 732,
+   "first_date": "2024-10-22",
+   "last_date": "2026-11-20",
+   "earliest_meaningful_date": "2026-10-22",
+   "months": [
+    {
+     "month": 1,
+     "median": 43.5,
+     "years": [
+      2025,
+      2026
+     ],
+     "observations": 60,
+     "year_medians": {
+      "2025": 43.5,
+      "2026": 43.5
+     }
+    },
+    {
+     "month": 2,
+     "median": 44.5,
+     "years": [
+      2025,
+      2026
+     ],
+     "observations": 53,
+     "year_medians": {
+      "2025": 44.5,
+      "2026": 44.0
+     }
+    },
+    {
+     "month": 3,
+     "median": 46.0,
+     "years": [
+      2025,
+      2026
+     ],
+     "observations": 61,
+     "year_medians": {
+      "2025": 46.0,
+      "2026": 46.0
+     }
+    },
+    {
+     "month": 4,
+     "median": 48.5,
+     "years": [
+      2025,
+      2026
+     ],
+     "observations": 59,
+     "year_medians": {
+      "2025": 48.25,
+      "2026": 48.5
+     }
+    },
+    {
+     "month": 5,
+     "median": 50.5,
+     "years": [
+      2025,
+      2026
+     ],
+     "observations": 59,
+     "year_medians": {
+      "2025": 50.5,
+      "2026": 50.5
+     }
+    },
+    {
+     "month": 6,
+     "median": 52.5,
+     "years": [
+      2025,
+      2026
+     ],
+     "observations": 57,
+     "year_medians": {
+      "2025": 52.0,
+      "2026": 52.5
+     }
+    },
+    {
+     "month": 7,
+     "median": 52.5,
+     "years": [
+      2025,
+      2026
+     ],
+     "observations": 58,
+     "year_medians": {
+      "2025": 52.5,
+      "2026": 52.5
+     }
+    },
+    {
+     "month": 8,
+     "median": 52.0,
+     "years": [
+      2025,
+      2026
+     ],
+     "observations": 59,
+     "year_medians": {
+      "2025": 52.0,
+      "2026": 51.5
+     }
+    },
+    {
+     "month": 9,
+     "median": 49.5,
+     "years": [
+      2025,
+      2026
+     ],
+     "observations": 60,
+     "year_medians": {
+      "2025": 50.0,
+      "2026": 49.5
+     }
+    },
+    {
+     "month": 10,
+     "median": 47.25,
+     "years": [
+      2024,
+      2025,
+      2026
+     ],
+     "observations": 68,
+     "year_medians": {
+      "2024": 46.0,
+      "2025": 47.5,
+      "2026": 47.5
+     }
+    },
+    {
+     "month": 11,
+     "median": 45.0,
+     "years": [
+      2024,
+      2025,
+      2026
+     ],
+     "observations": 79,
+     "year_medians": {
+      "2024": 45.0,
+      "2025": 45.5,
+      "2026": 45.25
+     }
+    },
+    {
+     "month": 12,
+     "median": 43.5,
+     "years": [
+      2024,
+      2025
+     ],
+     "observations": 59,
+     "year_medians": {
+      "2024": 44.0,
+      "2025": 43.5
+     }
+    }
+   ],
+   "needs": null,
+   "needs_key": null,
+   "needs_params": null,
+   "status": "ok"
+  },
+  "quality": {
+   "total_rows": 732,
+   "n_mandis": 1,
+   "last_updated": "2026-11-20",
+   "days_saved": 732,
+   "fresh": true,
+   "flag_counts": {},
+   "rejected": 0,
+   "warned": 0,
+   "confidence": "Low"
+  },
+  "demo": false
+ },
+ "notifications": {
+  "notifications": [
+   {
+    "id": "dbbed491-1a80-57ab-8462-9cdc308fd4d9",
+    "kind": "price_alert",
+    "alert_id": "99e04ad8-ba4a-5f47-9517-08793e8bf68f",
+    "payload": {
+     "message_key": "sell_notif_price_alert",
+     "price_per_kg": 52.0,
+     "target_per_kg": 50.0,
+     "direction": "at_or_above",
+     "trade_date": "2026-11-17",
+     "state": "Maharashtra",
+     "district": "Pune",
+     "market_name": "Pune",
+     "source": "Agmarknet / data.gov.in (TEST DATA)",
+     "demo": false
+    },
+    "read_at": null,
+    "created_at": "2026-11-20T12:07:57.296399+00:00"
+   }
+  ],
+  "unread_count": 1,
+  "demo": false
+ },
+ "fairness": {
+  "source": "Agmarknet / data.gov.in",
+  "attribution": "Source: Agmarknet / data.gov.in",
+  "location_basis": "district_centre",
+  "harvest_count": 1,
+  "status": "ok",
+  "sale_date": "2026-11-10",
+  "price_date": "2026-11-10",
+  "date_gap_days": 0,
+  "n_mandis": 5,
+  "radius_km": 300.0,
+  "sale_price_per_kg": 36.0,
+  "market_median_per_kg": 43.5,
+  "gap_per_kg": -7.5,
+  "gap_total_rs": -3750.0,
+  "sale_quantity_kg": 500.0,
+  "like_for_like": false,
+  "notes": [
+   {
+    "key": "fairness_note_market_type",
+    "text_en": "Your sale was 'farm_gate', not at a mandi, so it is not like-for-like with mandi prices."
+   },
+   {
+    "key": "fairness_note_grade",
+    "text_en": "Mandi prices mix varieties and grades; your grade 'A' may differ."
+   }
+  ],
+  "demo": false
+ },
+ "alerts": {
+  "alerts": [
+   {
+    "id": "99e04ad8-ba4a-5f47-9517-08793e8bf68f",
+    "state": "Maharashtra",
+    "district": "Pune",
+    "market_name": "Pune",
+    "target_rs_per_kg": 70.0,
+    "direction": "at_or_above",
+    "is_active": true,
+    "last_trigger_date": null,
+    "created_at": "2026-11-20T12:07:57.296399+00:00"
+   },
+   {
+    "id": "93a1b72f-5864-536c-ab8c-174cf5f424d1",
+    "state": "Maharashtra",
+    "district": "Pune",
+    "market_name": "Pune",
+    "target_rs_per_kg": 45.0,
+    "direction": "at_or_above",
+    "is_active": true,
+    "last_trigger_date": null,
+    "created_at": "2026-11-20T12:07:57.850095+00:00"
+   }
+  ],
+  "active_count": 2,
+  "max_alerts": 20,
+  "directions": [
+   "at_or_above",
+   "at_or_below"
+  ],
+  "demo": false
+ },
+ "_note": "TEST DATA: shapes generated from backend/services/sell_smart/demo.py; values are made up, not real prices."
+}

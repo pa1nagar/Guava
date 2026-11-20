@@ -32,6 +32,7 @@ ART = Path("D:/Python World/Experiment/Guava/.agents/tasks/guava-polish")
 PAGES = ["index", "login", "onboarding", "farm", "plan", "tasks", "observations",
          "inventory", "report", "sell-smart", "privacy"]
 APP_PAGES = {"farm", "plan", "tasks", "observations", "inventory", "report"}
+PUBLIC_PAGES = {"index", "login", "onboarding", "sell-smart", "privacy"}
 VIEWPORTS = {"360x800": dict(width=360, height=800, mobile=True), "1366x768": dict(width=1366, height=768, mobile=False)}
 ORIGIN = "https://guavaa.netlify.app"
 API = "https://guava-8wc7.onrender.com"
@@ -82,8 +83,8 @@ MEASURE = """() => {
   });
   out.has_nav = !!document.getElementById('sf-nav');
   out.text = document.body.innerText || '';
-  out.empty_state = Array.from(document.querySelectorAll('.empty-state')).some(vis);
-  out.error_state = Array.from(document.querySelectorAll('.load-error__retry, #page-error, #report-error .load-error')).some(vis);
+  out.empty_state = Array.from(document.querySelectorAll('.empty-state, #mandi-hero[data-state=empty]')).some(vis) ||\n    (!!document.getElementById('ranking-status') && vis(document.getElementById('ranking-status')) && document.getElementById('ranking-status').innerText.trim().length > 0 && !document.getElementById('ranking-retry').offsetParent && document.getElementById('ranking-body').classList.contains('hidden'));
+  out.error_state = Array.from(document.querySelectorAll('.load-error__retry, #page-error, #report-error .load-error, [data-mandi-retry], #ranking-retry, #settings-retry')).some(vis);
   const grab = (id) => { const e = document.querySelector(id); return e && vis(e) ? e.innerText : ''; };
   out.risk_text = grab('#disease-risk-list') + ' ' + grab('#irrigation-advisory');
   out.estimate_pills = {
@@ -234,6 +235,274 @@ def chat_flow(page, extra):
             extra.append(f"AI reply did not show the server text for: {question} -> {last[:80]!r}")
 
 
+def _largest_font(page):
+    return page.evaluate("""() => { let best = 0, txt = '';
+      const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      while (w.nextNode()) { const e = w.currentNode.parentElement; if (!e || !w.currentNode.nodeValue.trim()) continue;
+        if (['SCRIPT','STYLE','NOSCRIPT'].includes(e.tagName)) continue; const r = e.getBoundingClientRect(); if (!r.width) continue;
+        const fs = parseFloat(getComputedStyle(e).fontSize); if (fs > best) { best = fs; txt = e.innerText.slice(0, 40); } }
+      const hero = document.querySelector('.price-hero__value');
+      return { best, txt, hero: hero ? parseFloat(getComputedStyle(hero).fontSize) : 0 }; }""")
+
+
+def explore_public(page, pg, total, extra, scenario):
+    """Interactions on index, login, onboarding, sell-smart and privacy; measures after each state."""
+    def snap():
+        nonlocal total
+        total = merge(total, page.evaluate(MEASURE))
+
+    page.on("dialog", lambda d: d.accept())
+    snap()
+    if pg == "index":
+        f = _largest_font(page)
+        if scenario == "ok":
+            if not f["hero"] or f["hero"] < 36 or f["hero"] < f["best"]:
+                extra.append(f"index: the mandi price is not the largest number/text (hero {f['hero']}px, largest {f['best']}px: {f['txt']!r})")
+            hero = page.inner_text("#mandi-hero")
+            for need in ("42", "4,200", "Madhya Pradesh", "20/11/2026", "Agmarknet"):
+                if need not in hero:
+                    extra.append(f"index hero missing {need!r}")
+        # language toggle persists (then restore the language this run started with)
+        start_lang = page.evaluate("localStorage.getItem('sf_lang')") or "en"
+        other = "en" if start_lang == "hi" else "hi"
+        page.click("#lang-" + other)
+        page.wait_for_timeout(200)
+        if page.evaluate("localStorage.getItem('sf_lang')") != other:
+            extra.append("index: language toggle did not persist")
+        page.click("#lang-" + start_lang)
+        # contact form: validation, then success
+        page.click("#contact-submit")
+        page.wait_for_timeout(150)
+        if not page.is_visible("#contact-validation"):
+            extra.append("index: empty contact form shows no validation text")
+        snap()
+        page.fill("#contact-name", "Test Farmer")
+        page.fill("#contact-phone", "9999999999")
+        page.click("#contact-submit")
+        page.wait_for_timeout(150)
+        if "tick" not in page.inner_text("#contact-validation-text").lower() and "निशान" not in page.inner_text("#contact-validation-text"):
+            extra.append("index: missing-consent message not shown")
+        page.click("label[for=contact-consent]")
+        page.click("#contact-submit")
+        page.wait_for_timeout(500)
+        if scenario == "ok" and not page.is_visible("#contact-success"):
+            extra.append("index: contact form did not show success")
+        snap()
+    elif pg == "login":
+        if not page.is_visible("#btn-google-signin"):
+            extra.append("login: sign-in button not visible")
+        h = page.evaluate("document.getElementById('btn-google-signin').getBoundingClientRect().height")
+        w = page.evaluate("document.getElementById('btn-google-signin').getBoundingClientRect().width / document.getElementById('btn-google-signin').parentElement.getBoundingClientRect().width")
+        if h < 47.5 or w < 0.99:
+            extra.append(f"login: button should be full width and >= 48px (got height {h}, width ratio {w:.2f})")
+        page.click("#btn-google-signin")
+        page.wait_for_timeout(300)
+        snap()
+    elif pg == "onboarding":
+        opts = page.eval_on_selector_all("#state-select option", "o => o.map(x => x.value).filter(Boolean)")
+        if opts != ["Madhya Pradesh", "Maharashtra"]:
+            extra.append(f"onboarding: state options are {opts}")
+        for sel, mode in (("#plant-count", "numeric"), ("#expected-yield", "decimal")):
+            if page.get_attribute(sel, "inputmode") != mode:
+                extra.append(f"onboarding: {sel} inputmode is not {mode}")
+        page.select_option("#state-select", "Maharashtra")
+        n = page.eval_on_selector_all("#district-select option", "o => o.length")
+        if n < 5:
+            extra.append("onboarding: district list did not fill")
+        page.click("#btn-submit")
+        page.wait_for_timeout(150)
+        if not page.is_visible("#plant-count-error"):
+            extra.append("onboarding: empty plant count shows no inline error")
+        snap()
+        page.fill("#plant-count", "7777")
+        page.select_option("#district-select", index=1)
+        if scenario == "ok":
+            page.click("#btn-submit")
+            page.wait_for_selector("#form-error:not(.hidden)", timeout=5000)
+            if "too high" not in page.inner_text("#form-error") and "looks" not in page.inner_text("#form-error"):
+                extra.append("onboarding: backend 422 text not shown")
+            if page.is_disabled("#btn-submit"):
+                extra.append("onboarding: submit stays disabled after an error")
+            snap()
+    elif pg == "sell-smart":
+        page.wait_for_timeout(600)
+        if scenario == "ok":
+            cards = page.eval_on_selector_all("#ranking-body ol > li", "l => l.length")
+            if cards < 3:
+                extra.append(f"sell-smart: expected ranked cards, found {cards}")
+            if not page.is_visible("#trend-chart-summary") or not page.inner_text("#trend-chart-summary").strip():
+                extra.append("sell-smart: chart has no text summary")
+            if not page.get_attribute("#trend-chart", "aria-label"):
+                extra.append("sell-smart: chart has no aria-label")
+            need = page.inner_text("#trend-windows")
+            if "12" not in need:
+                extra.append("sell-smart: 'N more days needed' text missing")
+            # edit, pause, delete, 409, mark as read
+            page.click("#alerts-list li >> text=/Change price|भाव बदलें/")
+            page.wait_for_timeout(150)
+            snap()
+            page.fill("#alerts-list input", "55")
+            page.click("#alerts-list .btn-primary")
+            page.wait_for_timeout(400)
+            if page.is_visible("#alerts-list input"):
+                extra.append("sell-smart: alert edit did not close after save")
+            page.select_option("#alert-where", index=1)
+            page.fill("#alert-target", "999")
+            page.click("#alert-add")
+            page.wait_for_timeout(400)
+            msg = page.inner_text("#alert-form-status")
+            if "20" not in msg:
+                extra.append(f"sell-smart: 409 limit message not shown in plain words: {msg!r}")
+            snap()
+            page.click("#alerts-list li >> nth=0 >> text=/Delete|हटाएं/")
+            page.wait_for_timeout(400)
+            if page.is_visible("#alert-form-status.is-error") and "20" not in page.inner_text("#alert-form-status"):
+                extra.append("sell-smart: delete failed")
+            b = page.query_selector("#notif-list .btn")
+            if b:
+                b.click()
+                page.wait_for_timeout(300)
+            else:
+                extra.append("sell-smart: no mark-as-read button in notifications")
+            snap()
+            # every card shows a source and a date
+            for li in page.query_selector_all("#ranking-body ol > li"):
+                if "/" not in li.inner_text():
+                    extra.append("sell-smart: ranked card without a date")
+                    break
+            if "Agmarknet" not in page.inner_text("#ranking-body"):
+                extra.append("sell-smart: ranking shows no source")
+        start_lang = page.evaluate("localStorage.getItem('sf_lang')") or "en"
+        other = "en" if start_lang == "hi" else "hi"
+        page.click("#lang-" + other)
+        page.wait_for_timeout(300)
+        snap()
+        page.click("#lang-" + start_lang)
+    else:  # privacy
+        heads = page.eval_on_selector_all("h1, h2", "e => e.map(x => x.tagName)")
+        if heads[:1] != ["H1"] or len(heads) < 6:
+            extra.append(f"privacy: heading hierarchy looks wrong {heads}")
+        txt = page.inner_text("main").lower()
+        if not ("mandi" in txt or "मंडिय" in txt) or not ("saved cop" in txt or "सहेजी" in txt):
+            extra.append("privacy: farm-location / saved-copy statements missing")
+    return total
+
+
+def special_runs(browser, args):
+    """Extra scenarios: ?demo=1 on a production origin vs localhost, Supabase unreachable, Chart.js offline."""
+    import copy
+    out = []
+    (ART / "screens").mkdir(parents=True, exist_ok=True)
+
+    def new_ctx(local_base=None, anon=True):
+        a = copy.copy(args)
+        a.anon = anon
+        a.scenario = "ok"
+        a.local = bool(local_base)
+        ctx = browser.new_context(viewport={"width": 360, "height": 800}, is_mobile=True, has_touch=True,
+                                  device_scale_factor=2, user_agent=ANDROID_UA, service_workers="block")
+        ctx.add_init_script("try{localStorage.setItem('sf_lang','en')}catch(e){}")
+        un = []
+        install_routes(ctx, a, local_base or ORIGIN, un)
+        return ctx, un
+
+    def row(name, errs, content, measure):
+        total = merge(None, measure)
+        total.pop("texts", None)
+        out.append(dict(page=name, viewport="360x800", lang="en", scenario="special", errors=errs, unmocked=[],
+                        content=content, **total))
+
+    def watch(page, errs, reqs):
+        page.on("console", lambda m: errs.append("console." + m.type + ": " + m.text[:200]) if m.type in ("error", "warning") else None)
+        page.on("pageerror", lambda e: errs.append("pageerror: " + str(e)[:200]))
+        page.on("request", lambda r: reqs.append(r.url))
+
+    # 1. ?demo=1 on the production origin: sign-in gate, no banner, no request to 127.0.0.1:8001
+    ctx, un = new_ctx(anon=True)
+    page = ctx.new_page()
+    page.add_init_script("localStorage.setItem('sf_test_anon','1')")
+    errs, reqs, content = [], [], []
+    watch(page, errs, reqs)
+    page.goto(f"{ORIGIN}/sell-smart.html?demo=1", wait_until="load")
+    try:
+        page.wait_for_url("**/login.html", timeout=8000)
+    except Exception:
+        content.append("demo flag on the production origin did not send an anonymous visitor to the sign-in page")
+    page.wait_for_timeout(500)
+    if any("127.0.0.1:8001" in r for r in reqs):
+        content.append("request sent to 127.0.0.1:8001 from the production origin")
+    if page.query_selector("#demo-banner") and page.is_visible("#demo-banner"):
+        content.append("DEMO banner visible on the production origin")
+    errs = [e for e in errs if "Service Worker" not in e]
+    page.screenshot(path=str(ART / "screens" / "special_demo_prod_origin.png"))
+    row("sell-smart?demo=1 [production origin]", errs, content, page.evaluate(MEASURE))
+    ctx.close()
+
+    # 2. ?demo=1 on 127.0.0.1: the demo works and shows the banner
+    holder = []
+    srv = serve_local(holder)
+    base = f"http://127.0.0.1:{holder[0]}"
+    ctx, un = new_ctx(local_base=base, anon=True)
+    cors = {"access-control-allow-origin": "*", "access-control-allow-headers": "*", "access-control-allow-methods": "*"}
+
+    def demo_api(route):
+        if route.request.method == "OPTIONS":
+            return route.fulfill(status=204, headers=cors)
+        p = route.request.url[len("http://127.0.0.1:8001"):].split("?")[0]
+        status, data = mock_api.respond(p, route.request.method, route.request.post_data or "", "ok")
+        route.fulfill(status=status, content_type="application/json", body=json.dumps(data), headers=cors)
+    ctx.route("http://127.0.0.1:8001/**", demo_api)
+    page = ctx.new_page()
+    errs, reqs, content = [], [], []
+    watch(page, errs, reqs)
+    page.goto(f"{base}/sell-smart.html?demo=1", wait_until="load")
+    page.wait_for_timeout(1500)
+    if not page.is_visible("#demo-banner"):
+        content.append("DEMO banner not shown on 127.0.0.1")
+    if not any("127.0.0.1:8001" in r for r in reqs):
+        content.append("demo mode on 127.0.0.1 made no request to the demo server")
+    errs = [e for e in errs if "Service Worker" not in e]
+    page.screenshot(path=str(ART / "screens" / "special_demo_local.png"), full_page=True)
+    row("sell-smart?demo=1 [127.0.0.1]", errs, content, page.evaluate(MEASURE))
+    ctx.close()
+    srv.shutdown()
+
+    # 3. Supabase library unreachable: login shows a message, not a blank page
+    ctx, un = new_ctx(anon=True)
+    ctx.route("**/@supabase/supabase-js@2/+esm", lambda r: r.abort())
+    page = ctx.new_page()
+    errs, reqs, content = [], [], []
+    watch(page, errs, reqs)
+    page.goto(f"{ORIGIN}/login.html", wait_until="load")
+    page.wait_for_timeout(1200)
+    if not page.is_visible("#auth-error-box"):
+        content.append("login: no message when the sign-in library cannot load")
+    errs = [e for e in errs if "Failed to load resource" not in e and "Service Worker" not in e and "ERR_FAILED" not in e
+            and "dynamically imported" not in e]
+    page.screenshot(path=str(ART / "screens" / "special_login_no_supabase.png"))
+    row("login [sign-in library unreachable]", errs, content, page.evaluate(MEASURE))
+    ctx.close()
+
+    # 4. Chart.js unreachable (offline): the text summary stays, no console error
+    ctx, un = new_ctx(anon=False)
+    ctx.route("**/npm/chart.js", lambda r: r.abort())
+    page = ctx.new_page()
+    errs, reqs, content = [], [], []
+    watch(page, errs, reqs)
+    page.goto(f"{ORIGIN}/sell-smart.html", wait_until="load")
+    page.wait_for_timeout(1500)
+    summ = page.inner_text("#trend-chart-summary")
+    if not summ.strip():
+        content.append("sell-smart: no text summary when Chart.js fails to load")
+    if page.is_visible("#trend-chart"):
+        content.append("sell-smart: empty chart canvas still visible when Chart.js fails")
+    errs = [e for e in errs if "Failed to load resource" not in e and "Service Worker" not in e and "ERR_FAILED" not in e]
+    page.screenshot(path=str(ART / "screens" / "special_sell_chart_offline.png"), full_page=True)
+    row("sell-smart [Chart.js unreachable]", errs, content, page.evaluate(MEASURE))
+    ctx.close()
+    return out
+
+
 def run(args):
     pages = args.pages.split(",") if args.pages else PAGES
     vps = [args.viewport] if args.viewport else list(VIEWPORTS)
@@ -257,6 +526,9 @@ def run(args):
                 install_routes(ctx, args, base, unmocked)
                 for pg in pages:
                     page = ctx.new_page()
+                    # localStorage is shared by every page of the origin, so set or clear the flag on each page
+                    anon_js = "setItem('sf_test_anon','1')" if (pg == 'login' or args.anon) else "removeItem('sf_test_anon')"
+                    page.add_init_script("try{localStorage." + anon_js + "}catch(e){}")
                     errs, extra = [], []
                     page.on("console", lambda m, errs=errs: errs.append("console." + m.type + ": " + m.text[:200]) if m.type in ("error", "warning") else None)
                     page.on("pageerror", lambda e, errs=errs: errs.append("pageerror: " + str(e)[:200]))
@@ -268,6 +540,8 @@ def run(args):
                         page.wait_for_timeout(1200)
                         if pg in APP_PAGES:
                             total = explore(page, pg, total, extra)
+                        elif pg in PUBLIC_PAGES:
+                            total = explore_public(page, pg, total, extra, args.scenario)
                         else:
                             total = merge(total, page.evaluate(MEASURE))
                         page.evaluate("window.scrollTo(0, 0)")
@@ -284,12 +558,14 @@ def run(args):
                     if unmocked[n0:]:  # Chromium's generic message for an aborted (unmocked) request has no URL
                         errs = [e for e in errs if "Failed to load resource: net::ERR_FAILED" not in e]
                     errs = [e for e in errs if "Service Worker registration blocked" not in e]
+                    if pg in ("onboarding", "sell-smart"):  # the check provokes a 422 / 409 on purpose
+                        errs = [e for e in errs if not re.search(r"Failed to load resource: the server responded with a status of (409|422)", e)]
                     if args.scenario != "ok":  # the browser logs every 4xx/5xx response; those are expected here
-                        errs = [e for e in errs if "Failed to load resource" not in e]
+                        errs = [e for e in errs if "Failed to load resource" not in e and "Mandi prices load failed" not in e]
 
                     # content checks on the app pages
                     content = []
-                    if pg in APP_PAGES:
+                    if pg in APP_PAGES or pg in PUBLIC_PAGES:
                         text = " ".join(total["texts"])
                         bad = sorted(set(BAD_TEXT_RE.findall(text)))
                         if bad:
@@ -305,15 +581,17 @@ def run(args):
                             for key, n in pills.items():
                                 if n < 1:
                                     content.append(f"missing Estimate label: {key}")
-                        if args.scenario == "empty" and not total["empty_state"]:
+                        if args.scenario == "empty" and pg in (APP_PAGES | {"index", "sell-smart"}) and not total["empty_state"]:
                             content.append("empty scenario: no empty-state message visible")
-                        if args.scenario == "error" and not total["error_state"]:
+                        if args.scenario == "error" and pg in (APP_PAGES | {"index", "sell-smart"}) and not total["error_state"]:
                             content.append("error scenario: no Retry / error state visible")
                     content += extra
                     total.pop("texts", None)
                     results.append(dict(page=pg, viewport=vp, lang=lang, scenario=args.scenario, errors=errs,
                                         unmocked=unmocked[n0:], content=content, **total))
                 ctx.close()
+        if args.scenario == 'ok' and not args.pages and not args.viewport and not args.lang:
+            results += special_runs(browser, args)
         browser.close()
     if srv:
         srv.shutdown()

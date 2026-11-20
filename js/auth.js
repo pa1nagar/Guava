@@ -131,9 +131,12 @@ export async function routeGuard(currentPage) {
         window.location.href = "plan.html";
       } else if (res.status === 404) {
         window.location.href = "onboarding.html";
+      } else {
+        return "server_down";
       }
     } catch (_) {
-      // Network failure — stay on login page
+      // Network failure: stay on the login page; the page shows a message.
+      return "server_down";
     }
   }
   // All other protected pages → allow through (session already confirmed above)

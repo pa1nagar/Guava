@@ -343,3 +343,27 @@ a.empty-state__action { min-height: 44px; display: inline-flex; align-items: cen
    Keep "hidden" working on components that set their own display. */
 .loading-overlay.hidden, .stale-banner.hidden, .farm-nav-btn.hidden, .empty-state.hidden,
 .headline-card.hidden, .load-error.hidden { display: none; }
+
+/* Language bar on the public / sign-in pages (index, login, onboarding, privacy) */
+.lang-bar {
+  display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 0.25rem 0.75rem;
+  background: #1E3A2B; padding: 0.25rem 1rem;
+}
+.lang-bar__label { color: #A7F3D0; font-size: 0.875rem; font-weight: 600; }
+.lang-pill {
+  min-height: 44px; min-width: 44px; padding: 0.25rem 1rem; border-radius: 9999px; font-size: 1rem;
+  font-weight: 600; cursor: pointer; background: transparent; color: #A7F3D0; border: 1px solid #4A7C59;
+}
+.lang-pill.lang-active { background: #4A7C59; color: #fff; }
+/* Today's mandi price: the largest number on the landing page */
+.price-hero { background: #fff; color: #1E3A2B; border-radius: 1rem; padding: 1.25rem 1rem; text-align: center; box-shadow: 0 4px 14px rgba(0,0,0,.18); }
+.price-hero__value { font-size: 3rem; line-height: 1.1; font-weight: 800; margin: 0.25rem 0 0; }
+:lang(hi) .price-hero__value { line-height: 1.4; }
+.price-hero__unit { font-size: 1.125rem; font-weight: 700; margin: 0; }
+.price-hero__quintal { font-size: 1.25rem; font-weight: 700; margin: 0.5rem 0 0; }
+.price-hero__meta { font-size: 1rem; color: #374151; margin: 0.25rem 0 0; }
+.price-hero .load-error { background: #FEF2F2; }
+.price-hero.hidden { display: none; }
+@media (min-width: 640px) { .price-hero__value { font-size: 4.5rem; } }
+.tap-label { display: flex; align-items: flex-start; gap: 0.75rem; min-height: 44px; padding: 0.5rem 0; cursor: pointer; }
+.tap-label input[type="checkbox"] { width: 1.5rem; height: 1.5rem; margin-top: 0.125rem; flex: none; }

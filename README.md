@@ -44,8 +44,23 @@ Supabase (Postgres + Auth)      Gemini 1.5 Flash
 
 ## Pages
 
-| Page | File | Purpose |
-|---|---|---|
+| Page | File | Purpose | Bottom nav | Works offline |
+|---|---|---|---|---|
+| Home | `index.html` | Public landing page: today's guava mandi price (live from Agmarknet, with source and date), what the app does, contact form | no | page shell and the last public price (saved copy, labelled with its date) |
+| Login | `login.html` | Google OAuth sign-in | no | shell only (sign-in needs the network) |
+| Onboarding | `onboarding.html` | First-time farm profile (Madhya Pradesh and Maharashtra at launch) | no | shell only |
+| Care plan | `plan.html` | Personalized stage plan, weather, estimates, AI chat | Plan | shell only |
+| Farm | `farm.html` | Farms, plots, plant counts | Farm | shell only |
+| Tasks | `tasks.html` | Tasks due today and your own tasks | Tasks | shell only |
+| Sell smart | `sell-smart.html` | Where and when to sell: ranked mandis, trends, price alerts | Sell | shell only |
+| Observations | `observations.html` | Crop health notes and photos | More | shell only |
+| Inventory | `inventory.html` | Inputs on hand | More | shell only |
+| Crop report | `report.html` | Financial summary and activity history | More | shell only |
+| Privacy | `privacy.html` | Privacy policy (EN / HI) | More | yes |
+
+The bottom navigation (`js/nav.js`) appears on the signed-in pages. Signed-in `/api/` responses are never cached on the phone; only pages and the public price list are.
+
+---|---|---|
 | Landing dashboard | `index.html` | Static agronomic reference for the owner's Taiwan Pink Guava orchard (case study, not market data) |
 | Login | `login.html` | Google OAuth sign-in |
 | Onboarding | `onboarding.html` | First-time farm profile creation |
@@ -163,7 +178,9 @@ Shared frontend pieces: `js/nav.js` (bottom navigation, `mountNav('tasks')`),
 prices; never caches signed-in `/api/` requests), `_headers` (no-cache for `sw.js`).
 
 Browser check (mobile and desktop, English and Hindi; needs `pip install playwright`
-and `playwright install chromium`): `python tests/e2e/browser_check.py`. See `tests/e2e/README.md`.
+and `playwright install chromium`): `python tests/e2e/browser_check.py` (all 11 pages x 2 viewports x 2 languages,
+plus the `?demo=1` host checks). Use `--scenario empty|error` for the empty and error states.
+See `tests/e2e/README.md`.
 
 ### Tests
 
@@ -172,8 +189,16 @@ cd backend
 python -m pytest tests/ -v
 ```
 
-All 92 tests cover deterministic logic only. Gemini is mocked — no API key needed
-for tests.
+The backend tests cover deterministic logic only (Gemini is mocked, no API key needed;
+tests that need credentials skip when there is no `.env`).
+
+Other checks, run from the repo root:
+
+```powershell
+npx -y deno test --allow-read supabase/functions/mandi-ingest/   # Edge Function parser
+python tests/e2e/browser_check.py                                 # browser check, needs Playwright
+python tests/e2e/prod_smoke.py                                    # read-only GET check of the live site and API
+```
 
 ---
 
@@ -344,7 +369,8 @@ Guava prices come from the official Agmarknet dataset on data.gov.in ("Current d
 - Endpoints under `/api/sell-smart` (JWT required): `GET/PUT /settings`, `GET /ranking`, `GET /trends`, `GET /quality`, `GET/POST /alerts`, `PUT /alerts/{id}`, `POST /alerts/{id}/delete`, `GET /notifications`, `POST /notifications/{id}/read`, `GET /fairness`. Run `backend/migrations/2026-11-sell-smart.sql` in the Supabase SQL editor first. A scheduler job at 07:45 and 19:45 IST checks data quality and alerts after each price ingestion.
 - Net price: `mandi price - transport - handling - (mandi price x commission % / 100)`, all per kg. Distance is straight-line to the mandi's district centre unless the farmer enters road km.
 - Thresholds: every number is defined in `backend/services/sell_smart/config.py` with a `basis` string saying where it comes from. A test fails if one has no basis.
-- Demo: `cd backend`, set `SELL_SMART_ALLOW_DEMO=1`, run `python scripts/run_sell_smart_demo.py` (port 8001), serve the repo root with `python -m http.server 5500`, then open `http://127.0.0.1:5500/sell-smart.html?demo=1`. The server refuses to start without the flag and always refuses when `RENDER` is set.
+- Client writes are revoked: browsers cannot insert or update `price_alerts` or `sell_settings` directly; every change goes through the API. Databases that ran the first version need `backend/migrations/2026-11-sell-smart-harden.sql` once.
+- Demo: `cd backend`, set `SELL_SMART_ALLOW_DEMO=1`, run `python scripts/run_sell_smart_demo.py` (port 8001), serve the repo root with `python -m http.server 5500`, then open `http://127.0.0.1:5500/sell-smart.html?demo=1`. The server refuses to start without the flag and always refuses when `RENDER` is set. `?demo=1` is honoured only on `127.0.0.1`, `localhost` or a `file://` page; on the live site it is ignored and the normal sign-in applies.
 - **Demo data is synthetic.** Prices are generated by arithmetic (`services/sell_smart/demo.py`), are not market data, and the page shows a DEMO DATA banner. `main.py` never imports the demo module.
 - Examples: `python scripts/sell_smart_examples.py` prints the Pune, Mumbai, Nashik, Solapur ranking on demo data and on `tests/fixtures/mandi_guava_live_shape.json`.
-- Owner steps: see `SELL_SMART_OWNER_CHECKLIST.md`.
+- Owner steps: see `docs/OWNER_STEPS.md` (all steps in order) and `SELL_SMART_OWNER_CHECKLIST.md`. The Edge Function setup is in `docs/MANDI_EDGE_FUNCTION.md`.
