@@ -1,4 +1,8 @@
-Browser check for all pages (360x800 + 1366x768, English + Hindi) with mocked Supabase and API.
+Browser check for all 11 pages (360x800 + 1366x768, English + Hindi) with mocked Supabase and API.
 Setup once: pip install playwright && playwright install chromium
-Run: python tests/e2e/browser_check.py [--pages a,b] [--viewport 360x800] [--local] [--anon] [--real-cdn]; report goes to .agents/tasks/guava-polish/browser_report.md, exit 1 on a hard failure.
-Scenarios: --scenario empty|error (empty and error states). The full run (no filters) also checks ?demo=1 on a production origin vs 127.0.0.1, sign-in library unreachable, Chart.js unreachable. Read-only live smoke: python tests/e2e/prod_smoke.py.
+Run: python tests/e2e/browser_check.py [--pages a,b] [--viewport 360x800] [--lang en] [--scenario all|ok|empty|error] [--local] [--anon] [--real-cdn] [--report path]
+The default scenario is all (ok, empty, error). The report goes to .agents/tasks/visual-redesign/browser_report.md and results.json; exit 1 on a hard failure.
+A full run (no page/viewport/lang filter) also saves 360x800 en ok full-page screenshots to .agents/tasks/visual-redesign/screens/after/<page>.png and checks ?demo=1 on a production origin vs 127.0.0.1, sign-in library unreachable, Chart.js unreachable, and price history with 3 days (counter) vs 8 days (line chart).
+Every page and state is also checked for: console errors, horizontal overflow, tap targets under 44px, broken images (each img is scrolled into view; needs width and height attributes and a same-origin src), index first-load image bytes (limit 150 KB at 360x800), charts (each .sf-chart canvas is drawn or its .sf-chart-summary is visible with text). In Hindi, runs of 3+ plain English words in main are listed in the report as soft warnings (fixture text from the mock API appears there too).
+Fixtures: tests/e2e/fixtures/*.json, fixtures_app.py (app pages), mock_api.py. Price history length: SF_HISTORY_DAYS (default 3; 8 draws the line chart). Observation photos use tests/e2e/fixtures/photo.png, served at /__fixtures__/photo.png. Images are checked only against the site route (not --local).
+Read-only live smoke: python tests/e2e/prod_smoke.py.

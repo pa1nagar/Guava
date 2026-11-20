@@ -3,6 +3,7 @@
 Fixture values are fake test data, not real prices.
 """
 import json
+import os
 from pathlib import Path
 
 FIX = Path(__file__).parent / "fixtures"
@@ -27,7 +28,6 @@ CHART_STUB = "window.Chart = function(){ this.destroy=function(){}; };"
 # (substring of path, fixture file) - first match wins
 ROUTES = [
     ("/api/public/market-prices/guava", "mandi_board.json"),
-    ("/api/market-prices/guava/history", "mandi_history.json"),
     ("/api/market-prices/guava", "mandi_board.json"),
     ("/api/farmers/me/farms", "list.json"),
     ("/api/farmers/me/tasks", "list.json"),
@@ -40,6 +40,17 @@ ROUTES = [
     ("/api/constants/activity-types", "list.json"),
     ("/health", "health.json"),
 ]
+
+
+def history(days: int | None = None):
+    """Price history like build_history(): 3 saved days by default (counter), 8 or more draws the line chart.
+    Set SF_HISTORY_DAYS=8 to select the line-chart variant. TEST DATA, not real prices."""
+    n = int(days if days is not None else os.environ.get("SF_HISTORY_DAYS", "3"))
+    ds = [f"2026-11-{20 - n + 1 + i:02d}" for i in range(n)]
+    return {"has_trend": n >= 7, "min_days_for_trend": 7, "distinct_days": n, "market": "Test Mandi One (fake)",
+            "first_date": ds[0], "last_date": ds[-1], "source": "Agmarknet (test)",
+            "series": [{"trade_date": d, "modal_per_kg": 40 + i, "min_per_kg": 32 + i, "max_per_kg": 48 + i, "rows": 1}
+                       for i, d in enumerate(ds)]}
 
 
 def fixture_for(path: str):
@@ -108,6 +119,8 @@ def respond(path: str, method: str = "GET", body: str = "", scenario: str = "ok"
     import fixtures_app  # noqa: PLC0415 - sibling module, path is set up by browser_check.py
     if "/api/sell-smart" in path:
         return _sell_response(path, method, body, scenario)
+    if "/api/market-prices/guava/history" in path:
+        return (500, {"detail": "Internal error (test)"}) if scenario == "error" else (200, history(0 if scenario == "empty" else None))
     if "/api/public/market-prices" in path or "/api/market-prices/guava" in path and "history" not in path:
         if scenario == "error":
             return 500, {"detail": "Internal error (test)"}

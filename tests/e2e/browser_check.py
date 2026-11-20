@@ -1,8 +1,9 @@
 """Browser check: every page x viewport x language against mocked Supabase + API.
 
-python tests/e2e/browser_check.py [--pages a,b] [--viewport 360x800] [--lang en] [--scenario ok|empty|error]
+python tests/e2e/browser_check.py [--pages a,b] [--viewport 360x800] [--lang en] [--scenario all|ok|empty|error]
                                   [--local] [--anon] [--real-cdn] [--report path]
-Writes screenshots + results.json + a markdown report under .agents/tasks/guava-polish/ (not committed).
+Writes screenshots + results.json + a markdown report under .agents/tasks/visual-redesign/ (not committed).
+Default --scenario all runs ok, empty and error.
 Exit code 1 if any hard check fails.
 
 For the signed-in app pages (farm, plan, tasks, observations, inventory, report) the check also opens every
@@ -11,12 +12,16 @@ form, modal and tab panel and measures again, runs the AI chat on plan.html, and
   - the Estimate label on disease alerts, GDD, fertilizer forecast and irrigation advisory (ok scenario)
   - no chemical name or dose in the disease alerts / irrigation advisory text
   - empty scenario: an empty-state message is visible; error scenario: a Retry button (or error panel) is visible
+Quality gates on every page and state: every <img> loads (scrolled into view first), has width and height attributes
+and a same-origin src; first-load image bytes on index at 360x800 stay under 150 KB; every .sf-chart canvas is drawn or its
+.sf-chart-summary is visible with text; in Hindi, runs of 3+ plain English words in <main> are listed as a soft warning.
 """
 import argparse
 import http.server
 import json
 import mimetypes
 import re
+import shutil
 import socketserver
 import sys
 import threading
@@ -27,6 +32,7 @@ from playwright.sync_api import sync_playwright
 sys.path.insert(0, str(Path(__file__).parent))
 import mock_api  # noqa: E402
 
+mimetypes.add_type("image/webp", ".webp")  # missing from Windows' registry-based type table
 ROOT = Path(__file__).resolve().parents[2]
 ART = Path("D:/Python World/Experiment/Guava/.agents/tasks/visual-redesign")
 PAGES = ["index", "login", "onboarding", "farm", "plan", "tasks", "observations",
@@ -81,6 +87,31 @@ MEASURE = """() => {
       (e.labels && e.labels.length) || e.getAttribute('placeholder') || (e.type === 'submit' && e.value);
     if (!name) out.no_name.push(sel(e));
   });
+  out.imgs = 0; out.bad_img = []; out.bad_chart = []; out.charts = 0; out.ascii_runs = [];
+  document.querySelectorAll('img').forEach((im) => {
+    out.imgs++;
+    const src = im.currentSrc || im.getAttribute('src') || '';
+    const name = sel(im) + ' ' + src.slice(0, 80);
+    let origin = '';
+    try { origin = new URL(src, location.href).origin; } catch (e) { origin = 'invalid'; }
+    if (!im.getAttribute('width') || !im.getAttribute('height')) out.bad_img.push('no width/height attribute: ' + name);
+    if (origin !== location.origin) out.bad_img.push('not same-origin: ' + name);
+    const r = im.getBoundingClientRect();
+    if (r.width > 0 && r.height > 0 && !(im.complete && im.naturalWidth > 0)) out.bad_img.push('broken or not loaded: ' + name);
+  });
+  document.querySelectorAll('.sf-chart canvas').forEach((c) => {
+    const block = c.closest('.sf-chart-block');
+    if (!block || !vis(block)) return;
+    out.charts++;
+    let drawn = false;
+    try { const blank = document.createElement('canvas'); blank.width = c.width; blank.height = c.height; drawn = c.width > 0 && c.height > 0 && c.toDataURL() !== blank.toDataURL(); } catch (e) {}
+    const sm = block.querySelector('.sf-chart-summary');
+    const summaryOk = !!sm && vis(sm) && sm.innerText.trim().length > 0;
+    if (!(drawn && vis(c)) && !summaryOk) out.bad_chart.push(sel(c) + ': canvas blank and no visible text summary');
+  });
+  ((document.querySelector('main') || document.body).innerText || '').split('\\n').forEach((line) => {
+    (line.match(/\\b[A-Za-z][A-Za-z'’-]*(?:\\s+[A-Za-z][A-Za-z'’-]*){2,}/g) || []).forEach((m) => out.ascii_runs.push(m));
+  });
   out.has_nav = !!document.getElementById('sf-nav');
   out.text = document.body.innerText || '';
   out.empty_state = Array.from(document.querySelectorAll('.empty-state, #mandi-hero[data-state=empty]')).some(vis) ||\n    (!!document.getElementById('ranking-status') && vis(document.getElementById('ranking-status')) && document.getElementById('ranking-status').innerText.trim().length > 0 && !document.getElementById('ranking-retry').offsetParent && document.getElementById('ranking-body').classList.contains('hidden'));
@@ -96,7 +127,34 @@ MEASURE = """() => {
   return out;
 }"""
 
+IMG_BYTES = {}  # url -> bytes of every image the page loaded through the site route (reset per page)
+IMG_BUDGET = 150 * 1024
+FIXTURES = Path(__file__).parent / "fixtures"
+# Words that may stay English in Hindi pages: brand, unit and test-data names.
+ASCII_OK = set("smart farmer agmarknet guava google netlify supabase ai gps kvk icar govt india test mandi one two fake district variety farm block apmc rs kg quintal per sf rani nature photography".split())
+
 LIST_KEYS = ("small_tap", "small_font", "body_font", "clipped", "no_name")
+
+
+LOAD_IMAGES = """async () => {
+  const imgs = Array.from(document.querySelectorAll('img'));
+  for (const im of imgs) {
+    const r = im.getBoundingClientRect();
+    if (!r.width && !r.height) continue;
+    im.scrollIntoView({ block: 'center' });
+    if (!(im.complete && im.naturalWidth > 0)) {
+      await Promise.race([new Promise((res) => { im.addEventListener('load', res, { once: true }); im.addEventListener('error', res, { once: true }); }),
+                          new Promise((res) => setTimeout(res, 2500))]);
+    }
+  }
+  window.scrollTo(0, 0);
+}"""
+
+
+def measure(page):
+    """Scroll every image into view so lazy ones load, then take the measurements."""
+    page.evaluate(LOAD_IMAGES)
+    return page.evaluate(MEASURE)
 
 
 def serve_local(port_holder):
@@ -115,12 +173,19 @@ def install_routes(ctx, args, base, unmocked):
     def site(route):
         url = route.request.url.split("?")[0].split("#")[0]
         rel = url[len(ORIGIN):].lstrip("/") or "index.html"
+        if rel.startswith("__fixtures__/"):
+            f = FIXTURES / rel[len("__fixtures__/"):]
+            return route.fulfill(status=200, body=f.read_bytes(), content_type=mimetypes.guess_type(str(f))[0] or "text/plain") if f.is_file() else route.fulfill(status=404, body="not found")
         f = ROOT / rel
         if f.is_dir() or not f.exists():
             f = ROOT / (rel + ".html") if (ROOT / (rel + ".html")).exists() else None
         if not f:
             return route.fulfill(status=404, body="not found")
-        route.fulfill(status=200, body=f.read_bytes(), content_type=mimetypes.guess_type(str(f))[0] or "text/plain")
+        body = f.read_bytes()
+        ctype = mimetypes.guess_type(str(f))[0] or "text/plain"
+        if ctype.startswith("image/"):
+            IMG_BYTES[url] = len(body)
+        route.fulfill(status=200, body=body, content_type=ctype)
     # Playwright runs the LAST registered matching route first, so the catch-all goes first.
     def other(route):
         u = route.request.url
@@ -153,11 +218,18 @@ def merge(total, m):
     if total is None:
         total = {k: [] for k in LIST_KEYS}
         total.update(overflow=0, has_nav=False, texts=[], empty_state=False, error_state=False, risk_text="",
+                     imgs=0, bad_img=[], charts=0, bad_chart=[], ascii_runs=[], img_kb=None,
                      estimate_pills={"disease": 0, "irrigation": 0, "gdd": 0, "fert": 0})
     for k in LIST_KEYS:
         for item in m[k]:
             if item not in total[k]:
                 total[k].append(item)
+    for k in ("bad_img", "bad_chart", "ascii_runs"):
+        for item in m.get(k, []):
+            if item not in total[k]:
+                total[k].append(item)
+    total["imgs"] = max(total["imgs"], m.get("imgs", 0))
+    total["charts"] = max(total["charts"], m.get("charts", 0))
     total["overflow"] = max(total["overflow"], m["overflow"])
     total["has_nav"] = total["has_nav"] or m["has_nav"]
     total["texts"].append(m["text"])
@@ -173,7 +245,7 @@ def explore(page, pg, total, extra):
     """Open forms, modals and tab panels on the app pages and measure each state."""
     def snap():
         nonlocal total
-        total = merge(total, page.evaluate(MEASURE))
+        total = merge(total, measure(page))
 
     snap()
     if pg == "plan":
@@ -249,7 +321,7 @@ def explore_public(page, pg, total, extra, scenario):
     """Interactions on index, login, onboarding, sell-smart and privacy; measures after each state."""
     def snap():
         nonlocal total
-        total = merge(total, page.evaluate(MEASURE))
+        total = merge(total, measure(page))
 
     page.on("dialog", lambda d: d.accept())
     snap()
@@ -376,7 +448,9 @@ def explore_public(page, pg, total, extra, scenario):
         other = "en" if start_lang == "hi" else "hi"
         page.click("#lang-" + other)
         page.wait_for_timeout(300)
-        snap()
+        m = measure(page)
+        m["ascii_runs"] = []  # the page is in the other language here
+        total = merge(total, m)
         page.click("#lang-" + start_lang)
     else:  # privacy
         heads = page.eval_on_selector_all("h1, h2", "e => e.map(x => x.tagName)")
@@ -435,7 +509,7 @@ def special_runs(browser, args):
         content.append("DEMO banner visible on the production origin")
     errs = [e for e in errs if "Service Worker" not in e]
     page.screenshot(path=str(ART / "screens" / "special_demo_prod_origin.png"))
-    row("sell-smart?demo=1 [production origin]", errs, content, page.evaluate(MEASURE))
+    row("sell-smart?demo=1 [production origin]", errs, content, measure(page))
     ctx.close()
 
     # 2. ?demo=1 on 127.0.0.1: the demo works and shows the banner
@@ -463,7 +537,7 @@ def special_runs(browser, args):
         content.append("demo mode on 127.0.0.1 made no request to the demo server")
     errs = [e for e in errs if "Service Worker" not in e]
     page.screenshot(path=str(ART / "screens" / "special_demo_local.png"), full_page=True)
-    row("sell-smart?demo=1 [127.0.0.1]", errs, content, page.evaluate(MEASURE))
+    row("sell-smart?demo=1 [127.0.0.1]", errs, content, measure(page))
     ctx.close()
     srv.shutdown()
 
@@ -480,7 +554,7 @@ def special_runs(browser, args):
     errs = [e for e in errs if "Failed to load resource" not in e and "Service Worker" not in e and "ERR_FAILED" not in e
             and "dynamically imported" not in e]
     page.screenshot(path=str(ART / "screens" / "special_login_no_supabase.png"))
-    row("login [sign-in library unreachable]", errs, content, page.evaluate(MEASURE))
+    row("login [sign-in library unreachable]", errs, content, measure(page))
     ctx.close()
 
     # 4. Chart.js unreachable (offline): the text summary stays, no console error
@@ -498,7 +572,7 @@ def special_runs(browser, args):
         content.append("sell-smart: empty chart canvas still visible when Chart.js fails")
     errs = [e for e in errs if "Failed to load resource" not in e and "Service Worker" not in e and "ERR_FAILED" not in e]
     page.screenshot(path=str(ART / "screens" / "special_sell_chart_offline.png"), full_page=True)
-    row("sell-smart [Chart.js unreachable]", errs, content, page.evaluate(MEASURE))
+    row("sell-smart [Chart.js unreachable]", errs, content, measure(page))
     ctx.close()
     # 5. Chart.js unreachable on index and report: each chart keeps its text summary and shows a plain list
     def chart_text(page, canvas_id):
@@ -530,7 +604,7 @@ def special_runs(browser, args):
                 content.append(f"{pg_name}: chart canvas has no aria-label")
         errs = [e for e in errs if "Failed to load resource" not in e and "Service Worker" not in e and "ERR_FAILED" not in e]
         page.screenshot(path=str(ART / "screens" / f"special_{pg_name}_chart_offline.png"), full_page=True)
-        row(f"{pg_name} [Chart.js unreachable]", errs, content, page.evaluate(MEASURE))
+        row(f"{pg_name} [Chart.js unreachable]", errs, content, measure(page))
         ctx.close()
     # 6. Price history: day counter below 7 saved days, line chart from 7 (the backend decides via has_trend)
     ctx, un = new_ctx(anon=False)
@@ -542,8 +616,8 @@ def special_runs(browser, args):
     page.evaluate("switchPanel('panel-insights')")
     page.wait_for_timeout(1500)
     few = page.inner_text("#mandi-history")
-    if "1 of 7" not in few or page.query_selector("#mandi-history-chart"):
-        content.append("plan: fewer than 7 saved days must show the day counter and no chart")
+    if "3 of 7" not in few or page.query_selector("#mandi-history-chart"):
+        content.append("plan: fewer than 7 saved days (3 in the default fixture) must show the day counter and no chart")
     ctx.close()
     days = [f"2026-11-{d:02d}" for d in range(13, 21)]
     hist = {"has_trend": True, "min_days_for_trend": 7, "distinct_days": 8, "market": "Test Mandi (fake)",
@@ -565,7 +639,7 @@ def special_runs(browser, args):
         content.append("plan: 8 saved days must draw the history chart with a text summary")
     errs = [e for e in errs if "Failed to load resource" not in e and "Service Worker" not in e]
     page.screenshot(path=str(ART / "screens" / "special_plan_history.png"), full_page=True)
-    row("plan [price history 1 day vs 8 days]", errs, content, page.evaluate(MEASURE))
+    row("plan [price history 1 day vs 8 days]", errs, content, measure(page))
     ctx.close()
     return out
 
@@ -602,21 +676,29 @@ def run(args):
                     page.on("requestfailed", lambda r, errs=errs: errs.append("requestfailed: " + r.url[:150]) if "chrome-extension" not in r.url else None)
                     n0 = len(unmocked)
                     total = None
+                    IMG_BYTES.clear()
+                    first_load_bytes = None
                     try:
                         page.goto(f"{base}/{pg}.html", wait_until="load", timeout=20000)
                         page.wait_for_timeout(1200)
+                        first_load_bytes = sum(IMG_BYTES.values())
                         if pg in APP_PAGES:
                             total = explore(page, pg, total, extra)
                         elif pg in PUBLIC_PAGES:
                             total = explore_public(page, pg, total, extra, args.scenario)
                         else:
-                            total = merge(total, page.evaluate(MEASURE))
+                            total = merge(total, measure(page))
                         page.evaluate("window.scrollTo(0, 0)")
-                        page.screenshot(path=str(ART / "screens" / f"{pg}_{vp}_{lang}_{args.scenario}.png"), full_page=True)
+                        shot = ART / "screens" / f"{pg}_{vp}_{lang}_{args.scenario}.png"
+                        page.screenshot(path=str(shot), full_page=True)
+                        if (vp, lang, args.scenario) == ("360x800", "en", "ok"):
+                            (ART / "screens" / "after").mkdir(parents=True, exist_ok=True)
+                            shutil.copyfile(shot, ART / "screens" / "after" / f"{pg}.png")
                     except Exception as e:  # keep going; record as failure
                         total = total or merge(None, {"overflow": 0, "small_tap": [], "small_font": [], "body_font": [], "clipped": [],
                                                       "no_name": [], "has_nav": False, "text": "", "empty_state": False,
                                                       "error_state": False, "risk_text": "",
+                                                      "imgs": 0, "bad_img": [], "charts": 0, "bad_chart": [], "ascii_runs": [],
                                                       "estimate_pills": {"disease": 0, "irrigation": 0, "gdd": 0, "fert": 0}})
                         errs.append("harness: " + str(e)[:80] + " ... " + str(e)[-260:])
                     page.close()
@@ -652,6 +734,17 @@ def run(args):
                             content.append("empty scenario: no empty-state message visible")
                         if args.scenario == "error" and pg in (APP_PAGES | {"index", "sell-smart"}) and not total["error_state"]:
                             content.append("error scenario: no Retry / error state visible")
+                    content += [f"image: {x}" for x in total["bad_img"]]
+                    content += [f"chart: {x}" for x in total["bad_chart"]]
+                    if pg == "index" and vp == "360x800" and not args.local and first_load_bytes is not None:
+                        total["img_kb"] = round(first_load_bytes / 1024)
+                        if first_load_bytes > IMG_BUDGET:
+                            content.append(f"image: index first load fetched {total['img_kb']} KB of images (limit 150 KB)")
+                    total["soft"] = []
+                    if lang == "hi":
+                        for run_text in total["ascii_runs"]:
+                            if not all(w.lower() in ASCII_OK for w in re.findall(r"[A-Za-z]+", run_text)):
+                                total["soft"].append(run_text)
                     content += extra
                     total.pop("texts", None)
                     results.append(dict(page=pg, viewport=vp, lang=lang, scenario=args.scenario, errors=errs,
@@ -667,20 +760,25 @@ def run(args):
 
 def report(results, out_md):
     hard = 0
-    lines = ["| page | viewport | lang | scenario | errors | overflow px | tap<44 | font<14 | p/li/input/label<16 | clipped | no name | content | nav |",
-             "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+    lines = ["| page | viewport | lang | scenario | errors | overflow px | tap<44 | font<14 | p/li/input/label<16 | clipped | no name | content | imgs | broken img | img KB (index) | charts | bad charts | untranslated (soft) | nav |",
+             "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     detail = []
+    soft = []
     for r in results:
         bad = (bool(r["errors"]) or r["overflow"] > 1 or r["small_tap"] or r["body_font"] or r["clipped"]
                or r["no_name"] or r["small_font"] or r["content"])
         hard += 1 if bad else 0
         lines.append(f"| {r['page']} | {r['viewport']} | {r['lang']} | {r['scenario']} | {len(r['errors'])} | {max(r['overflow'], 0)} | "
                      f"{len(r['small_tap'])} | {len(r['small_font'])} | {len(r['body_font'])} | {len(r['clipped'])} | "
-                     f"{len(r['no_name'])} | {len(r['content'])} | {'yes' if r['has_nav'] else 'no'} |")
+                     f"{len(r['no_name'])} | {len(r['content'])} | {r.get('imgs', 0)} | {len(r.get('bad_img', []))} | "
+                     f"{r.get('img_kb') if r.get('img_kb') is not None else '-'} | {r.get('charts', 0)} | {len(r.get('bad_chart', []))} | "
+                     f"{len(r.get('soft', []))} | {'yes' if r['has_nav'] else 'no'} |")
+        if r.get("soft"):
+            soft.append(f"- {r['page']} {r['viewport']} {r['lang']} {r['scenario']} (first 5 of {len(r['soft'])}): {r['soft'][:5]}")
         for key in ("errors", "small_tap", "small_font", "body_font", "clipped", "no_name", "content"):
             if r[key]:
                 detail.append(f"- {r['page']} {r['viewport']} {r['lang']} {r['scenario']} {key} (worst 5 of {len(r[key])}): {r[key][:5]}")
-    text = "# Browser check\n\n" + "\n".join(lines) + "\n\n## Offenders\n\n" + "\n".join(detail) + f"\n\nRows with a hard failure: {hard} of {len(results)}\n"
+    text = "# Browser check\n\n" + "\n".join(lines) + "\n\n## Offenders\n\n" + "\n".join(detail) + "\n\n## Soft warnings: English text on Hindi pages (not a failure)\n\n" + "\n".join(soft) + f"\n\nRows with a hard failure: {hard} of {len(results)}\n"
     out_md.write_text(text, encoding="utf-8")
     return hard
 
@@ -688,11 +786,16 @@ def report(results, out_md):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--pages"); ap.add_argument("--viewport", choices=list(VIEWPORTS)); ap.add_argument("--lang")
-    ap.add_argument("--scenario", choices=("ok", "empty", "error"), default="ok")
+    ap.add_argument("--scenario", choices=("all", "ok", "empty", "error"), default="all")
     ap.add_argument("--local", action="store_true"); ap.add_argument("--anon", action="store_true")
     ap.add_argument("--real-cdn", action="store_true"); ap.add_argument("--report", default=str(ART / "browser_report.md"))
     args = ap.parse_args()
-    results = run(args)
+    import copy
+    results = []
+    for sc in (("ok", "empty", "error") if args.scenario == "all" else (args.scenario,)):
+        a = copy.copy(args)
+        a.scenario = sc
+        results += run(a)
     ART.mkdir(parents=True, exist_ok=True)
     (ART / "results.json").write_text(json.dumps(results, indent=1), encoding="utf-8")
     hard = report(results, Path(args.report))

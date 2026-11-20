@@ -53,6 +53,15 @@ TASKS = [
      "description": None, "source": "ai", "priority": "high", "status": "needs-review", "risk_level": "HIGH",
      "content_record_id": None, "is_ai_generated": True,
      "created_at": "2026-11-01T00:00:00", "updated_at": "2026-11-01T00:00:00"},
+    {"id": "t3", "title": "Prune test rows", "due_date": "2026-11-11T00:00:00", "plot_id": None, "farm_id": None, "description": None,
+     "source": "manual", "priority": "low", "status": "completed", "risk_level": None, "content_record_id": None,
+     "is_ai_generated": False, "created_at": "2026-11-01T00:00:00", "updated_at": "2026-11-01T00:00:00"},
+    {"id": "t4", "title": "Clean test drip lines", "due_date": "2026-11-12T00:00:00", "plot_id": None, "farm_id": None, "description": None,
+     "source": "manual", "priority": "low", "status": "completed", "risk_level": None, "content_record_id": None,
+     "is_ai_generated": False, "created_at": "2026-11-01T00:00:00", "updated_at": "2026-11-01T00:00:00"},
+    {"id": "t5", "title": "Check test fence", "due_date": "2026-11-13T00:00:00", "plot_id": None, "farm_id": None, "description": None,
+     "source": "manual", "priority": "low", "status": "due", "risk_level": None, "content_record_id": None,
+     "is_ai_generated": False, "created_at": "2026-11-01T00:00:00", "updated_at": "2026-11-01T00:00:00"},
 ]
 
 INVENTORY = [
@@ -66,8 +75,8 @@ INVENTORY = [
      "created_at": "2026-01-01T00:00:00", "updated_at": "2026-01-01T00:00:00"},
 ]
 
-# 1x1 transparent PNG (test data) so the thumbnail renders without network access.
-TEST_PHOTO = ("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==")
+# Same-origin 1x1 PNG (tests/e2e/fixtures/photo.png), served by browser_check.py, so photos need no network.
+TEST_PHOTO_URL = "https://guavaa.netlify.app/__fixtures__/photo.png"
 
 OBSERVATIONS = [
     {"id": "o1", "user_id": "u1", "plot_id": None, "observed_date": "2026-11-18", "plant_part": "leaves",
@@ -75,7 +84,7 @@ OBSERVATIONS = [
      "spread_pattern": "one corner", "severity": "medium", "trees_sampled": 20, "trees_affected": 3,
      "weather_notes": None, "recent_input_notes": None, "observer_name": "Test Farmer", "ai_analysis": None,
      "ai_analysis_label": "Preliminary observation — not a diagnosis", "created_at": "2026-11-18T00:00:00",
-     "photos": [{"id": "p1", "is_ai_version": False, "created_at": "2026-11-18T00:00:00", "signed_url": TEST_PHOTO},
+     "photos": [{"id": "p1", "is_ai_version": False, "created_at": "2026-11-18T00:00:00", "signed_url": TEST_PHOTO_URL},
                 {"id": "p2", "is_ai_version": False, "created_at": "2026-11-18T00:00:00", "signed_url": None}]},
 ]
 
@@ -88,11 +97,11 @@ ACTIVITIES = [
      "method": None, "actor": None, "photo_storage_key": None,
      "logged_date": "2026-11-12", "created_at": "2026-11-12T00:00:00"},
 ]
-SPENDING = {"total_cost": 1200.0, "by_type": {"Fertilizer": 1200.0, "Irrigation": 0.0}}
+SPENDING = {"total_cost": 2000.0, "by_type": {"Fertilizer": 1200.0, "Labour": 800.0, "Irrigation": 0.0}}
 GAPS = [{"activity_type": "Fertilizer", "expected": 20.0, "actual": 10.0, "unit": "kg", "status": "behind",
          "message": "Test: you may be behind on fertilizer for this stage."}]
-FIN_SUMMARY = {"total_cost": 1200.0, "cost_by_type": {"Fertilizer": 1200.0}, "revenue": None, "profit_or_loss": None,
-               "net_realisation": None, "break_even_price_per_kg": 4.5, "has_harvest": False, "currency": "INR",
+FIN_SUMMARY = {"total_cost": 2000.0, "cost_by_type": {"Fertilizer": 1200.0, "Labour": 800.0}, "revenue": 9500.0,
+               "profit_or_loss": 7500.0, "net_realisation": 9500.0, "break_even_price_per_kg": 4.5, "has_harvest": True, "currency": "INR",
                "break_even_note": None}
 ACTIVITY_TYPES = {"activity_types": ["Fertilizer", "Irrigation", "Pesticide", "Labour", "Other"]}
 
@@ -151,9 +160,9 @@ INSIGHTS = {
 
 REPORT = {
     "crop": "guava", "sowing_date": "2025-06-15", "plant_count": 120, "stage_coverage": ["fruit_development"],
-    "stages_with_no_activity": ["Pre-Bloom"], "total_cost": 1200.0, "cost_by_type": {"Fertilizer": 1200.0},
-    "revenue": None, "profit_or_loss": None, "net_realisation": None, "break_even_price_per_kg": None,
-    "break_even_note": "Break-even needs an expected yield.", "has_harvest": False, "harvest_record": None,
+    "stages_with_no_activity": ["Pre-Bloom"], "total_cost": 2000.0, "cost_by_type": {"Fertilizer": 1200.0, "Labour": 800.0},
+    "revenue": 9500.0, "profit_or_loss": 7500.0, "net_realisation": 9500.0, "break_even_price_per_kg": None,
+    "break_even_note": "Break-even needs an expected yield.", "has_harvest": True, "harvest_record": None,
     "scenario_record": None,
     "activity_history": [{"date": "2026-11-10", "activity_type": "Fertilizer", "quantity": 10.0, "unit": "kg",
                           "cost": 1200.0, "notes": "Test <i>note</i>"}],
