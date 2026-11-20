@@ -226,6 +226,51 @@
         </button>
       </div>
 
+      <!-- Home header: greeting, date, best price, next task, quick actions (each part loads on its own) -->
+      <section id="home-header" class="sf-home" aria-labelledby="home-hello">
+        <div>
+          <h2 id="home-hello" class="sf-home__hello" data-i18n="dash.helloNoName">Hello</h2>
+          <p id="home-date" class="sf-home__meta"></p>
+          <p id="home-farm" class="sf-home__meta"></p>
+        </div>
+        <div id="home-chips" class="sf-home__chips"></div>
+        <div class="sf-home__grid">
+          <div class="sf-home__card">
+            <p class="sf-home__label" data-i18n="dash.bestPrice">Best mandi price today</p>
+            <p id="home-price" class="sf-home__value sf-home__value--key">—</p>
+            <p id="home-price-meta" class="sf-home__meta"></p>
+          </div>
+          <div class="sf-home__card">
+            <p class="sf-home__label" data-i18n="dash.nextTask">Next task</p>
+            <p id="home-task" class="sf-home__value">—</p>
+            <p id="home-task-meta" class="sf-home__meta"></p>
+          </div>
+        </div>
+        <div id="task-ring" class="sf-home__card hidden"></div>
+        <nav class="sf-tiles" aria-label="Quick actions" data-i18n-aria-label="dash.tiles.label">
+          <a class="sf-tile" href="plan.html#panel-log" data-switch-panel="panel-log">
+            <span class="sf-icon" data-icon="plusCircle" aria-hidden="true"></span>
+            <span data-i18n="dash.tile.log">Log activity</span>
+          </a>
+          <a class="sf-tile" href="observations.html">
+            <span class="sf-icon" data-icon="camera" aria-hidden="true"></span>
+            <span data-i18n="dash.tile.photo">Add photo</span>
+          </a>
+          <a class="sf-tile" href="sell-smart.html">
+            <span class="sf-icon" data-icon="rupee" aria-hidden="true"></span>
+            <span data-i18n="dash.tile.prices">Check prices</span>
+          </a>
+          <a class="sf-tile" href="plan.html#panel-ai" data-switch-panel="panel-ai">
+            <span class="sf-icon" data-icon="robot" aria-hidden="true"></span>
+            <span data-i18n="dash.tile.ai">Ask AI</span>
+          </a>
+        </nav>
+        <div class="sf-home__card">
+          <p class="sf-home__label" data-i18n="plan.stages.label">Crop stages</p>
+          <ol id="stage-stepper" class="sf-stages mt-2"></ol>
+        </div>
+      </section>
+
       <!-- Headline: current stage and the next task -->
       <section class="headline-card mb-6" aria-live="polite">
         <div class="min-w-0">

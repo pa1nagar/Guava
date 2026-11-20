@@ -28,7 +28,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 import mock_api  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
-ART = Path("D:/Python World/Experiment/Guava/.agents/tasks/guava-polish")
+ART = Path("D:/Python World/Experiment/Guava/.agents/tasks/visual-redesign")
 PAGES = ["index", "login", "onboarding", "farm", "plan", "tasks", "observations",
          "inventory", "report", "sell-smart", "privacy"]
 APP_PAGES = {"farm", "plan", "tasks", "observations", "inventory", "report"}
@@ -77,7 +77,7 @@ MEASURE = """() => {
   }
   document.querySelectorAll('img,input,select,textarea').forEach((e) => {
     if (!vis(e) || e.type === 'hidden') return;
-    const name = e.getAttribute('aria-label') || e.getAttribute('aria-labelledby') || e.getAttribute('alt') || e.getAttribute('title') ||
+    const name = e.getAttribute('aria-label') || e.getAttribute('aria-labelledby') || (e.tagName === 'IMG' && e.getAttribute('alt') !== null) || e.getAttribute('title') ||
       (e.labels && e.labels.length) || e.getAttribute('placeholder') || (e.type === 'submit' && e.value);
     if (!name) out.no_name.push(sel(e));
   });
@@ -499,6 +499,73 @@ def special_runs(browser, args):
     errs = [e for e in errs if "Failed to load resource" not in e and "Service Worker" not in e and "ERR_FAILED" not in e]
     page.screenshot(path=str(ART / "screens" / "special_sell_chart_offline.png"), full_page=True)
     row("sell-smart [Chart.js unreachable]", errs, content, page.evaluate(MEASURE))
+    ctx.close()
+    # 5. Chart.js unreachable on index and report: each chart keeps its text summary and shows a plain list
+    def chart_text(page, canvas_id):
+        return page.evaluate("""(id) => { const c = document.getElementById(id); if (!c) return null;
+            const b = c.closest('.sf-chart-block'); return { summary: b.querySelector('.sf-chart-summary').textContent.trim(),
+            listItems: b.querySelectorAll('.sf-chart-list li').length, canvasVisible: !!(c.offsetWidth || c.offsetHeight),
+            aria: c.getAttribute('aria-label') || '' }; }""", canvas_id)
+    for pg_name, anon_flag, cid in (("index", True, "mandi-bar-chart"), ("report", False, "spend-donut")):
+        ctx, un = new_ctx(anon=anon_flag)
+        ctx.route("**/npm/chart.js", lambda r: r.abort())
+        page = ctx.new_page()
+        if anon_flag:
+            page.add_init_script("localStorage.setItem('sf_test_anon','1')")
+        errs, reqs, content = [], [], []
+        watch(page, errs, reqs)
+        page.goto(f"{ORIGIN}/{pg_name}.html", wait_until="load")
+        page.wait_for_timeout(1800)
+        info = chart_text(page, cid)
+        if not info:
+            content.append(f"{pg_name}: chart #{cid} not rendered")
+        else:
+            if not info["summary"]:
+                content.append(f"{pg_name}: no text summary when Chart.js fails to load")
+            if not info["listItems"]:
+                content.append(f"{pg_name}: no plain list when Chart.js fails to load")
+            if info["canvasVisible"]:
+                content.append(f"{pg_name}: empty chart canvas still visible when Chart.js fails")
+            if not info["aria"]:
+                content.append(f"{pg_name}: chart canvas has no aria-label")
+        errs = [e for e in errs if "Failed to load resource" not in e and "Service Worker" not in e and "ERR_FAILED" not in e]
+        page.screenshot(path=str(ART / "screens" / f"special_{pg_name}_chart_offline.png"), full_page=True)
+        row(f"{pg_name} [Chart.js unreachable]", errs, content, page.evaluate(MEASURE))
+        ctx.close()
+    # 6. Price history: day counter below 7 saved days, line chart from 7 (the backend decides via has_trend)
+    ctx, un = new_ctx(anon=False)
+    page = ctx.new_page()
+    errs, reqs, content = [], [], []
+    watch(page, errs, reqs)
+    page.goto(f"{ORIGIN}/plan.html", wait_until="load")
+    page.wait_for_selector("#page-content:not(.hidden)", timeout=8000)
+    page.evaluate("switchPanel('panel-insights')")
+    page.wait_for_timeout(1500)
+    few = page.inner_text("#mandi-history")
+    if "1 of 7" not in few or page.query_selector("#mandi-history-chart"):
+        content.append("plan: fewer than 7 saved days must show the day counter and no chart")
+    ctx.close()
+    days = [f"2026-11-{d:02d}" for d in range(13, 21)]
+    hist = {"has_trend": True, "min_days_for_trend": 7, "distinct_days": 8, "market": "Test Mandi (fake)",
+            "first_date": days[0], "last_date": days[-1],
+            "series": [{"trade_date": d, "modal_per_kg": 40 + i, "min_per_kg": 30, "max_per_kg": 50, "rows": 1} for i, d in enumerate(days)]}
+    ctx, un = new_ctx(anon=False)
+    hist_cors = {"access-control-allow-origin": "*", "access-control-allow-headers": "*", "access-control-allow-methods": "*"}
+    ctx.route("**/api/market-prices/guava/history*", lambda r: r.fulfill(
+        status=204 if r.request.method == "OPTIONS" else 200, content_type="application/json",
+        body="" if r.request.method == "OPTIONS" else json.dumps(hist), headers=hist_cors))
+    page = ctx.new_page()
+    watch(page, errs, reqs)
+    page.goto(f"{ORIGIN}/plan.html", wait_until="load")
+    page.wait_for_selector("#page-content:not(.hidden)", timeout=8000)
+    page.evaluate("switchPanel('panel-insights')")
+    page.wait_for_timeout(1500)
+    info = chart_text(page, "mandi-history-chart")
+    if not info or not info["summary"]:
+        content.append("plan: 8 saved days must draw the history chart with a text summary")
+    errs = [e for e in errs if "Failed to load resource" not in e and "Service Worker" not in e]
+    page.screenshot(path=str(ART / "screens" / "special_plan_history.png"), full_page=True)
+    row("plan [price history 1 day vs 8 days]", errs, content, page.evaluate(MEASURE))
     ctx.close()
     return out
 

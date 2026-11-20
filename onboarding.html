@@ -25,8 +25,20 @@
   </header>
 
   <main class="px-4 pt-4 pb-8 max-w-lg mx-auto">
+    <section class="mb-4">
+      <h2 class="sf-page-title" data-i18n="onb.welcome.title">Welcome! Let's set up your farm</h2>
+      <p class="mt-1 text-gray-700" data-i18n="onb.welcome.body">It takes about a minute. Your answers help us show prices and tasks that match your farm.</p>
+    </section>
+    <div class="sf-onb-steps">
+      <p id="onb-steps-label" class="sf-onb-steps__label" role="status"></p>
+      <ol id="onb-stepper" class="sf-stepper" aria-hidden="true"></ol>
+    </div>
     <p id="page-status" class="hidden text-base text-gray-700 mb-3" role="status"></p>
     <form id="onboarding-form" autocomplete="off" novalidate class="flex flex-col gap-4">
+
+      <div class="sf-onb-group" role="group" aria-labelledby="onb-step1-title" data-onb-step="1">
+        <h2 id="onb-step1-title" class="sf-onb-group__title" data-i18n="onb.step1.title">Your trees</h2>
+        <p class="sf-onb-group__hint" data-i18n="onb.step1.hint">Tell us what you grow and how many trees you have.</p>
 
       <!-- Crop -->
       <div class="flex flex-col gap-1">
@@ -55,6 +67,12 @@
         <span id="plant-count-error" class="hidden text-red-700 text-base" role="alert"></span>
       </div>
 
+      </div>
+
+      <div class="sf-onb-group" role="group" aria-labelledby="onb-step2-title" data-onb-step="2">
+        <h2 id="onb-step2-title" class="sf-onb-group__title" data-i18n="onb.step2.title">Where your farm is</h2>
+        <p class="sf-onb-group__hint" data-i18n="onb.step2.hint">We use this to find mandi prices near you.</p>
+
       <!-- State -->
       <div class="flex flex-col gap-1">
         <label for="state-select" class="text-base font-medium text-gray-700"><span data-i18n="onb.state">State</span> <span class="text-red-700" aria-hidden="true">*</span></label>
@@ -71,6 +89,12 @@
           <option value="" data-i18n="onb.district.placeholder">Select district</option>
         </select>
       </div>
+
+      </div>
+
+      <div class="sf-onb-group" role="group" aria-labelledby="onb-step3-title" data-onb-step="3">
+        <h2 id="onb-step3-title" class="sf-onb-group__title" data-i18n="onb.step3.title">When you planted</h2>
+        <p class="sf-onb-group__hint" data-i18n="onb.step3.hint">The planting date tells us which stage your trees are in.</p>
 
       <!-- Date planted -->
       <div class="flex flex-col gap-1">
@@ -109,6 +133,8 @@
         </div>
         <p id="yield-hint" class="text-base text-gray-600" data-i18n="onb.yield.hint">Used later to calculate your break-even price. You can skip this now.</p>
         <span id="yield-error" class="hidden text-red-700 text-base" role="alert"></span>
+      </div>
+
       </div>
 
       <!-- Submit -->

@@ -186,7 +186,13 @@ export const SELL_EN = {
   "fairness_note_no_grade": "No grade was logged for your sale, so grade differences cannot be checked.",
   "sell_fairness_no_sale": "No sale is logged yet. Log your sale in the harvest records to compare.",
   "sell_fairness_no_origin": "Set your farm location to compare with nearby mandis.",
-  "sell_fairness_not_enough_market_data": "Too few mandis had a price near your sale date to compare."
+  "sell_fairness_not_enough_market_data": "Too few mandis had a price near your sale date to compare.",
+  "sell_prog_text": "{have} of {min} days saved, history started {date}.",
+  "sell_prog_none": "{have} of {min} days saved. Prices are saved once a day.",
+  "sell_prog_why": "The line chart appears after {min} days of saved prices.",
+  "sell_rank_bars_title": "Compare mandis",
+  "sell_rank_bars_label": "Bar list of the price in Rs per kg for each mandi, highest first",
+  "sell_rank_best": "Best",
 };
 
 export const SELL_HI = {
@@ -364,7 +370,13 @@ export const SELL_HI = {
   "fairness_note_no_grade": "आपकी बिक्री में ग्रेड दर्ज नहीं है, इसलिए ग्रेड का फर्क जाँचा नहीं जा सकता।",
   "sell_fairness_no_sale": "अभी कोई बिक्री दर्ज नहीं है। तुलना के लिए अपनी बिक्री फसल-रिकॉर्ड में दर्ज करें।",
   "sell_fairness_no_origin": "पास की मंडियों से तुलना के लिए अपने खेत की जगह भरें।",
-  "sell_fairness_not_enough_market_data": "आपकी बिक्री की तारीख के आसपास बहुत कम मंडियों के भाव हैं, इसलिए तुलना नहीं हो सकती।"
+  "sell_fairness_not_enough_market_data": "आपकी बिक्री की तारीख के आसपास बहुत कम मंडियों के भाव हैं, इसलिए तुलना नहीं हो सकती।",
+  "sell_prog_text": "{min} में से {have} दिन सेव, इतिहास {date} से शुरू।",
+  "sell_prog_none": "{min} में से {have} दिन सेव। भाव दिन में एक बार सेव होते हैं।",
+  "sell_prog_why": "{min} दिन के सेव भाव के बाद लाइन चार्ट दिखेगा।",
+  "sell_rank_bars_title": "मंडियों की तुलना",
+  "sell_rank_bars_label": "हर मंडी के भाव (रुपये प्रति किलो) की बार सूची, सबसे ज़्यादा पहले",
+  "sell_rank_best": "सबसे अच्छा",
 };
 
 /** Merge both maps into the shared TRANSLATIONS object. Safe to call twice. */

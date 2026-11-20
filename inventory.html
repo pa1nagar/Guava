@@ -154,13 +154,14 @@
 
       <!-- Empty state -->
       <div id="inventory-list-empty" class="hidden">
-        <div class="empty-state">
+        <div class="empty-state sf-empty">
           <picture><source type="image/webp" srcset="images/orchard-480.webp 480w, images/orchard-960.webp 960w" sizes="96px"><img src="images/orchard-480.jpg" width="96" height="96" alt="" loading="lazy" decoding="async"></picture>
           <div class="empty-state__icon">📦</div>
           <p class="empty-state__title" data-i18n="empty.noInventory.title">No items yet</p>
           <p class="empty-state__body" data-i18n="empty.noInventory.body">
             Add the agricultural inputs you have purchased to track quantities on hand and link consumption to activities.
           </p>
+          <button type="button" class="sf-btn sf-btn--primary" data-click-target="btn-show-inv-form" data-i18n="empty.addItem.cta">Add an item</button>
         </div>
       </div>
 

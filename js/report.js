@@ -12,7 +12,9 @@
 
 import { routeGuard } from "./auth.js";
 import { apiFetch } from "./api.js";
-import { applyI18n, escapeHtml, initPage, renderLoadError, t } from "./dom.js";
+import { applyI18n, escapeHtml, getLang, initPage, renderLoadError, t } from "./dom.js";
+import { activityTypeLabel } from "./api-text.js";
+import { barRevenueCost, donutCosts } from "./charts.js";
 import { formatDate, formatNumber } from "./translator.js";
 
 // ── DOM refs ──────────────────────────────────────────────────────────────────
@@ -42,6 +44,29 @@ const noHarvestEmptyEl     = document.getElementById("no-harvest-empty");
 function fmt(n) {
   if (n == null) return "—";
   return "₹" + formatNumber(Number(n), { maximumFractionDigits: 2 });
+}
+
+// ── Charts: the farmer's own records only ─────────────────────────────────────
+
+function renderCharts(r, byType) {
+  const donutCard   = document.getElementById("spend-chart-card");
+  const revCostCard = document.getElementById("revcost-card");
+  const harvestHint = document.getElementById("log-harvest-prompt");
+  const rows = Object.keys(byType)
+    .filter((k) => Number(byType[k]) > 0)
+    .sort((a, b) => byType[b] - byType[a])
+    .map((k) => ({ label: activityTypeLabel(k, getLang()), value: Number(byType[k]) }));
+
+  donutCard?.classList.toggle("hidden", rows.length === 0);
+  if (rows.length) donutCosts("spend-donut", rows, r.total_cost).catch(() => {});
+
+  const hasRevenue = r.revenue != null;
+  revCostCard?.classList.toggle("hidden", !hasRevenue);
+  if (hasRevenue) {
+    barRevenueCost("revcost-bar", { cost: r.total_cost, revenue: r.revenue, profit: r.profit_or_loss }).catch(() => {});
+  }
+  // No harvest revenue yet: only the donut, plus a way to log the harvest.
+  harvestHint?.classList.toggle("hidden", hasRevenue || rows.length === 0);
 }
 
 // ── Renderers ─────────────────────────────────────────────────────────────────
@@ -129,6 +154,8 @@ function renderReport(r) {
     `;
     costBreakdownEl.appendChild(totalRow);
   }
+
+  renderCharts(r, byType);
 
   // ── Activity history ────────────────────────────────────────────────────
   actHistoryEl.innerHTML = "";

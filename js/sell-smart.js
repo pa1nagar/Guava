@@ -300,6 +300,27 @@ function mandiCard(e, costsSet, ranked) {
     flagList(e.quality_flags));
 }
 
+/** Horizontal bar list (HTML/CSS only). Width is proportional to the Rs/kg the API returned. */
+function rankBars(d, costsSet) {
+  const value = (e) => (costsSet && e.net_per_kg !== null && e.net_per_kg !== undefined ? e.net_per_kg : e.gross_per_kg);
+  const rows = d.ranked.filter((e) => value(e) !== null && value(e) !== undefined);
+  if (rows.length < 2) return null;
+  const max = Math.max(...rows.map(value));
+  const items = rows.map((e, i) => {
+    const bar = h("span", {});
+    bar.style.width = `${max > 0 ? Math.max(0, Math.round((value(e) / max) * 100)) : 0}%`;
+    return h("li", { class: `sf-rank__row${i === 0 ? " is-best" : ""}` },
+      h("div", { class: "sf-rank__name" },
+        h("span", {}, `${e.market_name} (${e.district})`, i === 0 ? " " : null,
+          i === 0 ? h("span", { class: "sf-chip sf-chip--ok" }, tr("sell_rank_best")) : null),
+        h("span", {}, `${fmt(value(e))} ${tr("sell_unit_rs_kg")}`)),
+      h("div", { class: "sf-rank__bar", "aria-hidden": "true" }, bar));
+  });
+  return h("div", { class: "border border-gray-200 rounded-xl p-3" },
+    h("h3", { class: "font-semibold text-emerald-900" }, tr("sell_rank_bars_title"), " · ", tr(costsSet ? "sell_net" : "sell_gross")),
+    h("ul", { class: "sf-rank mt-2", "aria-label": tr("sell_rank_bars_label") }, items));
+}
+
 function renderRanking() {
   const d = data.ranking;
   const body = $("ranking-body");
@@ -312,6 +333,7 @@ function renderRanking() {
   body.append(formulaBox(d));
 
   if (d.ranked.length) {
+    body.append(rankBars(d, costsSet));
     body.append(h("ol", { class: "flex flex-col gap-3" }, d.ranked.map((e) => mandiCard(e, costsSet, true))));
   } else if (d.status !== "no_origin") {
     body.append(h("p", { class: "text-sm" }, tr("sell_rank_none_in_radius", { km: fmt(d.radius_km, 0) })));
@@ -447,6 +469,26 @@ function renderTrends() {
   canvas.setAttribute("aria-label", tr("sell_chart_label"));
   const series = d.series;
   const values = series.map((p) => p.value_per_kg);
+  // History needs the backend's minimum number of saved days (the shortest trend window).
+  // Until then: an honest day counter with a progress bar, and no chart.
+  const minDays = (d.windows && d.windows[0] && d.windows[0].window_days) || 0;
+  const enough = series.length >= 2 && series.length >= minDays;
+  const progress = $("trend-progress");
+  if (progress) {
+    progress.classList.toggle("hidden", enough);
+    if (!enough) {
+      const have = series.length;
+      const bar = h("span", {});
+      bar.style.width = `${minDays ? Math.min(100, Math.round((have / minDays) * 100)) : 0}%`;
+      progress.replaceChildren(
+        h("p", { class: "text-sm font-semibold" }, have
+          ? tr("sell_prog_text", { have, min: minDays, date: fmtDate(series[0].trade_date) })
+          : tr("sell_prog_none", { have, min: minDays })),
+        h("div", { class: "sf-bar mt-2", role: "progressbar", "aria-label": tr("sell_trend_title"),
+                   "aria-valuemin": "0", "aria-valuemax": String(minDays), "aria-valuenow": String(have) }, bar),
+        h("p", { class: "text-sm mt-2" }, tr("sell_prog_why", { min: minDays })));
+    }
+  }
   const done = (drawn) => {
     // The text summary is always shown (it is the text alternative for the chart).
     // When Chart.js cannot load (offline), the empty canvas is hidden and a note is added.
@@ -458,7 +500,12 @@ function renderTrends() {
     canvas.parentElement.classList.toggle("hidden", !drawn);
   };
   // Chart.js is fetched on first use so it never blocks first paint.
-  loadChartJs().then(() => done(drawTrendChart(canvas, series)), () => done(false));
+  if (enough) loadChartJs().then(() => done(drawTrendChart(canvas, series)), () => done(false));
+  else {
+    if (chart) { chart.destroy(); chart = null; }
+    canvas.parentElement.classList.add("hidden");
+    $("trend-chart-summary").textContent = "";
+  }
   $("trend-windows").replaceChildren(...d.windows.map(windowCard));
 
   const vol = d.volatility;

@@ -13,6 +13,7 @@ import { icon } from "./icons.js";
 import { getMandiHistory, loadMandiCard, mandiEsc, mandiLang, mt } from "./mandi.js";
 import { applyI18n, errorMessage, escapeHtml as esc, getLang, initPage, renderLoadError, setBusy, t } from "./dom.js";
 import { activityTypeLabel, translateApiText } from "./api-text.js";
+import { nextDueTask, renderTaskRing } from "./task-ring.js";
 
 // Hindi for the fixed English sentences the API sends (falls back to the English text).
 const tx = (s) => translateApiText(s, getLang());
@@ -283,6 +284,98 @@ function renderRoadmap(plan) {
     row.appendChild(label);
     stageRoadmap.appendChild(row);
   });
+
+  // Horizontal stepper over the same stage list (past ticked, current highlighted)
+  const stepper = document.getElementById("stage-stepper");
+  if (stepper) {
+    stepper.innerHTML = STAGE_IDS.map((id, i) => {
+      const done = i < currentIdx;
+      const mark = done ? `${icon("check")}<span class="sr-only">${esc(t("plan.stages.done"))}: </span>` : "";
+      return `<li${done ? ' class="is-done"' : ""}${i === currentIdx ? ' aria-current="step"' : ""}>${mark}<span>${esc(stageName(id))}</span></li>`;
+    }).join("");
+  }
+}
+
+// ── Home header (greeting, best price, next task, quick actions) ─────────────
+// Every part loads on its own, so one failure never blanks the others.
+
+function setText(id, text) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+function renderHomeStatic(displayName) {
+  try {
+    const hello = document.getElementById("home-hello");
+    const first = String(displayName || "").trim().split(/\s+/)[0];
+    if (hello) {
+      hello.removeAttribute("data-i18n");
+      hello.textContent = first ? t("dash.hello", { name: first }) : t("dash.helloNoName");
+    }
+    setText("home-date", new Date().toLocaleDateString(getLang() === "hi" ? "hi-IN" : "en-IN",
+      { weekday: "long", day: "numeric", month: "long" }));
+    setText("home-farm", [hdrFarmName.textContent, hdrLocation.textContent].filter(Boolean).join(" · "));
+  } catch { /* the header still shows the other parts */ }
+}
+
+async function loadHomePrice() {
+  const priceEl = document.getElementById("home-price");
+  try {
+    const res = await apiFetch("/api/market-prices/guava?limit=5");
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const board = await res.json();
+    let best = null;
+    for (const m of (board.has_data ? board.mandis || [] : [])) {
+      if (m.is_stale) continue;
+      for (const p of m.prices || []) {
+        if (p.modal_per_kg != null && (!best || p.modal_per_kg > best.price)) {
+          best = { price: p.modal_per_kg, market: m.market, date: m.trade_date };
+        }
+      }
+    }
+    if (best) {
+      setText("home-price", t("dash.perKg", { price: `₹${Number(best.price).toLocaleString("en-IN", { maximumFractionDigits: 2 })}` }));
+      setText("home-price-meta", t("dash.bestPrice.at", { market: best.market, date: fmtDate(String(best.date).slice(0, 10)) }));
+      return;
+    }
+  } catch { /* falls through to the honest "not available" text */ }
+  if (priceEl) priceEl.classList.remove("sf-home__value--key");
+  setText("home-price", t("dash.bestPrice.none"));
+}
+
+async function loadHomeTasks() {
+  try {
+    const res = await apiFetch("/api/farmers/me/tasks");
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const tasks = await res.json();
+    renderTaskRing(document.getElementById("task-ring"), tasks);
+    const next = nextDueTask(tasks);
+    setText("home-task", next ? next.title : t("dash.nextTask.none"));
+    setText("home-task-meta", next?.due_date ? t("dash.nextTask.due", { date: fmtDate(String(next.due_date).slice(0, 10)) }) : "");
+  } catch { /* leaves the placeholder dash */ }
+}
+
+function centreCurrentStage() {
+  const ol = document.getElementById("stage-stepper");
+  const cur = ol?.querySelector('[aria-current="step"]');
+  if (ol && cur) ol.scrollLeft = cur.offsetLeft - (ol.clientWidth - cur.offsetWidth) / 2;
+}
+
+function loadHome(displayName) {
+  renderHomeStatic(displayName);
+  centreCurrentStage();
+  // Tiles that open a panel on this page still work as plain links without JS.
+  document.querySelectorAll("[data-switch-panel]").forEach((a) => {
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
+      window.switchPanel(a.getAttribute("data-switch-panel"));
+      window.scrollTo(0, 0);
+    });
+  });
+  const wanted = location.hash.slice(1);
+  if (wanted.startsWith("panel-") && document.getElementById(wanted)) window.switchPanel(wanted);
+  loadHomePrice();
+  loadHomeTasks();
 }
 
 // ── Gap alerts ────────────────────────────────────────────────────────────────
@@ -882,6 +975,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     clearTimeout(coldStartTimer);
     pageLoading.classList.add("hidden");
     pageContent.classList.remove("hidden");
+    loadHome(displayName);
 
     // ── Step 2: Load secondary data after the page is visible ──────────────
     // Each part is guarded on its own so one failing request never blanks the others.
@@ -962,6 +1056,10 @@ function renderWeather(weather, locationStr) {
   }
 
   const cur = weather.current || {};
+  const chips = document.getElementById("home-chips");
+  if (chips && cur.temperature != null) {
+    chips.innerHTML = `<span class="sf-chip sf-chip--info">${wmoEmoji(cur.weathercode || 0)} ${esc(Math.round(Number(cur.temperature)))}°C</span>`;
+  }
   if (curEl) {
     curEl.innerHTML = `
       <span class="text-5xl">${wmoEmoji(cur.weathercode || 0)}</span>

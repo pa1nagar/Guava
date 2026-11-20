@@ -72,6 +72,14 @@ export function initPage() {
     /* language engine is optional; pages still render in English */
   }
   applyAria(document);
+  // Empty-state buttons: data-click-target="<id>" presses the page's existing "Add" button.
+  document.addEventListener("click", (e) => {
+    const src = e.target.closest?.("[data-click-target]");
+    const target = src && document.getElementById(src.getAttribute("data-click-target"));
+    if (!target) return;
+    target.click();
+    target.scrollIntoView({ block: "center" });
+  });
 }
 
 export function setBusy(btn, busy) {

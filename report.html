@@ -89,6 +89,21 @@
       </div>
     </section>
 
+    <!-- Charts (your own records; the text under each chart says the same thing) -->
+    <section class="flex flex-col gap-3">
+      <div id="spend-chart-card" class="hidden bg-white rounded-xl border border-gray-200 p-4">
+        <h2 class="sf-card__title mb-2" data-i18n="report.chart.spendTitle">Where your money went</h2>
+        <div class="sf-chart-block"><div class="sf-chart"><canvas id="spend-donut"></canvas></div><p class="sf-chart-summary"></p></div>
+      </div>
+      <div id="revcost-card" class="hidden bg-white rounded-xl border border-gray-200 p-4">
+        <h2 class="sf-card__title mb-2" data-i18n="report.chart.revCostTitle">Spent and earned</h2>
+        <div class="sf-chart-block"><div class="sf-chart"><canvas id="revcost-bar"></canvas></div><p class="sf-chart-summary"></p></div>
+      </div>
+      <div id="log-harvest-prompt" class="hidden">
+        <a href="plan.html#panel-harvest" class="sf-btn sf-btn--secondary" data-i18n="report.logHarvestBtn">Log harvest to see revenue</a>
+      </div>
+    </section>
+
     <!-- Cost breakdown -->
     <section>
       <h2 class="text-sm font-semibold text-gray-600 uppercase tracking-wide mb-2" data-i18n="report.costBreakdown">Cost Breakdown</h2>
@@ -102,13 +117,13 @@
       </div>
       <!-- Empty state: no expenses yet -->
       <div id="cost-breakdown-empty" class="hidden">
-        <div class="empty-state">
+        <div class="empty-state sf-empty">
           <div class="empty-state__icon">💰</div>
           <p class="empty-state__title" data-i18n="empty.noExpenses.title">No expenses recorded yet</p>
           <p class="empty-state__body" data-i18n="empty.noExpenses.body">
             Log activities with a cost on the My Farm page to see a breakdown here.
           </p>
-          <a href="plan.html" class="empty-state__action" data-i18n="empty.noExpenses.cta">Go to My Farm →</a>
+          <a href="plan.html#panel-log" class="sf-btn sf-btn--primary" data-i18n="empty.logActivity.cta">Log an activity</a>
         </div>
       </div>
     </section>

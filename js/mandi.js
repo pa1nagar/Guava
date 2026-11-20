@@ -14,6 +14,7 @@
  * stale_after_days; the UI only displays that number.
  */
 import { TRANSLATIONS } from "./i18n.js";
+import { barMandi, lineHistory } from "./charts.js";
 
 const PUBLIC_PATH  = "/api/public/market-prices/guava";
 const PRIVATE_PATH = "/api/market-prices/guava?limit=5";
@@ -53,6 +54,29 @@ export function mandiDate(iso) {
 export function rupee(value) {
   return value == null ? "—" : `₹${Number(value).toLocaleString("en-IN", { maximumFractionDigits: 2 })}`;
 }
+
+/** "20 Nov 2026" in the farmer's language (used in the history progress line). */
+function longDate(iso) {
+  const d = new Date(`${String(iso).slice(0, 10)}T00:00:00`);
+  if (Number.isNaN(d.getTime())) return mandiDate(iso);
+  return d.toLocaleDateString(mandiLang() === "hi" ? "hi-IN" : "en-IN", { day: "numeric", month: "short", year: "numeric" });
+}
+
+/** Top 6 mandis by modal Rs/kg (first price row per mandi, as in the hero). Real rows only. */
+function chartRows(board) {
+  const rows = (board.mandis || [])
+    .map(m => {
+      const p = (m.prices || []).find(x => x.modal_per_kg != null);
+      return p ? { label: m.market, value: Number(p.modal_per_kg) } : null;
+    })
+    .filter(Boolean)
+    .sort((a, b) => b.value - a.value)
+    .slice(0, 6);
+  const top = rows.length ? rows[0].value : null;
+  rows.forEach(r => { r.best = r.value === top; });
+  return rows;
+}
+
 
 /** Last history payload (plan page uses it for the harvest card). */
 export function getMandiHistory() { return _history; }
@@ -138,12 +162,25 @@ function renderBoard() {
     ? `<p class="text-sm mt-3"><a href="login.html" class="font-semibold text-brand-primary underline">${mandiEsc(mt("mandi.public.signin"))}</a></p>`
     : "";
 
+  const rows = chartRows(board);
+  const chartBlock = rows.length >= 2 ? `
+    <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm mb-3">
+      <div class="sf-chart-head">
+        <h3 class="sf-card__title">${mandiEsc(mt("chart.mandi.title"))}</h3>
+        <span class="sf-chip sf-chip--ok">${mandiEsc(mt("chart.mandi.best"))} · ${mandiEsc(rows[0].label)}</span>
+      </div>
+      <div class="sf-chart-block"><div class="sf-chart"><canvas id="mandi-bar-chart"></canvas></div><p class="sf-chart-summary"></p></div>
+      <p class="text-sm text-gray-600 mt-2">${mandiEsc(mt("mandi.asOf", { date: mandiDate(board.as_of) }))} · ${mandiEsc(mt("mandi.source"))}</p>
+    </div>` : "";
+
   el.innerHTML = `
     ${_savedAt ? `<p class="text-sm font-semibold text-amber-800 mb-2" role="status">${mandiEsc(mt("mandi.offlineCopy", { date: mandiDate(_savedAt) }))}</p>` : ""}
     <p class="text-sm text-gray-600 mb-2">${mandiEsc(mt(scopeKey))}</p>
+    ${chartBlock}
     <div class="grid gap-3 sm:grid-cols-2">${cards}</div>
     <p class="text-sm text-gray-600 mt-3">${mandiEsc(mt("mandi.source"))} · ${mandiEsc(mt("mandi.asOf", { date: mandiDate(board.as_of) }))}</p>
     ${signIn}`;
+  if (rows.length >= 2) barMandi("mandi-bar-chart", rows, { date: board.as_of }).catch(() => {});
 }
 
 function renderHistory() {
@@ -156,27 +193,34 @@ function renderHistory() {
   const h = _history;
   const title = `<p class="text-sm font-bold text-emerald-900 mb-1">${mandiEsc(mt("mandi.history.title"))}${h.market ? ` · ${mandiEsc(h.market)}` : ""}</p>`;
 
-  if (!h.has_trend) {
+  const pts = (h.series || []).filter(s => s.modal_per_kg != null)
+    .map(s => ({ date: s.trade_date, value: s.modal_per_kg }));
+
+  if (!h.has_trend || pts.length < 2) {
+    // Honest empty state: no chart until the backend says the trend threshold is met.
+    const have = h.distinct_days || 0;
+    const min = h.min_days_for_trend;
+    const pct = min ? Math.min(100, Math.round((have / min) * 100)) : 0;
+    const line = h.first_date
+      ? mt("mandi.history.progress", { have, min, date: longDate(h.first_date) })
+      : mt("mandi.history.progressNone", { have, min });
     el.innerHTML = `
       <div class="bg-white border border-gray-200 rounded-2xl p-4">
         ${title}
-        <p class="text-sm text-gray-600">${mandiEsc(mt("mandi.history.notEnough", { min: h.min_days_for_trend, have: h.distinct_days }))}</p>
+        <p class="text-sm text-gray-700 font-semibold">${mandiEsc(line)}</p>
+        <div class="sf-bar mt-2" role="progressbar" aria-label="${mandiEsc(mt("mandi.history.title"))}" aria-valuemin="0" aria-valuemax="${min ?? 0}" aria-valuenow="${have}"><span style="width:${pct}%"></span></div>
+        <p class="text-sm text-gray-600 mt-2">${mandiEsc(mt("mandi.history.progressWhy", { min }))}</p>
       </div>`;
     return;
   }
 
-  const pts = h.series.filter(s => s.modal_per_kg != null);
-  const max = Math.max(...pts.map(s => s.modal_per_kg), 1);
-  const bars = pts.map(s => `
-    <div title="${mandiEsc(mandiDate(s.trade_date))}: ${rupee(s.modal_per_kg)}"
-         style="flex:1; min-width:3px; height:${Math.max(4, Math.round((s.modal_per_kg / max) * 100))}%; background:#4A7C59; border-radius:3px 3px 0 0;"></div>`).join("");
   el.innerHTML = `
     <div class="bg-white border border-gray-200 rounded-2xl p-4">
       ${title}
-      <div class="flex items-end gap-px h-24 mb-2">${bars}</div>
-      <p class="text-sm text-gray-600">${mandiEsc(mt("mandi.history.range", { n: h.distinct_days, from: mandiDate(h.first_date), to: mandiDate(h.last_date) }))} · ${mandiEsc(mt("mandi.modal"))} ${mandiEsc(mt("mandi.perKg"))}</p>
-      <p class="text-sm text-gray-600 mt-1">${mandiEsc(mt("mandi.source"))}</p>
+      <div class="sf-chart-block"><div class="sf-chart"><canvas id="mandi-history-chart"></canvas></div><p class="sf-chart-summary"></p></div>
+      <p class="text-sm text-gray-600 mt-2">${mandiEsc(mt("mandi.source"))}</p>
     </div>`;
+  lineHistory("mandi-history-chart", pts, { market: h.market || "" }).catch(() => {});
 }
 
 /** Largest-number headline on the public page: the newest saved price (js/mandi.js feeds #mandi-hero). */

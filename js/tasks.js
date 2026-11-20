@@ -16,6 +16,8 @@ import {
   applyI18n, errorMessage, escapeHtml, initPage, renderLoadError, setBusy, t,
 } from "./dom.js";
 import { formatDate, formatNumber } from "./translator.js";
+import { icon } from "./icons.js";
+import { renderTaskRing } from "./task-ring.js";
 
 // ── Status metadata ───────────────────────────────────────────────────────────
 const STATUS_META = {
@@ -61,6 +63,7 @@ const taskFormError   = document.getElementById("task-form-error");
 const taskFormBtn     = document.getElementById("btn-save-task");
 
 const filterStatus    = document.getElementById("filter-status");
+const taskRingEl      = document.getElementById("task-ring");
 
 // ── Utilities ─────────────────────────────────────────────────────────────────
 function setHidden(el, hidden) {
@@ -171,6 +174,19 @@ function bindStatusButtons(container) {
   });
 }
 
+// ── Gentle celebration: a small check and "Well done". No streaks, no guilt text. ─
+// The check animation is switched off in css/style.src.css under prefers-reduced-motion.
+function celebrate() {
+  document.querySelector(".sf-toast[data-celebrate]")?.remove();
+  const toast = document.createElement("div");
+  toast.className = "sf-toast";
+  toast.setAttribute("role", "status");
+  toast.setAttribute("data-celebrate", "1");
+  toast.innerHTML = `<span class="sf-celebrate" aria-hidden="true">${icon("check")}</span>${escapeHtml(t("tasks.celebrate"))}`;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
+}
+
 // ── Update task status ────────────────────────────────────────────────────────
 async function updateTaskStatus(taskId, newStatus) {
   try {
@@ -182,6 +198,7 @@ async function updateTaskStatus(taskId, newStatus) {
       showError(await errorMessage(res));
       return false;
     }
+    if (newStatus === "completed") celebrate();
     await Promise.all([loadTodayTasks(), loadAllTasks()]);
     return true;
   } catch {
@@ -227,6 +244,8 @@ async function loadAllTasks() {
     }
     _tasks = await res.json();
     renderAllTasks(_tasks);
+    // The ring counts the full list, so it only updates when no status filter is applied.
+    if (!statusVal) renderTaskRing(taskRingEl, _tasks);
   } catch {
     setHidden(allLoading, true);
     renderLoadError(allList, loadAllTasks, "common.error.network");

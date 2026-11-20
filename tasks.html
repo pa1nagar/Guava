@@ -45,6 +45,8 @@
       </div>
     </section>
 
+    <div id="task-ring" class="sf-home__card hidden"></div>
+
     <!-- ── Today's Tasks ──────────────────────────────────────────────── -->
     <div id="today-tasks-section" class="section-card">
       <h2 class="font-bold text-emerald-900 text-lg mb-4">
@@ -158,12 +160,13 @@
 
       <!-- Empty state -->
       <div id="all-tasks-empty" class="hidden">
-        <div class="empty-state">
+        <div class="empty-state sf-empty">
           <div class="empty-state__icon">📋</div>
           <p class="empty-state__title" data-i18n="empty.noTasks.title">No tasks yet</p>
           <p class="empty-state__body" data-i18n="empty.noTasks.body">
             Create your first task to start tracking farm activities with due dates and status.
           </p>
+          <a href="plan.html" class="sf-btn sf-btn--primary" data-i18n="empty.goPlan.cta">See this week's plan</a>
         </div>
       </div>
 

@@ -80,17 +80,48 @@ function fillStates() {
   }
 }
 
+// ── 3-step progress indicator, derived from the form sections (data-onb-step) ──
+const stepperEl  = document.getElementById("onb-stepper");
+const stepsLabel = document.getElementById("onb-steps-label");
+
+function stepDone(n) {
+  if (n === 1) return Boolean(cropEl.value) && Boolean(plantCountEl.value);
+  if (n === 2) return Boolean(stateEl.value) && Boolean(districtEl.value);
+  return Boolean(sowingEl.value);
+}
+
+function updateSteps() {
+  const total = document.querySelectorAll("[data-onb-step]").length;
+  if (!stepperEl || !total) return;
+  let current = total;
+  for (let n = 1; n <= total; n++) {
+    if (!stepDone(n)) { current = n; break; }
+  }
+  stepperEl.replaceChildren(...Array.from({ length: total }, (_, i) => {
+    const li = document.createElement("li");
+    if (stepDone(i + 1)) li.className = "is-done";
+    if (i + 1 === current) li.setAttribute("aria-current", "step");
+    return li;
+  }));
+  if (stepsLabel) stepsLabel.textContent = t("onb.steps.label", { n: current, total });
+}
+
 // ── Initialise ────────────────────────────────────────────────────────────────
 async function start() {
   initPage();
-  document.getElementById("lang-en").addEventListener("click", () => setLanguage("en"));
-  document.getElementById("lang-hi").addEventListener("click", () => setLanguage("hi"));
+  for (const el of [cropEl, plantCountEl, stateEl, districtEl, sowingEl]) {
+    el.addEventListener("input", updateSteps);
+    el.addEventListener("change", updateSteps);
+  }
+  document.getElementById("lang-en").addEventListener("click", () => { setLanguage("en"); updateSteps(); });
+  document.getElementById("lang-hi").addEventListener("click", () => { setLanguage("hi"); updateSteps(); });
 
   // Default sowing date to today (local date, not UTC).
   const now = new Date();
   sowingEl.value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
   sowingEl.max = sowingEl.value;
   fillStates();
+  updateSteps();
 
   try {
     const [auth, api] = await Promise.all([import("./auth.js"), import("./api.js")]);
