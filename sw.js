@@ -9,7 +9,7 @@ const STATIC = 'sf-static-v1';
 const META = 'sf-meta';
 const PUBLIC_PRICES = 'https://guava-8wc7.onrender.com/api/public/market-prices/guava';
 const SHELL = ['css/tailwind.css', 'css/style.css', 'js/nav.js', 'js/translator.js', 'js/i18n.js',
-  'js/config.js', 'js/api.js', 'js/auth.js'];
+  'js/config.js', 'js/api.js', 'js/auth.js', 'js/dom.js', 'js/i18n-public.js', 'js/i18n-pages.js'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(STATIC).then((c) =>
