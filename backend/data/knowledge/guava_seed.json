@@ -4706,6 +4706,3364 @@
       "conflicts": [],
       "retrieved_on": "2026-11-21",
       "status": "DRAFT"
+    },
+    {
+      "id": "GUA-FLW-0001",
+      "topic": "flowering_fruit_set",
+      "subtopic": "flower_bearing_position",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "Guava flowers are borne in the axils of leaves on the current season's growth, singly or in groups of 2 to 3.",
+      "statement_hi": "अमरूद के फूल चालू मौसम की बढ़वार में पत्तियों के कक्ष में अकेले या 2-3 के समूह में आते हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "HORT181 Lecture 14: Guava - soil, climate, irrigation and nutrient management",
+          "publisher": "TNAU eAgri course notes",
+          "year": null,
+          "url": "https://eagri.org/eagri50/HORT181/lec14.pdf",
+          "page": null,
+          "section_or_table": "Cropping",
+          "quote": "The flowers are borne on the current season growth in the axils of leaves.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "secondary",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-FLW-0002",
+      "topic": "flowering_fruit_set",
+      "subtopic": "bud_development_time",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "Floral buds need 38 to 42 days to develop fully, and the current season's growth takes one to two months to bear flowers.",
+      "statement_hi": "फूल की कलियों को पूरी तरह विकसित होने में 38 से 42 दिन लगते हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "floral_bud_development",
+          "min": 38,
+          "max": 42,
+          "unit": "days"
+        }
+      ],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "HORT181 Lecture 14: Guava - soil, climate, irrigation and nutrient management",
+          "publisher": "TNAU eAgri course notes",
+          "year": null,
+          "url": "https://eagri.org/eagri50/HORT181/lec14.pdf",
+          "page": null,
+          "section_or_table": "Cropping",
+          "quote": "The floral buds require 38- 42 days for full development.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "secondary",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-FLW-0003",
+      "topic": "flowering_fruit_set",
+      "subtopic": "blooming_seasons_north_india",
+      "region": "ALL",
+      "applicability": {
+        "months": [
+          2,
+          3,
+          9,
+          10
+        ]
+      },
+      "statement_en": "In northern India two main blooming seasons occur, February-March (fruit ripening July to September) and September-October (ripening February to April).",
+      "statement_hi": "उत्तर भारत में दो मुख्य पुष्पन मौसम होते हैं: फरवरी-मार्च (फल जुलाई से सितंबर में पकते हैं) और सितंबर-अक्टूबर (फल फरवरी से अप्रैल में)।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Improvement in the guava production technology - an overview",
+          "publisher": "Review Of Research (lbp.world), Y.C. Maharashtra Open University author",
+          "year": 2015,
+          "url": "https://oldsciparks.lbp.world/ArticlePDF/287.pdf",
+          "page": "4",
+          "section_or_table": "Crop regulation",
+          "quote": "In northern India, two main blooming seasons are observed, one in February-March (fruit ripening in July to September)",
+          "access": "opened_partial"
+        }
+      ],
+      "source_confidence": "secondary",
+      "conflicts": [
+        {
+          "source_title": "HORT181 Lecture 14: Guava - soil, climate, irrigation and nutrient management",
+          "url": "https://eagri.org/eagri50/HORT181/lec14.pdf",
+          "quote": "Guava flowers twice a year, first in April-May for rainy season crop and then in August – September for wiriter season crop.",
+          "note": "TNAU notes give April-May and August-September flowering; the review gives February-March and September-October."
+        }
+      ],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-FLW-0004",
+      "topic": "flowering_fruit_set",
+      "subtopic": "growth_regulator_fruit_set",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "A review states that fruit set can be increased by a foliar spray of 15-30 ppm GA3 or 10-20 ppm NAA (growth regulators). Chemical item: the dose is quoted from the source only; registration for guava under CIB&RC and the pre-harvest interval were not verified.",
+      "statement_hi": "एक समीक्षा के अनुसार 15-30 पीपीएम जीए3 या 10-20 पीपीएम एनएए के पर्णीय छिड़काव से फल बनना बढ़ सकता है। रसायन संबंधी बिंदु: मात्रा केवल स्रोत से ली गई है; CIB&RC में अमरूद के लिए पंजीकरण और कटाई-पूर्व अंतराल सत्यापित नहीं हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "GA3",
+          "min": 15,
+          "max": 30,
+          "unit": "ppm"
+        },
+        {
+          "name": "NAA",
+          "min": 10,
+          "max": 20,
+          "unit": "ppm"
+        }
+      ],
+      "risk_level": "HIGH",
+      "involves_chemical": true,
+      "cibrc_check_required": true,
+      "sources": [
+        {
+          "title": "Improvement in the guava production technology - an overview",
+          "publisher": "Review Of Research (lbp.world), Y.C. Maharashtra Open University author",
+          "year": 2015,
+          "url": "https://oldsciparks.lbp.world/ArticlePDF/287.pdf",
+          "page": "4",
+          "section_or_table": "Flowering and fruit set",
+          "quote": "Fruit set can be increased by foliar application of 15-30 ppm GA",
+          "access": "opened_partial"
+        }
+      ],
+      "source_confidence": "secondary",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-FLW-0005",
+      "topic": "flowering_fruit_set",
+      "subtopic": "pollination",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "A Himachal Pradesh package of practices says guava flowers are bisexual and self-pollinated, and suggests 4-5 bee colonies per hectare for better fruit set.",
+      "statement_hi": "हिमाचल प्रदेश की पैकेज ऑफ प्रैक्टिसेज के अनुसार अमरूद के फूल द्विलिंगी और स्व-परागित होते हैं; बेहतर फल बनने के लिए प्रति हेक्टेयर 4-5 मधुमक्खी कॉलोनी सुझाई गई हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "bee_colonies",
+          "min": 4,
+          "max": 5,
+          "unit": "colonies",
+          "per": "ha"
+        }
+      ],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "All about Guava (HPSHIVA package of practices booklet)",
+          "publisher": "HPSHIVA Project, Directorate of Horticulture, Himachal Pradesh (authors from Dr YSP University of Horticulture & Forestry)",
+          "year": null,
+          "url": "https://hpshiva.hp.gov.in/cms/media/ae2bfh14/guava.pdf",
+          "page": "8",
+          "section_or_table": "Pollination",
+          "quote": "4-5 bee colonies/ha can be maintained in the orchard for better fruit set and proper cropping.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-FLW-0006",
+      "topic": "flowering_fruit_set",
+      "subtopic": "fruit_drop_loss",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "NHB reports that fruit drop is a serious guava disorder causing about 45-65% loss.",
+      "statement_hi": "एनएचबी के अनुसार फल झड़ना अमरूद की गंभीर समस्या है जिससे लगभग 45-65% नुकसान होता है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "fruit_drop_loss",
+          "min": 45,
+          "max": 65,
+          "unit": "percent"
+        }
+      ],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Guava (model bankable project report, one-acre model)",
+          "publisher": "National Horticulture Board, Govt. of India",
+          "year": 2004,
+          "url": "https://nhb.gov.in/report_files/guava/GUAVA.htm",
+          "page": null,
+          "section_or_table": "5.13.3 Disorders",
+          "quote": "Fruit drop is a serious disorder in guava resulting in about 45-65% loss",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-FLW-0007",
+      "topic": "flowering_fruit_set",
+      "subtopic": "gibberellic_acid_fruit_drop",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "NHB says spraying GA has been found effective in reducing fruit drop; the report gives no dose. Chemical item: the dose is quoted from the source only; registration for guava under CIB&RC and the pre-harvest interval were not verified.",
+      "statement_hi": "एनएचबी के अनुसार जीए का छिड़काव फल झड़ना कम करने में प्रभावी पाया गया है; रिपोर्ट में मात्रा नहीं दी गई। रसायन संबंधी बिंदु: मात्रा केवल स्रोत से ली गई है; CIB&RC में अमरूद के लिए पंजीकरण और कटाई-पूर्व अंतराल सत्यापित नहीं हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "HIGH",
+      "involves_chemical": true,
+      "cibrc_check_required": true,
+      "sources": [
+        {
+          "title": "Guava (model bankable project report, one-acre model)",
+          "publisher": "National Horticulture Board, Govt. of India",
+          "year": 2004,
+          "url": "https://nhb.gov.in/report_files/guava/GUAVA.htm",
+          "page": null,
+          "section_or_table": "5.13.3 Disorders",
+          "quote": "Spraying of GA has been found to be effective in reducing the fruit drop in guava.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PST-0001",
+      "topic": "pests",
+      "subtopic": "major_pests",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "The NHM IPM bulletin names fruit flies, bark-eating caterpillars, fruit borer and coccids (scale insects and mealybugs) as the major pests of guava.",
+      "statement_hi": "एनएचएम की आईपीएम पुस्तिका के अनुसार फल मक्खी, छाल खाने वाली इल्ली, फल छेदक और कोकसिड (शल्क कीट व मीलीबग) अमरूद के प्रमुख कीट हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "16",
+          "section_or_table": "B. Insects (introduction)",
+          "quote": "Fruit flies, bark-eating caterpillars, fruit borer and coccids (scale insects and mealy bugs) are considered as major pest of guava",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PST-0002",
+      "topic": "pests",
+      "subtopic": "fruit_fly_importance",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "Fruit fly is described as the most destructive guava insect, particularly in the rainy season.",
+      "statement_hi": "फल मक्खी को अमरूद का सबसे विनाशकारी कीट बताया गया है, खासकर बरसात में।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "16",
+          "section_or_table": "14. Fruit Fly",
+          "quote": "The fruit fly is the most destructive insect in the production of guava, particularly during rainy season.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PST-0003",
+      "topic": "pests",
+      "subtopic": "fruit_fly_rainy_crop_infestation",
+      "region": "ALL",
+      "applicability": {
+        "bahar": "ambe"
+      },
+      "statement_en": "ICAR authors report that the rainy-season guava crop is normally discouraged because of poor quality and fruit fly infestation of up to 86%.",
+      "statement_hi": "आईसीएआर के लेखकों के अनुसार बरसात की फसल को आम तौर पर हतोत्साहित किया जाता है क्योंकि फल खराब गुणवत्ता के होते हैं और फल मक्खी का प्रकोप 86% तक होता है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "max_fruit_fly_infestation",
+          "value": 86.0,
+          "unit": "percent"
+        }
+      ],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Eco-friendly management of fruit fly for quality guava production",
+          "publisher": "Indian Horticulture, Jan-Feb 2023 (ICAR); authors ICAR-IARI New Delhi and others",
+          "year": 2023,
+          "url": "https://epubs.icar.org.in/index.php/IndHort/article/download/130941/49198/472789",
+          "page": "43",
+          "section_or_table": "Abstract",
+          "quote": "rainy season crop is normally discouraged since it bears fruits of poor quality having high fruit fly infestation (up to 86.0%)",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PST-0004",
+      "topic": "pests",
+      "subtopic": "fruit_fly_region_maharashtra",
+      "region": "MH",
+      "applicability": {},
+      "statement_en": "ICAR authors list Maharashtra among the coastal and south-western states where the fruit fly problem on guava is expected to increase.",
+      "statement_hi": "आईसीएआर के लेखकों ने महाराष्ट्र को उन तटीय व दक्षिण-पश्चिमी राज्यों में गिना है जहाँ अमरूद में फल मक्खी की समस्या बढ़ने की आशंका है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Eco-friendly management of fruit fly for quality guava production",
+          "publisher": "Indian Horticulture, Jan-Feb 2023 (ICAR); authors ICAR-IARI New Delhi and others",
+          "year": 2023,
+          "url": "https://epubs.icar.org.in/index.php/IndHort/article/download/130941/49198/472789",
+          "page": "44",
+          "section_or_table": "Bahar in guava and fruit fly intensity",
+          "quote": "Kerala, Karnataka, Tamil nadu, Maharashtra, Gujarat the fruit fly menace is going to increase.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PST-0005",
+      "topic": "pests",
+      "subtopic": "fruit_fly_sanitation",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "To limit carry-over of fruit fly, collect and destroy fallen and infested fruit with the maggots, and till the tree basin so natural enemies destroy pupae.",
+      "statement_hi": "फल मक्खी का प्रकोप आगे न बढ़े इसके लिए गिरे और संक्रमित फलों को इल्लियों सहित इकट्ठा करके नष्ट करें, और थाले की जुताई करें।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "17",
+          "section_or_table": "14. Fruit Fly, Management",
+          "quote": "To check the carryover of the pest, collect and destroy fallen and infested fruits along with fruit fly maggots.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PST-0006",
+      "topic": "pests",
+      "subtopic": "fruit_fly_bagging",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "ICAR authors describe fruit bagging as one of the most effective ways to control fruit fly in high-density and hedgerow systems; bags are put on at least 30 days before harvest.",
+      "statement_hi": "आईसीएआर के लेखकों के अनुसार फलों पर थैली चढ़ाना फल मक्खी नियंत्रण के सबसे प्रभावी तरीकों में है; थैली कटाई से कम से कम 30 दिन पहले चढ़ाई जाती है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "bagging_before_harvest",
+          "min": 30,
+          "unit": "days"
+        }
+      ],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Eco-friendly management of fruit fly for quality guava production",
+          "publisher": "Indian Horticulture, Jan-Feb 2023 (ICAR); authors ICAR-IARI New Delhi and others",
+          "year": 2023,
+          "url": "https://epubs.icar.org.in/index.php/IndHort/article/download/130941/49198/472789",
+          "page": "44",
+          "section_or_table": "Integrated pest management strategies, Fruit bagging",
+          "quote": "Fruit bagging: recently, fruit bagging has emerged … as one of the most effective approaches for controlling … fruit fly.",
+          "access": "opened_read"
+        },
+        {
+          "title": "Eco-friendly management of fruit fly for quality guava production",
+          "publisher": "Indian Horticulture, Jan-Feb 2023 (ICAR); authors ICAR-IARI New Delhi and others",
+          "year": 2023,
+          "url": "https://epubs.icar.org.in/index.php/IndHort/article/download/130941/49198/472789",
+          "page": "45",
+          "section_or_table": "Fruit bagging",
+          "quote": "for fruit bagging atleast 30 days prior to harvest",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PST-0007",
+      "topic": "pests",
+      "subtopic": "fruit_fly_methyl_eugenol_trap_ipm",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "The NHM bulletin recommends hanging bottle traps with 0.1% methyl eugenol and 0.1% malathion, ten per hectare at 5-6 ft height before fruit ripening, solution changed weekly. Chemical item: the dose is quoted from the source only; registration for guava under CIB&RC and the pre-harvest interval were not verified.",
+      "statement_hi": "एनएचएम पुस्तिका 0.1% मिथाइल यूजेनॉल और 0.1% मैलाथियान वाले बोतल ट्रैप सुझाती है: प्रति हेक्टेयर दस, 5-6 फीट ऊँचाई पर, फल पकने से पहले; घोल साप्ताहिक बदलें। रसायन संबंधी बिंदु: मात्रा केवल स्रोत से ली गई है; CIB&RC में अमरूद के लिए पंजीकरण और कटाई-पूर्व अंतराल सत्यापित नहीं हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "traps",
+          "value": 10,
+          "unit": "traps",
+          "per": "ha"
+        },
+        {
+          "name": "methyl_eugenol",
+          "value": 0.1,
+          "unit": "percent"
+        },
+        {
+          "name": "malathion",
+          "value": 0.1,
+          "unit": "percent"
+        }
+      ],
+      "risk_level": "HIGH",
+      "involves_chemical": true,
+      "cibrc_check_required": true,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "17",
+          "section_or_table": "14. Fruit Fly, Management",
+          "quote": "Hanging of methyl eugenol bottle traps (containing 100 ml solution of 0.1% methyl eugenol & 0.1% malathion) is highly effective in controlling the pests.",
+          "access": "opened_read"
+        },
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "17",
+          "section_or_table": "14. Fruit Fly, Management",
+          "quote": "Ten such traps may be hanged in a hectare at a height of 5-6 ft, well before the ripening of fruits.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [
+        {
+          "source_title": "All about Guava (HPSHIVA package of practices booklet)",
+          "url": "https://hpshiva.hp.gov.in/cms/media/ae2bfh14/guava.pdf",
+          "quote": "Install pheromone traps in the orchard at mid of canopy height @ 15 trap per ha.",
+          "note": "Himachal booklet gives 15 traps per ha."
+        },
+        {
+          "source_title": "Horticulture :: Fruits :: Guava (Agritech portal)",
+          "url": "https://agritech.tnau.ac.in/horticulture/horti_fruits_guava.html",
+          "quote": "50 traps are required/ha, fish meal and Dichlorvos soaked cotton are to be renewed once in 20 and 7 days respectively.",
+          "note": "TNAU gives 50 fish-meal traps per ha."
+        }
+      ],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PST-0008",
+      "topic": "pests",
+      "subtopic": "fruit_fly_pheromone_traps_hp",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "A Himachal Pradesh booklet recommends pheromone traps at mid canopy height, 15 traps per hectare. Chemical item: the dose is quoted from the source only; registration for guava under CIB&RC and the pre-harvest interval were not verified.",
+      "statement_hi": "हिमाचल प्रदेश की पुस्तिका कैनोपी की मध्य ऊँचाई पर प्रति हेक्टेयर 15 फेरोमोन ट्रैप लगाने की सलाह देती है। रसायन संबंधी बिंदु: मात्रा केवल स्रोत से ली गई है; CIB&RC में अमरूद के लिए पंजीकरण और कटाई-पूर्व अंतराल सत्यापित नहीं हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "traps",
+          "value": 15,
+          "unit": "traps",
+          "per": "ha"
+        }
+      ],
+      "risk_level": "HIGH",
+      "involves_chemical": true,
+      "cibrc_check_required": true,
+      "sources": [
+        {
+          "title": "All about Guava (HPSHIVA package of practices booklet)",
+          "publisher": "HPSHIVA Project, Directorate of Horticulture, Himachal Pradesh (authors from Dr YSP University of Horticulture & Forestry)",
+          "year": null,
+          "url": "https://hpshiva.hp.gov.in/cms/media/ae2bfh14/guava.pdf",
+          "page": "15",
+          "section_or_table": "Insect pest management, Guava fruit fly",
+          "quote": "Install pheromone traps in the orchard at mid of canopy height @ 15 trap per ha.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PST-0009",
+      "topic": "pests",
+      "subtopic": "fruit_fly_mass_trapping_review",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "A review cites a study recommending 8 or 16 methyl eugenol traps per acre as the most effective fruit fly measure in guava. Chemical item: the dose is quoted from the source only; registration for guava under CIB&RC and the pre-harvest interval were not verified.",
+      "statement_hi": "एक समीक्षा एक अध्ययन का हवाला देती है जिसमें अमरूद में फल मक्खी के लिए प्रति एकड़ 8 या 16 मिथाइल यूजेनॉल ट्रैप सबसे प्रभावी बताए गए हैं। रसायन संबंधी बिंदु: मात्रा केवल स्रोत से ली गई है; CIB&RC में अमरूद के लिए पंजीकरण और कटाई-पूर्व अंतराल सत्यापित नहीं हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "traps",
+          "min": 8,
+          "max": 16,
+          "unit": "traps",
+          "per": "acre"
+        }
+      ],
+      "risk_level": "HIGH",
+      "involves_chemical": true,
+      "cibrc_check_required": true,
+      "sources": [
+        {
+          "title": "Improvement in the guava production technology - an overview",
+          "publisher": "Review Of Research (lbp.world), Y.C. Maharashtra Open University author",
+          "year": 2015,
+          "url": "https://oldsciparks.lbp.world/ArticlePDF/287.pdf",
+          "page": "5",
+          "section_or_table": "Pest management, Fruit fly",
+          "quote": "mass trapping by installing 8 or 16 methyl eugenol traps/acre as the most effective measure",
+          "access": "opened_partial"
+        }
+      ],
+      "source_confidence": "secondary",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PST-0010",
+      "topic": "pests",
+      "subtopic": "fruit_fly_insecticide_icar",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "ICAR authors list deltamethrin 0.025% thrice at least 15 days apart, starting 45 days after fruit set, as a chemical option for fruit fly. Chemical item: the dose is quoted from the source only; registration for guava under CIB&RC and the pre-harvest interval were not verified.",
+      "statement_hi": "आईसीएआर के लेखकों ने फल मक्खी के लिए डेल्टामेथ्रिन 0.025% को कम से कम 15 दिन के अंतर पर तीन बार, फल बनने के 45 दिन बाद से, रासायनिक विकल्प बताया है। रसायन संबंधी बिंदु: मात्रा केवल स्रोत से ली गई है; CIB&RC में अमरूद के लिए पंजीकरण और कटाई-पूर्व अंतराल सत्यापित नहीं हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "deltamethrin",
+          "value": 0.025,
+          "unit": "percent"
+        },
+        {
+          "name": "sprays",
+          "value": 3,
+          "unit": "sprays"
+        },
+        {
+          "name": "interval",
+          "min": 15,
+          "unit": "days"
+        }
+      ],
+      "risk_level": "HIGH",
+      "involves_chemical": true,
+      "cibrc_check_required": true,
+      "sources": [
+        {
+          "title": "Eco-friendly management of fruit fly for quality guava production",
+          "publisher": "Indian Horticulture, Jan-Feb 2023 (ICAR); authors ICAR-IARI New Delhi and others",
+          "year": 2023,
+          "url": "https://epubs.icar.org.in/index.php/IndHort/article/download/130941/49198/472789",
+          "page": "45",
+          "section_or_table": "Table 2, row 4 Chemical insecticide",
+          "quote": "Deltamethrin (0.025%) thrice at least 15 days interval commencing 45 days after fruit set.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PST-0011",
+      "topic": "pests",
+      "subtopic": "fruit_fly_insecticide_hp",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "A Himachal Pradesh booklet suggests foliar malathion 2 ml/l plus 20 g gur a month before harvest, repeated after 15 days. Chemical item: the dose is quoted from the source only; registration for guava under CIB&RC and the pre-harvest interval were not verified.",
+      "statement_hi": "हिमाचल प्रदेश की पुस्तिका कटाई से एक माह पहले मैलाथियान 2 मिली/ली और 20 ग्राम गुड़ का छिड़काव, 15 दिन बाद दोहराना सुझाती है। रसायन संबंधी बिंदु: मात्रा केवल स्रोत से ली गई है; CIB&RC में अमरूद के लिए पंजीकरण और कटाई-पूर्व अंतराल सत्यापित नहीं हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "malathion",
+          "value": 2,
+          "unit": "ml",
+          "per": "litre"
+        },
+        {
+          "name": "repeat_after",
+          "value": 15,
+          "unit": "days"
+        }
+      ],
+      "risk_level": "HIGH",
+      "involves_chemical": true,
+      "cibrc_check_required": true,
+      "sources": [
+        {
+          "title": "All about Guava (HPSHIVA package of practices booklet)",
+          "publisher": "HPSHIVA Project, Directorate of Horticulture, Himachal Pradesh (authors from Dr YSP University of Horticulture & Forestry)",
+          "year": null,
+          "url": "https://hpshiva.hp.gov.in/cms/media/ae2bfh14/guava.pdf",
+          "page": "15",
+          "section_or_table": "Insect pest management, Guava fruit fly",
+          "quote": "Foliar spray with malathion 2 ml/l + gur 20 g a month before harvesting the fruit crop, repeated after 15 days.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PST-0012",
+      "topic": "pests",
+      "subtopic": "bark_eating_caterpillar_symptoms",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "Bark-eating caterpillar attack shows as irregular tunnels and patches covered with silken web of excreta and chewed wood on shoots, branches and trunk.",
+      "statement_hi": "छाल खाने वाली इल्ली का प्रकोप टहनियों, शाखाओं और तने पर अनियमित सुरंगों और मल व लकड़ी के बुरादे के रेशमी जाले से ढके धब्बों के रूप में दिखता है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "17",
+          "section_or_table": "15. Bark-eating caterpillar, Symptoms",
+          "quote": "The infestation of this pest may be identified by the presence of irregular tunnels and patches covered with silken web",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PST-0013",
+      "topic": "pests",
+      "subtopic": "bark_eating_caterpillar_mechanical",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "In early infestation kill bark-eating caterpillars mechanically by inserting an iron spike in their shelter holes; keep the orchard clean and watch for drying young shoots.",
+      "statement_hi": "शुरुआती प्रकोप में छाल खाने वाली इल्ली को आश्रय छेद में लोहे की सलाई डालकर मार दें; बाग साफ रखें और सूखती नई टहनियों पर नज़र रखें।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "18",
+          "section_or_table": "15. Bark-eating caterpillar, Management",
+          "quote": "Kill the caterpillars mechanically by inserting the iron spike in shelter holes made by these borers at early stages of infestation.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PST-0014",
+      "topic": "pests",
+      "subtopic": "bark_eating_caterpillar_chemical_ipm",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "For severe bark-eating caterpillar infestation the NHM bulletin suggests a cotton swab with 0.05% dichlorvos in the hole, or injecting 0.05% emulsion, then plugging with mud. Chemical item: the dose is quoted from the source only; registration for guava under CIB&RC and the pre-harvest interval were not verified.",
+      "statement_hi": "गंभीर प्रकोप में एनएचएम पुस्तिका छेद में 0.05% डाइक्लोरवॉस में भिगोई रुई डालने या 0.05% घोल इंजेक्ट करके मिट्टी से बंद करने की सलाह देती है। रसायन संबंधी बिंदु: मात्रा केवल स्रोत से ली गई है; CIB&RC में अमरूद के लिए पंजीकरण और कटाई-पूर्व अंतराल सत्यापित नहीं हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "dichlorvos",
+          "value": 0.05,
+          "unit": "percent"
+        }
+      ],
+      "risk_level": "HIGH",
+      "involves_chemical": true,
+      "cibrc_check_required": true,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "18",
+          "section_or_table": "15. Bark-eating caterpillar, Management",
+          "quote": "insert the swab of cotton wool soaked in 0.05 per cent dichlorovos or inject water emulsion of 0.05 per cent",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PST-0015",
+      "topic": "pests",
+      "subtopic": "bark_eating_caterpillar_chemical_hp",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "A Himachal Pradesh booklet lists sprays of spinosad 0.2 ml/l, cypermethrin 1 ml/l, cyantraniliprole 0.3 ml/l or chlorantraniliprole 0.3 ml/l for bark-eating caterpillar. Chemical item: the dose is quoted from the source only; registration for guava under CIB&RC and the pre-harvest interval were not verified.",
+      "statement_hi": "हिमाचल प्रदेश की पुस्तिका छाल खाने वाली इल्ली के लिए स्पिनोसैड 0.2 मिली/ली, साइपरमेथ्रिन 1 मिली/ली, सायंट्रानिलिप्रोल 0.3 मिली/ली या क्लोरएंट्रानिलिप्रोल 0.3 मिली/ली के छिड़काव बताती है। रसायन संबंधी बिंदु: मात्रा केवल स्रोत से ली गई है; CIB&RC में अमरूद के लिए पंजीकरण और कटाई-पूर्व अंतराल सत्यापित नहीं हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "spinosad",
+          "value": 0.2,
+          "unit": "ml",
+          "per": "litre"
+        },
+        {
+          "name": "cypermethrin",
+          "value": 1,
+          "unit": "ml",
+          "per": "litre"
+        }
+      ],
+      "risk_level": "HIGH",
+      "involves_chemical": true,
+      "cibrc_check_required": true,
+      "sources": [
+        {
+          "title": "All about Guava (HPSHIVA package of practices booklet)",
+          "publisher": "HPSHIVA Project, Directorate of Horticulture, Himachal Pradesh (authors from Dr YSP University of Horticulture & Forestry)",
+          "year": null,
+          "url": "https://hpshiva.hp.gov.in/cms/media/ae2bfh14/guava.pdf",
+          "page": "18",
+          "section_or_table": "Bark eating caterpillar, Management",
+          "quote": "Spray spinosad 0.2 ml/l or cypermethrin (1 ml/l) or cyantraniliprole (0.3 ml/l) or chlorantraniliprole (0.3 ml/l).",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PST-0016",
+      "topic": "pests",
+      "subtopic": "scale_insect_central_south_india",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "The NHM bulletin names Chloropulvinaria psidii as the main scale insect causing serious damage to guava in Central and South India.",
+      "statement_hi": "एनएचएम पुस्तिका के अनुसार मध्य और दक्षिण भारत में अमरूद को गंभीर नुकसान पहुँचाने वाला मुख्य शल्क कीट क्लोरोपुल्विनेरिया साइडी है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "20",
+          "section_or_table": "17. Coccids",
+          "quote": "C. psidii is the main scale insect causing serious damage to guava crop in Central and South India.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PST-0017",
+      "topic": "pests",
+      "subtopic": "mealybug_nonchemical",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "For mango mealybug the NHM bulletin suggests an alkathene band (400 gauge, 25 cm wide) on the trunk and release of Cryptolaemus montrouzieri at 3000 per ha before fruiting.",
+      "statement_hi": "आम के मीलीबग के लिए एनएचएम पुस्तिका तने पर अल्काथीन पट्टी (400 गेज, 25 सेमी चौड़ी) बाँधने और फल आने से पहले 3000 प्रति हेक्टेयर क्रिप्टोलेमस मोंट्रोज़िएरी छोड़ने की सलाह देती है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "Cryptolaemus_montrouzieri",
+          "value": 3000,
+          "unit": "beetles",
+          "per": "ha"
+        }
+      ],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "21",
+          "section_or_table": "17. Coccids, Management",
+          "quote": "alkathene banding (400 gauge 25 cm wide) may be tied with the help of thread on tree trunk",
+          "access": "opened_read"
+        },
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "21",
+          "section_or_table": "17. Coccids, Management",
+          "quote": "Releasing of Cryptolaemus montrouzieri @ 3000 /ha before fruiting season.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [
+        {
+          "source_title": "Horticulture :: Fruits :: Guava (Agritech portal)",
+          "url": "https://agritech.tnau.ac.in/horticulture/horti_fruits_guava.html",
+          "quote": "Release of Cryptolaemus montrouzieri beetles (Coccinellid beetles) @ 10 beetles /tree is also recommended.",
+          "note": "TNAU gives 10 beetles per tree."
+        }
+      ],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PST-0018",
+      "topic": "pests",
+      "subtopic": "mealybug_chemical_ipm",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "For heavy Ferrisia virgata infestation the NHM bulletin suggests 0.1% buprofezin or 0.045% dimethoate in early fruiting or non-fruiting season, repeated fortnightly if needed. Chemical item: the dose is quoted from the source only; registration for guava under CIB&RC and the pre-harvest interval were not verified.",
+      "statement_hi": "भारी प्रकोप में एनएचएम पुस्तिका शुरुआती फलन या बिना फलन के मौसम में 0.1% ब्यूप्रोफेज़िन या 0.045% डाइमेथोएट छिड़कने की सलाह देती है; ज़रूरत हो तो पखवाड़े पर दोहराएँ। रसायन संबंधी बिंदु: मात्रा केवल स्रोत से ली गई है; CIB&RC में अमरूद के लिए पंजीकरण और कटाई-पूर्व अंतराल सत्यापित नहीं हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "buprofezin",
+          "value": 0.1,
+          "unit": "percent"
+        },
+        {
+          "name": "dimethoate",
+          "value": 0.045,
+          "unit": "percent"
+        }
+      ],
+      "risk_level": "HIGH",
+      "involves_chemical": true,
+      "cibrc_check_required": true,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "21",
+          "section_or_table": "17. Coccids, Management",
+          "quote": "In case of heavy infestation of F. virgata, spray of 0.1 per cent buprofezin or 0.045 per cent dimethoate in early fruiting season",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PST-0019",
+      "topic": "pests",
+      "subtopic": "mealybug_chemical_hp",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "A Himachal Pradesh booklet suggests acetamiprid 0.5 ml/l, imidacloprid 0.5 ml/l or chlorantraniliprole 0.3 ml/l when severe mealybug is seen on twigs. Chemical item: the dose is quoted from the source only; registration for guava under CIB&RC and the pre-harvest interval were not verified.",
+      "statement_hi": "हिमाचल प्रदेश की पुस्तिका टहनियों पर गंभीर मीलीबग दिखने पर एसिटामिप्रिड 0.5 मिली/ली, इमिडाक्लोप्रिड 0.5 मिली/ली या क्लोरएंट्रानिलिप्रोल 0.3 मिली/ली सुझाती है। रसायन संबंधी बिंदु: मात्रा केवल स्रोत से ली गई है; CIB&RC में अमरूद के लिए पंजीकरण और कटाई-पूर्व अंतराल सत्यापित नहीं हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "acetamiprid",
+          "value": 0.5,
+          "unit": "ml",
+          "per": "litre"
+        }
+      ],
+      "risk_level": "HIGH",
+      "involves_chemical": true,
+      "cibrc_check_required": true,
+      "sources": [
+        {
+          "title": "All about Guava (HPSHIVA package of practices booklet)",
+          "publisher": "HPSHIVA Project, Directorate of Horticulture, Himachal Pradesh (authors from Dr YSP University of Horticulture & Forestry)",
+          "year": null,
+          "url": "https://hpshiva.hp.gov.in/cms/media/ae2bfh14/guava.pdf",
+          "page": "17",
+          "section_or_table": "Guava mealy bug, Management",
+          "quote": "Spraying with acetamiprid 0.5 ml/l or imidachloprid 0.5 ml/l or chlorantraniliprole 0.3 ml/l, when severe mealybug infestation noticed on the twigs.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PST-0020",
+      "topic": "pests",
+      "subtopic": "tea_mosquito_bug_chemical_tnau",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "TNAU (Tamil Nadu) lists quinalphos 2 ml/l, malathion 1 ml/l, monocrotophos 2 ml/l or neem oil 3% for tea mosquito bug, at least four sprays 21 days apart during fruiting; it gives waiting periods of 10 days (monocrotophos) and 9 days (malathion). Chemical item: the dose is quoted from the source only; registration for guava under CIB&RC and the pre-harvest interval were not verified.",
+      "statement_hi": "टीएनएयू (तमिलनाडु) चाय मच्छर कीट के लिए क्विनालफॉस 2 मिली/ली, मैलाथियान 1 मिली/ली, मोनोक्रोटोफॉस 2 मिली/ली या नीम तेल 3% बताता है, फलन के दौरान 21 दिन के अंतर पर कम से कम चार छिड़काव; प्रतीक्षा अवधि मोनोक्रोटोफॉस 10 दिन और मैलाथियान 9 दिन। रसायन संबंधी बिंदु: मात्रा केवल स्रोत से ली गई है; CIB&RC में अमरूद के लिए पंजीकरण और कटाई-पूर्व अंतराल सत्यापित नहीं हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "quinalphos",
+          "value": 2,
+          "unit": "ml",
+          "per": "litre"
+        },
+        {
+          "name": "malathion",
+          "value": 1,
+          "unit": "ml",
+          "per": "litre"
+        },
+        {
+          "name": "interval",
+          "value": 21,
+          "unit": "days"
+        }
+      ],
+      "risk_level": "HIGH",
+      "involves_chemical": true,
+      "cibrc_check_required": true,
+      "sources": [
+        {
+          "title": "Horticulture :: Fruits :: Guava (Agritech portal)",
+          "publisher": "Tamil Nadu Agricultural University",
+          "year": null,
+          "url": "https://agritech.tnau.ac.in/horticulture/horti_fruits_guava.html",
+          "page": null,
+          "section_or_table": "Plant protection, Tea mosquito bug",
+          "quote": "Spray Quinalphos 25 EC at the rate of 2 ml/lit or Malathion 50 EC at the rate of 1 ml/lit",
+          "access": "opened_read"
+        },
+        {
+          "title": "Horticulture :: Fruits :: Guava (Agritech portal)",
+          "publisher": "Tamil Nadu Agricultural University",
+          "year": null,
+          "url": "https://agritech.tnau.ac.in/horticulture/horti_fruits_guava.html",
+          "page": null,
+          "section_or_table": "Plant protection, Safe waiting period",
+          "quote": "For Monocrotophos 36 WSC-10 days and for Malathion 50 EC – 9 days.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "secondary",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PST-0021",
+      "topic": "pests",
+      "subtopic": "tea_mosquito_bug_fruit_injury",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "A Himachal Pradesh booklet says the bug Helopeltis antonii punctures young fruit to suck juice and exposes the fruit to canker infection. Compiler note: Helopeltis is the tea mosquito bug genus; the booklet does not use that name.",
+      "statement_hi": "हिमाचल प्रदेश की पुस्तिका के अनुसार हेलोपेल्टिस एंटोनी कीट कच्चे फल में छेद करके रस चूसता है और फल को कैंकर संक्रमण के लिए खुला छोड़ देता है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "All about Guava (HPSHIVA package of practices booklet)",
+          "publisher": "HPSHIVA Project, Directorate of Horticulture, Himachal Pradesh (authors from Dr YSP University of Horticulture & Forestry)",
+          "year": null,
+          "url": "https://hpshiva.hp.gov.in/cms/media/ae2bfh14/guava.pdf",
+          "page": "12",
+          "section_or_table": "Fruit canker, Disease cycle and epidemiology",
+          "quote": "A bug Helopeltis antonii, which puncturesthe young fruit for sucking juice, damages and exposes the fruit to infection by the pathogen.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PST-0022",
+      "topic": "pests",
+      "subtopic": "fruit_borer_season_and_host",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "Pomegranate butterfly and castor capsule borer attack guava fruit in both rainy and winter crops; the bulletin says to discourage pomegranate close to guava and to collect and destroy infested fruit.",
+      "statement_hi": "अनार की तितली और अरंडी की फली छेदक इल्ली बरसात और सर्दी दोनों फसलों के फल पर हमला करती हैं; अनार को अमरूद के पास न लगाने और संक्रमित फल इकट्ठा करके नष्ट करने की सलाह है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "18",
+          "section_or_table": "16. Fruit borers",
+          "quote": "The attack of this pest occurs in fruiting season both in rainy and winter season crops.",
+          "access": "opened_read"
+        },
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "19",
+          "section_or_table": "16. Fruit borers, Management",
+          "quote": "Cultivation of pomegranate should be discouraged close to guava as this is the most preferred host of this pest.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PST-0023",
+      "topic": "pests",
+      "subtopic": "fruit_borer_chemical",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "For fruit borers the NHM bulletin suggests carbaryl 0.2% or ethofenprox 0.05% at start of fruiting and before ripening, with at least 15 days waiting before harvest. Chemical item: the dose is quoted from the source only; registration for guava under CIB&RC and the pre-harvest interval were not verified.",
+      "statement_hi": "फल छेदक के लिए एनएचएम पुस्तिका फलन की शुरुआत में और पकने से पहले कार्बारिल 0.2% या इथोफेनप्रॉक्स 0.05% का छिड़काव सुझाती है, कटाई से कम से कम 15 दिन पहले। रसायन संबंधी बिंदु: मात्रा केवल स्रोत से ली गई है; CIB&RC में अमरूद के लिए पंजीकरण और कटाई-पूर्व अंतराल सत्यापित नहीं हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "carbaryl",
+          "value": 0.2,
+          "unit": "percent"
+        },
+        {
+          "name": "waiting_period_before_harvest",
+          "min": 15,
+          "unit": "days"
+        }
+      ],
+      "risk_level": "HIGH",
+      "involves_chemical": true,
+      "cibrc_check_required": true,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "19",
+          "section_or_table": "16. Fruit borers, Management",
+          "quote": "spray carbaryl (0.2%) or ethophenprox (0.05%) at the beginning of fruiting season and before ripening of fruits.",
+          "access": "opened_read"
+        },
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "19",
+          "section_or_table": "16. Fruit borers, Management",
+          "quote": "At least 15 days waiting period should be observed before beginning of harvest.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-DIS-0001",
+      "topic": "diseases",
+      "subtopic": "wilt_overview",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "The NHM bulletin calls wilt a pernicious disease and a curse to the guava industry and says its exact cause is not fully understood.",
+      "statement_hi": "एनएचएम पुस्तिका उकठा (विल्ट) को अमरूद उद्योग के लिए घातक रोग बताती है और कहती है कि इसका सटीक कारण पूरी तरह समझा नहीं गया है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "4",
+          "section_or_table": "1. Wilt",
+          "quote": "Wilt is a pernicious disease and a curse to guava industry.",
+          "access": "opened_read"
+        },
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "4",
+          "section_or_table": "1. Wilt",
+          "quote": "The exact cause of the disease is still not fully understood",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-DIS-0002",
+      "topic": "diseases",
+      "subtopic": "wilt_severity_conditions",
+      "region": "ALL",
+      "applicability": {
+        "months": [
+          8,
+          9
+        ]
+      },
+      "statement_en": "Wilt is more severe with heavy August-September rain and long waterlogging, and with temperatures of 23-32 C at about 76% relative humidity.",
+      "statement_hi": "अगस्त-सितंबर की भारी वर्षा, लंबे समय तक जलभराव, और 23-32 डिग्री सेल्सियस तापमान व लगभग 76% आर्द्रता में उकठा रोग अधिक गंभीर होता है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "temperature",
+          "min": 23,
+          "max": 32,
+          "unit": "C"
+        },
+        {
+          "name": "relative_humidity",
+          "value": 76,
+          "unit": "percent"
+        }
+      ],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "4",
+          "section_or_table": "1. Wilt, Reasons of severity",
+          "quote": "High rain fall during August/ September.",
+          "access": "opened_read"
+        },
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "4",
+          "section_or_table": "1. Wilt, Reasons of severity",
+          "quote": "Stagnation of water in guava field for long duration.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-DIS-0003",
+      "topic": "diseases",
+      "subtopic": "wilt_cultural_biological",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "For wilt the NHM bulletin advises uprooting and burning wilted trees with a trench around the trunk, avoiding root injury, and Aspergillus niger in FYM at 5 kg per planting pit.",
+      "statement_hi": "उकठा के लिए पुस्तिका सूखे पेड़ों को उखाड़कर जलाने और तने के चारों ओर खाई खोदने, जड़ों को चोट से बचाने, और रोपाई के गड्ढे में 5 किलो गोबर खाद में मिला एस्परजिलस नाइजर डालने की सलाह देती है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "Aspergillus_niger_in_FYM",
+          "value": 5,
+          "unit": "kg",
+          "per": "pit"
+        }
+      ],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "5",
+          "section_or_table": "1. Wilt, Management",
+          "quote": "Wilted trees should be uprooted, burnt and trench should be dug around the tree trunk.",
+          "access": "opened_read"
+        },
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "5",
+          "section_or_table": "1. Wilt, Management",
+          "quote": "Aspergillus niger multiplied in FYM @ 5 kg/pit, applied in the pits while planting new plants.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-DIS-0004",
+      "topic": "diseases",
+      "subtopic": "wilt_fungicide_drench_review",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "A review attributes wilt to Fusarium oxysporum in alkaline soil and suggests drenching the basin with 15 g Bavistin per tree. Chemical item: the dose is quoted from the source only; registration for guava under CIB&RC and the pre-harvest interval were not verified.",
+      "statement_hi": "एक समीक्षा उकठा का कारण क्षारीय मिट्टी में फ्यूजेरियम ऑक्सीस्पोरम बताती है और प्रति पेड़ थाले में 15 ग्राम बाविस्टिन से मिट्टी भिगोने की सलाह देती है। रसायन संबंधी बिंदु: मात्रा केवल स्रोत से ली गई है; CIB&RC में अमरूद के लिए पंजीकरण और कटाई-पूर्व अंतराल सत्यापित नहीं हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "Bavistin",
+          "value": 15,
+          "unit": "g",
+          "per": "tree"
+        }
+      ],
+      "risk_level": "HIGH",
+      "involves_chemical": true,
+      "cibrc_check_required": true,
+      "sources": [
+        {
+          "title": "Improvement in the guava production technology - an overview",
+          "publisher": "Review Of Research (lbp.world), Y.C. Maharashtra Open University author",
+          "year": 2015,
+          "url": "https://oldsciparks.lbp.world/ArticlePDF/287.pdf",
+          "page": "6",
+          "section_or_table": "Disease management, Guava wilt",
+          "quote": "drenching the soil with 15 gm Bavistin around the basin of each tree",
+          "access": "opened_partial"
+        }
+      ],
+      "source_confidence": "secondary",
+      "conflicts": [
+        {
+          "source_title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "quote": "The exact cause of the disease is still not fully understood",
+          "note": "The NHM bulletin lists several fungi and says the cause is not fully understood."
+        }
+      ],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-DIS-0005",
+      "topic": "diseases",
+      "subtopic": "anthracnose_symptoms",
+      "region": "ALL",
+      "applicability": {
+        "months": [
+          8,
+          9
+        ]
+      },
+      "statement_en": "Anthracnose causes die-back from the tip of branches and spots on unripe fruit; it appears in epidemic form in August-September.",
+      "statement_hi": "एन्थ्रेक्नोज़ से टहनियों के सिरे से पीछे की ओर सूखना और कच्चे फलों पर धब्बे होते हैं; यह अगस्त-सितंबर में महामारी के रूप में आता है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "5",
+          "section_or_table": "2. Anthracnose, Symptoms",
+          "quote": "The disease appears in epidemic form, during August to September.",
+          "access": "opened_read"
+        },
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "5",
+          "section_or_table": "2. Anthracnose, Symptoms",
+          "quote": "Die back phase: The plant begins to die backwards form the top of a branch.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-DIS-0006",
+      "topic": "diseases",
+      "subtopic": "anthracnose_severity_factors",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "Anthracnose is worse with closer planting without canopy management, late harvesting and free water from dew or rain.",
+      "statement_hi": "घना रोपण बिना कैनोपी प्रबंधन, देर से तुड़ाई और ओस या बारिश का पानी रहने से एन्थ्रेक्नोज़ बढ़ता है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "6",
+          "section_or_table": "2. Anthracnose, Reasons for severity",
+          "quote": "Closer planting without canopy management",
+          "access": "opened_read"
+        },
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "6",
+          "section_or_table": "2. Anthracnose, Reasons for severity",
+          "quote": "Lack of timely harvesting",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-DIS-0007",
+      "topic": "diseases",
+      "subtopic": "anthracnose_chemical",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "For anthracnose the NHM bulletin suggests Bordeaux mixture 3:3:50 or copper oxychloride 0.3% just after the disease starts. Chemical item: the dose is quoted from the source only; registration for guava under CIB&RC and the pre-harvest interval were not verified.",
+      "statement_hi": "एन्थ्रेक्नोज़ के लिए पुस्तिका रोग शुरू होते ही बोर्डो मिश्रण 3:3:50 या कॉपर ऑक्सीक्लोराइड 0.3% का छिड़काव सुझाती है। रसायन संबंधी बिंदु: मात्रा केवल स्रोत से ली गई है; CIB&RC में अमरूद के लिए पंजीकरण और कटाई-पूर्व अंतराल सत्यापित नहीं हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "Bordeaux_mixture",
+          "value": "3:3:50"
+        },
+        {
+          "name": "copper_oxychloride",
+          "value": 0.3,
+          "unit": "percent"
+        }
+      ],
+      "risk_level": "HIGH",
+      "involves_chemical": true,
+      "cibrc_check_required": true,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "6",
+          "section_or_table": "2. Anthracnose, Management",
+          "quote": "Spray of Bordeaux mixture (3:3:50) or Copper oxychloride (0.3 %) just after initiation of disease.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [
+        {
+          "source_title": "Improvement in the guava production technology - an overview",
+          "url": "https://oldsciparks.lbp.world/ArticlePDF/287.pdf",
+          "quote": "spraying of copper oxychloride or dithane Z- 78 @ 0.2 %, spraying Bordeaux mixture (3:3:50) at 10 days interval",
+          "note": "The review adds Dithane Z-78 at 0.2% and a 10-day interval, and gives copper oxychloride at 0.2%."
+        }
+      ],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-DIS-0008",
+      "topic": "diseases",
+      "subtopic": "anthracnose_postharvest_dip",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "The NHM bulletin says a 20-minute post-harvest dip in 500 ppm tetracycline is effective against anthracnose; use of an antibiotic on fruit needs expert and regulatory review. Chemical item: the dose is quoted from the source only; registration for guava under CIB&RC and the pre-harvest interval were not verified.",
+      "statement_hi": "एनएचएम पुस्तिका के अनुसार कटाई के बाद 500 पीपीएम टेट्रासाइक्लिन में 20 मिनट डुबोना एन्थ्रेक्नोज़ पर प्रभावी है; फलों पर एंटीबायोटिक के उपयोग की विशेषज्ञ और नियामक समीक्षा ज़रूरी है। रसायन संबंधी बिंदु: मात्रा केवल स्रोत से ली गई है; CIB&RC में अमरूद के लिए पंजीकरण और कटाई-पूर्व अंतराल सत्यापित नहीं हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "tetracycline",
+          "value": 500,
+          "unit": "ppm"
+        },
+        {
+          "name": "dip_time",
+          "value": 20,
+          "unit": "min"
+        }
+      ],
+      "risk_level": "HIGH",
+      "involves_chemical": true,
+      "cibrc_check_required": true,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "6",
+          "section_or_table": "2. Anthracnose, Management",
+          "quote": "For post harvest treatment, 20 min. dip in 500 ppm tetracycline is effective.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-DIS-0009",
+      "topic": "diseases",
+      "subtopic": "fruit_canker_symptoms",
+      "region": "ALL",
+      "applicability": {
+        "varieties": [
+          "Sardar",
+          "L-49"
+        ]
+      },
+      "statement_en": "Fruit canker shows as small rust-coloured circular spots on green fruit that tear the skin; in cv. Sardar (Lucknow-49) the pustules are larger, more raised and more numerous.",
+      "statement_hi": "फल कैंकर कच्चे फलों पर छोटे जंग-रंग के गोल धब्बों के रूप में दिखता है जो त्वचा फाड़ देते हैं; सरदार (लखनऊ-49) में फुंसियाँ बड़ी, उभरी और अधिक होती हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "7",
+          "section_or_table": "3. Canker, Symptoms",
+          "quote": "In cv. Sardar (Lucknow-49), development of canker pustule is large, more elevated and numerous.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-DIS-0010",
+      "topic": "diseases",
+      "subtopic": "fruit_canker_chemical",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "For fruit canker in early infection the NHM bulletin suggests 3-4 sprays of 1% Bordeaux mixture or lime sulphur at 15-day intervals. Chemical item: the dose is quoted from the source only; registration for guava under CIB&RC and the pre-harvest interval were not verified.",
+      "statement_hi": "फल कैंकर की शुरुआती अवस्था में पुस्तिका 15 दिन के अंतर पर 1% बोर्डो मिश्रण या चूना-गंधक के 3-4 छिड़काव सुझाती है। रसायन संबंधी बिंदु: मात्रा केवल स्रोत से ली गई है; CIB&RC में अमरूद के लिए पंजीकरण और कटाई-पूर्व अंतराल सत्यापित नहीं हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "Bordeaux_mixture",
+          "value": 1,
+          "unit": "percent"
+        },
+        {
+          "name": "sprays",
+          "min": 3,
+          "max": 4,
+          "unit": "sprays"
+        },
+        {
+          "name": "interval",
+          "value": 15,
+          "unit": "days"
+        }
+      ],
+      "risk_level": "HIGH",
+      "involves_chemical": true,
+      "cibrc_check_required": true,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "8",
+          "section_or_table": "3. Canker, Management",
+          "quote": "controlled by 3 to 4 sprays of 1 per cent Bordeaux mixture or lime sulphur at 15 days interval",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [
+        {
+          "source_title": "Improvement in the guava production technology - an overview",
+          "url": "https://oldsciparks.lbp.world/ArticlePDF/287.pdf",
+          "quote": "1% Bordeaux mixture 2-3 times at 15 days interval will help to control the disease.",
+          "note": "The review gives 2-3 sprays instead of 3-4."
+        }
+      ],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-DIS-0011",
+      "topic": "diseases",
+      "subtopic": "algal_spot_season",
+      "region": "ALL",
+      "applicability": {
+        "months": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "statement_en": "Algal leaf and fruit spot begins to appear from April, is more serious in May-August, and incidence peaks in September; no symptoms are seen in winter.",
+      "statement_hi": "शैवाल पत्ती व फल धब्बा अप्रैल से दिखना शुरू होता है, मई-अगस्त में अधिक गंभीर होता है और सितंबर में सर्वाधिक; सर्दियों में लक्षण नहीं दिखते।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "8",
+          "section_or_table": "4. Algal leaf and fruit spot",
+          "quote": "Disease begins to appear from April and is more serious during May to August.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-DIS-0012",
+      "topic": "diseases",
+      "subtopic": "algal_spot_chemical",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "For algal spot the NHM bulletin suggests copper oxychloride 0.3% sprayed 3-4 times at 15-day intervals once symptoms appear. Chemical item: the dose is quoted from the source only; registration for guava under CIB&RC and the pre-harvest interval were not verified.",
+      "statement_hi": "शैवाल धब्बे के लिए पुस्तिका लक्षण दिखते ही कॉपर ऑक्सीक्लोराइड 0.3% के 15 दिन के अंतर पर 3-4 छिड़काव सुझाती है। रसायन संबंधी बिंदु: मात्रा केवल स्रोत से ली गई है; CIB&RC में अमरूद के लिए पंजीकरण और कटाई-पूर्व अंतराल सत्यापित नहीं हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "copper_oxychloride",
+          "value": 0.3,
+          "unit": "percent"
+        },
+        {
+          "name": "sprays",
+          "min": 3,
+          "max": 4,
+          "unit": "sprays"
+        },
+        {
+          "name": "interval",
+          "value": 15,
+          "unit": "days"
+        }
+      ],
+      "risk_level": "HIGH",
+      "involves_chemical": true,
+      "cibrc_check_required": true,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "8",
+          "section_or_table": "4. Algal leaf and fruit spot, Management",
+          "quote": "The control of alga can be achieved by sprays of Copper oxychloride (0.3%) 3-4 times at an interval of 15 days",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [
+        {
+          "source_title": "All about Guava (HPSHIVA package of practices booklet)",
+          "url": "https://hpshiva.hp.gov.in/cms/media/ae2bfh14/guava.pdf",
+          "quote": "mixture containing 340 g copper oxide, 340 g hydrated lime and 680 g ZnSO4 in 227 litres of water.",
+          "note": "The Himachal booklet (calling it red rust) uses a different copper-lime-zinc mixture every 3-4 weeks."
+        }
+      ],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-DIS-0013",
+      "topic": "diseases",
+      "subtopic": "stylar_end_rot_chemical",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "For stylar end rot the NHM bulletin suggests copper oxychloride 0.3%, or carbendazim or thiophanate methyl 0.1%, before winter fruiting, and no spraying in the 15 days before harvest. Chemical item: the dose is quoted from the source only; registration for guava under CIB&RC and the pre-harvest interval were not verified.",
+      "statement_hi": "स्टाइलर एंड रॉट के लिए पुस्तिका सर्दी की फसल से पहले कॉपर ऑक्सीक्लोराइड 0.3% या कार्बेन्डाज़िम/थायोफेनेट मिथाइल 0.1% सुझाती है, और कटाई से 15 दिन पहले कोई छिड़काव नहीं। रसायन संबंधी बिंदु: मात्रा केवल स्रोत से ली गई है; CIB&RC में अमरूद के लिए पंजीकरण और कटाई-पूर्व अंतराल सत्यापित नहीं हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "copper_oxychloride",
+          "value": 0.3,
+          "unit": "percent"
+        },
+        {
+          "name": "no_spray_before_harvest",
+          "value": 15,
+          "unit": "days"
+        }
+      ],
+      "risk_level": "HIGH",
+      "involves_chemical": true,
+      "cibrc_check_required": true,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "13",
+          "section_or_table": "9. Stylar end rot, Management",
+          "quote": "Spray Copper oxychloride (0.3%) or carbendazim or Thiophonate methyl (0.1%) before onset of winter fruiting.",
+          "access": "opened_read"
+        },
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "13",
+          "section_or_table": "9. Stylar end rot, Management",
+          "quote": "care should be taken that no spraying is done 15 days prior to harvesting.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-DIS-0014",
+      "topic": "diseases",
+      "subtopic": "stylar_end_rot_calcium_chloride",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "A Himachal Pradesh booklet suggests calcium chloride at 400 g per 100 litres of water in December (2nd and 4th week) and pruning for light penetration against stylar end rot. Fertiliser-type spray: verify under fertiliser rules.",
+      "statement_hi": "हिमाचल प्रदेश की पुस्तिका स्टाइलर एंड रॉट के लिए दिसंबर (दूसरे और चौथे सप्ताह) में 100 लीटर पानी में 400 ग्राम कैल्शियम क्लोराइड का छिड़काव और कटाई-छँटाई से प्रकाश पहुँचाना सुझाती है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "calcium_chloride",
+          "value": 400,
+          "unit": "g",
+          "per": "100 litre water"
+        }
+      ],
+      "risk_level": "HIGH",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "All about Guava (HPSHIVA package of practices booklet)",
+          "publisher": "HPSHIVA Project, Directorate of Horticulture, Himachal Pradesh (authors from Dr YSP University of Horticulture & Forestry)",
+          "year": null,
+          "url": "https://hpshiva.hp.gov.in/cms/media/ae2bfh14/guava.pdf",
+          "page": "13",
+          "section_or_table": "Styler end rot, Cultural methods",
+          "quote": "Application of calcium chloride @ 400 g per 100 litre of water in December (2nd and 4th week) should be done.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-DIS-0015",
+      "topic": "diseases",
+      "subtopic": "phytophthora_fruit_rot",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "Phytophthora fruit rot incidence varies from 8-30% depending on weather and foliage; fruits near the soil under dense foliage are worst affected.",
+      "statement_hi": "फाइटोफ्थोरा फल सड़न का प्रकोप मौसम और पत्तियों के घनत्व के अनुसार 8-30% रहता है; ज़मीन के पास घनी पत्तियों के नीचे के फल सबसे अधिक प्रभावित होते हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "incidence",
+          "min": 8,
+          "max": 30,
+          "unit": "percent"
+        }
+      ],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "12",
+          "section_or_table": "8. Phytophthora fruit rot",
+          "quote": "The disease incidence varies from 8-30%, depending upon the weather and foliage conditions.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-DIS-0016",
+      "topic": "diseases",
+      "subtopic": "phytophthora_chemical",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "For Phytophthora fruit rot the NHM bulletin lists Dithane Z-78 0.2%, Ridomil or Aliette 0.2%, or copper oxychloride 0.3% for foliar infection, plus spacing to avoid dense canopy. Chemical item: the dose is quoted from the source only; registration for guava under CIB&RC and the pre-harvest interval were not verified.",
+      "statement_hi": "फाइटोफ्थोरा फल सड़न के लिए पुस्तिका डाइथेन ज़ेड-78 0.2%, रिडोमिल या एलिएट 0.2%, या कॉपर ऑक्सीक्लोराइड 0.3% बताती है, साथ में घनी कैनोपी से बचने के लिए दूरी का प्रबंधन। रसायन संबंधी बिंदु: मात्रा केवल स्रोत से ली गई है; CIB&RC में अमरूद के लिए पंजीकरण और कटाई-पूर्व अंतराल सत्यापित नहीं हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "Dithane_Z78",
+          "value": 0.2,
+          "unit": "percent"
+        },
+        {
+          "name": "copper_oxychloride",
+          "value": 0.3,
+          "unit": "percent"
+        }
+      ],
+      "risk_level": "HIGH",
+      "involves_chemical": true,
+      "cibrc_check_required": true,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "12",
+          "section_or_table": "8. Phytophthora fruit rot, Management",
+          "quote": "Dithane Z-78 (0.2%) or Ridomil or Aliette (0.2%) or Copper oxychloride (0.3%) are found effective to control foliar infection.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-DIS-0017",
+      "topic": "diseases",
+      "subtopic": "sooty_mould",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "Sooty mould grows on honeydew from scale insects, aphids, whiteflies and mealybugs; the bulletin says control means killing those insects.",
+      "statement_hi": "सूटी मोल्ड शल्क कीट, माहू, सफेद मक्खी और मीलीबग के मधुरस पर उगता है; पुस्तिका के अनुसार नियंत्रण का तरीका इन कीटों को मारना है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "9",
+          "section_or_table": "6. Sooty mould, Management",
+          "quote": "The control of disease consists in removing the cause by destroying the insects.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-DIS-0018",
+      "topic": "diseases",
+      "subtopic": "cercospora_leaf_spot_chemical",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "For Cercospora leaf spot the NHM bulletin suggests mancozeb or Dithane M-45 0.2% at monthly intervals. Chemical item: the dose is quoted from the source only; registration for guava under CIB&RC and the pre-harvest interval were not verified.",
+      "statement_hi": "सर्कोस्पोरा पत्ती धब्बे के लिए पुस्तिका मैन्कोज़ेब या डाइथेन एम-45 0.2% का मासिक अंतर पर छिड़काव सुझाती है। रसायन संबंधी बिंदु: मात्रा केवल स्रोत से ली गई है; CIB&RC में अमरूद के लिए पंजीकरण और कटाई-पूर्व अंतराल सत्यापित नहीं हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "mancozeb",
+          "value": 0.2,
+          "unit": "percent"
+        },
+        {
+          "name": "interval",
+          "value": 1,
+          "unit": "month"
+        }
+      ],
+      "risk_level": "HIGH",
+      "involves_chemical": true,
+      "cibrc_check_required": true,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "9",
+          "section_or_table": "5. Cercospora leaf spot, Management",
+          "quote": "Spray mancozeb or Dithane-M-45 (0.2%) at monthly interval.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-DIS-0019",
+      "topic": "diseases",
+      "subtopic": "damping_off_nursery_chemical",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "For damping off of seedlings the NHM bulletin suggests a 2-minute dip of seed in captan or thiram 0.2% before sowing and avoiding excess water and close sowing. Chemical item: the dose is quoted from the source only; registration for guava under CIB&RC and the pre-harvest interval were not verified.",
+      "statement_hi": "पौध गलन के लिए पुस्तिका बुवाई से पहले बीज को कैप्टान या थिरम 0.2% में 2 मिनट डुबोने और अधिक पानी व घनी बुवाई से बचने की सलाह देती है। रसायन संबंधी बिंदु: मात्रा केवल स्रोत से ली गई है; CIB&RC में अमरूद के लिए पंजीकरण और कटाई-पूर्व अंतराल सत्यापित नहीं हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "captan_or_thiram",
+          "value": 0.2,
+          "unit": "percent"
+        },
+        {
+          "name": "dip_time",
+          "value": 2,
+          "unit": "min"
+        }
+      ],
+      "risk_level": "HIGH",
+      "involves_chemical": true,
+      "cibrc_check_required": true,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "10",
+          "section_or_table": "7. Damping off of seedlings, Management",
+          "quote": "Two minute dipping of guava seeds in captan / thiram (0.2%) is advocated before seed sowing.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-DIS-0020",
+      "topic": "diseases",
+      "subtopic": "disease_list_and_fungicides_nhb",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "NHB lists wilt, fruit canker, fruit rot, anthracnose and grey leaf spot as the main guava diseases and cites carbendazim or thiophanate methyl 1 g/l, or Kavach or mancozeb 2 g/l, depending on infection. Chemical item: the dose is quoted from the source only; registration for guava under CIB&RC and the pre-harvest interval were not verified.",
+      "statement_hi": "एनएचएम के अनुसार मुख्य रोग उकठा, फल कैंकर, फल सड़न, एन्थ्रेक्नोज़ और ग्रे लीफ स्पॉट हैं; संक्रमण के अनुसार कार्बेन्डाज़िम/थायोफेनेट मिथाइल 1 ग्राम/ली या कवच/मैन्कोज़ेब 2 ग्राम/ली बताए गए हैं। रसायन संबंधी बिंदु: मात्रा केवल स्रोत से ली गई है; CIB&RC में अमरूद के लिए पंजीकरण और कटाई-पूर्व अंतराल सत्यापित नहीं हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "carbendazim_or_thiophanate_methyl",
+          "value": 1,
+          "unit": "g",
+          "per": "litre"
+        },
+        {
+          "name": "Kavach_or_mancozeb",
+          "value": 2,
+          "unit": "g",
+          "per": "litre"
+        }
+      ],
+      "risk_level": "HIGH",
+      "involves_chemical": true,
+      "cibrc_check_required": true,
+      "sources": [
+        {
+          "title": "Guava (model bankable project report, one-acre model)",
+          "publisher": "National Horticulture Board, Govt. of India",
+          "year": 2004,
+          "url": "https://nhb.gov.in/report_files/guava/GUAVA.htm",
+          "page": null,
+          "section_or_table": "5.13.2 Diseases",
+          "quote": "The main diseases reported are wilt, fruit canker, fruit rot, anthrachose and grey leaf spot.",
+          "access": "opened_read"
+        },
+        {
+          "title": "Guava (model bankable project report, one-acre model)",
+          "publisher": "National Horticulture Board, Govt. of India",
+          "year": 2004,
+          "url": "https://nhb.gov.in/report_files/guava/GUAVA.htm",
+          "page": null,
+          "section_or_table": "5.13.2 Diseases",
+          "quote": "Application of Carbendazim / Thiophanate methyl (1g./l) or Kavach / Mancozeb (2 g/l) depending upon the type of infection",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-DIS-0021",
+      "topic": "diseases",
+      "subtopic": "loranthus_parasite",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "Loranthus parasite on trunks and branches weakens the tree; affected branches should be cut well below the swollen 'burrs' so the haustoria are removed.",
+      "statement_hi": "लोरेन्थस परजीवी तने और शाखाओं पर पेड़ को कमज़ोर करता है; प्रभावित शाखाओं को सूजे हुए 'बर' से काफ़ी नीचे से काटें ताकि चूषकांग हट जाएँ।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+          "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+          "year": 2012,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
+          "page": "16",
+          "section_or_table": "13. Parasites (Loranthus sp.), Management",
+          "quote": "The affected branches should be cut sufficiently to eradicate the haustoria.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-DIS-0022",
+      "topic": "diseases",
+      "subtopic": "postharvest_diseases",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "ICAR authors say anthracnose and stem end rot are the more common post-harvest diseases during guava storage.",
+      "statement_hi": "आईसीएआर के लेखकों के अनुसार भंडारण के दौरान एन्थ्रेक्नोज़ और स्टेम एंड रॉट अधिक आम पश्चात-कटाई रोग हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Post-harvest management for longer shelf-life of guava",
+          "publisher": "Indian Horticulture, Sept-Oct 2020 (ICAR); authors AICRP, CH&F Jhalawar (AU Kota)",
+          "year": 2020,
+          "url": "https://epubs.icar.org.in/index.php/IndHort/article/download/111196/43549/289054",
+          "page": "3",
+          "section_or_table": "Introduction",
+          "quote": "Post-harvest diseases like anthracnose and … stem end rot are more common during storage.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-DIS-0023",
+      "topic": "diseases",
+      "subtopic": "fruit_cracking_hp",
+      "region": "ALL",
+      "applicability": {
+        "months": [
+          11
+        ]
+      },
+      "statement_en": "A Himachal Pradesh booklet says fruit cracking occurs in winter and suggests two sprays in November, a fortnight apart, of calcium chloride 400 g and boric acid 100 g per 100 litres. Fertiliser-type spray: verify under fertiliser rules.",
+      "statement_hi": "हिमाचल प्रदेश की पुस्तिका के अनुसार फल फटना सर्दियों में होता है; नवंबर में पखवाड़े के अंतर पर 100 लीटर पानी में 400 ग्राम कैल्शियम क्लोराइड और 100 ग्राम बोरिक अम्ल के दो छिड़काव सुझाए गए हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "calcium_chloride",
+          "value": 400,
+          "unit": "g",
+          "per": "100 litre water"
+        },
+        {
+          "name": "boric_acid",
+          "value": 100,
+          "unit": "g",
+          "per": "100 litre water"
+        }
+      ],
+      "risk_level": "HIGH",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "All about Guava (HPSHIVA package of practices booklet)",
+          "publisher": "HPSHIVA Project, Directorate of Horticulture, Himachal Pradesh (authors from Dr YSP University of Horticulture & Forestry)",
+          "year": null,
+          "url": "https://hpshiva.hp.gov.in/cms/media/ae2bfh14/guava.pdf",
+          "page": "18",
+          "section_or_table": "Physiological disorder",
+          "quote": "Calcium chloride and Boric acid @ 400g and 100 g, respectively in 100 litre water should be sprayed.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-HRV-0001",
+      "topic": "harvest_maturity",
+      "subtopic": "colour_for_market",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "NHB says ripeness is shown by yellow colour: fully yellow but firm fruit for local markets, half-yellow fruit for distant markets, picked selectively by hand with stalk and leaves.",
+      "statement_hi": "एनएचएम के अनुसार पकने का संकेत पीला रंग है: स्थानीय बाज़ार के लिए पूरी पीली पर सख्त फल, दूर के बाज़ार के लिए आधी पीली; फल डंठल और पत्ती सहित हाथ से चुनकर तोड़े जाते हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Guava (model bankable project report, one-acre model)",
+          "publisher": "National Horticulture Board, Govt. of India",
+          "year": 2004,
+          "url": "https://nhb.gov.in/report_files/guava/GUAVA.htm",
+          "page": null,
+          "section_or_table": "5.14 Harvesting and Yield",
+          "quote": "fully yellow but firm fruits are harvested, whereas half yellow fruits are picked for distant markets.",
+          "access": "opened_read"
+        },
+        {
+          "title": "Guava (model bankable project report, one-acre model)",
+          "publisher": "National Horticulture Board, Govt. of India",
+          "year": 2004,
+          "url": "https://nhb.gov.in/report_files/guava/GUAVA.htm",
+          "page": null,
+          "section_or_table": "5.14 Harvesting and Yield",
+          "quote": "Fruits are harvested selectively by hand along with the stalk and leaves.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-HRV-0002",
+      "topic": "harvest_maturity",
+      "subtopic": "tss_acid_specific_gravity_hp",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "A Himachal Pradesh booklet gives maturity indices of TSS:acid ratio 26-36, specific gravity below 1.0 and light green to yellow colour, depending on variety and distance of transport.",
+      "statement_hi": "हिमाचल प्रदेश की पुस्तिका परिपक्वता सूचकांक के रूप में टीएसएस:अम्ल अनुपात 26-36, विशिष्ट गुरुत्व 1.0 से कम और हल्का हरा से पीला रंग बताती है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "TSS_acid_ratio",
+          "min": 26,
+          "max": 36
+        },
+        {
+          "name": "specific_gravity_max",
+          "value": 1.0
+        }
+      ],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "All about Guava (HPSHIVA package of practices booklet)",
+          "publisher": "HPSHIVA Project, Directorate of Horticulture, Himachal Pradesh (authors from Dr YSP University of Horticulture & Forestry)",
+          "year": null,
+          "url": "https://hpshiva.hp.gov.in/cms/media/ae2bfh14/guava.pdf",
+          "page": "11",
+          "section_or_table": "Harvesting / Post harvest management, Maturity indices",
+          "quote": "TSS: acid ratio ranging from 26.0-36.0 with specific gravity <1.0 and light green to yellow colour",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [
+        {
+          "source_title": "Post-harvest management for longer shelf-life of guava",
+          "url": "https://epubs.icar.org.in/index.php/IndHort/article/download/111196/43549/289054",
+          "quote": "0.95 to 1.00. Total soluble solids range from 9.0-12.5 per",
+          "note": "The ICAR article gives specific gravity 0.95-1.00 and TSS 9.0-12.5 percent."
+        }
+      ],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-HRV-0003",
+      "topic": "harvest_maturity",
+      "subtopic": "specific_gravity_tss_icar",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "An ICAR article says specific gravity at harvest should be 0.95-1.00 and total soluble solids 9.0-12.5 percent; maturity is judged on colour.",
+      "statement_hi": "आईसीएआर के लेख के अनुसार तुड़ाई पर विशिष्ट गुरुत्व 0.95-1.00 और कुल घुलनशील ठोस 9.0-12.5 प्रतिशत होना चाहिए; परिपक्वता रंग से आँकी जाती है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "specific_gravity",
+          "min": 0.95,
+          "max": 1.0
+        },
+        {
+          "name": "TSS",
+          "min": 9.0,
+          "max": 12.5,
+          "unit": "percent"
+        }
+      ],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Post-harvest management for longer shelf-life of guava",
+          "publisher": "Indian Horticulture, Sept-Oct 2020 (ICAR); authors AICRP, CH&F Jhalawar (AU Kota)",
+          "year": 2020,
+          "url": "https://epubs.icar.org.in/index.php/IndHort/article/download/111196/43549/289054",
+          "page": "4",
+          "section_or_table": "Harvesting",
+          "quote": "0.95 to 1.00. Total soluble solids range from 9.0-12.5 per",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [
+        {
+          "source_title": "Improvement in the guava production technology - an overview",
+          "url": "https://oldsciparks.lbp.world/ArticlePDF/287.pdf",
+          "quote": "The fruits should be harvested when colour changes to yellowish green with specific gravity below1.01 percent.",
+          "note": "The review gives specific gravity below 1.01."
+        }
+      ],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-HRV-0004",
+      "topic": "harvest_maturity",
+      "subtopic": "days_from_flowering_icar",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "An ICAR article says fruit takes about 120-140 days from flowering to maturity.",
+      "statement_hi": "आईसीएआर के लेख के अनुसार फूल आने से परिपक्वता तक फल को लगभग 120-140 दिन लगते हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "flowering_to_maturity",
+          "min": 120,
+          "max": 140,
+          "unit": "days"
+        }
+      ],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Post-harvest management for longer shelf-life of guava",
+          "publisher": "Indian Horticulture, Sept-Oct 2020 (ICAR); authors AICRP, CH&F Jhalawar (AU Kota)",
+          "year": 2020,
+          "url": "https://epubs.icar.org.in/index.php/IndHort/article/download/111196/43549/289054",
+          "page": "4",
+          "section_or_table": "Harvesting",
+          "quote": "Fruit takes around … 120-140 days for maturation from flowering.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [
+        {
+          "source_title": "Improvement in the guava production technology - an overview",
+          "url": "https://oldsciparks.lbp.world/ArticlePDF/287.pdf",
+          "quote": "Guava fruits are ready for harvest 110-135 days after flowering.",
+          "note": "The review gives 110-135 days."
+        }
+      ],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-HRV-0005",
+      "topic": "harvest_maturity",
+      "subtopic": "peak_harvest_months_north_india",
+      "region": "ALL",
+      "applicability": {
+        "months": [
+          8,
+          11,
+          12,
+          3,
+          4
+        ]
+      },
+      "statement_en": "NHB gives peak harvest in north India as August for the rainy-season crop, November-December for the winter crop and March-April for the spring crop.",
+      "statement_hi": "एनएचएम के अनुसार उत्तर भारत में तुड़ाई का चरम समय बरसात की फसल के लिए अगस्त, सर्दी की फसल के लिए नवंबर-दिसंबर और बसंत की फसल के लिए मार्च-अप्रैल है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Guava (model bankable project report, one-acre model)",
+          "publisher": "National Horticulture Board, Govt. of India",
+          "year": 2004,
+          "url": "https://nhb.gov.in/report_files/guava/GUAVA.htm",
+          "page": null,
+          "section_or_table": "5.14 Harvesting and Yield",
+          "quote": "peak harvesting periods in north India are August for rainy season crop, November- December for winter season crop and March-April",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-HRV-0006",
+      "topic": "harvest_maturity",
+      "subtopic": "pick_at_maturity_not_on_tree",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "TNAU notes say guava should be picked as soon as it is mature and not left to ripen on the tree because of bird and squirrel damage; NHB says best flavour develops only on the tree.",
+      "statement_hi": "टीएनएयू के नोट्स के अनुसार परिपक्व होते ही तुड़ाई करें, पेड़ पर पकने न दें क्योंकि पक्षी और गिलहरी नुकसान करते हैं; जबकि एनएचएम के अनुसार सबसे अच्छा स्वाद पेड़ पर पकने पर ही आता है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "HORT181 Lecture 14: Guava - soil, climate, irrigation and nutrient management",
+          "publisher": "TNAU eAgri course notes",
+          "year": null,
+          "url": "https://eagri.org/eagri50/HORT181/lec14.pdf",
+          "page": "4",
+          "section_or_table": "Cropping",
+          "quote": "Guava fruits should be picked immediately when it is mature and they should not be allowed to ripen in the trees",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "secondary",
+      "conflicts": [
+        {
+          "source_title": "Guava (model bankable project report, one-acre model)",
+          "url": "https://nhb.gov.in/report_files/guava/GUAVA.htm",
+          "quote": "Guava fruits develop best flavour and aroma only when they ripen on tree.",
+          "note": "NHB says the opposite on flavour."
+        }
+      ],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PHT-0001",
+      "topic": "post_harvest",
+      "subtopic": "grading_basis",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "NHB says guava is graded on weight, size and colour.",
+      "statement_hi": "एनएचएम के अनुसार अमरूद की ग्रेडिंग वज़न, आकार और रंग के आधार पर होती है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Guava (model bankable project report, one-acre model)",
+          "publisher": "National Horticulture Board, Govt. of India",
+          "year": 2004,
+          "url": "https://nhb.gov.in/report_files/guava/GUAVA.htm",
+          "page": null,
+          "section_or_table": "6.1 Grading",
+          "quote": "Fruits are graded on the basis of their weight, size and colour.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PHT-0002",
+      "topic": "post_harvest",
+      "subtopic": "size_codes_international",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "An ICAR article gives an international size chart for guava with nine size codes from over 450 g and 100 mm down to under 35 g and 30 mm, based on Codex extra class, class 1 and class 2.",
+      "statement_hi": "आईसीएआर का लेख अंतरराष्ट्रीय बाज़ार के लिए अमरूद का आकार चार्ट देता है जिसमें 450 ग्राम/100 मिमी से अधिक से लेकर 35 ग्राम/30 मिमी से कम तक नौ आकार कोड हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "size_code_1",
+          "min": 450,
+          "unit": "g",
+          "per": "fruit"
+        },
+        {
+          "name": "size_code_5",
+          "min": 151,
+          "max": 200,
+          "unit": "g",
+          "per": "fruit"
+        },
+        {
+          "name": "size_code_9",
+          "max": 35,
+          "unit": "g",
+          "per": "fruit"
+        }
+      ],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Post-harvest management for longer shelf-life of guava",
+          "publisher": "Indian Horticulture, Sept-Oct 2020 (ICAR); authors AICRP, CH&F Jhalawar (AU Kota)",
+          "year": 2020,
+          "url": "https://epubs.icar.org.in/index.php/IndHort/article/download/111196/43549/289054",
+          "page": "4",
+          "section_or_table": "Grading, Table 1 size chart",
+          "quote": "1 >450 >100 2 351-450 96-100 3 251-350 86-95 4 201-250 76-85 5 151-200 66-75 6 101-150 54-65 7 61-100 43-53 8 35-60 30-42 9 <35 <30",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PHT-0003",
+      "topic": "post_harvest",
+      "subtopic": "agmark_standard_exists",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "Guavas appear in the list of fruits with Agmark standards under the Fruits and Vegetables Grading & Marking Rules, 2004. The grade specification itself was not opened.",
+      "statement_hi": "अमरूद उन फलों की सूची में है जिनके लिए फल एवं सब्जी ग्रेडिंग व मार्किंग नियम, 2004 के तहत एगमार्क मानक हैं। ग्रेड विनिर्देश स्वयं नहीं खोला गया।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Agmark standards for fruits & vegetables (list)",
+          "publisher": "AGMARK list hosted on TNAU Agritech AMIS portal",
+          "year": null,
+          "url": "https://agritech.tnau.ac.in/ta/amis_ta/pdf/F_V_G_M_under_Agmark.pdf",
+          "page": null,
+          "section_or_table": "List under Rules, 2004",
+          "quote": "6. Guavas",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PHT-0004",
+      "topic": "post_harvest",
+      "subtopic": "storage_nhb",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "NHB says shelf life can reach up to 20 days at 5 C and 75-85% relative humidity, and about 10 days at room temperature in ventilated polybags.",
+      "statement_hi": "एनएचएम के अनुसार 5 डिग्री सेल्सियस और 75-85% आर्द्रता पर शेल्फ लाइफ 20 दिन तक और कमरे के तापमान पर हवादार पॉलीबैग में लगभग 10 दिन हो सकती है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "storage_temperature",
+          "value": 5,
+          "unit": "C"
+        },
+        {
+          "name": "relative_humidity",
+          "min": 75,
+          "max": 85,
+          "unit": "percent"
+        },
+        {
+          "name": "shelf_life",
+          "value": 20,
+          "unit": "days"
+        }
+      ],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Guava (model bankable project report, one-acre model)",
+          "publisher": "National Horticulture Board, Govt. of India",
+          "year": 2004,
+          "url": "https://nhb.gov.in/report_files/guava/GUAVA.htm",
+          "page": null,
+          "section_or_table": "6.2 Storage",
+          "quote": "The shelf life can be extended upto 20 days by keeping them at low temperature of 5",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [
+        {
+          "source_title": "Post-harvest management for longer shelf-life of guava",
+          "url": "https://epubs.icar.org.in/index.php/IndHort/article/download/111196/43549/289054",
+          "quote": "Safe … storage temperature for guava is 8-10°C with 90% … relative humidity.",
+          "note": "ICAR article gives 8-10 C at 90% RH for up to 2 weeks (chilling injury risk at lower temperature on long storage)."
+        },
+        {
+          "source_title": "All about Guava (HPSHIVA package of practices booklet)",
+          "url": "https://hpshiva.hp.gov.in/cms/media/ae2bfh14/guava.pdf",
+          "quote": "Mature green and partially ripe … guavas are stored at 8-100C for 2-3 weeks",
+          "note": "Himachal booklet gives 8-10 C for 2-3 weeks."
+        }
+      ],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PHT-0005",
+      "topic": "post_harvest",
+      "subtopic": "storage_icar",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "An ICAR article gives 8-10 C with 90% relative humidity as the safe storage temperature, extending shelf life up to 2 weeks, and warns long storage at that range may cause chilling injury.",
+      "statement_hi": "आईसीएआर के लेख के अनुसार सुरक्षित भंडारण तापमान 8-10 डिग्री सेल्सियस और 90% आर्द्रता है जिससे शेल्फ लाइफ 2 सप्ताह तक बढ़ती है; लंबे भंडारण में शीत क्षति हो सकती है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "storage_temperature",
+          "min": 8,
+          "max": 10,
+          "unit": "C"
+        },
+        {
+          "name": "relative_humidity",
+          "value": 90,
+          "unit": "percent"
+        },
+        {
+          "name": "shelf_life",
+          "value": 14,
+          "unit": "days"
+        }
+      ],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Post-harvest management for longer shelf-life of guava",
+          "publisher": "Indian Horticulture, Sept-Oct 2020 (ICAR); authors AICRP, CH&F Jhalawar (AU Kota)",
+          "year": 2020,
+          "url": "https://epubs.icar.org.in/index.php/IndHort/article/download/111196/43549/289054",
+          "page": "5",
+          "section_or_table": "Storage",
+          "quote": "Safe … storage temperature for guava is 8-10°C with 90% … relative humidity.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PHT-0006",
+      "topic": "post_harvest",
+      "subtopic": "precooling",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "An ICAR article says harvested fruit is washed and precooled at 9-10 C for 24 hours in the packhouse.",
+      "statement_hi": "आईसीएआर के लेख के अनुसार तुड़ाई के बाद फलों को पैकहाउस में धोकर 9-10 डिग्री सेल्सियस पर 24 घंटे पूर्व-शीतलन किया जाता है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "precooling_temperature",
+          "min": 9,
+          "max": 10,
+          "unit": "C"
+        },
+        {
+          "name": "precooling_time",
+          "value": 24,
+          "unit": "hours"
+        }
+      ],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Post-harvest management for longer shelf-life of guava",
+          "publisher": "Indian Horticulture, Sept-Oct 2020 (ICAR); authors AICRP, CH&F Jhalawar (AU Kota)",
+          "year": 2020,
+          "url": "https://epubs.icar.org.in/index.php/IndHort/article/download/111196/43549/289054",
+          "page": "4",
+          "section_or_table": "Harvesting",
+          "quote": "Precooling is done … at a temperature range 9-10°C for 24 hours.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PHT-0007",
+      "topic": "post_harvest",
+      "subtopic": "packing_domestic",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "NHB says guava goes in local baskets for nearby markets and in wooden or corrugated fibre board boxes with cushioning (paddy straw, dry grass, guava leaves, rough paper) for distant markets, with good ventilation.",
+      "statement_hi": "एनएचएम के अनुसार पास के बाज़ार के लिए स्थानीय टोकरियाँ और दूर के बाज़ार के लिए लकड़ी या कोरुगेटेड फाइबर बोर्ड के डिब्बे, धान की पुआल, सूखी घास, अमरूद की पत्तियाँ या रफ कागज़ की गद्दी के साथ और अच्छी हवा के लिए छेद के साथ उपयोग होते हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Guava (model bankable project report, one-acre model)",
+          "publisher": "National Horticulture Board, Govt. of India",
+          "year": 2004,
+          "url": "https://nhb.gov.in/report_files/guava/GUAVA.htm",
+          "page": null,
+          "section_or_table": "6.3 Packing",
+          "quote": "For distant markets, wooden or corrugated fibre board boxes are used along with cushioning materials",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PHT-0008",
+      "topic": "post_harvest",
+      "subtopic": "export_cfb_boxes",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "An ICAR article says CISH developed corrugated fibre board boxes of 2.0 and 4.0 kg capacity with 0.5% ventilation for packing guava for export, and that multilayer packing is not recommended.",
+      "statement_hi": "आईसीएआर के लेख के अनुसार सीआईएसएच ने निर्यात के लिए 2.0 और 4.0 किलो क्षमता व 0.5% वेंटिलेशन वाले सीएफबी डिब्बे विकसित किए हैं; बहुपरत पैकिंग की सलाह नहीं है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "box_capacity",
+          "min": 2.0,
+          "max": 4.0,
+          "unit": "kg"
+        },
+        {
+          "name": "ventilation",
+          "value": 0.5,
+          "unit": "percent"
+        }
+      ],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Post-harvest management for longer shelf-life of guava",
+          "publisher": "Indian Horticulture, Sept-Oct 2020 (ICAR); authors AICRP, CH&F Jhalawar (AU Kota)",
+          "year": 2020,
+          "url": "https://epubs.icar.org.in/index.php/IndHort/article/download/111196/43549/289054",
+          "page": "5",
+          "section_or_table": "Packaging",
+          "quote": "developed CFB boxes having capacity of 2.0 and 4.0 kg",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PHT-0009",
+      "topic": "post_harvest",
+      "subtopic": "hot_water_treatment_fruit_fly",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "An ICAR article says hot water at 46-50 C for 10-20 minutes was reported effective for fruit fly disinfestation; a Himachal booklet gives 43-46.7 C for 35-90 minutes, or a double dip (40 C for 20 minutes, then 46 C for 10 minutes).",
+      "statement_hi": "आईसीएआर के लेख के अनुसार फल मक्खी से मुक्ति के लिए 46-50 डिग्री सेल्सियस गर्म पानी में 10-20 मिनट उपचार प्रभावी पाया गया; हिमाचल पुस्तिका 43-46.7 डिग्री पर 35-90 मिनट या दोहरा डुबोना (40 डिग्री पर 20 मिनट फिर 46 डिग्री पर 10 मिनट) बताती है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "water_temperature",
+          "min": 46,
+          "max": 50,
+          "unit": "C"
+        },
+        {
+          "name": "time",
+          "min": 10,
+          "max": 20,
+          "unit": "min"
+        }
+      ],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Post-harvest management for longer shelf-life of guava",
+          "publisher": "Indian Horticulture, Sept-Oct 2020 (ICAR); authors AICRP, CH&F Jhalawar (AU Kota)",
+          "year": 2020,
+          "url": "https://epubs.icar.org.in/index.php/IndHort/article/download/111196/43549/289054",
+          "page": "5",
+          "section_or_table": "Major post-harvest diseases and insect-pests",
+          "quote": "temperature range 46 to 50°C for 10-20 min was reported … to be effective against fruit fly disinfection",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [
+        {
+          "source_title": "All about Guava (HPSHIVA package of practices booklet)",
+          "url": "https://hpshiva.hp.gov.in/cms/media/ae2bfh14/guava.pdf",
+          "quote": "Hot water treatment: Submerging fruits in hot water at 43 to 46.7oC for 35-90 min.",
+          "note": "Himachal booklet gives 43-46.7 C for 35-90 min."
+        }
+      ],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-PHT-0010",
+      "topic": "post_harvest",
+      "subtopic": "ripening_chamber_cost",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "An ICAR article citing NHB norms says a 1 MT ripening chamber costs about Rs 1 lakh per MT; it is a magazine summary, not the NHB norm itself.",
+      "statement_hi": "आईसीएआर के लेख में एनएचबी मानकों का हवाला देकर कहा गया है कि 1 टन क्षमता का रिपनिंग चैंबर लगभग 1 लाख रुपये प्रति टन में बनता है; यह पत्रिका का सार है, एनएचबी का मूल मानक नहीं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Post-harvest management for longer shelf-life of guava",
+          "publisher": "Indian Horticulture, Sept-Oct 2020 (ICAR); authors AICRP, CH&F Jhalawar (AU Kota)",
+          "year": 2020,
+          "url": "https://epubs.icar.org.in/index.php/IndHort/article/download/111196/43549/289054",
+          "page": "6",
+          "section_or_table": "Economics and subsidy on cold storage",
+          "quote": "A ripening chamber establishment as per norms of … National Horticulture Board having capacity of 1 MT",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "secondary",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-YLD-0001",
+      "topic": "yield",
+      "subtopic": "bearing_age_and_tree_yield_nhb",
+      "region": "ALL",
+      "applicability": {
+        "tree_age_months_min": 24,
+        "tree_age_months_max": 36
+      },
+      "statement_en": "NHB says plants start bearing at 2-3 years, reach full bearing at 8-10 years, and a 10-year-old plant yields about 100-150 kg a year.",
+      "statement_hi": "एनएचएम के अनुसार पौधे 2-3 साल में फल देने लगते हैं, 8-10 साल में पूरी क्षमता पर पहुँचते हैं और 10 साल का पौधा साल में लगभग 100-150 किलो फल देता है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "first_bearing_age",
+          "min": 2,
+          "max": 3,
+          "unit": "years"
+        },
+        {
+          "name": "full_bearing_age",
+          "min": 8,
+          "max": 10,
+          "unit": "years"
+        },
+        {
+          "name": "yield_10_year_tree",
+          "min": 100,
+          "max": 150,
+          "unit": "kg",
+          "per": "tree per year"
+        }
+      ],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Guava (model bankable project report, one-acre model)",
+          "publisher": "National Horticulture Board, Govt. of India",
+          "year": 2004,
+          "url": "https://nhb.gov.in/report_files/guava/GUAVA.htm",
+          "page": null,
+          "section_or_table": "5.14 Harvesting and Yield",
+          "quote": "The plants start bearing at an early age of 2-3 years but they attain full bearing capacity at the age of 8-10 years.",
+          "access": "opened_read"
+        },
+        {
+          "title": "Guava (model bankable project report, one-acre model)",
+          "publisher": "National Horticulture Board, Govt. of India",
+          "year": 2004,
+          "url": "https://nhb.gov.in/report_files/guava/GUAVA.htm",
+          "page": null,
+          "section_or_table": "5.14 Harvesting and Yield",
+          "quote": "A 10 year old plant yields about 100 to 150 kg. of fruits every year.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [
+        {
+          "source_title": "HORT181 Lecture 14: Guava - soil, climate, irrigation and nutrient management",
+          "url": "https://eagri.org/eagri50/HORT181/lec14.pdf",
+          "quote": "On an average 800 number of fruits weighing 20-25 kg may be obtained from guava.",
+          "note": "TNAU notes give 20-25 kg per tree on average."
+        },
+        {
+          "source_title": "Improvement in the guava production technology - an overview",
+          "url": "https://oldsciparks.lbp.world/ArticlePDF/287.pdf",
+          "quote": "In a 2-3 year old orchard an average yield of 120-300 kg/tree is obtained in a year.",
+          "note": "The review's 120-300 kg per tree for a 2-3 year old orchard disagrees with NHB and looks implausible; expert to check."
+        }
+      ],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-YLD-0002",
+      "topic": "yield",
+      "subtopic": "one_acre_model_yield",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "The NHB one-acre model estimates yield at 3 tonnes in the first year of bearing, rising to 6 tonnes.",
+      "statement_hi": "एनएचएम के एक एकड़ मॉडल में पहले फलन वर्ष में 3 टन उपज और बढ़कर 6 टन अनुमानित है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "yield_first_bearing_year",
+          "value": 3.0,
+          "unit": "tonnes",
+          "per": "acre"
+        },
+        {
+          "name": "yield_peak",
+          "value": 6.0,
+          "unit": "tonnes",
+          "per": "acre"
+        }
+      ],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Guava (model bankable project report, one-acre model)",
+          "publisher": "National Horticulture Board, Govt. of India",
+          "year": 2004,
+          "url": "https://nhb.gov.in/report_files/guava/GUAVA.htm",
+          "page": null,
+          "section_or_table": "8.7 Returns from the Project",
+          "quote": "The yield from the plantation is estimated at 3.00 tonnes in the first year of bearing rising to 6 tonnes.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [
+        {
+          "source_title": "Horticulture :: Fruits :: Guava (Agritech portal)",
+          "url": "https://agritech.tnau.ac.in/horticulture/horti_fruits_guava.html",
+          "quote": "The crop yields about 25 t/ha.",
+          "note": "TNAU gives about 25 t/ha (Tamil Nadu), far above NHB's 6 t per acre (about 15 t/ha)."
+        }
+      ],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-YLD-0003",
+      "topic": "yield",
+      "subtopic": "yield_tamil_nadu_tnau",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "TNAU (Tamil Nadu) says the crop yields about 25 tonnes per hectare and that layers come to bearing in 2-3 years.",
+      "statement_hi": "टीएनएयू (तमिलनाडु) के अनुसार फसल से लगभग 25 टन प्रति हेक्टेयर उपज मिलती है और कलमें 2-3 साल में फल देती हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "yield",
+          "value": 25,
+          "unit": "t",
+          "per": "ha"
+        }
+      ],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Horticulture :: Fruits :: Guava (Agritech portal)",
+          "publisher": "Tamil Nadu Agricultural University",
+          "year": null,
+          "url": "https://agritech.tnau.ac.in/horticulture/horti_fruits_guava.html",
+          "page": null,
+          "section_or_table": "Yield",
+          "quote": "The crop yields about 25 t/ha.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "secondary",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-ECO-0001",
+      "topic": "economics",
+      "subtopic": "one_acre_project_cost",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "The NHB one-acre model puts project cost at about Rs 1.25 lakh per acre, based on 2001-02 era figures with labour at Rs 70 per man-day.",
+      "statement_hi": "एनएचबी के एक एकड़ मॉडल में परियोजना लागत लगभग 1.25 लाख रुपये प्रति एकड़ है; यह 2001-02 के समय के आँकड़ों पर आधारित है और मज़दूरी 70 रुपये प्रतिदिन ली गई है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "project_cost",
+          "value": 125000,
+          "unit": "INR",
+          "per": "acre"
+        }
+      ],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Guava (model bankable project report, one-acre model)",
+          "publisher": "National Horticulture Board, Govt. of India",
+          "year": 2004,
+          "url": "https://nhb.gov.in/report_files/guava/GUAVA.htm",
+          "page": null,
+          "section_or_table": "8.2 Costs & Returns",
+          "quote": "The project cost works out to around Rs.1.25 lakhs / Acre.",
+          "access": "opened_read"
+        },
+        {
+          "title": "Guava (model bankable project report, one-acre model)",
+          "publisher": "National Horticulture Board, Govt. of India",
+          "year": 2004,
+          "url": "https://nhb.gov.in/report_files/guava/GUAVA.htm",
+          "page": null,
+          "section_or_table": "8.4",
+          "quote": "Labour cost has been put at an average of Rs. 70 per man-day.",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-ECO-0002",
+      "topic": "economics",
+      "subtopic": "one_acre_returns_viability",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "The NHB model reports IRR 19.92, benefit-cost ratio 1.1, payback 7.54 years and break-even in the 3rd year. These are old figures, not current economics.",
+      "statement_hi": "एनएचबी मॉडल में आईआरआर 19.92, लाभ-लागत अनुपात 1.1, वापसी अवधि 7.54 वर्ष और तीसरे वर्ष में ब्रेक-ईवन बताया गया है। ये पुराने आँकड़े हैं, वर्तमान अर्थशास्त्र नहीं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "IRR",
+          "value": 19.92
+        },
+        {
+          "name": "BCR",
+          "value": 1.1
+        },
+        {
+          "name": "payback_period",
+          "value": 7.54,
+          "unit": "years"
+        }
+      ],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Guava (model bankable project report, one-acre model)",
+          "publisher": "National Horticulture Board, Govt. of India",
+          "year": 2004,
+          "url": "https://nhb.gov.in/report_files/guava/GUAVA.htm",
+          "page": null,
+          "section_or_table": "8.12 IRR/BCR",
+          "quote": "The IRR works out to 19.92 and the BCR to 1.1.",
+          "access": "opened_read"
+        },
+        {
+          "title": "Guava (model bankable project report, one-acre model)",
+          "publisher": "National Horticulture Board, Govt. of India",
+          "year": 2004,
+          "url": "https://nhb.gov.in/report_files/guava/GUAVA.htm",
+          "page": null,
+          "section_or_table": "8.14 Payback Period",
+          "quote": "the pay back period is estimated at 7.54 years",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-ECO-0003",
+      "topic": "economics",
+      "subtopic": "one_acre_financing_pattern",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "The NHB model finances Rs 125 thousand as Rs 62.5 thousand farmer share, Rs 25 thousand capital subsidy and Rs 37.5 thousand term loan.",
+      "statement_hi": "एनएचबी मॉडल में 125 हज़ार रुपये का वित्तपोषण: किसान का हिस्सा 62.5 हज़ार, पूंजी सब्सिडी 25 हज़ार और सावधि ऋण 37.5 हज़ार रुपये।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "capital_subsidy",
+          "value": 25000,
+          "unit": "INR",
+          "per": "acre"
+        },
+        {
+          "name": "term_loan",
+          "value": 37500,
+          "unit": "INR",
+          "per": "acre"
+        }
+      ],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Guava (model bankable project report, one-acre model)",
+          "publisher": "National Horticulture Board, Govt. of India",
+          "year": 2004,
+          "url": "https://nhb.gov.in/report_files/guava/GUAVA.htm",
+          "page": null,
+          "section_or_table": "8.8 Balance Sheet",
+          "quote": "Capital subsidy 25.00 Term loan 37.50",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-ECO-0004",
+      "topic": "economics",
+      "subtopic": "recurring_cost_by_year",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "The NHB one-acre model gives development and recurring cost of Rs 21.0, 25.5, 30.0 and 32.1 thousand in years 1 to 4.",
+      "statement_hi": "एनएचबी एक एकड़ मॉडल में वर्ष 1 से 4 तक विकास व आवर्ती लागत क्रमशः 21.0, 25.5, 30.0 और 32.1 हज़ार रुपये है।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "cost_year_1",
+          "value": 21000,
+          "unit": "INR",
+          "per": "acre"
+        },
+        {
+          "name": "cost_year_4",
+          "value": 32100,
+          "unit": "INR",
+          "per": "acre"
+        }
+      ],
+      "risk_level": "LOW",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Guava (model bankable project report, one-acre model)",
+          "publisher": "National Horticulture Board, Govt. of India",
+          "year": 2004,
+          "url": "https://nhb.gov.in/report_files/guava/GUAVA.htm",
+          "page": null,
+          "section_or_table": "8.6",
+          "quote": "Year 1 21.00 Year 2 25.50 Year 3 30.00 Year 4 32.10",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-ECO-0005",
+      "topic": "economics",
+      "subtopic": "midh_hdp_subsidy_old_norm",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "An old MIDH component list reproduced by the Himachal government shows high density planting of guava with a drip package at 1.50 lakh per ha cost norm and 50% assistance, for up to 4 ha per beneficiary. Current MIDH norms were not verified.",
+      "statement_hi": "हिमाचल सरकार द्वारा दी गई पुरानी एमआईडीएच घटक सूची में अमरूद के सघन रोपण का ड्रिप सहित पैकेज 1.50 लाख रुपये प्रति हेक्टेयर लागत मानक और 50% सहायता के साथ, प्रति लाभार्थी अधिकतम 4 हेक्टेयर तक दिखाया गया है। वर्तमान एमआईडीएच मानक सत्यापित नहीं हैं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "cost_norm_with_drip",
+          "value": 1.5,
+          "unit": "lakh INR",
+          "per": "ha"
+        },
+        {
+          "name": "assistance",
+          "value": 50,
+          "unit": "percent"
+        },
+        {
+          "name": "max_area",
+          "value": 4,
+          "unit": "ha",
+          "per": "beneficiary"
+        }
+      ],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Annexure-7: List of components covered under Mission for Integrated Development of Horticulture (MIDH)",
+          "publisher": "Govt. of Himachal Pradesh (eUdyan portal), reproducing the MIDH component and cost-norm list",
+          "year": null,
+          "url": "https://eudyan.hp.gov.in/UploadedFiles/publicawareness/Annexure-7.pdf",
+          "page": "1",
+          "section_or_table": "B.2 Establishment of new gardens, iv) High density planting",
+          "quote": "iv) High density planting (Mango, Guava, Litchi, Pomegranate, apple, citrus etc.) a) Integrated package with drip irrigation. (Ha) 1.50/ha 50",
+          "access": "opened_read"
+        },
+        {
+          "title": "Annexure-7: List of components covered under Mission for Integrated Development of Horticulture (MIDH)",
+          "publisher": "Govt. of Himachal Pradesh (eUdyan portal), reproducing the MIDH component and cost-norm list",
+          "year": null,
+          "url": "https://eudyan.hp.gov.in/UploadedFiles/publicawareness/Annexure-7.pdf",
+          "page": "1",
+          "section_or_table": "B.2 Establishment of new gardens",
+          "quote": "B.2 Establishment of new gardens (Area expansion) (for a maximum area of 4 ha per beneficiary",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "official_guideline",
+      "conflicts": [],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
+    },
+    {
+      "id": "GUA-ECO-0006",
+      "topic": "economics",
+      "subtopic": "tamil_nadu_guava_hdp_subsidy",
+      "region": "ALL",
+      "applicability": {},
+      "statement_en": "The Tamil Nadu horticulture scheme list shows a guava high density planting subsidy of 17,592 per hectare for a maximum of 4 ha (currency symbol lost in extraction, taken as rupees). It is a Tamil Nadu scheme, not MP or MH.",
+      "statement_hi": "तमिलनाडु बागवानी योजना सूची में अमरूद सघन रोपण पर अधिकतम 4 हेक्टेयर तक 17,592 प्रति हेक्टेयर सब्सिडी दिखाई गई है (मुद्रा चिह्न नहीं निकला, रुपये माना गया)। यह तमिलनाडु की योजना है, मध्य प्रदेश या महाराष्ट्र की नहीं।",
+      "hi_machine_translated": true,
+      "hi_reviewed": false,
+      "values": [
+        {
+          "name": "subsidy",
+          "value": 17592,
+          "unit": "INR",
+          "per": "ha"
+        },
+        {
+          "name": "max_area",
+          "value": 4,
+          "unit": "ha"
+        }
+      ],
+      "risk_level": "MEDIUM",
+      "involves_chemical": false,
+      "cibrc_check_required": false,
+      "sources": [
+        {
+          "title": "Horticulture Schemes and Services (MIDH/NHM subsidy list)",
+          "publisher": "Tamil Nadu Department of Horticulture, hosted on TNAU Agritech portal",
+          "year": null,
+          "url": "https://agritech.tnau.ac.in/horticulture/pdf/scheme_en.pdf",
+          "page": "1",
+          "section_or_table": "A. Setting new gardens, Fruit crops",
+          "quote": "3. Guava High Density Planting (cid:0) 17592/ha Maximum of 4 ha",
+          "access": "opened_read"
+        }
+      ],
+      "source_confidence": "secondary",
+      "conflicts": [
+        {
+          "source_title": "Annexure-7: List of components covered under Mission for Integrated Development of Horticulture (MIDH)",
+          "url": "https://eudyan.hp.gov.in/UploadedFiles/publicawareness/Annexure-7.pdf",
+          "quote": "iv) High density planting (Mango, Guava, Litchi, Pomegranate, apple, citrus etc.) a) Integrated package with drip irrigation. (Ha) 1.50/ha 50",
+          "note": "The MIDH central cost norm list differs in basis from the Tamil Nadu per-hectare subsidy; not comparable without the current guidelines."
+        }
+      ],
+      "retrieved_on": "2026-11-21",
+      "status": "DRAFT"
     }
   ],
   "gaps": [
@@ -4834,6 +8192,146 @@
       "missing_fact": "CISH Extension Bulletin 35 fertiliser table verified against the printed page.",
       "searched": "Decoded from OCR layout.",
       "reason": "Column headers were garbled in the scan, so the June/September split is inferred from layout and from the total matching NHB's 600 g N."
+    },
+    {
+      "topic": "pests",
+      "region": "MP",
+      "missing_fact": "Madhya Pradesh guava pest recommendations (JNKVV, RVSKVV, MP horticulture department, KVK).",
+      "searched": "Searched for MP guava pest and wilt recommendations; mphorticulture.gov.in could not be opened in the earlier step.",
+      "reason": "No MP university or KVK document was opened; MP and MH items rely on national or other-state documents."
+    },
+    {
+      "topic": "pests",
+      "region": "MH",
+      "missing_fact": "Maharashtra guava pest and disease recommendations (MPKV Rahuri, PDKV Akola, VNMKV Parbhani, BSKKV Dapoli).",
+      "searched": "Searched Maharashtra agriculture department and SAU pages; only Marathi scanned GR/guideline PDFs appeared and none were opened.",
+      "reason": "No Maharashtra source on guava pests was read. One ICAR article names Maharashtra for fruit fly only."
+    },
+    {
+      "topic": "pests",
+      "region": "ALL",
+      "missing_fact": "CIB&RC registration status for every named pesticide on guava, and the label dose.",
+      "searched": "CIB&RC (cibrc.nic.in) was not opened in this step.",
+      "reason": "Every chemical item is marked HIGH with cibrc_check_required. Older sources name chemicals (for example monocrotophos, quinalphos, dichlorvos) whose current registration or restrictions must be checked; this was not verified."
+    },
+    {
+      "topic": "pests",
+      "region": "ALL",
+      "missing_fact": "Pre-harvest intervals and MRLs (FSSAI) for each pesticide.",
+      "searched": "Only a few intervals appear in the sources read (15 days before harvest in the NHM bulletin; TNAU 9-10 days).",
+      "reason": "FSSAI MRL documents were not opened."
+    },
+    {
+      "topic": "pests",
+      "region": "ALL",
+      "missing_fact": "Tea mosquito bug management from an official ICAR/NHM document.",
+      "searched": "Only the TNAU page (Tamil Nadu, secondary) and a Himachal booklet naming Helopeltis were read; the NHM IPM bulletin has no tea mosquito section.",
+      "reason": "No official national document on this pest was opened."
+    },
+    {
+      "topic": "pests",
+      "region": "ALL",
+      "missing_fact": "Fruit fly management paper IJAH 180653 (ICAR epubs).",
+      "searched": "PDF was downloaded but not read.",
+      "reason": "Not used as a source; recorded as found_not_opened."
+    },
+    {
+      "topic": "diseases",
+      "region": "ALL",
+      "missing_fact": "ICAR-CISH guava wilt management module (IndHort 177209 mentions ICAR-FUSICONT).",
+      "searched": "Search snippet only; the paper concerns mango wilt.",
+      "reason": "Not opened."
+    },
+    {
+      "topic": "diseases",
+      "region": "ALL",
+      "missing_fact": "Disease severity and loss data specific to MP and MH.",
+      "searched": "No state-specific disease survey was found.",
+      "reason": "Not available in opened documents."
+    },
+    {
+      "topic": "flowering_fruit_set",
+      "region": "MP",
+      "missing_fact": "Flowering and fruit set timing for MP and MH conditions.",
+      "searched": "Only general north/south India timing was found (review article and TNAU notes).",
+      "reason": "No MP or MH document read."
+    },
+    {
+      "topic": "flowering_fruit_set",
+      "region": "MH",
+      "missing_fact": "Flowering and fruit set timing for Maharashtra.",
+      "searched": "Only general north/south India timing was found.",
+      "reason": "No Maharashtra document read."
+    },
+    {
+      "topic": "harvest_maturity",
+      "region": "ALL",
+      "missing_fact": "Maturity indices by variety (Allahabad Safeda, Lalit, Arka Kiran, Shweta).",
+      "searched": "Only generic indices were found.",
+      "reason": "No variety-specific official document read."
+    },
+    {
+      "topic": "post_harvest",
+      "region": "ALL",
+      "missing_fact": "FSSAI standards for fresh guava and Agmark grade specification (grade names, tolerances).",
+      "searched": "The Agmark list page was read, but the grade specification (GSR 220, 2004) and any FSSAI standard were not opened.",
+      "reason": "Items state only that Agmark standards exist."
+    },
+    {
+      "topic": "post_harvest",
+      "region": "ALL",
+      "missing_fact": "APEDA export grade and packhouse requirements for guava.",
+      "searched": "An APEDA/PwC study PDF was found; the download timed out and it was not opened.",
+      "reason": "Not verified."
+    },
+    {
+      "topic": "post_harvest",
+      "region": "ALL",
+      "missing_fact": "1-MCP and coating doses for guava.",
+      "searched": "The ICAR article mentions 300-600 nL for 1-MCP but this was not captured as an item.",
+      "reason": "Chemical dose, deliberately not added without CIB&RC / regulatory check."
+    },
+    {
+      "topic": "yield",
+      "region": "MP",
+      "missing_fact": "Yield by tree age and system for Madhya Pradesh.",
+      "searched": "NHB gives national and one-acre model figures only.",
+      "reason": "No state-level yield document read."
+    },
+    {
+      "topic": "yield",
+      "region": "MH",
+      "missing_fact": "Yield by tree age and system for Maharashtra (including high-density).",
+      "searched": "A review mentions the MPKV Rahuri high-density plot without yields.",
+      "reason": "No state-level yield document read."
+    },
+    {
+      "topic": "yield",
+      "region": "ALL",
+      "missing_fact": "Himachal booklet yield by age.",
+      "searched": "The HP booklet's yield paragraph begins 'The sweet orange tree', an apparent copy error.",
+      "reason": "Not used."
+    },
+    {
+      "topic": "economics",
+      "region": "ALL",
+      "missing_fact": "Current cost of cultivation and returns for guava.",
+      "searched": "NHB model is based on 2001-02 era figures.",
+      "reason": "No current official cost study read."
+    },
+    {
+      "topic": "economics",
+      "region": "MP",
+      "missing_fact": "Current MIDH operational guidelines (2025) and MP state subsidy for guava.",
+      "searched": "Only Scribd copies and news items appeared in search; the Himachal-hosted annex is old.",
+      "reason": "Current norms not verified."
+    },
+    {
+      "topic": "economics",
+      "region": "MH",
+      "missing_fact": "Maharashtra horticulture subsidy for guava (MIDH state share, BAKSY).",
+      "searched": "Maharashtra agriculture department PDFs were found but are scanned Marathi and were not opened.",
+      "reason": "Not verified."
     }
   ],
   "bibliography": [
@@ -4907,7 +8405,7 @@
       "year": 2015,
       "url": "https://oldsciparks.lbp.world/ArticlePDF/287.pdf",
       "access": "opened_partial",
-      "notes": "Downloaded PDF. Read the abstract and the propagation, planting, high-density and training sections only; the rest was not read. Secondary review."
+      "notes": "Downloaded PDF. Read the abstract and the propagation, planting, high-density and training sections only; the rest was not read. Secondary review. Later (FEAT-002) also read the flowering, crop regulation, nutrient, pest, disease and harvest sections (pages 4-7); the references were not read."
     },
     {
       "title": "Crop regulation in guava (Vikaspedia page)",
@@ -4918,20 +8416,20 @@
       "notes": "web_fetch returned no readable content."
     },
     {
-      "title": "Guava (Himachal Pradesh Horticulture presentation)",
-      "publisher": "HP Horticulture Dept",
+      "title": "All about Guava (HPSHIVA package of practices booklet)",
+      "publisher": "HPSHIVA Project, Directorate of Horticulture, Himachal Pradesh (authors from Dr YSP University of Horticulture & Forestry)",
       "year": null,
       "url": "https://hpshiva.hp.gov.in/cms/media/ae2bfh14/guava.pdf",
-      "access": "found_not_opened",
-      "notes": "Downloaded but not read; hill-state document, low relevance to MP/MH."
+      "access": "opened_read",
+      "notes": "Full 20-page PDF downloaded and read. Himachal Pradesh sub-tropical conditions, not MP or MH. Text extraction drops spaces, so quotes are copied with spaces restored. Its yield paragraph begins 'The sweet orange tree', an apparent copy error, so it was not used."
     },
     {
-      "title": "IPM for guava (Extension Bulletin)",
-      "publisher": "NCIPM / TNAU Agritech",
-      "year": 2011,
+      "title": "IPM Schedule for Guava Pests (Extension Bulletin No. 2)",
+      "publisher": "National Horticulture Mission, Ministry of Agriculture (Dept. of Agriculture & Cooperation), Govt. of India",
+      "year": 2012,
       "url": "https://agritech.tnau.ac.in/horticulture/pdf/tech_bulletin/national/IPM-GUAVA-Revised-Sept2011.pdf",
-      "access": "found_not_opened",
-      "notes": "Downloaded but not read in FEAT-001; pest topic belongs to FEAT-002."
+      "access": "opened_read",
+      "notes": "Full 21-page PDF downloaded and read. Cover says Horticulture Year 2012; file name says Sept 2011. Hosted on TNAU Agritech portal. Pesticide names and doses in it are 2011-12 recommendations and must be re-checked against CIB&RC."
     },
     {
       "title": "Combined effects of deficit irrigation and mulching on VNR Bihi guava",
@@ -5004,6 +8502,110 @@
       "url": "https://sdiopr.s3.ap-south-1.amazonaws.com/2022/Aug/2022_IJECC_87998/Ms_IJECC_87998.pdf",
       "access": "found_not_opened",
       "notes": "Only seen in search results."
+    },
+    {
+      "title": "Eco-friendly management of fruit fly for quality guava production",
+      "publisher": "Indian Horticulture, Jan-Feb 2023 (ICAR); authors ICAR-IARI New Delhi and others",
+      "year": 2023,
+      "url": "https://epubs.icar.org.in/index.php/IndHort/article/download/130941/49198/472789",
+      "access": "opened_read",
+      "notes": "Full 4-page PDF downloaded and read. Two-column layout, so only single-line fragments are quoted."
+    },
+    {
+      "title": "Post-harvest management for longer shelf-life of guava",
+      "publisher": "Indian Horticulture, Sept-Oct 2020 (ICAR); authors AICRP, CH&F Jhalawar (AU Kota)",
+      "year": 2020,
+      "url": "https://epubs.icar.org.in/index.php/IndHort/article/download/111196/43549/289054",
+      "access": "opened_read",
+      "notes": "Full 4-page PDF downloaded and read. Two-column layout, so only single-line fragments are quoted."
+    },
+    {
+      "title": "Annexure-7: List of components covered under Mission for Integrated Development of Horticulture (MIDH)",
+      "publisher": "Govt. of Himachal Pradesh (eUdyan portal), reproducing the MIDH component and cost-norm list",
+      "year": null,
+      "url": "https://eudyan.hp.gov.in/UploadedFiles/publicawareness/Annexure-7.pdf",
+      "access": "opened_read",
+      "notes": "Full 7-page PDF read. Undated; year columns '2012-13' and '2013-14' show it is an old norm list. Current MIDH norms were NOT verified."
+    },
+    {
+      "title": "Horticulture Schemes and Services (MIDH/NHM subsidy list)",
+      "publisher": "Tamil Nadu Department of Horticulture, hosted on TNAU Agritech portal",
+      "year": null,
+      "url": "https://agritech.tnau.ac.in/horticulture/pdf/scheme_en.pdf",
+      "access": "opened_read",
+      "notes": "Full 4-page PDF read. Tamil Nadu scheme list; the currency symbol did not extract."
+    },
+    {
+      "title": "Agmark standards for fruits & vegetables (list)",
+      "publisher": "AGMARK list hosted on TNAU Agritech AMIS portal",
+      "year": null,
+      "url": "https://agritech.tnau.ac.in/ta/amis_ta/pdf/F_V_G_M_under_Agmark.pdf",
+      "access": "opened_read",
+      "notes": "One-page list only. It names guavas among the fruits graded under the Fruits and Vegetables Grading & Marking Rules, 2004. The grade specification itself was not opened."
+    },
+    {
+      "title": "Annexure II cost norms (PIB document, Lok Sabha reply)",
+      "publisher": "Press Information Bureau",
+      "year": 2025,
+      "url": "https://static.pib.gov.in/WriteReadData/specificdocs/documents/2025/aug/doc202585600301.pdf",
+      "access": "opened_partial",
+      "notes": "First 3 pages read; they cover medicinal plants and no guava line, so nothing was taken from it."
+    },
+    {
+      "title": "General Grading and Marking Rules, 1988 (as amended up to 2009)",
+      "publisher": "Agmark / TNAU AMIS copy",
+      "year": 2009,
+      "url": "https://agritech.tnau.ac.in/amis/pdf/Grading_Marketing_Rules_1988.pdf",
+      "access": "opened_read",
+      "notes": "Read by keyword search and extraction; the document has no guava-specific grade. Nothing was taken from it."
+    },
+    {
+      "title": "Fruit fly management in guava (IJAH)",
+      "publisher": "Indian Journal of Arid Horticulture (ICAR epubs)",
+      "year": null,
+      "url": "https://epubs.icar.org.in/index.php/IJAH/article/download/180653/66785",
+      "access": "found_not_opened",
+      "notes": "PDF was downloaded but not read."
+    },
+    {
+      "title": "MIDH Operational Guidelines (2025)",
+      "publisher": "Scribd copy of MIDH guidelines",
+      "year": 2025,
+      "url": "https://www.scribd.com/document/953950518/Final-MIDH-Operational-Guidelines-2025",
+      "access": "found_not_opened",
+      "notes": "Found by search; third-party copy, not opened."
+    },
+    {
+      "title": "Study on export oriented infrastructure for agri products from Maharashtra and Gujarat (guava section)",
+      "publisher": "APEDA / PwC",
+      "year": 2016,
+      "url": "https://apeda.gov.in/sites/default/files/study_reports/PwC_APEDA_Project_Report_Identification_of_Export_Oriented_Infrastructure_Maharashtra_Gujarat_Rev_Oct_2016.pdf",
+      "access": "found_not_opened",
+      "notes": "Download timed out; not opened."
+    },
+    {
+      "title": "Maharashtra agriculture department horticulture PDFs (BAKSY guidelines, pack house guidelines)",
+      "publisher": "Commissionerate of Agriculture, Maharashtra",
+      "year": null,
+      "url": "https://krishi.maharashtra.gov.in/Site/Upload/Pdf/Dr%20BAKSY%20Guidelines_compressed.pdf",
+      "access": "found_not_opened",
+      "notes": "Scanned Marathi PDF found by search; not opened."
+    },
+    {
+      "title": "IPM Schedule for Guava Pests (e-GyanKosh copy)",
+      "publisher": "IGNOU e-GyanKosh",
+      "year": null,
+      "url": "https://www.egyankosh.ac.in/bitstream/123456789/59167/1/IPM%20Schedule%20for%20Guava%20Pests.pdf",
+      "access": "found_not_opened",
+      "notes": "Duplicate of the NHM bulletin that was read from the TNAU copy; not opened."
+    },
+    {
+      "title": "Guava anthracnose disease (note)",
+      "publisher": "wsimg.com hosted PDF (publisher unclear)",
+      "year": null,
+      "url": "https://img1.wsimg.com/blobby/go/881189cc-82d9-4fd9-ba00-1d464633fe6b/downloads/1c89163c-1e47-4c53-920f-5561597a303e/26.%20Guava%20Anthracnose%20Disease.pdf?ver=1754131696152",
+      "access": "found_not_opened",
+      "notes": "Publisher unclear; not opened and not citable."
     }
   ],
   "conflicts_index": [
@@ -5141,6 +8743,96 @@
         "GUA-IRR-0004"
       ],
       "summary": "Drip water saving: CISH 40-50% vs NHB about 60%."
+    },
+    {
+      "item_ids": [
+        "GUA-PST-0007"
+      ],
+      "summary": "Fruit fly trap density: NHM bulletin 10 per ha, Himachal booklet 15 per ha, TNAU 50 fish-meal traps per ha, review 8 or 16 per acre."
+    },
+    {
+      "item_ids": [
+        "GUA-DIS-0007"
+      ],
+      "summary": "Anthracnose fungicide: NHM bulletin copper oxychloride 0.3% or Bordeaux 3:3:50; review copper oxychloride 0.2% or Dithane Z-78 0.2% at 10-day interval."
+    },
+    {
+      "item_ids": [
+        "GUA-DIS-0010"
+      ],
+      "summary": "Canker sprays: NHM bulletin 3-4 sprays of 1% Bordeaux; review 2-3 sprays."
+    },
+    {
+      "item_ids": [
+        "GUA-DIS-0004"
+      ],
+      "summary": "Wilt cause: NHM bulletin says the cause is not fully understood; a review attributes it to Fusarium in alkaline soil."
+    },
+    {
+      "item_ids": [
+        "GUA-DIS-0012"
+      ],
+      "summary": "Algal spot / red rust spray: NHM bulletin copper oxychloride 0.3%; Himachal booklet a copper-lime-zinc mixture."
+    },
+    {
+      "item_ids": [
+        "GUA-HRV-0002"
+      ],
+      "summary": "Specific gravity at harvest: HP below 1.0; ICAR article 0.95-1.00; review below 1.01."
+    },
+    {
+      "item_ids": [
+        "GUA-HRV-0004"
+      ],
+      "summary": "Days from flowering to maturity: ICAR article 120-140; review 110-135."
+    },
+    {
+      "item_ids": [
+        "GUA-HRV-0006"
+      ],
+      "summary": "Ripening: TNAU notes say pick at maturity; NHB says best flavour develops on the tree."
+    },
+    {
+      "item_ids": [
+        "GUA-PHT-0004"
+      ],
+      "summary": "Storage: NHB 5 C and 75-85% RH up to 20 days; ICAR article and Himachal booklet 8-10 C for 2-3 weeks."
+    },
+    {
+      "item_ids": [
+        "GUA-PHT-0009"
+      ],
+      "summary": "Hot water for fruit fly: ICAR article 46-50 C for 10-20 min; Himachal booklet 43-46.7 C for 35-90 min."
+    },
+    {
+      "item_ids": [
+        "GUA-YLD-0001"
+      ],
+      "summary": "Yield per tree: NHB 100-150 kg at 10 years; TNAU notes 20-25 kg average; a review 120-300 kg for a 2-3 year old orchard."
+    },
+    {
+      "item_ids": [
+        "GUA-YLD-0002"
+      ],
+      "summary": "Yield per hectare: NHB model 6 t per acre at peak; TNAU 25 t per ha."
+    },
+    {
+      "item_ids": [
+        "GUA-PST-0017"
+      ],
+      "summary": "Cryptolaemus release: NHM bulletin 3000 per ha; TNAU 10 beetles per tree."
+    },
+    {
+      "item_ids": [
+        "GUA-FLW-0003"
+      ],
+      "summary": "Flowering seasons: review Feb-March and Sept-Oct; TNAU notes April-May and Aug-Sept."
+    },
+    {
+      "item_ids": [
+        "GUA-ECO-0006"
+      ],
+      "summary": "Subsidy basis: central MIDH cost norm (old list) vs Tamil Nadu per-hectare subsidy; not comparable."
     }
   ]
 }
