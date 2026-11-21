@@ -62,7 +62,17 @@ function renderHero() {
   }
   const priced = (board.mandis || []).filter((m) => (m.prices || []).some((p) => p.modal_per_kg != null))
     .sort((a, b) => String(b.trade_date).localeCompare(String(a.trade_date)));
-  const top = board.has_data ? priced[0] : null;
+  // Public page: no farm location, so headline the BEST modal price on the newest
+  // trade date (not just whichever mandi happens to be listed first, which could
+  // be the cheapest and mislead a farmer about what guava is fetching today).
+  const modalOf = (m) => Math.max(...m.prices.filter((p) => p.modal_per_kg != null).map((p) => Number(p.modal_per_kg)));
+  const newest = priced.length ? priced[0].trade_date : null;
+  const sameDay = priced.filter((m) => m.trade_date === newest);
+  const top = board.has_data && sameDay.length
+    ? sameDay.reduce((best, m) => (modalOf(m) > modalOf(best) ? m : best), sameDay[0])
+    : null;
+  const lows = sameDay.map(modalOf);
+  const low = lows.length > 1 ? Math.min(...lows) : null;
   if (!top) {
     el.dataset.state = "empty";
     el.innerHTML = `<h2 class="price-hero__unit">${esc(mt("mandi.hero.title"))}</h2><p class="price-hero__value">—</p>
@@ -70,13 +80,15 @@ function renderHero() {
       <p class="price-hero__meta">${esc(mt("mandi.source"))}</p>`;
     return;
   }
-  const p = top.prices.find((x) => x.modal_per_kg != null);
+  const p = top.prices.reduce((a, x) => (x.modal_per_kg != null && (a == null || Number(x.modal_per_kg) > Number(a.modal_per_kg)) ? x : a), null);
   const quintal = p.modal_per_quintal != null
     ? `<p class="price-hero__quintal">${esc(mt("mandi.hero.perQuintal", { value: Number(p.modal_per_quintal).toLocaleString("en-IN", { maximumFractionDigits: 0 }) }))}</p>` : "";
-  el.innerHTML = `<h2 class="price-hero__unit">${esc(mt("mandi.hero.title"))}</h2>
+  const range = low != null && low < Number(p.modal_per_kg)
+    ? `<p class="price-hero__meta">${esc(mt("mandi.hero.range", { low: rupee(low), n: sameDay.length }))}</p>` : "";
+  el.innerHTML = `<h2 class="price-hero__unit">${esc(mt("mandi.hero.bestTitle"))}</h2>
     <p class="price-hero__value">${rupee(p.modal_per_kg)}</p>
     <p class="price-hero__unit">${esc(mt("mandi.perKg"))} · ${esc(mt("mandi.modal"))}</p>${quintal}
-    <p class="price-hero__meta"><strong>${esc(mt("mandi.hero.at", { market: top.market, state: top.state }))}</strong></p>
+    <p class="price-hero__meta"><strong>${esc(mt("mandi.hero.at", { market: top.market, state: top.state }))}</strong></p>${range}
     <p class="price-hero__meta">${esc(mt("mandi.asOf", { date: dmy(top.trade_date) }))}${top.is_stale ? ` · ${esc(mt("mandi.hero.stale"))}` : ""}</p>
     <p class="price-hero__meta">${esc(mt("mandi.source"))}</p>
     ${savedAt ? `<p class="price-hero__meta" role="status"><strong>${esc(mt("mandi.offlineCopy", { date: dmy(savedAt) }))}</strong></p>` : ""}`;
