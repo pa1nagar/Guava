@@ -55,6 +55,10 @@ CATEGORY_LIMITS: dict[str, int] = {
     "admin_ingest": 5,
     "sell_smart_read": 60,
     "sell_smart_write": 20,
+    "knowledge_read": 120,
+    "knowledge_write": 40,
+    "knowledge_export": 10,
+    "knowledge_import": 5,
 }
 
 

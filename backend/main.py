@@ -36,6 +36,7 @@ from routers import calculators as calculators_router_module
 from routers import ai as ai_router_module
 from routers import prices as prices_router_module
 from routers import sell_smart as sell_smart_router_module
+from routers import knowledge_admin as knowledge_admin_router_module
 from services.rate_limiter import RateLimiter, check_rate_limit, _extract_ip
 
 logging.basicConfig(
@@ -130,6 +131,7 @@ app.include_router(calculators_router_module.router, prefix="/api")
 app.include_router(ai_router_module.router, prefix="/api")
 app.include_router(prices_router_module.router, prefix="/api")
 app.include_router(sell_smart_router_module.router, prefix="/api")
+app.include_router(knowledge_admin_router_module.router, prefix="/api")
 
 
 # â”€â”€ Background scheduler (module-level so shutdown event can stop it) â”€â”€â”€â”€â”€â”€â”€â”€
