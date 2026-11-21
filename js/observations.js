@@ -15,8 +15,9 @@
 import { routeGuard, signOut } from "./auth.js";
 import { apiFetch, showError } from "./api.js";
 import {
-  applyI18n, errorMessage, escapeHtml, initPage, renderLoadError, setBusy, t,
+  applyI18n, errorMessage, escapeHtml, getLang, initPage, renderLoadError, setBusy, t,
 } from "./dom.js";
+import { translateApiText } from "./api-text.js";
 import { formatDate, formatNumber } from "./translator.js";
 
 const MAX_PHOTO_BYTES = 10 * 1024 * 1024; // backend limit (observations.py _MAX_PHOTO_BYTES)
@@ -122,7 +123,7 @@ function renderObservations() {
 
       ${obs.ai_analysis_label || obs.ai_analysis ? `
         <div class="mt-3 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2.5">
-          <p class="text-sm font-bold text-amber-900 mb-1">⚠️ ${escapeHtml(obs.ai_analysis_label || t("obs.ai.label"))}</p>
+          <p class="text-sm font-bold text-amber-900 mb-1">⚠️ ${escapeHtml(translateApiText(obs.ai_analysis_label, getLang()) || t("obs.ai.label"))}</p>
           ${obs.ai_analysis ? `<p class="text-sm text-gray-800 leading-relaxed break-words">${escapeHtml(obs.ai_analysis)}</p>` : ""}
           <p class="text-sm text-amber-800 mt-1.5" data-i18n="obs.aiDisclaimerBody"></p>
         </div>

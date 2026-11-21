@@ -18,16 +18,16 @@ FARMER = {
 PLAN = {
     "stage_id": "fruit_development", "stage_label": "Fruit Development", "months_elapsed": 17, "days_elapsed": 520,
     "is_final_stage": False,
-    "summary": "Test summary: fruits are growing. Keep the soil moist and watch the trees every week.",
+    "summary": "You are in the Fruit Development stage (9 months since planting). Reference tasks are shown below.",
     "tasks": [
         {"category": "fertilizer", "title": "Apply test fertilizer", "description": "Test description for the fertilizer task.",
          "quantity": 12.5, "unit": "kg"},
-        {"category": "irrigation", "title": "Irrigate the orchard", "description": "Test irrigation note.",
-         "quantity": 3000, "unit": "litres/day"},
-        {"category": "ipm", "title": "Walk the orchard", "description": "Look for rotting fruit and remove it.",
+        {"category": "irrigation", "title": "Irrigation", "description": "Water every day. Give 10 litres per plant each day.",
+         "quantity": 3000, "unit": "litres/day (total for all plants)"},
+        {"category": "ipm", "title": "Check: Stem borer", "description": "Inspect shoot tips for wilting or dead tips. Remove affected shoot, insert wire into entry hole to kill larva",
          "quantity": None, "unit": None},
     ],
-    "warnings": [], "notes": ["Test note: quantities are reference values."], "from_cache": False,
+    "warnings": [], "notes": ["Plan generated from reference data (AI explanation unavailable)."], "from_cache": False,
 }
 
 FARMS = [
@@ -80,7 +80,7 @@ TEST_PHOTO_URL = "https://guavaa.netlify.app/__fixtures__/photo.png"
 
 OBSERVATIONS = [
     {"id": "o1", "user_id": "u1", "plot_id": None, "observed_date": "2026-11-18", "plant_part": "leaves",
-     "symptom_description": "Test: yellow leaves on <script>alert(1)</script> one corner", "onset_date": None,
+     "symptom_description": "Test yellow leaves on <script>alert(1)</script> one corner", "onset_date": None,
      "spread_pattern": "one corner", "severity": "medium", "trees_sampled": 20, "trees_affected": 3,
      "weather_notes": None, "recent_input_notes": None, "observer_name": "Test Farmer", "ai_analysis": None,
      "ai_analysis_label": "Preliminary observation — not a diagnosis", "created_at": "2026-11-18T00:00:00",
@@ -93,13 +93,13 @@ ACTIVITIES = [
      "status": "recorded", "plot_id": None, "method": None, "actor": None, "photo_storage_key": None,
      "logged_date": "2026-11-10", "created_at": "2026-11-10T00:00:00"},
     {"id": "a2", "activity_type": "Labour", "quantity": 4.0, "unit": "hours", "cost": 800.0,
-     "notes": "Test: pruning the north rows before the rains start", "status": "recorded", "plot_id": None,
+     "notes": "Test pruning the north rows before the rains start", "status": "recorded", "plot_id": None,
      "method": None, "actor": None, "photo_storage_key": None,
      "logged_date": "2026-11-12", "created_at": "2026-11-12T00:00:00"},
 ]
 SPENDING = {"total_cost": 2000.0, "by_type": {"Fertilizer": 1200.0, "Labour": 800.0, "Irrigation": 0.0}}
 GAPS = [{"activity_type": "Fertilizer", "expected": 20.0, "actual": 10.0, "unit": "kg", "status": "behind",
-         "message": "Test: you may be behind on fertilizer for this stage."}]
+         "message": "You may be behind on fertilizer for this stage."}]
 FIN_SUMMARY = {"total_cost": 2000.0, "cost_by_type": {"Fertilizer": 1200.0, "Labour": 800.0}, "revenue": 9500.0,
                "profit_or_loss": 7500.0, "net_realisation": 9500.0, "break_even_price_per_kg": 4.5, "has_harvest": True, "currency": "INR",
                "break_even_note": None}
@@ -115,7 +115,7 @@ INSIGHTS = {
         "current": {"temperature": 29.5, "weathercode": 2, "weather_desc": "Partly cloudy", "windspeed": 8.2},
         "irrigation": {"status": "normal", "et0": 4.1, "etc": 3.5,
                        "message": "ET0 is 4.1 mm/day — normal water demand. Maintain reference schedule.",
-                       "basis": "Estimate. Flat crop coefficient 0.85 for all growth stages, and the demand bands are rules of thumb, not from a source.",
+                       "basis": "Estimate. Flat crop coefficient 0.85 for all growth stages, and the demand bands (above 6 and above 3 mm/day) are rules of thumb, not from a source. Check the soil before changing your schedule.",
                        "is_estimate": True},
         "forecast": [{"date": "2026-11-2%d" % i, "weathercode": 1, "tmax": 31, "tmin": 18, "rain_mm": 0 if i % 2 else 4.2,
                       "rain_prob": 10 * i} for i in range(1, 8)],
@@ -138,15 +138,15 @@ INSIGHTS = {
          "ipm_checks": ["Fruit fly", "Fruit rot"]},
     ],
     "climate": {
-        "fetched": True, "gdd_cumulative": 4200, "gdd_vs_calendar": "on_track", "gdd_note": "Heat units are close to the calendar stage.",
+        "fetched": True, "gdd_cumulative": 4200, "gdd_vs_calendar": "on_track", "gdd_note": "Heat accumulation is consistent with the calendar-based stage.",
         "gdd_thresholds": {"fruit_development": 3500, "harvest": 5000}, "gdd_basis":
         "Estimate typed in by the app developer; no published source. Compare with the calendar stage, do not use alone.",
         "gdd_is_estimate": True, "anomaly_temperature": 0.8, "anomaly_rainfall_mm": -12,
-        "anomaly_summary": "This month is slightly warmer and drier than normal.",
-        "waterlogging_risk": "low", "waterlogging_message": "No waterlogging expected.",
+        "anomaly_summary": "This month is 0.8°C warmer than the 30-year average and 12mm less rainfall than normal.",
+        "waterlogging_risk": "low", "waterlogging_message": "Rainfall within normal range. No waterlogging risk.",
         "monsoon_cumulative_mm": 640, "monsoon_deficit_pct": -5.5,
     },
-    "compliance": {"score": 72, "interpretation": "Test: fertilizer logged is close to the reference amount.",
+    "compliance": {"score": 72, "interpretation": "Moderate compliance (72/100). Consider catching up on fertilizer in the next stage to protect yield.",
                    "logged_fert_kg": 10, "expected_fert_kg": 14},
     "fertilizer_forecast": [
         {"stage_label": "Harvest", "fertilizer": "Test fertilizer A", "total_kg": 30, "rate_per_kg": 20.0,
@@ -169,7 +169,7 @@ REPORT = {
     "expenses_by_category": {}, "market_prices": [], "currency": "INR",
 }
 
-AI_OK = {"response": "Test answer: guava trees need steady moisture while fruits grow.", "risk_level": "LOW",
+AI_OK = {"response": "Test answer guava trees need steady moisture while fruits grow.", "risk_level": "LOW",
          "is_high_risk_refusal": False}
 AI_REFUSAL = {"response": HIGH_RISK_TEXT, "risk_level": "HIGH", "is_high_risk_refusal": True}
 

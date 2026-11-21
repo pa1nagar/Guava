@@ -34,11 +34,12 @@ import mock_api  # noqa: E402
 
 mimetypes.add_type("image/webp", ".webp")  # missing from Windows' registry-based type table
 ROOT = Path(__file__).resolve().parents[2]
-ART = Path("D:/Python World/Experiment/Guava/.agents/tasks/visual-redesign")
-PAGES = ["index", "login", "onboarding", "farm", "plan", "tasks", "observations",
+ART = Path("D:/Python World/Experiment/Guava/.agents/tasks/mobile-landing-fixes")
+PAGES = ["index", "about", "login", "onboarding", "farm", "plan", "tasks", "observations",
          "inventory", "report", "sell-smart", "privacy"]
 APP_PAGES = {"farm", "plan", "tasks", "observations", "inventory", "report"}
-PUBLIC_PAGES = {"index", "login", "onboarding", "sell-smart", "privacy"}
+INDEX_MAX_HEIGHT = 3500  # px, index.html at 360x800
+PUBLIC_PAGES = {"index", "about", "login", "onboarding", "sell-smart", "privacy"}
 VIEWPORTS = {"360x800": dict(width=360, height=800, mobile=True), "1366x768": dict(width=1366, height=768, mobile=False)}
 ORIGIN = "https://guavaa.netlify.app"
 API = "https://guava-8wc7.onrender.com"
@@ -132,6 +133,8 @@ IMG_BUDGET = 150 * 1024
 FIXTURES = Path(__file__).parent / "fixtures"
 # Words that may stay English in Hindi pages: brand, unit and test-data names.
 ASCII_OK = set("smart farmer agmarknet guava google netlify supabase ai gps kvk icar govt india test mandi one two fake district variety farm block apmc rs kg quintal per sf rani nature photography".split())
+
+FIXTURE_MARKERS = {"test", "fake"}  # mock farmer data (names, notes, districts) always contains one of these words
 
 LIST_KEYS = ("small_tap", "small_font", "body_font", "clipped", "no_name")
 
@@ -292,8 +295,11 @@ def explore(page, pg, total, extra):
 def chat_flow(page, extra):
     box = page.query_selector("#ai-chat-input")
     send = page.query_selector("#ai-chat-container button")
-    for question, expect in (("How often should I water my trees?", "steady moisture"),
-                             ("What dose of pesticide should I spray?", "cannot verify the safety")):
+    hi = (page.evaluate("localStorage.getItem('sf_lang')") or "en") == "hi"
+    # Questions are farmer-typed text; they carry the word "test" like all other mock farmer text.
+    # The refusal is shown in Hindi on Hindi pages (same refusal, no advice).
+    for question, expect in (("Test how often should I water my trees?", "steady moisture"),
+                             ("Test what dose of pesticide should I spray?", "सत्यापित नहीं कर सकता" if hi else "cannot verify the safety")):
         before = page.eval_on_selector("#ai-chat-messages", "e => e.children.length")
         box.fill(question)
         send.click()
@@ -325,6 +331,10 @@ def explore_public(page, pg, total, extra, scenario):
 
     page.on("dialog", lambda d: d.accept())
     snap()
+    cut = page.evaluate("""() => { const e = document.querySelector('.sf-topbar__brand span:last-child');
+      return e ? e.scrollWidth - e.clientWidth : 0; }""")
+    if cut > 0:
+        extra.append(f"{pg}: the Smart Farmer brand name is cut off in the header ({cut}px)")
     if pg == "index":
         f = _largest_font(page)
         if scenario == "ok":
@@ -342,6 +352,16 @@ def explore_public(page, pg, total, extra, scenario):
         if page.evaluate("localStorage.getItem('sf_lang')") != other:
             extra.append("index: language toggle did not persist")
         page.click("#lang-" + start_lang)
+        if page.evaluate("typeof Chart") != "undefined":
+            extra.append("index: Chart.js was loaded on the landing page")
+        # the header is one row at 360px: brand, language toggle and Sign in share one line
+        tops = page.evaluate("""() => [...document.querySelectorAll('.sf-topbar > *')].map(e => Math.round(e.getBoundingClientRect().top))""")
+        hh = page.evaluate("document.querySelector('.sf-topbar').getBoundingClientRect().height")
+        if hh > 70 or max(tops) - min(tops) > 12:
+            extra.append(f"index: header is not a single row (height {hh}, tops {tops})")
+        if page.is_visible("#contact-form") or page.query_selector(".sf-topbar__tag") and page.is_visible(".sf-topbar__tag") and page.viewport_size["width"] < 640:
+            extra.append("index: contact form or tagline shows on the landing page")
+    elif pg == "about":
         # contact form: validation, then success
         page.click("#contact-submit")
         page.wait_for_timeout(150)
@@ -391,7 +411,7 @@ def explore_public(page, pg, total, extra, scenario):
         if scenario == "ok":
             page.click("#btn-submit")
             page.wait_for_selector("#form-error:not(.hidden)", timeout=5000)
-            if "too high" not in page.inner_text("#form-error") and "looks" not in page.inner_text("#form-error"):
+            if "future" not in page.inner_text("#form-error") and "आगे" not in page.inner_text("#form-error"):
                 extra.append("onboarding: backend 422 text not shown")
             if page.is_disabled("#btn-submit"):
                 extra.append("onboarding: submit stays disabled after an error")
@@ -580,7 +600,7 @@ def special_runs(browser, args):
             const b = c.closest('.sf-chart-block'); return { summary: b.querySelector('.sf-chart-summary').textContent.trim(),
             listItems: b.querySelectorAll('.sf-chart-list li').length, canvasVisible: !!(c.offsetWidth || c.offsetHeight),
             aria: c.getAttribute('aria-label') || '' }; }""", canvas_id)
-    for pg_name, anon_flag, cid in (("index", True, "mandi-bar-chart"), ("report", False, "spend-donut")):
+    for pg_name, anon_flag, cid in (("report", False, "spend-donut"),):  # index draws its bars in HTML/CSS: no chart library to fail
         ctx, un = new_ctx(anon=anon_flag)
         ctx.route("**/npm/chart.js", lambda r: r.abort())
         page = ctx.new_page()
@@ -678,10 +698,12 @@ def run(args):
                     total = None
                     IMG_BYTES.clear()
                     first_load_bytes = None
+                    page_height = None
                     try:
                         page.goto(f"{base}/{pg}.html", wait_until="load", timeout=20000)
                         page.wait_for_timeout(1200)
                         first_load_bytes = sum(IMG_BYTES.values())
+                        page_height = page.evaluate("document.documentElement.scrollHeight")
                         if pg in APP_PAGES:
                             total = explore(page, pg, total, extra)
                         elif pg in PUBLIC_PAGES:
@@ -743,8 +765,18 @@ def run(args):
                     total["soft"] = []
                     if lang == "hi":
                         for run_text in total["ascii_runs"]:
-                            if not all(w.lower() in ASCII_OK for w in re.findall(r"[A-Za-z]+", run_text)):
-                                total["soft"].append(run_text)
+                            words = [w.lower() for w in re.findall(r"[A-Za-z]+", run_text)]
+                            if all(w in ASCII_OK for w in words):
+                                continue
+                            if any(w in FIXTURE_MARKERS for w in words):
+                                continue  # farmer-entered text: the mock data marks it "test" or "fake"
+                            total["soft"].append(run_text)
+                        # hard gate: no known untranslated UI string on a Hindi page
+                        content += [f"untranslated on Hindi page: {x!r}" for x in total["soft"]]
+                    if pg == "index" and vp == "360x800" and page_height is not None:
+                        total["page_h"] = page_height
+                        if page_height > INDEX_MAX_HEIGHT:
+                            content.append(f"index is {page_height}px tall at 360x800 (limit {INDEX_MAX_HEIGHT})")
                     content += extra
                     total.pop("texts", None)
                     results.append(dict(page=pg, viewport=vp, lang=lang, scenario=args.scenario, errors=errs,

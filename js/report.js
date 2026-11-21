@@ -13,7 +13,7 @@
 import { routeGuard } from "./auth.js";
 import { apiFetch } from "./api.js";
 import { applyI18n, escapeHtml, getLang, initPage, renderLoadError, t } from "./dom.js";
-import { activityTypeLabel } from "./api-text.js";
+import { activityTypeLabel, translateApiText, unitLabel } from "./api-text.js";
 import { barRevenueCost, donutCosts } from "./charts.js";
 import { formatDate, formatNumber } from "./translator.js";
 
@@ -73,7 +73,7 @@ function renderCharts(r, byType) {
 
 function renderReport(r) {
   // Crop header
-  cropEl.textContent = t("report.title", { crop: r.crop });
+  cropEl.textContent = t("report.title", { crop: translateApiText(r.crop, getLang()) });
   metaEl.textContent = t("report.meta", { plants: formatNumber(r.plant_count), date: formatDate(r.sowing_date) });
 
   // Incomplete stage warning
@@ -82,7 +82,7 @@ function renderReport(r) {
     incompleteWarnEl.classList.remove("hidden");
     for (const label of r.stages_with_no_activity) {
       const li = document.createElement("li");
-      li.textContent = t("report.incomplete.item", { stage: label });
+      li.textContent = t("report.incomplete.item", { stage: translateApiText(label, getLang()) });
       incompleteListEl.appendChild(li);
     }
   } else {
@@ -120,7 +120,7 @@ function renderReport(r) {
   } else {
     fsBepEl.textContent = "—";
     // break_even_note is written for farmers by the backend
-    fsBepNoteEl.textContent = r.break_even_note || "";
+    fsBepNoteEl.textContent = translateApiText(r.break_even_note || "", getLang());
   }
 
   // ── Cost breakdown ──────────────────────────────────────────────────────
@@ -141,7 +141,7 @@ function renderReport(r) {
       const row = document.createElement("div");
       row.className = "flex items-center justify-between gap-3 px-4 py-3";
       row.innerHTML = `
-        <span class="text-base text-gray-800 break-words">${escapeHtml(type)}</span>
+        <span class="text-base text-gray-800 break-words">${escapeHtml(activityTypeLabel(type, getLang()))}</span>
         <span class="text-base font-semibold text-brand-dark">${escapeHtml(fmt(byType[type]))}</span>
       `;
       costBreakdownEl.appendChild(row);
@@ -169,9 +169,9 @@ function renderReport(r) {
       card.className = "bg-white rounded-xl border border-gray-200 px-4 py-3 flex items-start justify-between gap-3";
       card.innerHTML = `
         <div class="flex flex-col gap-0.5 flex-1 min-w-0">
-          <p class="text-base font-medium text-brand-dark break-words">${escapeHtml(a.activity_type)}</p>
+          <p class="text-base font-medium text-brand-dark break-words">${escapeHtml(activityTypeLabel(a.activity_type, getLang()))}</p>
           <p class="text-sm text-gray-600">${escapeHtml(formatDate(a.date))}</p>
-          ${a.quantity ? `<p class="text-sm text-gray-600">${escapeHtml(formatNumber(a.quantity))} ${escapeHtml(a.unit || "")}</p>` : ""}
+          ${a.quantity ? `<p class="text-sm text-gray-600">${escapeHtml(formatNumber(a.quantity))} ${escapeHtml(unitLabel(a.unit || "", getLang()))}</p>` : ""}
           ${a.notes ? `<p class="text-sm text-gray-600 italic break-words">${escapeHtml(a.notes)}</p>` : ""}
         </div>
         <div class="text-right flex-shrink-0">

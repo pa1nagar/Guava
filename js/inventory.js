@@ -19,7 +19,7 @@ import { apiFetch } from "./api.js";
 import {
   applyI18n, errorMessage, escapeHtml, getLang, initPage, renderLoadError, setBusy, t,
 } from "./dom.js";
-import { activityTypeLabel } from "./api-text.js";
+import { activityTypeLabel, unitLabel } from "./api-text.js";
 import { formatDate, formatNumber } from "./translator.js";
 
 // An item "expires soon" when its expiry date is within this many days.
@@ -129,7 +129,7 @@ function renderInventory() {
           <div class="flex flex-wrap gap-x-4 gap-y-0.5 text-sm text-gray-600 mt-1.5">
             <span class="font-semibold text-emerald-800">
               📦 ${item.quantity_on_hand != null
-                ? escapeHtml(formatNumber(item.quantity_on_hand) + " " + (item.unit || ""))
+                ? escapeHtml(formatNumber(item.quantity_on_hand) + " " + unitLabel(item.unit || "", getLang()))
                 : "—"}
             </span>
             ${item.purchase_price != null

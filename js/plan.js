@@ -12,12 +12,13 @@ import { initAiChat } from "./ai-chat.js";
 import { icon } from "./icons.js";
 import { getMandiHistory, loadMandiCard, mandiEsc, mandiLang, mt } from "./mandi.js";
 import { applyI18n, errorMessage, escapeHtml as esc, getLang, initPage, renderLoadError, setBusy, t } from "./dom.js";
-import { activityTypeLabel, translateApiText } from "./api-text.js";
+import { activityTypeLabel, translateApiText, unitLabel } from "./api-text.js";
 import { nextDueTask, renderTaskRing } from "./task-ring.js";
 
 // Hindi for the fixed English sentences the API sends (falls back to the English text).
 const tx = (s) => translateApiText(s, getLang());
 const typeLabel = (s) => activityTypeLabel(s, getLang());
+const unitTx = (s) => unitLabel(s, getLang());
 // Stage name from the stable stage id, so it follows the language. Falls back to the API label.
 function stageName(stageId, apiLabel) {
   if (!stageId) return tx(apiLabel || "—");
@@ -208,7 +209,7 @@ function renderHeader(profile, plan, displayName) {
     ? t("plan.farmOf", { name: displayName.split(" ")[0] })
     : t("plan.farmOf", { name: district || t("plan.my") });
   hdrFarmName.textContent = farmLabel;
-  hdrCropPill.textContent = `🌿 ${crop.charAt(0).toUpperCase() + crop.slice(1)}`;
+  hdrCropPill.textContent = `🌿 ${tx(crop.charAt(0).toUpperCase() + crop.slice(1))}`;
   hdrLocation.textContent = [district, profile.state].filter(Boolean).join(", ");
 
   hdrStageText.textContent = t("plan.monthStage", { n: plan.months_elapsed, stage: stageName(plan.stage_id, plan.stage_label) });
@@ -350,7 +351,7 @@ async function loadHomeTasks() {
     const tasks = await res.json();
     renderTaskRing(document.getElementById("task-ring"), tasks);
     const next = nextDueTask(tasks);
-    setText("home-task", next ? next.title : t("dash.nextTask.none"));
+    setText("home-task", next ? tx(next.title) : t("dash.nextTask.none"));
     setText("home-task-meta", next?.due_date ? t("dash.nextTask.due", { date: fmtDate(String(next.due_date).slice(0, 10)) }) : "");
   } catch { /* leaves the placeholder dash */ }
 }
@@ -400,8 +401,8 @@ function renderGaps(gaps) {
           ${esc(tx(g.message || `You may be behind on ${String(g.activity_type || "").toLowerCase()} for this stage.`))}
         </p>
         <p class="text-sm text-amber-800 mt-0.5">
-          ${esc(t("plan.gap.expected"))} <strong>${esc(g.expected)} ${esc(g.unit)}</strong> ·
-          ${esc(t("plan.gap.logged"))} <strong>${esc(g.actual)} ${esc(g.unit)}</strong>
+          ${esc(t("plan.gap.expected"))} <strong>${esc(g.expected)} ${esc(unitTx(g.unit))}</strong> ·
+          ${esc(t("plan.gap.logged"))} <strong>${esc(g.actual)} ${esc(unitTx(g.unit))}</strong>
         </p>
         <button type="button" onclick="window.switchPanel('panel-log')"
           class="mt-2 text-sm font-semibold text-amber-900 underline">
@@ -417,7 +418,7 @@ function renderGaps(gaps) {
 
 function renderSummary(plan) {
   summaryHeading.textContent = t("plan.monthStage", { n: plan.months_elapsed, stage: stageName(plan.stage_id, plan.stage_label) });
-  overviewSum.textContent = plan.summary || "";
+  overviewSum.textContent = tx(plan.summary || "");
 
   // Headline: current stage and the first task of the week
   const stageEl = document.getElementById("headline-stage");
@@ -425,7 +426,7 @@ function renderSummary(plan) {
   if (stageEl) stageEl.textContent = stageName(plan.stage_id, plan.stage_label);
   if (nextEl) {
     const first = (plan.tasks || [])[0];
-    nextEl.textContent = first ? first.title : t("plan.headline.noTask");
+    nextEl.textContent = first ? tx(first.title) : t("plan.headline.noTask");
   }
 }
 
@@ -518,13 +519,13 @@ function renderTasks(plan) {
           <span class="text-lg">${icon}</span>
           <span class="text-sm font-bold text-gray-600 uppercase tracking-wider">${esc(label)}</span>
         </div>
-        <p class="text-base font-semibold text-brand-dark mb-1 break-words">${esc(task.title)}</p>
+        <p class="text-base font-semibold text-brand-dark mb-1 break-words">${esc(tx(task.title))}</p>
         ${task.quantity != null ? `
           <div class="inline-flex items-center gap-1.5 bg-gray-50 rounded-lg px-2.5 py-1 mb-2">
             <span class="text-base font-extrabold text-brand-dark">${esc(task.quantity)}</span>
-            <span class="text-sm text-brand-muted">${esc(task.unit || "")}</span>
+            <span class="text-sm text-brand-muted">${esc(unitTx(task.unit || ""))}</span>
           </div>` : ""}
-        <p class="text-sm text-gray-700 leading-relaxed break-words">${esc(task.description)}</p>
+        <p class="text-sm text-gray-700 leading-relaxed break-words">${esc(tx(task.description))}</p>
       `;
       taskList.appendChild(card);
     }
@@ -626,7 +627,7 @@ function preFillFromPlan(plan) {
   if (fertTask?.quantity != null) {
     actQtyEl.value  = fertTask.quantity;
     actUnitEl.value = fertTask.unit?.includes("kg") ? "kg" : "kg";
-    qtyHintEl.textContent = t("plan.refQty", { q: fertTask.quantity, u: fertTask.unit || "" });
+    qtyHintEl.textContent = t("plan.refQty", { q: fertTask.quantity, u: unitTx(fertTask.unit || "") });
   }
   selectType("Fertilizer");
 }
@@ -659,7 +660,7 @@ async function loadRecentActivities() {
       el.innerHTML = `
         <div class="min-w-0">
           <p class="text-sm font-semibold text-brand-dark break-words">${esc(typeLabel(a.activity_type))}</p>
-          <p class="text-sm text-gray-600">${esc(fmtDate(a.logged_date))} · ${esc(a.quantity)} ${esc(a.unit || "")}</p>
+          <p class="text-sm text-gray-600">${esc(fmtDate(a.logged_date))} · ${esc(a.quantity)} ${esc(unitTx(a.unit || ""))}</p>
         </div>
         <p class="text-sm font-semibold text-brand-dark flex-shrink-0">${esc(fmtINRFull(a.cost))}</p>
       `;
@@ -808,7 +809,7 @@ function renderVendors(cards) {
     const digits = String(c.phone || "").replace(/\D/g, "");
     card.innerHTML = `
       <p class="text-sm font-bold text-brand-dark break-words">${esc(c.vendor_name)} — ${esc(c.district)}</p>
-      <p class="text-sm text-gray-600">${esc(t("plan.vendor.for"))}: <strong>${esc(c.input_needed)}</strong> (${esc(c.quantity_needed)} ${esc(c.unit)})</p>
+      <p class="text-sm text-gray-600">${esc(t("plan.vendor.for"))}: <strong>${esc(c.input_needed)}</strong> (${esc(c.quantity_needed)} ${esc(unitTx(c.unit))})</p>
       <div class="flex gap-2">
         ${hasCall && digits ? `<a href="tel:${digits}" class="flex-1 min-h-[44px] flex items-center justify-center bg-brand-primary text-white text-sm font-bold rounded-xl">📞 ${esc(t("plan.vendor.call"))}</a>` : ""}
         ${hasWA && digits ? `<a href="https://wa.me/${digits}" target="_blank" rel="noopener" class="flex-1 min-h-[44px] flex items-center justify-center bg-green-700 text-white text-sm font-bold rounded-xl">💬 WhatsApp</a>` : ""}
@@ -1225,7 +1226,7 @@ function renderFutureStages(stages) {
         <p class="text-base font-bold text-brand-dark break-words">${esc(stageName(s.stage_id, s.label))}</p>
         <span class="ml-auto text-sm text-gray-600">${esc(t("plan.future.starts", { month: s.month_start }))}</span>
       </div>
-      <p class="text-sm text-gray-700 mb-3 leading-relaxed break-words">${esc(s.description)}</p>
+      <p class="text-sm text-gray-700 mb-3 leading-relaxed break-words">${esc(tx(s.description))}</p>
       <div class="grid grid-cols-1 min-[400px]:grid-cols-2 gap-2 text-sm">
         ${s.fertilizer_name ? `
           <div class="bg-green-50 rounded-lg px-3 py-2">

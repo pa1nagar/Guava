@@ -419,11 +419,11 @@
             <select id="act-unit"
               class="w-full h-11 rounded-xl border border-gray-300 bg-white px-3 text-sm
                      focus:outline-none focus:border-brand-secondary">
-              <option value="kg">kg</option>
-              <option value="litres">litres</option>
-              <option value="bags">bags</option>
-              <option value="hours">hours</option>
-              <option value="units">units</option>
+              <option value="kg" data-i18n="unit.kg">kg</option>
+              <option value="litres" data-i18n="unit.litres">litres</option>
+              <option value="bags" data-i18n="unit.bags">bags</option>
+              <option value="hours" data-i18n="unit.hours">hours</option>
+              <option value="units" data-i18n="unit.units">units</option>
             </select>
           </div>
         </div>
@@ -513,7 +513,7 @@
           <span data-i18n="plan.sim.title">Revenue calculator</span>
           <span class="text-red-500 text-xs ml-1" data-i18n="plan.sim.scenario">Scenario only</span>
         </h3>
-        <p class="text-sm text-gray-600 mb-4">Adjust price and yield to explore potential revenue for <span id="sim-plant-count">—</span> plants.</p>
+        <p class="text-sm text-gray-600 mb-4"><span data-i18n="plan.sim.hint.pre">Adjust price and yield to explore potential revenue for</span> <span id="sim-plant-count">—</span> <span data-i18n="plan.sim.hint.post">plants.</span></p>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
             <label for="sim-price" class="text-sm font-semibold text-gray-700 block mb-1">
@@ -541,7 +541,7 @@
             <p class="text-sm text-gray-600" data-i18n="plan.sim.afterCosts">after current costs</p>
           </div>
         </div>
-        <p class="text-sm text-red-500 mt-3">
+        <p class="text-sm text-red-500 mt-3" data-i18n="simulator.disclaimer">
           🔴 Scenario only — verify with actual buyer prices before harvest.
         </p>
       </div>
@@ -595,7 +595,7 @@
           <div class="flex items-start justify-between gap-3 flex-wrap mb-1">
             <h2 class="text-xl font-bold text-emerald-900">
               <span class="sf-icon text-emerald-600 mr-1" data-icon="chart" aria-hidden="true"></span>
-              <span id="mandi-title">Guava Mandi Prices</span>
+              <span id="mandi-title" data-i18n="mandi.title">Guava Mandi Prices</span>
             </h2>
             <div class="text-xs text-gray-600" role="group" aria-label="Language">
               <button type="button" id="mandi-lang-en" onclick="setMandiLang('en')" class="px-2 py-1 rounded-lg border border-gray-200 bg-white">English</button>
@@ -675,9 +675,9 @@
           <h2 class="text-xl font-bold text-emerald-900">
             <span class="sf-icon text-emerald-600 mr-1" data-icon="robot" aria-hidden="true"></span> <span data-i18n="plan.ai.title">Ask Smart Farmer AI</span>
           </h2>
-          <p class="text-sm text-gray-600 mt-1 max-w-xl">
-            The AI assistant answers <strong>low-risk questions</strong> about your farm records,
-            crop stages, and general agronomy. It <strong>cannot</strong> provide pesticide doses,
+          <p class="text-sm text-gray-600 mt-1 max-w-xl" data-i18n="plan.ai.note">
+            The AI assistant answers low-risk questions about your farm records,
+            crop stages, and general agronomy. It cannot provide pesticide doses,
             tank mix recommendations, or chemical treatments — please consult your agronomist
             or local KVK for those.
           </p>

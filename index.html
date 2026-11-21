@@ -4,603 +4,91 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <link rel="preconnect" href="https://guava-8wc7.onrender.com" crossorigin>
-  <title>Smart Farmer — Farm Management &amp; Decision Support Platform</title>
-  <meta name="description" content="Smart Farmer is a farm management and decision-support platform for Indian farmers. Track activities, manage plots, run calculators, and get trusted agronomy guidance.">
-
-
-
-
-  <!-- Project stylesheet -->
-  <link rel="stylesheet" href="css/tailwind.css">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="preload" as="image" href="images/hero-480.webp" type="image/webp" fetchpriority="high">
+  <title>Smart Farmer — Guava prices, crop plan and farm records</title>
+  <meta name="description" content="Smart Farmer for Indian guava farmers: latest mandi price from Agmarknet, a monthly crop plan and simple farm records. Hindi and English.">
+  <link rel="stylesheet" href="css/topbar.css">
+  <link rel="stylesheet" href="css/home.css">
 </head>
-<body class="min-h-screen bg-brand-bg">
+<body>
 
-  <!-- ── Fixed language toggle bar ─────────────────────────────────────── -->
-  <div id="lang-bar" class="lang-bar">
-    <span class="lang-bar__label">🌐 <span data-i18n="home.lang.label">Language</span>:</span>
-    <button type="button" id="lang-en" class="lang-pill lang-active" lang="en" onclick="setLang('en')">English</button>
-    <button type="button" id="lang-hi" class="lang-pill" lang="hi" onclick="setLang('hi')">हिन्दी</button>
-  </div>
-
-  <!-- ── Sticky header ────────────────────────────────────────────────── -->
-  <header class="bg-brand-primary text-white sticky top-0 z-50 shadow-lg">
-    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
-      <div class="flex items-center gap-3">
-        <span class="text-2xl">🌾</span>
-        <div>
-          <h1 class="text-lg font-bold leading-tight">Smart Farmer</h1>
-          <p class="text-sm text-green-200 mt-0.5"><span data-i18n="home.header.tagline">Farm management &amp; decision support for Indian farmers</span></p>
-        </div>
-      </div>
-      <a href="login.html"
-         class="text-sm bg-brand-accentdark text-white font-semibold px-4 py-2 min-h-[44px] rounded-lg
-                hover:opacity-90 transition whitespace-nowrap flex items-center gap-2">
-        <span class="sf-icon" data-icon="login" aria-hidden="true"></span>
-        <span data-i18n="home.header.signin">Sign In</span>
-      </a>
+  <header class="sf-topbar">
+    <a class="sf-topbar__brand" href="index.html" aria-label="Smart Farmer">
+      <span class="sf-topbar__logo sf-icon" data-icon="leaf" aria-hidden="true"></span>
+      <span>Smart Farmer</span>
+    </a>
+    <div class="sf-topbar__lang" role="group" data-i18n-aria-label="home.lang.label" aria-label="Language">
+      <button type="button" id="lang-en" class="lang-pill lang-active" lang="en" aria-pressed="true">EN</button>
+      <button type="button" id="lang-hi" class="lang-pill" lang="hi" aria-pressed="false">हिं</button>
     </div>
+    <a class="sf-topbar__cta" href="login.html" data-i18n="home.header.signin">Sign in</a>
   </header>
 
   <main>
-    <!-- ════════════════════════════════════════════════════════════════ -->
-    <!-- Hero Section                                                    -->
-    <!-- ════════════════════════════════════════════════════════════════ -->
-    <section class="bg-gradient-to-b from-brand-primary to-brand-secondary text-white py-16 px-4">
-      <div class="max-w-4xl mx-auto text-center">
-        <h2 class="text-3xl sm:text-5xl font-bold mb-4">
-          <span data-i18n="home.hero.title">Smart Farmer</span>
-        </h2>
-        <p class="text-lg sm:text-xl text-green-100 mb-8 max-w-2xl mx-auto">
-          <span data-i18n="home.hero.subtitle">A farm management and decision-support platform built for Indian farmers. Track your activities, manage your plots, use transparent calculators, and get guidance you can trust.</span>
-        </p>
-        <figure class="sf-hero-photo"><picture><source type="image/webp" srcset="images/hero-480.webp 480w, images/hero-960.webp 960w" sizes="(min-width: 640px) 448px, 100vw"><img src="images/hero-480.jpg" width="480" height="360" alt="" data-i18n-alt="img.hero.alt" fetchpriority="high" decoding="async"></picture></figure>
-        <!-- Today's guava mandi price (live, from the public API; filled in by js/mandi.js) -->
-        <div id="mandi-hero" class="price-hero max-w-md mx-auto mb-8" aria-live="polite"></div>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="login.html"
-             class="bg-brand-accentdark text-white font-semibold px-6 py-3 rounded-lg
-                    hover:opacity-90 transition text-lg flex items-center justify-center gap-2">
-            <span class="sf-icon" data-icon="tractor" aria-hidden="true"></span>
-            <span data-i18n="home.hero.cta.getStarted">Get Started</span>
-          </a>
-          <a href="#product"
-             class="bg-white text-brand-primary font-semibold px-6 py-3 rounded-lg
-                    hover:bg-green-50 transition text-lg flex items-center justify-center gap-2">
-            <span class="sf-icon" data-icon="info" aria-hidden="true"></span>
-            <span data-i18n="home.hero.cta.learnMore">Learn More</span>
-          </a>
+    <!-- Hero: real guava photo, one line, one big button -->
+    <section class="h-hero">
+      <div class="h-hero__img"><picture><source type="image/webp" srcset="images/hero-480.webp"><img src="images/hero-480.jpg" width="480" height="360" alt="" data-i18n-alt="img.hero.alt" fetchpriority="high" decoding="async"></picture></div>
+      <div class="h-hero__body">
+        <h1 data-i18n="home.hero.title">Guava farming made simple</h1>
+        <p data-i18n="home.hero.sub">Today's mandi price, your crop plan and farm records, in one place.</p>
+        <a class="h-btn" href="login.html"><span class="sf-icon" data-icon="login" aria-hidden="true"></span><span data-i18n="home.hero.cta">Sign in to get started</span></a>
+        <p class="h-hero__free" data-i18n="home.hero.free">Free. Sign in with Google.</p>
+      </div>
+    </section>
+
+    <!-- Latest guava price + mandi bars (real data from Agmarknet, with date and source) -->
+    <section class="h-sec" id="prices">
+      <div class="h-wrap">
+        <div id="mandi-hero" class="price-hero" aria-live="polite" data-state="loading"></div>
+        <div id="mandi-chart" class="h-card h-chart"></div>
+        <details id="mandi-all" class="h-card h-more hidden">
+          <summary data-i18n="home.all.summary">All mandis: modal, min and max</summary>
+          <div data-list></div>
+        </details>
+      </div>
+    </section>
+
+    <!-- Benefits -->
+    <section class="h-sec">
+      <div class="h-wrap">
+        <h2 class="h-h2" data-i18n="home.benefits.title">What you can do</h2>
+        <div class="h-tiles">
+          <a class="h-tile" href="login.html"><span class="h-tile__icon sf-icon" data-icon="market" aria-hidden="true"></span><h3 data-i18n="home.benefit.prices.t">Mandi prices</h3><p data-i18n="home.benefit.prices.d">Daily guava rates, with date and source.</p></a>
+          <a class="h-tile" href="login.html"><span class="h-tile__icon sf-icon" data-icon="calendar" aria-hidden="true"></span><h3 data-i18n="home.benefit.plan.t">Crop plan</h3><p data-i18n="home.benefit.plan.d">What to do on your farm this month.</p></a>
+          <a class="h-tile" href="login.html"><span class="h-tile__icon sf-icon" data-icon="receipt" aria-hidden="true"></span><h3 data-i18n="home.benefit.records.t">Farm records</h3><p data-i18n="home.benefit.records.d">Write down spending and harvest.</p></a>
+          <a class="h-tile" href="login.html"><span class="h-tile__icon sf-icon" data-icon="robot" aria-hidden="true"></span><h3 data-i18n="home.benefit.ai.t">Ask AI</h3><p data-i18n="home.benefit.ai.d">Simple answers about your farm records.</p></a>
         </div>
       </div>
     </section>
 
-    <!-- ════════════════════════════════════════════════════════════════ -->
-    <!-- Guava mandi prices (public view; real data: Agmarknet)          -->
-    <!-- ════════════════════════════════════════════════════════════════ -->
-    <section id="mandi-prices" class="py-12 px-4 bg-white">
-      <div class="max-w-4xl mx-auto">
-        <div class="sf-banner rounded-2xl mb-4"><picture><source type="image/webp" srcset="images/market-480.webp 480w, images/market-960.webp 960w" sizes="(min-width: 896px) 896px, 100vw"><img src="images/market-480.jpg" width="480" height="360" alt="" data-i18n-alt="img.market.alt" loading="lazy" decoding="async"></picture></div>
-        <div class="flex items-start justify-between gap-3 flex-wrap mb-1">
-          <h2 class="text-2xl sm:text-3xl font-bold text-brand-primary">
-            <span class="sf-icon text-brand-secondary mr-1" data-icon="chart" aria-hidden="true"></span>
-            <span id="mandi-title">Guava Mandi Prices</span>
-          </h2>
-        </div>
-        <p id="mandi-subtitle" class="text-sm text-gray-600 mb-4"></p>
-        <div id="mandi-board" class="mb-2"></div>
+    <!-- Trust strip -->
+    <section class="h-trust">
+      <picture><source type="image/webp" srcset="images/farmer-480.webp"><img class="h-trust__photo" src="images/farmer-480.jpg" width="480" height="360" alt="" data-i18n-alt="img.farmer.alt" loading="lazy" decoding="async"></picture>
+      <div class="h-wrap">
+        <h2 class="h-h2" style="margin-top:16px" data-i18n="home.trust.title">Why you can trust it</h2>
+        <ul>
+          <li><span class="sf-icon" data-icon="chart" aria-hidden="true"></span><p data-i18n="home.trust.1">Prices come from Agmarknet (data.gov.in), shown with their date.</p></li>
+          <li><span class="sf-icon" data-icon="leaf" aria-hidden="true"></span><p data-i18n="home.trust.2">Crop advice follows published guava research. Estimates are labelled as estimates.</p></li>
+          <li><span class="sf-icon" data-icon="shield" aria-hidden="true"></span><p data-i18n="home.trust.3">The AI never gives chemical or dose advice. For sprays, ask your local KVK.</p></li>
+        </ul>
+        <a class="h-trust__link" href="about.html#ai" data-i18n="home.trust.more">How we use AI and our sources</a>
       </div>
     </section>
-
-    <!-- ════════════════════════════════════════════════════════════════ -->
-    <!-- Product Explanation Section                                     -->
-    <!-- ════════════════════════════════════════════════════════════════ -->
-    <section id="variety" class="py-12 px-4">
-      <div class="max-w-4xl mx-auto">
-        <div class="sf-card flex flex-col sm:flex-row gap-4 items-center">
-          <div class="w-full sm:w-56 flex-none"><picture><source type="image/webp" srcset="images/guava-pink-480.webp 480w, images/guava-pink-960.webp 960w" sizes="(min-width: 640px) 224px, 100vw"><img src="images/guava-pink-480.jpg" width="480" height="480" alt="" data-i18n-alt="img.pink.alt" loading="lazy" decoding="async" class="sf-photo"></picture>
-            <span class="sf-indicative" data-i18n="img.indicative">Indicative photo</span>
-          </div>
-          <div>
-            <h2 class="sf-card__title"><span class="sf-icon text-brand-leaf mr-1" data-icon="leaf" aria-hidden="true"></span><span data-i18n="variety.title">Taiwan Pink guava</span></h2>
-            <p class="mt-2 text-brand-muted" data-i18n="variety.desc">A pink-fleshed guava variety.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="product" class="py-16 px-4">
-      <div class="max-w-7xl mx-auto">
-        <h2 class="text-2xl sm:text-3xl font-bold text-brand-primary mb-2 text-center">
-          <span data-i18n="home.product.heading">What Smart Farmer Does</span>
-        </h2>
-        <p class="text-gray-600 text-center mb-10 max-w-2xl mx-auto">
-          <span data-i18n="home.product.intro">Five core capabilities to help you manage your farm with confidence.</span>
-        </p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-          <!-- Farm Profile -->
-          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <div class="text-3xl mb-3">🏡</div>
-            <h3 class="text-lg font-bold text-brand-primary mb-2">
-              <span data-i18n="home.product.farmProfile.title">Farm Profile</span>
-            </h3>
-            <p class="text-sm text-gray-600">
-              <span data-i18n="home.product.farmProfile.desc">Create and manage multiple farms and plots. Record crop, variety, planting date, spacing, and plant count for each plot — no hard-coded defaults.</span>
-            </p>
-          </div>
-
-          <!-- Activity History -->
-          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <div class="text-3xl mb-3">📋</div>
-            <h3 class="text-lg font-bold text-brand-primary mb-2">
-              <span data-i18n="home.product.activityHistory.title">Activity History</span>
-            </h3>
-            <p class="text-sm text-gray-600">
-              <span data-i18n="home.product.activityHistory.desc">Log every irrigation, fertilisation, scouting, and harvest operation. Your full history is preserved with an audit trail, so nothing is lost.</span>
-            </p>
-          </div>
-
-          <!-- Calculators -->
-          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <div class="text-3xl mb-3">🧮</div>
-            <h3 class="text-lg font-bold text-brand-primary mb-2">
-              <span data-i18n="home.product.calculators.title">Transparent Calculators</span>
-            </h3>
-            <p class="text-sm text-gray-600">
-              <span data-i18n="home.product.calculators.desc">Irrigation, nutrient, and procurement calculators that show every input and formula. No black boxes — you can verify every result by hand.</span>
-            </p>
-          </div>
-
-          <!-- Trusted Knowledge -->
-          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <div class="text-3xl mb-3">📚</div>
-            <h3 class="text-lg font-bold text-brand-primary mb-2">
-              <span data-i18n="home.product.trustedKnowledge.title">Trusted Knowledge</span>
-            </h3>
-            <p class="text-sm text-gray-600">
-              <span data-i18n="home.product.trustedKnowledge.desc">Every agronomy recommendation is sourced, reviewed, and labelled with its evidence status. Unverified content is never shown as an actionable instruction.</span>
-            </p>
-          </div>
-
-          <!-- AI Assistance -->
-          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <div class="text-3xl mb-3">🤖</div>
-            <h3 class="text-lg font-bold text-brand-primary mb-2">
-              <span data-i18n="home.product.aiAssistance.title">AI Assistance</span>
-            </h3>
-            <p class="text-sm text-gray-600">
-              <span data-i18n="home.product.aiAssistance.desc">Ask questions about your farm records and get plain-language explanations. The AI assistant is scoped to low-risk questions only and never gives chemical recommendations.</span>
-            </p>
-          </div>
-
-          <!-- Financial Summary -->
-          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <div class="text-3xl mb-3">💰</div>
-            <h3 class="text-lg font-bold text-brand-primary mb-2">
-              <span data-i18n="home.product.financials.title">Financial Summary</span>
-            </h3>
-            <p class="text-sm text-gray-600">
-              <span data-i18n="home.product.financials.desc">Track expenses, record harvests, and see your profit or loss clearly. Scenarios are always labelled distinctly from actuals — no fabricated projections.</span>
-            </p>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ════════════════════════════════════════════════════════════════ -->
-    <!-- Capability Cards Section                                        -->
-    <!-- ════════════════════════════════════════════════════════════════ -->
-    <section class="bg-gray-50 py-16 px-4">
-      <div class="max-w-7xl mx-auto">
-        <h2 class="text-2xl sm:text-3xl font-bold text-brand-primary mb-2 text-center">
-          <span data-i18n="home.capabilities.heading">Platform Capabilities</span>
-        </h2>
-        <p class="text-gray-600 text-center mb-10 max-w-2xl mx-auto">
-          <span data-i18n="home.capabilities.intro">What you can use today, and what's coming next.</span>
-        </p>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-          <!-- Working: Authentication -->
-          <a href="login.html"
-             class="bg-white border border-emerald-200 rounded-xl p-6 shadow-sm hover:shadow-md transition block">
-            <div class="flex items-center justify-between mb-3">
-              <div class="text-3xl">🔐</div>
-              <span class="text-sm font-semibold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
-                <span data-i18n="home.capabilities.status.live">Live</span>
-              </span>
-            </div>
-            <h3 class="text-lg font-bold text-brand-primary mb-1">
-              <span data-i18n="home.capabilities.auth.title">Secure Authentication</span>
-            </h3>
-            <p class="text-sm text-gray-600 mb-2">
-              <span data-i18n="home.capabilities.auth.desc">Sign in with Google. Your farm data is private — no other user can access it.</span>
-            </p>
-            <span class="text-sm text-brand-secondary font-semibold flex items-center gap-1">
-              <span data-i18n="home.capabilities.tryIt">Try it</span>
-              <span class="sf-icon text-sm" data-icon="arrow" aria-hidden="true"></span>
-            </span>
-          </a>
-
-          <!-- Working: Farm Profile -->
-          <a href="login.html"
-             class="bg-white border border-emerald-200 rounded-xl p-6 shadow-sm hover:shadow-md transition block">
-            <div class="flex items-center justify-between mb-3">
-              <div class="text-3xl">🏡</div>
-              <span class="text-sm font-semibold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
-                <span data-i18n="home.capabilities.status.live">Live</span>
-              </span>
-            </div>
-            <h3 class="text-lg font-bold text-brand-primary mb-1">
-              <span data-i18n="home.capabilities.farmProfile.title">Farm &amp; Plot Management</span>
-            </h3>
-            <p class="text-sm text-gray-600 mb-2">
-              <span data-i18n="home.capabilities.farmProfile.desc">Create farms and plots with crop, variety, and planting date. Track plant counts with an audit trail.</span>
-            </p>
-            <span class="text-sm text-brand-secondary font-semibold flex items-center gap-1">
-              <span data-i18n="home.capabilities.tryIt">Try it</span>
-              <span class="sf-icon text-sm" data-icon="arrow" aria-hidden="true"></span>
-            </span>
-          </a>
-
-          <!-- Working: Activity Log -->
-          <a href="login.html"
-             class="bg-white border border-emerald-200 rounded-xl p-6 shadow-sm hover:shadow-md transition block">
-            <div class="flex items-center justify-between mb-3">
-              <div class="text-3xl">📋</div>
-              <span class="text-sm font-semibold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
-                <span data-i18n="home.capabilities.status.live">Live</span>
-              </span>
-            </div>
-            <h3 class="text-lg font-bold text-brand-primary mb-1">
-              <span data-i18n="home.capabilities.activityLog.title">Activity Log</span>
-            </h3>
-            <p class="text-sm text-gray-600 mb-2">
-              <span data-i18n="home.capabilities.activityLog.desc">Record irrigation, fertilisation, scouting, and other operations with date, quantity, cost, and notes.</span>
-            </p>
-            <span class="text-sm text-brand-secondary font-semibold flex items-center gap-1">
-              <span data-i18n="home.capabilities.tryIt">Try it</span>
-              <span class="sf-icon text-sm" data-icon="arrow" aria-hidden="true"></span>
-            </span>
-          </a>
-
-          <!-- Working: Financial Summary -->
-          <a href="login.html"
-             class="bg-white border border-emerald-200 rounded-xl p-6 shadow-sm hover:shadow-md transition block">
-            <div class="flex items-center justify-between mb-3">
-              <div class="text-3xl">💰</div>
-              <span class="text-sm font-semibold px-2 py-1 rounded-full bg-emerald-100 text-emerald-700">
-                <span data-i18n="home.capabilities.status.live">Live</span>
-              </span>
-            </div>
-            <h3 class="text-lg font-bold text-brand-primary mb-1">
-              <span data-i18n="home.capabilities.financials.title">Financial Summary</span>
-            </h3>
-            <p class="text-sm text-gray-600 mb-2">
-              <span data-i18n="home.capabilities.financials.desc">See total expenses, revenue from harvests, and break-even price per kg. Actuals and scenarios are always separated.</span>
-            </p>
-            <span class="text-sm text-brand-secondary font-semibold flex items-center gap-1">
-              <span data-i18n="home.capabilities.tryIt">Try it</span>
-              <span class="sf-icon text-sm" data-icon="arrow" aria-hidden="true"></span>
-            </span>
-          </a>
-
-          <!-- In Development: Task Calendar -->
-          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <div class="flex items-center justify-between mb-3">
-              <div class="text-3xl">📅</div>
-              <span class="text-sm font-semibold px-2 py-1 rounded-full bg-amber-100 text-amber-700">
-                <span data-i18n="home.capabilities.status.inDev">In Development</span>
-              </span>
-            </div>
-            <h3 class="text-lg font-bold text-gray-600 mb-1">
-              <span data-i18n="home.capabilities.tasks.title">Task Calendar</span>
-            </h3>
-            <p class="text-sm text-gray-600">
-              <span data-i18n="home.capabilities.tasks.desc">See tasks due today, create your own, and track completion. AI-suggested high-risk tasks require your confirmation before saving.</span>
-            </p>
-          </div>
-
-          <!-- In Development: Crop Health Observations -->
-          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <div class="flex items-center justify-between mb-3">
-              <div class="text-3xl">🌱</div>
-              <span class="text-sm font-semibold px-2 py-1 rounded-full bg-amber-100 text-amber-700">
-                <span data-i18n="home.capabilities.status.inDev">In Development</span>
-              </span>
-            </div>
-            <h3 class="text-lg font-bold text-gray-600 mb-1">
-              <span data-i18n="home.capabilities.observations.title">Crop Health Observations</span>
-            </h3>
-            <p class="text-sm text-gray-600">
-              <span data-i18n="home.capabilities.observations.desc">Record symptoms, upload photos, and get a structured log you can share with an expert. AI labels are always preliminary — not a diagnosis.</span>
-            </p>
-          </div>
-
-          <!-- In Development: Inventory -->
-          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <div class="flex items-center justify-between mb-3">
-              <div class="text-3xl">📦</div>
-              <span class="text-sm font-semibold px-2 py-1 rounded-full bg-amber-100 text-amber-700">
-                <span data-i18n="home.capabilities.status.inDev">In Development</span>
-              </span>
-            </div>
-            <h3 class="text-lg font-bold text-gray-600 mb-1">
-              <span data-i18n="home.capabilities.inventory.title">Inventory &amp; Inputs</span>
-            </h3>
-            <p class="text-sm text-gray-600">
-              <span data-i18n="home.capabilities.inventory.desc">Track products on hand, link consumption to activities, and keep a catalogue of what you have purchased.</span>
-            </p>
-          </div>
-
-          <!-- In Development: Calculators -->
-          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <div class="flex items-center justify-between mb-3">
-              <div class="text-3xl">🧮</div>
-              <span class="text-sm font-semibold px-2 py-1 rounded-full bg-amber-100 text-amber-700">
-                <span data-i18n="home.capabilities.status.inDev">In Development</span>
-              </span>
-            </div>
-            <h3 class="text-lg font-bold text-gray-600 mb-1">
-              <span data-i18n="home.capabilities.calculators.title">Deterministic Calculators</span>
-            </h3>
-            <p class="text-sm text-gray-600">
-              <span data-i18n="home.capabilities.calculators.desc">Irrigation runtime, nutrient product mass, and procurement scaling — all with visible formulas and no hidden defaults.</span>
-            </p>
-          </div>
-
-          <!-- In Development: Reports -->
-          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <div class="flex items-center justify-between mb-3">
-              <div class="text-3xl">📄</div>
-              <span class="text-sm font-semibold px-2 py-1 rounded-full bg-amber-100 text-amber-700">
-                <span data-i18n="home.capabilities.status.inDev">In Development</span>
-              </span>
-            </div>
-            <h3 class="text-lg font-bold text-gray-600 mb-1">
-              <span data-i18n="home.capabilities.reports.title">Reports &amp; Export</span>
-            </h3>
-            <p class="text-sm text-gray-600">
-              <span data-i18n="home.capabilities.reports.desc">Download your activity timeline and financial summary as CSV. Exports are audited and never include another farmer's data.</span>
-            </p>
-          </div>
-
-          <!-- In Development: AI Assistant -->
-          <div class="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-            <div class="flex items-center justify-between mb-3">
-              <div class="text-3xl">🤖</div>
-              <span class="text-sm font-semibold px-2 py-1 rounded-full bg-amber-100 text-amber-700">
-                <span data-i18n="home.capabilities.status.inDev">In Development</span>
-              </span>
-            </div>
-            <h3 class="text-lg font-bold text-gray-600 mb-1">
-              <span data-i18n="home.capabilities.ai.title">AI Assistant</span>
-            </h3>
-            <p class="text-sm text-gray-600">
-              <span data-i18n="home.capabilities.ai.desc">Ask questions about your farm data and get plain-language explanations. High-risk agronomy questions are always redirected to a qualified expert.</span>
-            </p>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ════════════════════════════════════════════════════════════════ -->
-    <!-- Guava Pilot Section                                             -->
-    <!-- ════════════════════════════════════════════════════════════════ -->
-    <section class="py-16 px-4">
-      <div class="max-w-4xl mx-auto">
-        <h2 class="text-2xl sm:text-3xl font-bold text-brand-primary mb-4 text-center">
-          <span data-i18n="home.pilot.heading">Guava Pilot Programme</span>
-        </h2>
-        <div class="bg-white border border-gray-200 rounded-xl p-6 sm:p-8 shadow-sm">
-          <p class="text-gray-600 mb-4">
-            <span data-i18n="home.pilot.p1">Smart Farmer began as a management tool for a single Taiwan Pink Guava orchard. That pilot helped us build and test the core activity logging, gap detection, and financial summary features.</span>
-          </p>
-          <p class="text-gray-600 mb-4">
-            <span data-i18n="home.pilot.p2">We are now expanding the platform to support any farmer with any crop. The guava pilot continues as a reference implementation — its lessons inform our design, but the platform does not assume a single orchard, a fixed tree count, or a specific location.</span>
-          </p>
-          <p class="text-gray-600">
-            <span data-i18n="home.pilot.p3">If you grow guava or any other crop and want to try Smart Farmer, we welcome you to join the pilot. Your feedback directly shapes what we build next.</span>
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ════════════════════════════════════════════════════════════════ -->
-    <!-- Trust / AI Explanation Section                                  -->
-    <!-- ════════════════════════════════════════════════════════════════ -->
-    <section class="bg-brand-primary text-white py-16 px-4">
-      <div class="max-w-4xl mx-auto">
-        <h2 class="text-2xl sm:text-3xl font-bold mb-4 text-center">
-          <span data-i18n="home.trust.heading">How We Use AI — and What It Will Not Do</span>
-        </h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8">
-
-          <div class="bg-emerald-900/40 rounded-xl p-6 border border-emerald-700/50">
-            <div class="text-2xl mb-3">✅</div>
-            <h3 class="text-lg font-bold text-green-100 mb-2">
-              <span data-i18n="home.trust.does.title">What AI Does</span>
-            </h3>
-            <ul class="space-y-2 text-sm text-green-100">
-              <li class="flex gap-2"><span class="sf-icon text-green-400 mt-1" data-icon="check" aria-hidden="true"></span><span data-i18n="home.trust.does.1">Explains your saved activities, tasks, and financial results in plain language</span></li>
-              <li class="flex gap-2"><span class="sf-icon text-green-400 mt-1" data-icon="check" aria-hidden="true"></span><span data-i18n="home.trust.does.2">Answers questions about your farm records using only your data</span></li>
-              <li class="flex gap-2"><span class="sf-icon text-green-400 mt-1" data-icon="check" aria-hidden="true"></span><span data-i18n="home.trust.does.3">Cites the source and date of any knowledge it references</span></li>
-            </ul>
-          </div>
-
-          <div class="bg-red-900/30 rounded-xl p-6 border border-red-700/50">
-            <div class="text-2xl mb-3">⛔</div>
-            <h3 class="text-lg font-bold text-red-100 mb-2">
-              <span data-i18n="home.trust.doesNot.title">What AI Will Not Do</span>
-            </h3>
-            <ul class="space-y-2 text-sm text-red-100">
-              <li class="flex gap-2"><span class="sf-icon text-red-400 mt-1" data-icon="x" aria-hidden="true"></span><span data-i18n="home.trust.doesNot.1">Recommend specific fertilizer doses, pesticide products, or tank mixtures</span></li>
-              <li class="flex gap-2"><span class="sf-icon text-red-400 mt-1" data-icon="x" aria-hidden="true"></span><span data-i18n="home.trust.doesNot.2">Diagnose crop diseases from photos</span></li>
-              <li class="flex gap-2"><span class="sf-icon text-red-400 mt-1" data-icon="x" aria-hidden="true"></span><span data-i18n="home.trust.doesNot.3">Access or reveal another farmer's data</span></li>
-              <li class="flex gap-2"><span class="sf-icon text-red-400 mt-1" data-icon="x" aria-hidden="true"></span><span data-i18n="home.trust.doesNot.4">Execute instructions found in uploaded documents</span></li>
-            </ul>
-          </div>
-
-        </div>
-        <p class="text-center text-green-200 text-sm mt-8 max-w-2xl mx-auto">
-          <span data-i18n="home.trust.note">High-risk agronomy questions are always redirected to your local KVK, agronomist, or product label. Smart Farmer never presents unverified content as an actionable instruction.</span>
-        </p>
-      </div>
-    </section>
-
-    <!-- ════════════════════════════════════════════════════════════════ -->
-    <!-- Contact / Join Pilot Form                                       -->
-    <!-- ════════════════════════════════════════════════════════════════ -->
-    <section id="contact" class="py-16 px-4">
-      <div class="max-w-2xl mx-auto">
-        <h2 class="text-2xl sm:text-3xl font-bold text-brand-primary mb-2 text-center">
-          <span data-i18n="home.contact.heading">Contact Us / Join the Pilot</span>
-        </h2>
-        <p class="text-gray-600 text-center mb-8">
-          <span data-i18n="home.contact.intro">Tell us about yourself and we'll get back to you. No spam — we only use your details to respond to your enquiry.</span>
-        </p>
-
-        <form id="contact-form" novalidate class="bg-white border border-gray-200 rounded-xl p-6 sm:p-8 shadow-sm space-y-5">
-
-          <!-- Name -->
-          <div>
-            <label for="contact-name" class="block text-sm font-semibold text-gray-700 mb-1">
-              <span data-i18n="home.contact.name.label">Your Name</span> <span class="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              id="contact-name"
-              name="name"
-              autocomplete="name"
-              maxlength="100"
-              required
-              class="w-full border border-gray-300 rounded-lg p-3 min-h-[44px] text-base focus:outline-none focus:ring-2 focus:ring-brand-secondary"
-              placeholder=""
-            >
-            <p class="text-sm text-gray-600 mt-1"><span data-i18n="home.contact.name.hint">Required, up to 100 characters</span></p>
-          </div>
-
-          <!-- Contact method: Email -->
-          <div>
-            <label for="contact-email" class="block text-sm font-semibold text-gray-700 mb-1">
-              <span data-i18n="home.contact.email.label">Email</span>
-            </label>
-            <input
-              type="email"
-              id="contact-email"
-              autocomplete="email"
-              inputmode="email"
-              name="email"
-              class="w-full border border-gray-300 rounded-lg p-3 min-h-[44px] text-base focus:outline-none focus:ring-2 focus:ring-brand-secondary"
-              placeholder="you@example.com"
-            >
-          </div>
-
-          <!-- Contact method: Phone -->
-          <div>
-            <label for="contact-phone" class="block text-sm font-semibold text-gray-700 mb-1">
-              <span data-i18n="home.contact.phone.label">Phone</span>
-            </label>
-            <input
-              type="tel"
-              id="contact-phone"
-              autocomplete="tel"
-              name="phone"
-              class="w-full border border-gray-300 rounded-lg p-3 min-h-[44px] text-base focus:outline-none focus:ring-2 focus:ring-brand-secondary"
-              placeholder="+91 XXXXX XXXXX"
-            >
-            <p class="text-sm text-gray-600 mt-1"><span data-i18n="home.contact.method.hint">Provide at least one contact method (email or phone)</span></p>
-          </div>
-
-          <!-- Message (optional) -->
-          <div>
-            <label for="contact-message" class="block text-sm font-semibold text-gray-700 mb-1">
-              <span data-i18n="home.contact.message.label">Message (optional)</span>
-            </label>
-            <textarea
-              id="contact-message"
-              name="message"
-              rows="3"
-              class="w-full border border-gray-300 rounded-lg p-3 min-h-[44px] text-base focus:outline-none focus:ring-2 focus:ring-brand-secondary resize-y"
-            ></textarea>
-          </div>
-
-          <!-- Consent checkbox: the whole label is the tap target -->
-          <div>
-            <label for="contact-consent" class="tap-label text-sm text-gray-700">
-              <input
-                type="checkbox"
-                id="contact-consent"
-                name="consent"
-                required
-                class="accent-brand-secondary cursor-pointer"
-              >
-              <span><span data-i18n="home.contact.consent.label">I consent to Smart Farmer storing my name and contact details to respond to this enquiry. I can request deletion at any time.</span> <span class="text-red-500">*</span></span>
-            </label>
-          </div>
-          <!-- Submit button -->
-          <button
-            type="submit"
-            id="contact-submit"
-            class="w-full bg-brand-accentdark text-white font-semibold px-6 py-3 rounded-lg
-                   hover:opacity-90 transition text-lg flex items-center justify-center gap-2"
-          >
-            <span data-i18n="home.contact.submit">Submit</span>
-            <span class="sf-icon" data-icon="send" aria-hidden="true"></span>
-          </button>
-
-          <!-- Success message (hidden until needed) -->
-          <div id="contact-success" class="hidden bg-emerald-50 border border-emerald-300 rounded-lg p-4 text-center">
-            <span class="sf-icon text-emerald-600 text-xl" data-icon="checkCircle" aria-hidden="true"></span>
-            <p class="text-emerald-800 font-semibold mt-2">
-              <span data-i18n="home.contact.success">Thank you! We'll be in touch soon.</span>
-            </p>
-          </div>
-
-          <!-- Error message (hidden until needed) -->
-          <div id="contact-error" class="hidden bg-red-50 border border-red-300 rounded-lg p-4 text-center" role="alert">
-            <span class="sf-icon text-red-600 text-xl" data-icon="alert" aria-hidden="true"></span>
-            <p id="contact-error-msg" class="text-red-800 font-semibold mt-2">
-              <span data-i18n="home.contact.error">Something went wrong. Please try again later.</span>
-            </p>
-          </div>
-
-          <!-- Validation hint (hidden until needed) -->
-          <p id="contact-validation" class="hidden text-base text-red-700 font-semibold text-center" role="alert">
-            <span id="contact-validation-text" data-i18n="home.contact.validation">Please provide your name, at least one contact method, and consent.</span>
-          </p>
-
-        </form>
-      </div>
-    </section>
-
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-emerald-900 text-green-100 text-sm p-6 mt-8 text-center">
-    <p class="mb-2"><span data-i18n="home.footer.tagline">Smart Farmer — Farm management &amp; decision support for Indian farmers</span></p>
-    <p><span data-i18n="home.footer.disclaimer">All agronomic content is sourced and labelled with its evidence status. Unverified content is never shown as an actionable instruction. Consult your local KVK or agronomist for crop-specific advice.</span></p>
-    <p class="mt-3"><a href="privacy.html" class="inline-flex items-center min-h-[44px] text-green-300 underline hover:text-green-100"><span data-i18n="home.footer.privacy">Privacy Policy</span></a></p>
-<p class="mt-1"><a href="privacy.html#credits" class="inline-flex items-center min-h-[44px] text-green-300 underline hover:text-green-100"><span data-i18n="home.footer.credits">Photo credits</span></a></p>
+  <footer class="h-foot">
+    <div class="h-wrap">
+      <nav aria-label="Footer">
+        <a href="about.html" data-i18n="home.footer.about">About</a>
+        <a href="about.html#contact" data-i18n="home.footer.contact">Contact us</a>
+        <a href="privacy.html" data-i18n="home.footer.privacy">Privacy</a>
+        <a href="privacy.html#credits" data-i18n="home.footer.credits">Photo credits</a>
+      </nav>
+      <p data-i18n="home.footer.tagline">Farm management &amp; decision support for Indian farmers</p>
+    </div>
   </footer>
 
-  <!-- Main homepage script -->
-  <script type="module" src="js/app.js"></script>
-
-  <!-- Public mandi price card (no login needed). Must load after app.js. -->
-  <script type="module">
-    import { API_BASE_URL } from "./js/config.js";
-    import { loadMandiCard } from "./js/mandi.js";
-    loadMandiCard({ apiBase: API_BASE_URL });
-  </script>
-
-  <!-- Wake up the Render backend as soon as anyone visits the landing page -->
-  <script type="module">
-    import { API_BASE_URL } from "./js/config.js";
-    fetch(`${API_BASE_URL}/health`, { method: "GET" }).catch(() => {});
-  </script>
+  <script type="module" src="js/home.js"></script>
   <script type="module" src="js/icons.js"></script>
   <script type="module" src="js/sw-register.js"></script>
 </body>

@@ -274,7 +274,10 @@ async function _draw(canvasId, { label, summary, items, config }) {
   p.block.querySelector('.sf-chart-list')?.remove();
   p.wrap.classList.remove('hidden');
 
+  // Skeleton shimmer while Chart.js loads, so the box is never a plain empty rectangle.
+  p.wrap.classList.add('sf-skeleton');
   const fallback = () => {
+    p.wrap.classList.remove('sf-skeleton');
     if (p.summary) p.summary.textContent = `${ct('chart.unavailable')} ${summary}`;
     _showList(p, items);
     return null;
@@ -288,6 +291,7 @@ async function _draw(canvasId, { label, summary, items, config }) {
   try {
     const chart = new Chart(p.canvas.getContext('2d'), config);
     _instances.set(canvasId, chart);
+    p.wrap.classList.remove('sf-skeleton');
     return chart;
   } catch (err) {
     console.warn('[Charts] draw failed:', canvasId);

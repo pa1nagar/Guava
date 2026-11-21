@@ -23,7 +23,10 @@ export function createClient() {
 """
 SESSION = {"access_token": "test", "user": {"id": "u1", "email": "t@example.com",
                                             "user_metadata": {"full_name": "Test Farmer"}}}
-CHART_STUB = "window.Chart = function(){ this.destroy=function(){}; };"
+# The stub paints a few bars so the "canvas is drawn" gate is meaningful offline. Real Chart.js is checked with --real-cdn.
+CHART_STUB = ("window.Chart = function(ctx){ var g = (ctx && ctx.getContext) ? ctx.getContext('2d') : ctx; if (!g || !g.fillRect) { this.destroy = function(){}; return; } g.fillStyle = '#2F6B47'; "
+              "[20, 60, 100].forEach(function(x, i){ g.fillRect(x, 150 - 30 * (i + 1), 30, 30 * (i + 1)); }); "
+              "this.destroy = function(){}; };")
 
 # (substring of path, fixture file) - first match wins
 ROUTES = [
@@ -129,7 +132,7 @@ def respond(path: str, method: str = "GET", body: str = "", scenario: str = "ok"
         return 200, fixture_for(path)
     if path.startswith("/api/profile") and method == "POST" and scenario == "ok":
         if '"plant_count":7777' in body.replace(" ", ""):
-            return 422, {"detail": "Number of plants looks too high (test message)."}
+            return 422, {"detail": "Planting date cannot be in the future."}  # a real backend message (routers/profile.py)
     if path.startswith("/api/contact") and scenario == "ok":
         return 200, {"ok": True}
     return fixtures_app.response_for(path, method, body, scenario)

@@ -2,6 +2,8 @@
 // price card. Merged into TRANSLATIONS by i18n.js. Every key exists in both languages.
 export const PUBLIC_EN = {
   "home.lang.label": "Language",
+  "about.title": "About Smart Farmer",
+  "about.back": "Back to home page",
   "home.contact.sending": "Sending…",
   "home.contact.v.name": "Please enter your name.",
   "home.contact.v.contact": "Please enter an email or a phone number so we can reply.",
@@ -69,7 +71,7 @@ export const PUBLIC_EN = {
   "privacy.delete.h": "Deleting your data",
   "privacy.delete.p": "To delete your account and data, email us or sign out and we will remove your record on request.",
   "privacy.contact.h": "Contact",
-  "privacy.contact.p": "For any questions, contact us through the contact form on our home page.",
+  "privacy.contact.p": "For any questions, contact us through the contact form on our About page (about.html#contact).",
   "privacy.back": "Back to home page",
   "img.hero.alt": "Ripe guavas, two of them cut open to show pink flesh",
   "img.orchard.alt": "Guavas growing on a tree",
@@ -95,6 +97,8 @@ export const PUBLIC_EN = {
 };
 export const PUBLIC_HI = {
   "home.lang.label": "भाषा",
+  "about.title": "स्मार्ट फार्मर के बारे में",
+  "about.back": "होम पेज पर वापस जाएँ",
   "home.contact.sending": "भेजा जा रहा है…",
   "home.contact.v.name": "कृपया अपना नाम लिखें।",
   "home.contact.v.contact": "जवाब देने के लिए कृपया ईमेल या फ़ोन नंबर लिखें।",
@@ -162,7 +166,7 @@ export const PUBLIC_HI = {
   "privacy.delete.h": "अपना डेटा हटवाना",
   "privacy.delete.p": "अपना खाता और डेटा हटवाने के लिए हमें ईमेल करें। अनुरोध पर हम आपका रिकॉर्ड हटा देंगे।",
   "privacy.contact.h": "संपर्क",
-  "privacy.contact.p": "कोई भी सवाल हो तो हमारे होम पेज पर दिए संपर्क फ़ॉर्म से हमें लिखें।",
+  "privacy.contact.p": "कोई भी सवाल हो तो हमारे बारे में पेज (about.html#contact) पर दिए संपर्क फ़ॉर्म से हमें लिखें।",
   "privacy.back": "होम पेज पर वापस जाएँ",
   "img.hero.alt": "पके अमरूद, दो कटे हुए जिनमें गुलाबी गूदा दिख रहा है",
   "img.orchard.alt": "पेड़ पर लगे अमरूद",

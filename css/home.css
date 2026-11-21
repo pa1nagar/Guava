@@ -1,0 +1,103 @@
+/* Landing page (index.html) only. Self-contained: index loads topbar.css + this file, no Tailwind and no style.css. */
+:root { --g9: #1E3A2B; --g7: #2F6B47; --g1: #E8F2EA; --coral: #E07A5F; --coral-t: #A63F26; --page: #FDFBF7; --sand: #F4EDE2;
+  --ink: #2B2D42; --muted: #4B5563; --line: #E2DCD5; --r: 16px; --shadow: 0 1px 2px rgba(30,58,43,.06), 0 4px 14px rgba(30,58,43,.08); }
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 1rem/1.5 system-ui, "Noto Sans Devanagari", Mukta, "Nirmala UI", Mangal, "Segoe UI", Roboto, sans-serif; overflow-x: hidden; }
+:lang(hi) body { line-height: 1.7; }
+:lang(hi) * { letter-spacing: 0; }
+img { max-width: 100%; }
+a { color: var(--g7); }
+:focus-visible { outline: 3px solid var(--coral); outline-offset: 2px; }
+.sf-icon { display: inline-flex; align-items: center; justify-content: center; vertical-align: -.2em; line-height: 0; }
+.sf-svg { width: 1.25em; height: 1.25em; flex: none; }
+.hidden { display: none !important; }
+
+.h-wrap { max-width: 56rem; margin: 0 auto; padding: 0 16px; }
+
+/* Hero: real guava photo, value proposition, one big button */
+.h-hero { position: relative; background: var(--g9); color: #fff; overflow: hidden; }
+.h-hero__img { position: absolute; inset: 0; }
+.h-hero__img img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.h-hero__body { position: relative; padding: 112px 16px 24px; text-align: center;
+  background: linear-gradient(0deg, rgba(30,58,43,.96) 0%, rgba(30,58,43,.86) 62%, rgba(30,58,43,.1) 100%); }
+.h-hero h1 { margin: 0 0 8px; font-size: 1.75rem; line-height: 1.3; font-weight: 800; }
+.h-hero p { margin: 0 auto 16px; max-width: 30rem; font-size: 1.125rem; color: #E8F2EA; }
+.h-hero__free { margin: 8px auto 0 !important; font-size: 1rem !important; color: #D1E7D9 !important; }
+.h-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; max-width: 26rem; min-height: 56px;
+  margin: 0 auto; padding: 0 20px; border-radius: 12px; background: var(--coral-t); color: #fff; font-size: 1.25rem; font-weight: 700;
+  text-decoration: none; box-shadow: 0 6px 16px rgba(0,0,0,.25); }
+.h-btn:hover { opacity: .94; }
+
+.h-sec { padding: 24px 0 8px; }
+.h-h2 { margin: 0 0 12px; font-size: 1.375rem; line-height: 1.35; font-weight: 700; color: var(--g9); }
+.h-card { background: #fff; border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--shadow); padding: 16px; }
+.h-note { margin: 8px 0 0; font-size: 1rem; color: var(--muted); }
+
+/* Today's price: the largest number on the page */
+.price-hero { background: #fff; color: var(--g9); border: 2px solid var(--g7); border-radius: var(--r); padding: 16px; text-align: center; box-shadow: var(--shadow); }
+.price-hero__value { margin: 4px 0 0; font-size: 3rem; line-height: 1.1; font-weight: 800; }
+:lang(hi) .price-hero__value { line-height: 1.4; }
+.price-hero__unit { margin: 0; font-size: 1.125rem; font-weight: 700; }
+.price-hero__quintal { margin: 8px 0 0; font-size: 1.25rem; font-weight: 700; }
+.price-hero__meta { margin: 4px 0 0; font-size: 1rem; color: #374151; }
+.price-hero .load-error { background: #FEF2F2; }
+.load-error { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; padding: 16px; background: #FEF2F2; border: 1px solid #FECACA; border-radius: 12px; color: #991B1B; }
+.load-error__text { margin: 0; }
+.load-error__retry { min-height: 48px; padding: 0 24px; font: inherit; font-weight: 700; color: #fff; background: var(--g9); border: 0; border-radius: 12px; cursor: pointer; }
+.sf-skeleton { display: block; border-radius: 8px; background: linear-gradient(90deg, #EDE7DC 25%, #F8F4EC 50%, #EDE7DC 75%); background-size: 200% 100%; animation: sk 1.2s linear infinite; }
+@keyframes sk { to { background-position: -200% 0; } }
+
+/* Mandi bars: plain HTML and CSS (no chart library, no canvas) */
+.h-chart { margin-top: 12px; }
+.h-chart__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
+.h-chart__head h3 { margin: 0; font-size: 1.125rem; font-weight: 600; color: var(--g9); }
+.h-chip { display: inline-flex; padding: 2px 12px; border-radius: 999px; background: #DCFCE7; color: #14532D; font-size: .875rem; font-weight: 700; }
+.sf-rank { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.sf-rank__name { display: flex; justify-content: space-between; gap: 8px; font-weight: 600; overflow-wrap: anywhere; }
+.sf-rank__bar { height: 14px; margin-top: 4px; border-radius: 999px; background: var(--g1); overflow: hidden; }
+.sf-rank__bar > span { display: block; height: 100%; border-radius: 999px; background: var(--g7); }
+.sf-rank li.is-best .sf-rank__bar > span { background: var(--coral); }
+.h-more { margin-top: 12px; }
+.h-more > summary { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px; cursor: pointer; font-weight: 700; color: var(--g7); list-style: none; }
+.h-more > summary::-webkit-details-marker { display: none; }
+.h-more > summary::after { content: "+"; font-size: 1.5rem; line-height: 1; }
+.h-more[open] > summary::after { content: "−"; }
+.h-mandi { padding: 8px 0; border-top: 1px solid var(--line); }
+.h-mandi:first-of-type { border-top: 0; }
+.h-mandi p { margin: 0; }
+.h-mandi__name { font-weight: 700; }
+
+/* Benefit tiles */
+.h-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.h-tile { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-height: 132px; padding: 14px; background: #fff;
+  border: 1px solid var(--line); border-radius: var(--r); box-shadow: var(--shadow); color: var(--g9); text-decoration: none; }
+.h-tile:hover { box-shadow: 0 8px 24px rgba(30,58,43,.16); }
+.h-tile__icon { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: var(--g1); color: var(--g7); font-size: 1.5rem; }
+.h-tile h3 { margin: 0; font-size: 1.125rem; font-weight: 700; line-height: 1.3; }
+.h-tile p { margin: 0; font-size: 1rem; color: var(--muted); line-height: 1.4; }
+
+/* Trust strip */
+.h-trust { margin-top: 24px; background: var(--sand); }
+.h-trust__photo { display: block; width: 100%; height: 120px; object-fit: cover; }
+.h-trust ul { list-style: none; margin: 0; padding: 16px 0 8px; display: flex; flex-direction: column; gap: 12px; }
+.h-trust li { display: flex; gap: 12px; align-items: flex-start; }
+.h-trust li .sf-icon { flex: none; width: 36px; height: 36px; border-radius: 50%; background: #fff; color: var(--g7); font-size: 1.25rem; }
+.h-trust li p { margin: 0; }
+.h-trust__link { display: inline-flex; align-items: center; min-height: 44px; margin-bottom: 12px; font-weight: 700; }
+
+/* Footer: keeps a safe bottom space (home-bar inset plus room for the Netlify corner badge) */
+.h-foot { margin-top: 0; padding: 20px 0 calc(4.5rem + env(safe-area-inset-bottom)); background: var(--g9); color: #D1E7D9; }
+.h-foot a { color: #A7F3D0; }
+.h-foot nav { display: flex; flex-wrap: wrap; gap: 0 20px; }
+.h-foot nav a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; }
+.h-foot p { margin: 4px 0 0; }
+
+@media (min-width: 640px) {
+  .h-hero__body { padding-top: 168px; }
+  .h-hero h1 { font-size: 2.25rem; }
+  .h-tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .price-hero__value { font-size: 4.5rem; }
+}
+@media (prefers-reduced-motion: reduce) { .sf-skeleton { animation: none; } }
+.sf-offline-banner { background: #92400E; color: #fff; text-align: center; padding: 8px 16px; font-weight: 600; }

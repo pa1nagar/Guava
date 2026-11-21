@@ -17,6 +17,9 @@ import { t, errorMessage } from './dom.js';
  */
 export function setLang(lang) {
   setLanguage(lang);
+  document.querySelectorAll('[data-i18n-aria-label]').forEach(el => {
+    el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria-label')));
+  });
 }
 
 window.setLang = setLang;
@@ -132,6 +135,12 @@ async function handleContactSubmit(event) {
 window.addEventListener('DOMContentLoaded', () => {
   // Initialise language (seeds English text from TRANSLATIONS)
   init();
+
+  document.getElementById('lang-en')?.addEventListener('click', () => setLang('en'));
+  document.getElementById('lang-hi')?.addEventListener('click', () => setLang('hi'));
+  document.querySelectorAll('[data-i18n-aria-label]').forEach(el => {
+    el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria-label')));
+  });
 
   // Wire contact form
   const form = document.getElementById('contact-form');

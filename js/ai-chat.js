@@ -14,7 +14,7 @@
  */
 
 import { apiFetch } from "./api.js";
-import { t } from "./dom.js";
+import { getLang, t } from "./dom.js";
 import { icon } from "./icons.js";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -448,6 +448,8 @@ async function sendQuestion(question, messagesEl, inputEl, sendBtn) {
       // The refusal text for chemical / dose questions is shown exactly as the server returned it.
       responseText = data.response ?? fallbackMsg();
       isHighRisk   = Boolean(data.is_high_risk_refusal);
+    // The server refusal is English only. In Hindi show the same refusal in Hindi (still a refusal, no advice).
+    if (isHighRisk && getLang() === "hi") responseText = t("ai.highRisk.response");
       isFallback   = false;
     }
   } catch (_err) {

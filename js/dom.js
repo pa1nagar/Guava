@@ -12,6 +12,7 @@
 
 import { TRANSLATIONS } from "./i18n.js";
 import { init as initTranslator } from "./translator.js";
+import { translateApiText } from "./api-text.js";
 
 export function getLang() {
   try {
@@ -136,7 +137,7 @@ export async function errorMessage(res, body) {
   }
   const detail = data && data.detail;
   if (res.status === 422 || res.status === 400) {
-    if (typeof detail === "string" && detail.length <= 200) return detail;
+    if (typeof detail === "string" && detail.length <= 200) return translateApiText(detail, getLang());
     if (Array.isArray(detail) && detail.length) {
       const fields = [...new Set(detail.map((d) => _fieldName(d.loc)).filter(Boolean))];
       if (fields.length) return t("form.error.checkFields", { fields: fields.join(", ") });

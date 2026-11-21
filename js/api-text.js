@@ -54,6 +54,109 @@ const EXACT = {
   High: "ज़्यादा",
   Moderate: "मध्यम",
   Elevated: "बढ़ा हुआ",
+  guava: "अमरूद", Guava: "अमरूद",
+  "Pre-Bloom": "फूल आने से पहले",
+  // financial notes (backend/routers/financial.py)
+  "Set an expected yield to calculate your break-even price.":
+    "अपना ब्रेक-ईवन भाव निकालने के लिए अपेक्षित उपज दर्ज करें।",
+  "Break-even needs an expected yield.": "ब्रेक-ईवन निकालने के लिए अपेक्षित उपज चाहिए।",
+  "No costs logged yet.": "अभी तक कोई खर्च दर्ज नहीं हुआ है।",
+  "Harvest has already been recorded for this crop cycle.": "इस फसल चक्र की कटाई पहले ही दर्ज हो चुकी है।",
+  "Profile not found.": "प्रोफ़ाइल नहीं मिली।",
+  "Activity not found.": "गतिविधि नहीं मिली।",
+  "Observation not found.": "अवलोकन नहीं मिला।",
+  "Photo not found.": "फोटो नहीं मिली।",
+  "Crop not supported.": "यह फसल अभी उपलब्ध नहीं है।",
+  "Planting date cannot be in the future.": "रोपण की तारीख आगे की नहीं हो सकती।",
+  "Cannot determine crop stage.": "फसल का चरण तय नहीं हो सका।",
+  "Farm not found.": "खेत नहीं मिला।",
+  "Plot not found.": "प्लॉट नहीं मिला।",
+  "Database error.": "डेटा सहेजने या पढ़ने में दिक्कत आई। कृपया फिर कोशिश करें।",
+  "Could not submit form.": "फ़ॉर्म जमा नहीं हो सका। कृपया फिर कोशिश करें।",
+  "status must be one of: planned, recorded": "स्थिति 'योजनाबद्ध' या 'दर्ज' में से एक होनी चाहिए।",
+  "Could not process image file. Ensure it is a valid image.": "फोटो खोली नहीं जा सकी। कृपया सही फोटो चुनें।",
+  // weather and climate fetch failures
+  "Weather data temporarily unavailable.": "मौसम का डेटा अभी उपलब्ध नहीं है।",
+  "Climate baseline data unavailable.": "मौसम के औसत का डेटा उपलब्ध नहीं है।",
+  // weather descriptions (backend/services/weather.py WMO_DESCRIPTIONS)
+  "Clear sky": "साफ़ आसमान", "Mainly clear": "ज़्यादातर साफ़", "Partly cloudy": "आंशिक बादल", Overcast: "घने बादल",
+  Fog: "कोहरा", "Depositing rime fog": "पाला जमाने वाला कोहरा",
+  "Light drizzle": "हल्की फुहार", "Moderate drizzle": "मध्यम फुहार", "Dense drizzle": "घनी फुहार",
+  "Slight rain": "हल्की बारिश", "Moderate rain": "मध्यम बारिश", "Heavy rain": "भारी बारिश",
+  "Slight showers": "हल्की बौछारें", "Moderate showers": "मध्यम बौछारें", "Violent showers": "तेज़ बौछारें",
+  Thunderstorm: "आँधी-बारिश", "Thunderstorm with hail": "ओलों के साथ आँधी-बारिश",
+  // plan tasks and notes (backend/routers/plan.py)
+  Irrigation: "सिंचाई",
+  "Irrigation — Drought Stress Period": "सिंचाई — सूखे का दौर",
+  "Stop all irrigation this week.": "इस हफ़्ते सारी सिंचाई बंद रखें।",
+  "litres/day (total for all plants)": "लीटर/दिन (सभी पौधों के लिए कुल)",
+  "kg/week (total for all plants)": "किग्रा/हफ़्ता (सभी पौधों के लिए कुल)",
+  "litres/day": "लीटर/दिन",
+  "Preliminary observation — not a diagnosis": "शुरुआती अवलोकन, बीमारी की पहचान नहीं",
+  // reference content in backend/data/crop_knowledge.json (stage text)
+  "Fruits are sizing up rapidly. Keeping them well-fed and protected from insects is the priority.":
+    "फल तेज़ी से बड़े हो रहे हैं। उन्हें अच्छा पोषण देना और कीड़ों से बचाना सबसे ज़रूरी है।",
+  "Growth is slowing down and flower buds are beginning to form. The tree is preparing to flower.":
+    "बढ़त धीमी हो रही है और फूल की कलियाँ बनने लगी हैं। पेड़ फूलने की तैयारी में है।",
+  "Harvest is done and your trees are resting and rebuilding. New shoots are emerging from the pruned branches.":
+    "कटाई हो चुकी है और पेड़ आराम करके फिर से तैयार हो रहे हैं। छँटाई की डालियों से नई कोंपलें निकल रही हैं।",
+  "The monsoon is ending and your trees are continuing to grow strongly. Canopy training and drainage are the main focus now.":
+    "मानसून खत्म हो रहा है और पेड़ अच्छी तरह बढ़ रहे हैं। अब छतरी को आकार देने और पानी निकासी पर ध्यान दें।",
+  "This is the deliberate dry period. Stopping water now causes all fruits to ripen together at the same time.":
+    "यह जान-बूझकर रखा गया सूखा दौर है। अभी पानी रोकने से सारे फल एक साथ पकते हैं।",
+  "Your fruits are ready to pick. Harvest firm-mature fruits carefully for best market quality.":
+    "आपके फल तोड़ने लायक हैं। बाज़ार में अच्छे भाव के लिए सख्त और पके फल सावधानी से तोड़ें।",
+  "Your trees are flowering and small fruits are forming. This is the most important time for water and nutrition.":
+    "पेड़ों में फूल आ रहे हैं और छोटे फल बन रहे हैं। पानी और पोषण के लिए यह सबसे ज़रूरी समय है।",
+  "Your trees are putting on branches and leaves. This is the main growing phase where the tree builds its shape.":
+    "पेड़ों में डालियाँ और पत्ते आ रहे हैं। यह मुख्य बढ़त का दौर है जिसमें पेड़ का आकार बनता है।",
+  "Your trees have just been planted and are settling into the soil. Roots are growing and the tree is finding its footing.":
+    "पेड़ अभी लगाए गए हैं और मिट्टी में जम रहे हैं। जड़ें बढ़ रही हैं और पेड़ अपनी जगह बना रहा है।",
+  "Stop all irrigation completely this week. Do not water at all — this is intentional and important.":
+    "इस हफ़्ते सिंचाई पूरी तरह बंद रखें। बिल्कुल पानी न दें। यह जान-बूझकर है और ज़रूरी है।",
+  "Give 10 grams of 19-19-19 water-soluble fertiliser per plant each week. Add 2 grams of humic acid per plant each week.":
+    "हर पौधे को हर हफ़्ते 10 ग्राम 19-19-19 पानी में घुलने वाली खाद दें। साथ में हर पौधे को हर हफ़्ते 2 ग्राम ह्यूमिक एसिड दें।",
+  "Give 10 grams of SOP fertiliser per plant each week. Add 3 grams of calcium nitrate per plant each week.":
+    "हर पौधे को हर हफ़्ते 10 ग्राम SOP खाद दें। साथ में हर पौधे को हर हफ़्ते 3 ग्राम कैल्शियम नाइट्रेट दें।",
+  "Give 5 grams of 19-19-19 water-soluble fertiliser per plant each week through the drip system.":
+    "ड्रिप से हर पौधे को हर हफ़्ते 5 ग्राम 19-19-19 पानी में घुलने वाली खाद दें।",
+  "Give 5 grams of MKP fertiliser per plant each week in Tank B. Add 5 grams of calcium nitrate per plant each week in Tank A.":
+    "हर पौधे को हर हफ़्ते 5 ग्राम MKP खाद टैंक B में दें। हर पौधे को हर हफ़्ते 5 ग्राम कैल्शियम नाइट्रेट टैंक A में दें।",
+  "Give 5 grams of SOP fertiliser per plant each week for 2 weeks after harvest.":
+    "कटाई के बाद 2 हफ़्ते तक हर पौधे को हर हफ़्ते 5 ग्राम SOP खाद दें।",
+  "Give 7 grams of 19-19-19 water-soluble fertiliser per plant each week through the drip system.":
+    "ड्रिप से हर पौधे को हर हफ़्ते 7 ग्राम 19-19-19 पानी में घुलने वाली खाद दें।",
+  "Give 8 grams of 12-6-20 water-soluble fertiliser per plant each week. Add 1 gram of iron chelate per plant each week.":
+    "हर पौधे को हर हफ़्ते 8 ग्राम 12-6-20 पानी में घुलने वाली खाद दें। साथ में हर पौधे को हर हफ़्ते 1 ग्राम आयरन केलेट दें।",
+  "Give 8 grams of 8-8-32 water-soluble fertiliser per plant each week. Add 3 grams of calcium nitrate per plant each week.":
+    "हर पौधे को हर हफ़्ते 8 ग्राम 8-8-32 पानी में घुलने वाली खाद दें। साथ में हर पौधे को हर हफ़्ते 3 ग्राम कैल्शियम नाइट्रेट दें।",
+  "No fertiliser this week. The stress period must not be interrupted.":
+    "इस हफ़्ते कोई खाद नहीं। सूखे के दौर को बीच में न तोड़ें।",
+  "None — drought stress period": "कोई नहीं, सूखे का दौर",
+  "SOP (post-harvest)": "SOP (कटाई के बाद)",
+  "Anthracnose / leaf blight": "एंथ्रेक्नोज़ / पत्ती झुलसा", "Bark caterpillar": "छाल की इल्ली",
+  "Fruit fly / bag damage": "फल मक्खी / थैली को नुकसान", "Mealybug / cottony scale": "मीलीबग / रूई जैसा शल्क कीट",
+  "Post-harvest disease": "कटाई के बाद की बीमारी", "Premature fruit drop": "फल का समय से पहले गिरना",
+  "Stem borer": "तना छेदक", "Stem borer (new shoots)": "तना छेदक (नई कोंपलें)",
+  "Inspect bags for holes or insect entry": "थैलियों में छेद या कीड़े के घुसने के निशान देखें",
+  "Inspect fruit fly traps daily": "फल मक्खी के जाल रोज़ देखें",
+  "Inspect harvested fruit for rot or fungal patches": "तोड़े गए फलों में सड़न या फफूँद के धब्बे देखें",
+  "Inspect new shoot tips for wilting": "नई कोंपलों के सिरों पर मुरझाना देखें",
+  "Inspect shoot tips for wilting or dead tips": "टहनी के सिरों पर मुरझाना या सूखे सिरे देखें",
+  "Inspect stem base for white sticky patches": "तने के निचले हिस्से पर सफ़ेद चिपचिपे धब्बे देखें",
+  "Inspect stems for frass (sawdust-like excreta) or holes": "तनों पर बुरादे जैसा मल या छेद देखें",
+  "Look for dark spots or blotches on leaf tips": "पत्तियों के सिरों पर काले धब्बे देखें",
+  "Walk the orchard and check for fallen fruit": "बाग में घूमकर गिरे हुए फल देखें",
+  "Apply copper oxychloride spray if symptoms are found on more than 10% of leaves":
+    "अगर 10% से ज़्यादा पत्तियों पर लक्षण दिखें तो कॉपर ऑक्सीक्लोराइड का स्प्रे करें",
+  "Remove affected shoot, insert wire into entry hole to kill larva": "प्रभावित टहनी हटाएँ और छेद में तार डालकर इल्ली को मारें",
+  "Remove affected shoot; check root zone for collar rot symptoms": "प्रभावित टहनी हटाएँ और जड़ के पास कॉलर सड़न के लक्षण देखें",
+  "Remove and burn diseased fruit; do not compost": "रोगी फल हटाकर जला दें, खाद में न डालें",
+  "Remove and dispose of fallen fruit away from the orchard": "गिरे हुए फल उठाकर बाग से दूर नष्ट करें",
+  "Remove by hand or apply neem oil spray if present": "हाथ से हटाएँ, या कीट हों तो नीम तेल का स्प्रे करें",
+  "Remove caterpillar manually; apply chlorpyrifos paste on wound": "इल्ली को हाथ से निकालें और घाव पर क्लोरपाइरीफॉस का लेप लगाएँ",
+  "Replace bait in traps; do NOT spray insecticide during flowering": "जाल में चारा बदलें। फूल आने के समय कीटनाशक का स्प्रे न करें",
+  "Replace damaged bags; install additional fruit fly traps": "फटी थैलियाँ बदलें और फल मक्खी के और जाल लगाएँ",
   // stage labels from backend/data/crop_knowledge.json
   Establishment: "स्थापना",
   "Vegetative Growth": "वानस्पतिक बढ़त",
@@ -128,7 +231,37 @@ const TEMPLATES = [
     return a ? `इस चरण में आप ${a} में पीछे हो सकते हैं।` : null;
   }],
   [/^Month (\d+) — (.+)$/, (m, lang) => `महीना ${m[1]} — ${translateApiText(m[2], lang)}`],
+  // plan tasks (backend/routers/plan.py) and stage text (crop_knowledge.json)
+  [/^activity_type must be one of: (.+)$/, (m) =>
+    `गतिविधि का प्रकार इनमें से एक होना चाहिए: ${m[1].split(", ").map((x) => activityTypeLabel(x, "hi")).join(", ")}।`],
+  [/^area_unit must be one of: (.+)$/, (m) =>
+    `क्षेत्रफल की इकाई इनमें से एक होनी चाहिए: ${m[1].split(", ").map((x) => UNIT_HI[x.toLowerCase()] || x).join(", ")}।`],
+  [/^Water every day\. Give (\d+) litres per plant each day\.$/,
+    (m) => `रोज़ पानी दें। हर पौधे को रोज़ ${m[1]} लीटर दें।`],
+  [/^Restart watering\. Give (\d+) litres per plant each day\.$/,
+    (m) => `सिंचाई फिर शुरू करें। हर पौधे को रोज़ ${m[1]} लीटर दें।`],
+  [/^Fertilizer — (.+)$/, (m, lang) => `खाद — ${translateApiText(m[1], lang)}`],
+  [/^Check: (.+)$/, (m, lang) => `जाँच: ${translateApiText(m[1], lang)}`],
+  [/^(.+)\. (.+)$/, (m, lang) => {
+    // "<check>. <action>" description of a pest task
+    const a = EXACT[m[1]], b = EXACT[m[2]];
+    return a && b ? `${a}। ${b}` : null;
+  }],
+  [/^You are in the (.+) stage \((\d+) months since planting\)\. Reference tasks are shown below\.$/,
+    (m, lang) => `आप ${translateApiText(m[1], lang)} चरण में हैं (रोपण के ${m[2]} महीने बीते)। नीचे संदर्भ कार्य दिखाए गए हैं।`],
+  [/^Harvest can only be logged at the harvest stage\. Current stage: (.+)\.$/,
+    (m, lang) => `कटाई सिर्फ़ कटाई वाले चरण में दर्ज हो सकती है। अभी का चरण: ${translateApiText(m[1], lang)}।`],
 ];
+
+const UNIT_HI = {
+  kg: "किग्रा", g: "ग्राम", litres: "लीटर", liters: "लीटर", l: "लीटर", ml: "मिली", bags: "बोरे", units: "इकाई",
+  hours: "घंटे", acres: "एकड़", hectares: "हेक्टेयर", sqm: "वर्ग मीटर", quintal: "क्विंटल",
+};
+
+const CATEGORY_HI = {
+  input: "खाद, दवा और अन्य सामान", labour: "मज़दूरी", irrigation_electricity: "सिंचाई और बिजली", machinery: "मशीनरी",
+  packaging: "पैकिंग", transport: "ढुलाई", rent_lease: "किराया / पट्टा", services: "सेवाएँ", other: "अन्य",
+};
 
 /**
  * @param {string} text English text from the API
@@ -158,5 +291,13 @@ export function translateApiText(text, lang) {
 /** Hindi name of an activity type such as "Fertilizer" (falls back to the English name). */
 export function activityTypeLabel(type, lang) {
   if (lang !== "hi") return String(type ?? "");
-  return ACTIVITY_HI[String(type ?? "").toLowerCase()] || String(type ?? "");
+  const key = String(type ?? "").toLowerCase();
+  return ACTIVITY_HI[key] || CATEGORY_HI[key] || String(type ?? "");
+}
+
+/** Hindi unit ("kg" -> "किग्रा"); unknown units, and composite ones such as "litres/day", go through the text table. */
+export function unitLabel(unit, lang) {
+  const s = String(unit ?? "");
+  if (lang !== "hi" || !s) return s;
+  return UNIT_HI[s.toLowerCase()] || translateApiText(s, lang);
 }

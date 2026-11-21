@@ -13,8 +13,9 @@
 import { routeGuard, signOut } from "./auth.js";
 import { apiFetch, showError } from "./api.js";
 import {
-  applyI18n, errorMessage, escapeHtml, initPage, renderLoadError, setBusy, t,
+  applyI18n, errorMessage, escapeHtml, getLang, initPage, renderLoadError, setBusy, t,
 } from "./dom.js";
+import { translateApiText } from "./api-text.js";
 import { formatDate, formatNumber } from "./translator.js";
 import { icon } from "./icons.js";
 import { renderTaskRing } from "./task-ring.js";
@@ -118,8 +119,8 @@ function taskCardHtml(task) {
           ${statusBadge(task.status)}
           ${isHighRisk ? `<span class="text-sm font-semibold bg-red-100 text-red-800 px-2 py-0.5 rounded-full">⚠️ ${escapeHtml(t("tasks.highRisk.badge"))}</span>` : ""}
         </div>
-        <p class="font-semibold text-emerald-900 text-base mt-1 break-words">${escapeHtml(task.title)}</p>
-        ${task.description ? `<p class="text-sm text-gray-600 mt-0.5 leading-relaxed break-words">${escapeHtml(task.description)}</p>` : ""}
+        <p class="font-semibold text-emerald-900 text-base mt-1 break-words">${escapeHtml(translateApiText(task.title, getLang()))}</p>
+        ${task.description ? `<p class="text-sm text-gray-600 mt-0.5 leading-relaxed break-words">${escapeHtml(translateApiText(task.description, getLang()))}</p>` : ""}
         <div class="flex flex-wrap gap-x-4 gap-y-0.5 mt-2 text-sm text-gray-600">
           ${task.due_date ? `<span>📅 ${escapeHtml(t("tasks.due"))}: ${escapeHtml(formatDate(task.due_date))}</span>` : ""}
           ${task.plot_name ? `<span>🌿 ${escapeHtml(task.plot_name)}</span>` : ""}

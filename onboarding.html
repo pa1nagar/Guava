@@ -10,13 +10,19 @@
 
   <link rel="stylesheet" href="css/tailwind.css">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/topbar.css">
 </head>
 <body class="min-h-screen bg-brand-bg">
 
-  <div id="lang-bar" class="lang-bar">
-    <span class="lang-bar__label">🌐 <span data-i18n="home.lang.label">Language</span>:</span>
-    <button type="button" id="lang-en" class="lang-pill lang-active" lang="en">English</button>
-    <button type="button" id="lang-hi" class="lang-pill" lang="hi">हिन्दी</button>
+  <div class="sf-topbar">
+    <a class="sf-topbar__brand" href="index.html" aria-label="Smart Farmer">
+      <span class="sf-topbar__logo sf-icon" data-icon="leaf" aria-hidden="true"></span>
+      <span>Smart Farmer</span>
+    </a>
+    <div class="sf-topbar__lang" role="group" data-i18n-aria-label="home.lang.label" aria-label="Language">
+      <button type="button" id="lang-en" class="lang-pill lang-active" lang="en">EN</button>
+      <button type="button" id="lang-hi" class="lang-pill" lang="hi">हिं</button>
+    </div>
   </div>
   <div class="sf-banner"><picture><source type="image/webp" srcset="images/farmer-480.webp 480w, images/farmer-960.webp 960w" sizes="100vw"><img src="images/farmer-480.jpg" width="480" height="360" alt="" data-i18n-alt="img.farmer.alt" decoding="async"></picture></div>
 
